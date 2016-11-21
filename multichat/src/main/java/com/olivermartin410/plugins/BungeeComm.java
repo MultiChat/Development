@@ -16,10 +16,7 @@ import net.md_5.bungee.event.EventHandler;
 public class BungeeComm
   implements Listener
   {
-	
-  static SpongeCommServer spongeServer = new SpongeCommServer();
-  
-
+ 
   public static void sendMessage(String message, ServerInfo server)
   {
     ByteArrayOutputStream stream = new ByteArrayOutputStream();

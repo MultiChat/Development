@@ -1,46 +1,52 @@
 package com.olivermartin410.plugins;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Optional;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
+import org.spongepowered.api.event.message.MessageChannelEvent;
+import org.spongepowered.api.network.ChannelBinding.IndexedMessageChannel;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.entity.living.player.Player;
 
 @Plugin(id = "multichat", name = "MultiChat - Sponge Bridge", version = "1.0")
 public final class SpongeComm {
-	protected BufferedReader in;
-	protected PrintWriter out;
-	int namesTried = 0;
-	
-	public void run() throws UnknownHostException, IOException {
-	
-	String serverAddress = "localhost"; //getServerAddress();
-    Socket socket = new Socket(serverAddress, 25410); //Create a new socket to the server
-    //Define the input and output streams
-    in = new BufferedReader(new InputStreamReader(
-        socket.getInputStream()));
-    out = new PrintWriter(socket.getOutputStream(), true);
 
-    // Process all messages from server, according to the protocol.
-    while (true) {
-        String line = in.readLine();
-        if (line.startsWith("ENTERNAME")) {
-            out.println(namesTried);
-            namesTried++;
-            //Send the result of the getName dialogue box
-        } else if (line.startsWith("NAMEACCEPTED")) {
-            //If the name is accepted then allow them to type a message
-        } else if (line.startsWith("INFO")) {
-        	String player = line.substring(5);
-        	Optional<Player> p = Sponge.getServer().getPlayer(player);
-        	out.write(p.get().getDisplayNameData().displayName().get().toString());
-        }
+	IndexedMessageChannel c;
+	ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    DataOutputStream out = new DataOutputStream(stream);
+	
+	public void onServerStart(GameStartedServerEvent event) {
+		//Sponge.getEventManager().registerListeners(this, this);
+		c = Sponge.getChannelRegistrar().createChannel(this, "MultiChat");
     }
-}
+	
+	public void onServerStop(GameStoppingServerEvent event) {
+		Sponge.getChannelRegistrar().unbindChannel(c);
+    }
+	
+	@Listener
+	public void onPluginMessage(MessageChannelEvent e) {
+		if (e.getChannel().toString().equals("MultiChat")) {
+			String displayName;
+			displayName = Sponge.getServer().getPlayer(e.getMessage().toString()).get().getDisplayNameData().displayName().get().toString();
+		    try
+		    {
+		      out.writeUTF(displayName);
+		      out.writeUTF(Sponge.getServer().getPlayer(e.getMessage().toString()).get().getName());
+		    }
+		    catch (IOException e1)
+		    {
+		      e1.printStackTrace();
+		    }
+		    SpongeMultiChatMessage m = new SpongeMultiChatMessage();
+		    m.displayName = displayName;
+		    m.name = Sponge.getServer().getPlayer(e.getMessage().toString()).get().getName();
+			c.sendToAll(m);
+		}
+	}
+
 }
