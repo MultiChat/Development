@@ -259,8 +259,8 @@ public class MultiChat extends Plugin implements Listener {
 	      File file = new File(ConfigDir, "Bulletins.dat");
 	      FileOutputStream saveFile = new FileOutputStream(file);
 	      ObjectOutputStream out = new ObjectOutputStream(saveFile);
-	      out.writeObject(Bulletins.isEnabled());
-	      out.writeObject(Bulletins.getTimeBetween());
+	      out.writeBoolean(Bulletins.isEnabled());
+	      out.writeInt(Bulletins.getTimeBetween());
 	      out.writeObject(Bulletins.getArrayList());
 	      out.close();
 	      System.out.println("[MultiChat] SAVE ROUTINE: The bulletins file was successfully saved!");
@@ -398,20 +398,21 @@ public class MultiChat extends Plugin implements Listener {
 	  }
 	  
 	  @SuppressWarnings("unchecked")
-		public static ArrayList<String> loadBulletins()
+		public static void loadBulletins()
 		  {
 		   ArrayList<String> result = null;
 		   boolean enabled = false;
 		   int timeBetween = 0;
 		    try
 		    {
-		      File file = new File(ConfigDir, "Announcements.dat");
+		      File file = new File(ConfigDir, "Bulletins.dat");
 		      FileInputStream saveFile = new FileInputStream(file);
 		      ObjectInputStream in = new ObjectInputStream(saveFile);
 		      enabled = in.readBoolean();
 		      timeBetween = in.readInt();
 		      result = (ArrayList<String>)in.readObject();
 		      in.close();
+		      Bulletins.setArrayList(result);
 		      if (enabled) {
 		    	  Bulletins.startBulletins(timeBetween);
 		      }
@@ -422,7 +423,6 @@ public class MultiChat extends Plugin implements Listener {
 		      System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the bulletins file!");
 		      e.printStackTrace();
 		    }
-		    return result;
 		  }
 	  
 	  @SuppressWarnings("unchecked")
@@ -650,7 +650,7 @@ public class MultiChat extends Plugin implements Listener {
 	    if ((f8.exists()) && (!f8.isDirectory()))
 	    {
 	      System.out.println("[MultiChat] Attempting startup load for Bulletins");
-	      Bulletins.setArrayList((loadBulletins()));
+	      loadBulletins();
 	      System.out.println("[MultiChat] Load completed!");
 	    }
 	    else

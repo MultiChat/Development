@@ -28,20 +28,5 @@ public final class SpongeComm {
 	public void onServerStop(GameStoppingServerEvent event) {
 		Sponge.getChannelRegistrar().unbindChannel(channel);
     }
-	
-	/*@Listener
-	public void onPluginMessage(DropItemEvent e) {
-		System.out.println("MESSAGE IN");
-		//if (e.getChannel().toString().equals("MultiChat")) {
-			System.out.println("ITS MULTICHAT!");
-			String displayName;
-			displayName = Sponge.getServer().getPlayer("Revilo410".toString()).get().getDisplayNameData().displayName().get().toString();
-		    SpongeMultiChatMessage m = new SpongeMultiChatMessage();
-		    m.displayName = displayName;
-		    m.name = Sponge.getServer().getPlayer("Revilo410".toString()).get().getName();
-			c.sendToAll(m);
-			e.setCancelled(true);
-		//}
-	}*/
 
 }

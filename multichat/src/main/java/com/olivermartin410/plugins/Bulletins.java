@@ -61,20 +61,25 @@ public class Bulletins {
 
 	public static void addBulletin(String message) {
 
-		bulletin.add(message);
-
+		synchronized (bulletin) {
+			bulletin.add(message);
+		}
 	}
 	
 	public static Iterator<String> getIterator() {
-		return bulletin.iterator();
+		synchronized (bulletin) {
+			return bulletin.iterator();
+		}
 	}
 
 	public static void removeBulletin(int index) {
 
+		synchronized (bulletin) {
 		try {
 			bulletin.remove(index);
 		} catch (Exception e) {
 			System.err.println("Couldnt remove bulletin!");
+		}
 		}
 
 	}
