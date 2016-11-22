@@ -15,7 +15,7 @@ public class GCCommand
   {
     super("gc", "multichat.group", new String[0]);
   }
-  
+   
   public void execute(CommandSender sender, String[] args)
   {
     if (args.length < 1)

@@ -12,7 +12,7 @@ public class GroupListCommand
   {
     super("groups", "multichat.staff.listgroups", new String[0]);
   }
-  
+   
   public void execute(CommandSender sender, String[] args)
   {
     sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&a&lGroup List:")).create());

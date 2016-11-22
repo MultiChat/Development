@@ -25,7 +25,7 @@ public class HelpMeCommand extends Command {
 		      sender.sendMessage(new ComponentBuilder("Usage: /HelpMe <Message>").color(ChatColor.RED).create());
 		    }
 		    else
-		    {
+		    { 
 		      String Message = "";
 		      for (String arg : args) {
 		        Message = Message + arg + " ";

@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class ClearChatCommand extends Command {
 
 	static String[] aliases = {"chatclear","wipechat","killchat"};
-	  
+	   
 	  public ClearChatCommand()
 	  {
 	    super("clearchat", "multichat.chat.clear", aliases);

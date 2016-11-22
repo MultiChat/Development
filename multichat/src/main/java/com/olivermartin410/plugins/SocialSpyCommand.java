@@ -15,7 +15,7 @@ public class SocialSpyCommand
   {
     super("socialspy", "multichat.staff.spy", aliases);
   }
-  
+   
   public void execute(CommandSender sender, String[] args)
   {
     if ((sender instanceof ProxiedPlayer))

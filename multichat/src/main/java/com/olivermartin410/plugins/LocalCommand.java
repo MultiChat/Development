@@ -13,7 +13,7 @@ public class LocalCommand
   {
     super("local", "multichat.chat.mode", new String[0]);
   }
-  
+   
   public void execute(CommandSender sender, String[] args)
   {
     if ((sender instanceof ProxiedPlayer))

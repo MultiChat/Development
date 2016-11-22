@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -30,6 +31,7 @@ public class BungeeComm
       e.printStackTrace();
     }
     server.sendData("MultiChat", stream.toByteArray());
+    
   }
   
   @EventHandler

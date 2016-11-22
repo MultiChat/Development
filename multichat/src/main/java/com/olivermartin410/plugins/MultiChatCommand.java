@@ -16,7 +16,7 @@ public class MultiChatCommand
   public void execute(CommandSender sender, String[] args)
   {
     if (args.length < 1)
-    {
+    { 
       sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2Multi&aChat &bVersion " + MultiChat.latestversion)).create());
       sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bBy Revilo410")).create());
       sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bOriginally created for &3Oasis-MC.US")).create());

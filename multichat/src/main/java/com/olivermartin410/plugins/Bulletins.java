@@ -17,7 +17,7 @@ public class Bulletins {
 	private static int nextBulletin = -1;
 	private static ArrayList<String> bulletin = new ArrayList<String>();
 	private static int timeInbetween = 0;
-
+ 
 	public static void setArrayList(ArrayList<String> bulletinList) {
 		bulletin = bulletinList;
 	}

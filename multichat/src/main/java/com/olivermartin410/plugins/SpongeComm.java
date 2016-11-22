@@ -1,52 +1,47 @@
 package com.olivermartin410.plugins;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
+import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
-import org.spongepowered.api.event.message.MessageChannelEvent;
-import org.spongepowered.api.network.ChannelBinding.IndexedMessageChannel;
+import org.spongepowered.api.network.ChannelBinding;
+import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
+import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.Plugin;
 
 @Plugin(id = "multichat", name = "MultiChat - Sponge Bridge", version = "1.0")
 public final class SpongeComm {
-
-	IndexedMessageChannel c;
-	ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    DataOutputStream out = new DataOutputStream(stream);
 	
-	public void onServerStart(GameStartedServerEvent event) {
-		//Sponge.getEventManager().registerListeners(this, this);
-		c = Sponge.getChannelRegistrar().createChannel(this, "MultiChat");
-    }
-	
-	public void onServerStop(GameStoppingServerEvent event) {
-		Sponge.getChannelRegistrar().unbindChannel(c);
-    }
+	ChannelRegistrar channelRegistrar;
+	RawDataChannel channel;
 	
 	@Listener
-	public void onPluginMessage(MessageChannelEvent e) {
-		if (e.getChannel().toString().equals("MultiChat")) {
+	public void onServerStart(GameStartedServerEvent event) {
+		 channelRegistrar = Sponge.getGame().getChannelRegistrar();
+	     ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "MultiChat");
+	     channel.addListener(Platform.Type.SERVER, new MultiChatRawDataListener(channel));
+	     this.channel = channel;
+	}
+	
+	@Listener
+	public void onServerStop(GameStoppingServerEvent event) {
+		Sponge.getChannelRegistrar().unbindChannel(channel);
+    }
+	
+	/*@Listener
+	public void onPluginMessage(DropItemEvent e) {
+		System.out.println("MESSAGE IN");
+		//if (e.getChannel().toString().equals("MultiChat")) {
+			System.out.println("ITS MULTICHAT!");
 			String displayName;
-			displayName = Sponge.getServer().getPlayer(e.getMessage().toString()).get().getDisplayNameData().displayName().get().toString();
-		    try
-		    {
-		      out.writeUTF(displayName);
-		      out.writeUTF(Sponge.getServer().getPlayer(e.getMessage().toString()).get().getName());
-		    }
-		    catch (IOException e1)
-		    {
-		      e1.printStackTrace();
-		    }
+			displayName = Sponge.getServer().getPlayer("Revilo410".toString()).get().getDisplayNameData().displayName().get().toString();
 		    SpongeMultiChatMessage m = new SpongeMultiChatMessage();
 		    m.displayName = displayName;
-		    m.name = Sponge.getServer().getPlayer(e.getMessage().toString()).get().getName();
+		    m.name = Sponge.getServer().getPlayer("Revilo410".toString()).get().getName();
 			c.sendToAll(m);
-		}
-	}
+			e.setCancelled(true);
+		//}
+	}*/
 
 }

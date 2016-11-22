@@ -19,7 +19,7 @@ public class StaffChatManager {
 	    ChatManipulation chatfix = new ChatManipulation();
 	    
 	    String URLBIT = chatfix.getURLBIT(OriginalMessage);
-	    
+	     
 	    String MessageFormat = MultiChat.configman.config.getString("modchat.format");
 	    for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 	      if (onlineplayer.hasPermission("multichat.staff.mod"))

@@ -10,7 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 public class BulletinCommand extends Command {
 
 	static String[] aliases = {"bulletins"};
-	
+	 
 	public BulletinCommand() {
 		super("bulletin", "multichat.bulletin", aliases);
 	}
