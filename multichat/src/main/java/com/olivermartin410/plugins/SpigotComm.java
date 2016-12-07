@@ -76,10 +76,10 @@ public class SpigotComm
       {
     	  	String playername = in.readUTF();
         	if (vault) {
-        		if (Bukkit.getPlayer(playername).getDisplayName().contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
+        		if (Bukkit.getPlayer(playername).getDisplayName().replaceAll("§", "&").contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
         			sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
         		} else {
-        			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + Bukkit.getPlayer(playername).getName() + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+        			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + Bukkit.getPlayer(playername).getDisplayName() + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
         		}
         	} else {
         		sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
@@ -103,10 +103,10 @@ public class SpigotComm
       {
     	  String playername = event.getPlayer().getName();
     	  if (vault) {
-      		if (Bukkit.getPlayer(playername).getDisplayName().contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
+      		if (Bukkit.getPlayer(playername).getDisplayName().replaceAll("§", "&").contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
       			sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
       		} else {
-      			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + Bukkit.getPlayer(playername).getName() + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+      			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + Bukkit.getPlayer(playername).getDisplayName() + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
       		}
       	} else {
       		sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);

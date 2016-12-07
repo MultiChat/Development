@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.olivermartin410.plugins</groupId>
   <artifactId>multichat</artifactId>
-  <version>1.3.3</version>
+  <version>1.3.4</version>
     <repositories>
     	<repository>
       	  	 <id>sponge</id>
