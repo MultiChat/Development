@@ -119,7 +119,7 @@ public class Events
         StaffChatManager chatman = new StaffChatManager();
         chatman.sendModMessage(player.getName(),player.getDisplayName(), player.getServer().getInfo().getName(), Message);
         chatman = null;
-        //MCCommand.chatMessage(Message, player);
+
       }
     }
     if (ACToggle.contains(player.getUniqueId()))
@@ -132,7 +132,7 @@ public class Events
         StaffChatManager chatman = new StaffChatManager();
         chatman.sendAdminMessage(player.getName(),player.getDisplayName(), player.getServer().getInfo().getName(), Message);
         chatman = null;
-        //ACCommand.chatMessage(Message, player);
+
       }
     }
     if (GCToggle.contains(player.getUniqueId()))
@@ -236,6 +236,40 @@ public class Events
         chatfix = null;
       }
     }
+    if (event.isCommand()) {
+    	String[] parts = event.getMessage().split(" ");
+    	if (CastControl.castList.containsKey(parts[0].substring(1).toLowerCase())) {
+    		if (event.getSender() instanceof ProxiedPlayer) {
+    			ProxiedPlayer playerSender = (ProxiedPlayer) event.getSender();
+    			if (playerSender.hasPermission("multichat.cast." + parts[0].substring(1).toLowerCase())) {
+    				boolean starter = false;
+        	        String Message = "";
+        	        for (String part : parts) {
+        	          if (!starter) {
+        	            starter = true;
+        	          } else {
+        	            Message = Message + part + " ";
+        	          }
+        	        }
+        	        CastControl.sendCast(parts[0].substring(1),Message,ChatStream.getStream(playerSender.getUniqueId()));
+    				
+    				event.setCancelled(true);
+    			}
+    		} else {
+    			boolean starter = false;
+    	        String Message = "";
+    	        for (String part : parts) {
+    	          if (!starter) {
+    	            starter = true;
+    	          } else {
+    	            Message = Message + part + " ";
+    	          }
+    	        }
+    	        CastControl.sendCast(parts[0].substring(1),Message,MultiChat.globalChat);
+    	        event.setCancelled(true);
+    		}
+    	}
+    }
     if ((!event.isCancelled()) && (!event.isCommand())) {
       if (MultiChat.configman.config.getBoolean("global") == true) {
         if (!MultiChat.configman.config.getStringList("no_global").contains(player.getServer().getInfo().getName()))
@@ -249,41 +283,6 @@ public class Events
             
             MultiChat.globalChat.sendMessage(player, Message);
             
-            //ChatManipulation chatfix = new ChatManipulation();
-            /*if ((player.hasPermission("multichat.chat.color")) || (player.hasPermission("multichat.chat.colour"))) {
-              Message = chatfix.FixFormatCodes(Message);
-            }*/
-           /* String chatformat = MultiChat.configman.config.getString("globalformat");
-            
-            chatformat = chatfix.replaceChatVars(chatformat, player);
-            
-            String URLBIT = chatfix.getURLBIT(event.getMessage());
-            
-            if ((player.hasPermission("multichat.chat.color")) || (player.hasPermission("multichat.chat.colour"))) {
-                Message = chatfix.FixFormatCodes(chatformat + Message);
-              }
-            
-            chatfix = null;
-            for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-              if (!MultiChat.configman.config.getStringList("no_global").contains(onlineplayer.getServer().getInfo().getName())) {
-                if (((Boolean)MultiChat.globalplayers.get(onlineplayer.getUniqueId())).booleanValue() == true)
-                {
-                  if ((!player.hasPermission("multichat.chat.color")) && (!player.hasPermission("multichat.chat.colour"))) {
-                    onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', chatformat) + Message).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
-                  } else {
-                    onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', Message)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
-                  }
-                }
-                else if (player.getServer().getInfo().getName() == onlineplayer.getServer().getInfo().getName()) {
-                  if ((!player.hasPermission("multichat.chat.color")) && (!player.hasPermission("multichat.chat.colour"))) {
-                    onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', chatformat) + Message).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
-                  } else {
-                    onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', Message)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
-                  }
-                }
-              }
-            }
-            System.out.println("\033[33m[MultiChat][CHAT]" + player.getName() + ": " + event.getMessage());*/
           }
           else
           {
@@ -329,7 +328,7 @@ public class Events
     if (!MultiChat.globalplayers.containsKey(uuid))
     {
       MultiChat.globalplayers.put(uuid, Boolean.valueOf(true));
-      
+     
       System.out.println("[MultiChat] Created new global chat entry for " + player.getName());
     }
     if (UUIDNameManager.existsUUID(uuid)) {
@@ -337,7 +336,9 @@ public class Events
     }
     UUIDNameManager.addNew(uuid, player.getName());
     System.out.println("[MultiChat] Refresed UUID-Name lookup: " + uuid.toString());
-    
+    ///
+    ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
+    ///
     if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
       	
       	String joinformat = MultiChat.jmconfigman.config.getString("serverjoin");
@@ -376,9 +377,13 @@ public class Events
     if (GCToggle.contains(uuid)) {
       GCToggle.remove(uuid);
     }
+    ///
+    ChatStream.removePlayer(player.getUniqueId());
+    ///
     if (MultiChat.viewedchats.containsKey(uuid))
     {
       MultiChat.viewedchats.remove(uuid);
+
       
       System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
       
@@ -405,51 +410,6 @@ public class Events
 	    }
       
     }
-  
-  
-  /*@EventHandler
-  public void onServerSwitch(ServerSwitchEvent event) {
-	  
-	  ProxiedPlayer player = event.getPlayer();
-	  
-	  if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
-	      	
-	      	String joinformat = MultiChat.jmconfigman.config.getString("serverjoin");
-	      	String silentformat = MultiChat.jmconfigman.config.getString("silentjoin");
-	      	ChatManipulation chatman = new ChatManipulation();
-	      	joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName(), player.getDisplayName(), player.getServer().getInfo().getName());
-	      	silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName(), player.getDisplayName(), player.getServer().getInfo().getName());
-	      	
-	      	if (MultiChat.jmconfigman.config.getBoolean("showglobal") == true ) {
-	      	
-	      	for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-	      		if (!player.hasPermission("multichat.staff.silentjoin")) {
-	      			onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
-	      		} else {
-	      			if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-	      				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
-	      			}
-	      		}
-	      	}
-	      	
-	      	} else {
-	      		
-	      		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-	      			if (player.getServer().getInfo().getName() == onlineplayer.getServer().getInfo().getName()) {
-		      		if (!player.hasPermission("multichat.staff.silentjoin")) {
-		      			onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
-		      		} else {
-		      			if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-		      				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
-		      			}
-		      		}
-	      		}
-		      	}
-	      		
-	      	}
-	    } 
-	  
-  }*/
   
 }
 

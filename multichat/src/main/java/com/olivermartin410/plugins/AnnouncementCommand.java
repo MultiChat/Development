@@ -1,5 +1,8 @@
 package com.olivermartin410.plugins;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -24,11 +27,23 @@ public class AnnouncementCommand extends Command {
 		      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 		      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 		      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+		      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 		      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    }
 		    else if (args.length == 1) 
 		    {
-		    	if (Announcements.existsAnnouncemnt(args[0].toLowerCase())) {
+		    	if (args[0].toLowerCase().equals("list")) {
+		    		
+		    		Map<String,String> announcementList = Announcements.getAnnouncementList();
+		    		Iterator<String> it = announcementList.keySet().iterator();
+		  	        sender.sendMessage(new ComponentBuilder("List of avaliable announcements:").color(ChatColor.GREEN).create());
+	    			String currentItem;
+		    		while (it.hasNext()) {
+		    			currentItem = it.next();
+		    			sender.sendMessage(new ComponentBuilder(currentItem + ": " + announcementList.get(currentItem)).color(ChatColor.AQUA).create());
+		    		}
+		    		
+		    	} else if (Announcements.existsAnnouncemnt(args[0].toLowerCase())) {
 		    		Announcements.playAnnouncement(args[0].toLowerCase());
 		    	} else {
 		    		sender.sendMessage(new ComponentBuilder("Sorry, no such announcement found: " + args[0].toUpperCase()).color(ChatColor.RED).create());
@@ -59,6 +74,7 @@ public class AnnouncementCommand extends Command {
 				      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+				      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    		
 		    	}
@@ -83,6 +99,7 @@ public class AnnouncementCommand extends Command {
 				      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+				      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    		
 		    	}
@@ -94,6 +111,7 @@ public class AnnouncementCommand extends Command {
 				      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+				      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    		
 		    	}
@@ -126,6 +144,7 @@ public class AnnouncementCommand extends Command {
 				      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+				      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 				      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    		
 		    	}
@@ -137,6 +156,7 @@ public class AnnouncementCommand extends Command {
 			      sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 			      sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
 			      sender.sendMessage(new ComponentBuilder("/announcement stop <name>").color(ChatColor.AQUA).create());
+			      sender.sendMessage(new ComponentBuilder("/announcement list").color(ChatColor.AQUA).create());
 			      sender.sendMessage(new ComponentBuilder("/announce <name>").color(ChatColor.AQUA).create());
 		    	
 		    }

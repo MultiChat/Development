@@ -111,7 +111,6 @@ public class SpigotComm
       	} else {
       		sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
       	}
-        //SpigotComm.this.sendMessage(event.getPlayer().getDisplayName(), event.getPlayer().getName());
       
       }
     }

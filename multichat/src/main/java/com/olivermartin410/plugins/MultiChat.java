@@ -217,6 +217,8 @@ public class MultiChat extends Plugin implements Listener {
 	    	  globalChat.addServer(server);
 	      }
 	      
+	      CastControl.castList.put("casttest","&3[CastTest]&6");
+	      
 	      backup();
 	      fetchdisplaynames();
 	    }

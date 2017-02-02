@@ -28,7 +28,7 @@ public class StaffListCommand
       
       sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&a" + server)).create());
       for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
-        if ((onlineplayer2.hasPermission("multichat.staff.mod")) || (onlineplayer2.hasPermission("multichat.staff.admin")) || (onlineplayer2.hasPermission("multichat.staff"))) {
+        if ((onlineplayer2.hasPermission("multichat.staff"))) {
           if (onlineplayer2.getServer().getInfo().getName().equals(server))
           {
             if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
