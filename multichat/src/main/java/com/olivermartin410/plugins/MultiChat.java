@@ -23,7 +23,7 @@ import net.md_5.bungee.event.EventHandler;
 
 public class MultiChat extends Plugin implements Listener {
 	
-	  public static String latestversion = "1.3.4";
+	  public static String latestversion = "1.4";
 	  public static Map<UUID, TChatInfo> modchatpreferences = new HashMap<UUID, TChatInfo>();
 	  public static Map<UUID, TChatInfo> adminchatpreferences = new HashMap<UUID, TChatInfo>();
 	  public static Map<String, TGroupChatInfo> groupchats = new HashMap<String, TGroupChatInfo>();
@@ -37,6 +37,7 @@ public class MultiChat extends Plugin implements Listener {
 	  public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
 	  public static Map<UUID, UUID> lastmsg = new HashMap<UUID, UUID>();
 	  public static boolean frozen;
+	  public static ChatStream globalChat;
 	  
 	  private static MultiChat instance;
 	  
@@ -175,7 +176,7 @@ public class MultiChat extends Plugin implements Listener {
 	    configman.startupConfig();
 	    jmconfigman.startupConfig();
 	    configversion = configman.config.getString("version");
-	    if (configversion.equals(latestversion) || configversion.equals("1.3")  || configversion.equals("1.3.1")  || configversion.equals("1.3.2") || configversion.equals("1.3.3"))
+	    if (configversion.equals(latestversion) || configversion.equals("1.3")  || configversion.equals("1.3.1")  || configversion.equals("1.3.2") || configversion.equals("1.3.3") || configversion.equals("1.3.4"))
 	    {
 	      getProxy().getPluginManager().registerListener(this, new Events());
 	      getProxy().getPluginManager().registerListener(this, this);
@@ -210,6 +211,11 @@ public class MultiChat extends Plugin implements Listener {
 	      UUIDNameManager.Startup();
 	      
 	      getLogger().info("MultiChat has been initiated!");
+	      
+	      globalChat = new ChatStream("GLOBAL", configman.config.getString("globalformat"), false, false);
+	      for (String server : configman.config.getStringList("no_global")) {
+	    	  globalChat.addServer(server);
+	      }
 	      
 	      backup();
 	      fetchdisplaynames();

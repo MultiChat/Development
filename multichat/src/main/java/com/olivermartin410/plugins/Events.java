@@ -247,11 +247,13 @@ public class Events
           {
             String Message = event.getMessage();
             
-            ChatManipulation chatfix = new ChatManipulation();
+            MultiChat.globalChat.sendMessage(player, Message);
+            
+            //ChatManipulation chatfix = new ChatManipulation();
             /*if ((player.hasPermission("multichat.chat.color")) || (player.hasPermission("multichat.chat.colour"))) {
               Message = chatfix.FixFormatCodes(Message);
             }*/
-            String chatformat = MultiChat.configman.config.getString("globalformat");
+           /* String chatformat = MultiChat.configman.config.getString("globalformat");
             
             chatformat = chatfix.replaceChatVars(chatformat, player);
             
@@ -281,7 +283,7 @@ public class Events
                 }
               }
             }
-            System.out.println("\033[33m[MultiChat][CHAT]" + player.getName() + ": " + event.getMessage());
+            System.out.println("\033[33m[MultiChat][CHAT]" + player.getName() + ": " + event.getMessage());*/
           }
           else
           {
@@ -335,23 +337,6 @@ public class Events
     }
     UUIDNameManager.addNew(uuid, player.getName());
     System.out.println("[MultiChat] Refresed UUID-Name lookup: " + uuid.toString());
-    
-    /*if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
-    	
-    	String joinformat = MultiChat.jmconfigman.config.getString("networkjoin");
-    	ChatManipulation chatman = new ChatManipulation();
-    	joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName(), player.getDisplayName(), player.getServer().getInfo().getName());
-    	
-    	for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-    		if (!player.hasPermission("multichat.staff.silentjoin")) {
-    			onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
-    		} else {
-    			if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-    				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
-    			}
-    		}
-    	}
-  }*/
     
     if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
       	
