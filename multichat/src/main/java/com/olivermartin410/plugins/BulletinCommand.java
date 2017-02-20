@@ -33,6 +33,7 @@ public class BulletinCommand extends Command {
 	    {
 	    	if (args[0].toLowerCase().equals("stop")) {
 	    		Bulletins.stopBulletins();
+	    		sender.sendMessage(new ComponentBuilder("Bulletins stopped").color(ChatColor.AQUA).create());
 	    	}
 	    	else if (args[0].toLowerCase().equals("list")) {
 	    		int counter = 0;
@@ -58,12 +59,14 @@ public class BulletinCommand extends Command {
 	    		
 	    		try {
 	    			Bulletins.removeBulletin(Integer.parseInt(args[1]) - 1);
+	    			sender.sendMessage(new ComponentBuilder("Removed bulletin").color(ChatColor.AQUA).create());
 	    		} catch (Exception e) {
 	    			sender.sendMessage(new ComponentBuilder("Invalid command usage!").color(ChatColor.RED).create());
 	    		}
 	    	} else if (args[0].toLowerCase().equals("start") ) {
 	    		try {
 	    			Bulletins.startBulletins(Integer.parseInt(args[1]));
+	    			sender.sendMessage(new ComponentBuilder("Started bulletin").color(ChatColor.AQUA).create());
 	    		} catch (Exception e) {
 	    			sender.sendMessage(new ComponentBuilder("Invalid command usage!").color(ChatColor.RED).create());
 	    		}
@@ -71,6 +74,7 @@ public class BulletinCommand extends Command {
 	    	} else if (args[0].toLowerCase().equals("add") ) {
 	    		
 	    		Bulletins.addBulletin(args[1]);
+	    		sender.sendMessage(new ComponentBuilder("Added to bulletin").color(ChatColor.AQUA).create());
 	    		
 	    	} else {
 	    		
@@ -99,6 +103,7 @@ public class BulletinCommand extends Command {
 	    		        }
 	    			
 	    		        Bulletins.addBulletin(Message);
+	    		        sender.sendMessage(new ComponentBuilder("Added to bulletin").color(ChatColor.AQUA).create());
 	    	}
 	    	
 	    } else {

@@ -1,4 +1,5 @@
 package com.olivermartin410.plugins;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.spongepowered.api.Platform;
@@ -21,6 +22,7 @@ public class MultiChatRawDataListener implements RawDataListener {
 	    public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 	    	
 	        Optional<Player> player = Sponge.getServer().getPlayer(data.getUTF(0));
+	        try {
 	        Player p = player.get();
 	        if (p.getOption("prefix").isPresent()) {
 	        	if (p.getOption("suffix").isPresent()) {
@@ -31,6 +33,9 @@ public class MultiChatRawDataListener implements RawDataListener {
 	        	
 	        } else {
 	        	channel.sendTo(p,buffer -> buffer.writeUTF(p.getDisplayNameData().displayName().get().toPlain()).writeUTF(p.getName()));
+	        }
+	        } catch (NoSuchElementException e) {
+	        	System.err.println("[MultiChat] An error occurred getting player details, is the server lagging?");
 	        }
 
 	    }

@@ -68,6 +68,10 @@ public class MultiChatCommand
           MultiChat.configversion = MultiChat.configman.config.getString("version");
           MultiChat.jmconfigman.startupConfig();
           System.out.println("VERSION LOADED: " + MultiChat.configversion);
+          MultiChat.globalChat = new ChatStream("GLOBAL", MultiChat.configman.config.getString("globalformat"), false, false);
+	      for (String server : MultiChat.configman.config.getStringList("no_global")) {
+	    	  MultiChat.globalChat.addServer(server);
+	      }
           sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bReload completed!")).create());
           sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3If any errors occured they can be viewed in the console log!")).create());
         }

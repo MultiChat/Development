@@ -104,7 +104,15 @@ public class AnnouncementCommand extends Command {
 		    		
 		    	}
 		    	
-		    	} else {
+		    	} else if (args[0].toLowerCase().equals("add")) {
+    			
+    				if (Announcements.addAnnouncement(args[1].toLowerCase(), args[2]) == true) {
+    					sender.sendMessage(new ComponentBuilder("Added announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+    				} else {
+    					sender.sendMessage(new ComponentBuilder("Sorry, announcement already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+    				}
+    		
+    	} else {
 		    		
 		    		sender.sendMessage(new ComponentBuilder("Usage:").color(ChatColor.GREEN).create());
 				      sender.sendMessage(new ComponentBuilder("/announcement add <name> <message>").color(ChatColor.AQUA).create());

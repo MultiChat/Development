@@ -18,7 +18,7 @@ public class Announcements {
 	
 	public static boolean startAnnouncement(final String name, Integer minutes) {
 			
-			if(!AKey.containsKey(name.toLowerCase())) {
+			if(!(AKey.containsKey(name.toLowerCase())) && Announcements.containsKey(name.toLowerCase())) {
 			
 			Integer ID;
 			
@@ -122,16 +122,17 @@ public class Announcements {
 	
 	public static void playAnnouncement(String name) {
 		
+		if (Announcements.containsKey(name.toLowerCase())) {
 		String message;
         String URLBIT;
     	ChatManipulation chatman = new ChatManipulation();
-    	 message = chatman.FixFormatCodes(Announcements.get(name));
-    	  URLBIT = chatman.getURLBIT(Announcements.get(name));
+    	 message = chatman.FixFormatCodes(Announcements.get(name.toLowerCase()));
+    	  URLBIT = chatman.getURLBIT(Announcements.get(name.toLowerCase()));
     	  
     	  for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',message)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
 			}
-		
+		}
 	}
 	
 }
