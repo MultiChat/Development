@@ -26,9 +26,17 @@ public class MultiChatRawDataListener implements RawDataListener {
 	        Player p = player.get();
 	        if (p.getOption("prefix").isPresent()) {
 	        	if (p.getOption("suffix").isPresent()) {
-	        		channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + p.getDisplayNameData().displayName().get().toPlain() + p.getOption("suffix").get()).writeUTF(p.getName()));
+	        		if (!p.getDisplayNameData().displayName().get().toPlain().contains(p.getOption("prefix").get())) {
+	        			channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + p.getDisplayNameData().displayName().get().toPlain() + p.getOption("suffix").get()).writeUTF(p.getName()));
+	        		} else {
+	        			channel.sendTo(p,buffer -> buffer.writeUTF(p.getDisplayNameData().displayName().get().toPlain()).writeUTF(p.getName()));
+	        		}
 	        	} else {
-	        		channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + p.getDisplayNameData().displayName().get().toPlain()).writeUTF(p.getName()));
+	        		if (!p.getDisplayNameData().displayName().get().toPlain().contains(p.getOption("prefix").get())) {
+	        			channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + p.getDisplayNameData().displayName().get().toPlain()).writeUTF(p.getName()));
+	        		} else {
+	        			channel.sendTo(p,buffer -> buffer.writeUTF(p.getDisplayNameData().displayName().get().toPlain()).writeUTF(p.getName()));
+	        		}
 	        	}
 	        	
 	        } else {
