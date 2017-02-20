@@ -395,12 +395,16 @@ public class Events
 	      	joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 	      	silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 	      	
+	      	
+	      	
 	      	for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 	      		if (!player.hasPermission("multichat.staff.silentjoin")) {
+
 	      			onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
 	      		} else {
 	      			if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
 	      				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
+
 	      			}
 	      		}
 	      	

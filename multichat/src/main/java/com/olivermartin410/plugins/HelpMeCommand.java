@@ -32,6 +32,7 @@ public class HelpMeCommand extends Command {
 		      }
 		      
 		      chatMessage(sender.getName() + ": " + Message);
+		      sender.sendMessage(new ComponentBuilder("Your request for help has been sent to all online staff :)").color(ChatColor.RED).create());
 		    
 		    }
 		  } else {
