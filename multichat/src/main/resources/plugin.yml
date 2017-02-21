@@ -3,3 +3,9 @@ version: 1.4
 author: Revilo410
 main: com.olivermartin410.plugins.SpigotComm
 softdepend: [Vault]
+commands:
+   nick:
+      description: Nicknames a player!
+      usage: /nick <player> <nickname> , OR TO DISABLE NICKNAME /nick <player> off
+      permission: multichatbridge.nick
+      permission-message: You do not have permission to nickname players, need multichatbridge.nick
