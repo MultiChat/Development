@@ -130,7 +130,7 @@ public class SpigotComm
     	  	}
     	  	if (vault) {
         			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-        			Bukkit.getPlayer(playername).setDisplayName(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
+        			//Bukkit.getPlayer(playername).setDisplayName(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
     	  	} else {
         		sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
     	  	}
@@ -169,7 +169,7 @@ public class SpigotComm
     	  	}
     	  	if (vault) {
         			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-        			Bukkit.getPlayer(playername).setDisplayName(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
+        			//Bukkit.getPlayer(playername).setDisplayName(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
     	  	} else {
         		sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
     	  	}
