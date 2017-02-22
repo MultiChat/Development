@@ -109,6 +109,11 @@ implements Listener
 	public void onChat(ChatEvent event)
 	{
 		ProxiedPlayer player = (ProxiedPlayer)event.getSender();
+		///
+		if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+			BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+		}
+		///
 		if (MCToggle.contains(player.getUniqueId()))
 		{
 			String Message = event.getMessage();

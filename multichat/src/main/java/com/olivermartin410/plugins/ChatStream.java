@@ -23,17 +23,17 @@ public class ChatStream {
 
 	protected String name;
 	protected String format;
-	
+
 	public static Map<UUID,ChatStream> currentStreams = new HashMap<UUID,ChatStream>();
-	
+
 	public static void setStream (UUID uuid,ChatStream stream) {
 		ChatStream.currentStreams.put(uuid,stream);
 	}
-	
+
 	public static ChatStream getStream (UUID uuid) {
 		return ChatStream.currentStreams.get(uuid);
 	}
-	
+
 	public static void removePlayer (UUID uuid) {
 		ChatStream.currentStreams.remove(uuid);
 	}
@@ -89,7 +89,7 @@ public class ChatStream {
 		System.out.println("\033[33m[MultiChat][CHAT]" + sender.getName() + ": " + message);
 
 	}
-	
+
 	public void sendMessage(String message) {
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
@@ -100,7 +100,7 @@ public class ChatStream {
 					receiver.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', fixFormatCodes(message,"&f")[0])).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
 
 					System.out.println("\033[33m[MultiChat][CHAT]" + message);
-					
+
 				}
 			}
 		}
