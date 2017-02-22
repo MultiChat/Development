@@ -352,17 +352,17 @@ implements Listener
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 			
-			System.out.println("The normal join format is: " + joinformat);
-			System.out.println("The silent join format is: " + silentformat);
-			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
+//			System.out.println("The normal join format is: " + joinformat);
+//			System.out.println("The silent join format is: " + silentformat);
+//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
-					System.out.println("Sending a normal join message for " + player.getName() + " to " + onlineplayer.getName());
+//					System.out.println("Sending a normal join message for " + player.getName() + " to " + onlineplayer.getName());
 					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
 				} else {
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						System.out.println("Sending a silent join message for " + player.getName() + " to " + onlineplayer.getName());
+//						System.out.println("Sending a silent join message for " + player.getName() + " to " + onlineplayer.getName());
 						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
 					}
 				}
@@ -406,17 +406,17 @@ implements Listener
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 			
-			System.out.println("The normal quit format is: " + joinformat);
-			System.out.println("The silent quit format is: " + silentformat);
-			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
+//			System.out.println("The normal quit format is: " + joinformat);
+//			System.out.println("The silent quit format is: " + silentformat);
+//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
-					System.out.println("Sending a normal quit message for " + player.getName() + " to " + onlineplayer.getName());
+//					System.out.println("Sending a normal quit message for " + player.getName() + " to " + onlineplayer.getName());
 					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
 				} else {
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						System.out.println("Sending a silent quit message for " + player.getName() + " to " + onlineplayer.getName());
+//						System.out.println("Sending a silent quit message for " + player.getName() + " to " + onlineplayer.getName());
 						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
 					}
 				}
