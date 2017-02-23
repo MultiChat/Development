@@ -24,7 +24,7 @@ public class CastCommand extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-
+		
 		if (args.length < 1)
 		{
 			displayUsage(sender);

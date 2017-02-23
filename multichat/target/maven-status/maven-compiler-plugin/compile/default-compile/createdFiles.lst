@@ -15,6 +15,7 @@ com\olivermartin410\plugins\MultiChat$3.class
 com\olivermartin410\plugins\CastControl.class
 com\olivermartin410\plugins\TGroupChatInfo.class
 com\olivermartin410\plugins\ACCCommand.class
+com\olivermartin410\plugins\CastCommand.class
 com\olivermartin410\plugins\MultiChat$1.class
 com\olivermartin410\plugins\BulletinCommand.class
 com\olivermartin410\plugins\SpigotComm$1.class

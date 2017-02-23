@@ -59,6 +59,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveSocialSpyInfo();
 				saveAnnouncements();
 				saveBulletins();
+				saveCasts();
 				UUIDNameManager.saveUUIDS();
 			}
 		}, 1L, 60L, TimeUnit.MINUTES);
@@ -240,6 +241,7 @@ public class MultiChat extends Plugin implements Listener {
 		saveSocialSpyInfo();
 		saveAnnouncements();
 		saveBulletins();
+		saveCasts();
 		UUIDNameManager.saveUUIDS();
 	}
 
@@ -327,6 +329,24 @@ public class MultiChat extends Plugin implements Listener {
 		catch (IOException e)
 		{
 			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the group chat info file!");
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveCasts()
+	{
+		try
+		{
+			File file = new File(ConfigDir, "Casts.dat");
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(CastControl.castList);
+			out.close();
+			System.out.println("[MultiChat] SAVE ROUTINE: The casts file was successfully saved!");
+		}
+		catch (IOException e)
+		{
+			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the casts file!");
 			e.printStackTrace();
 		}
 	}
@@ -471,6 +491,27 @@ public class MultiChat extends Plugin implements Listener {
 		catch (IOException|ClassNotFoundException e)
 		{
 			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the admin chat info file!");
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static HashMap<String, String> loadCasts()
+	{
+		HashMap<String, String> result = null;
+		try
+		{
+			File file = new File(ConfigDir, "Casts.dat");
+			FileInputStream saveFile = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+			result = (HashMap<String, String>)in.readObject();
+			in.close();
+			System.out.println("[MultiChat] LOAD ROUTINE: The casts file was successfully loaded!");
+		}
+		catch (IOException|ClassNotFoundException e)
+		{
+			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the casts file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -654,7 +695,6 @@ public class MultiChat extends Plugin implements Listener {
 			saveAnnouncements();
 			System.out.println("[MultiChat] The files were created!");
 		}
-		System.out.println("[MultiChat] [COMPLETE] Load sequence successful!");
 		File f8 = new File(ConfigDir, "Bulletins.dat");
 		if ((f8.exists()) && (!f8.isDirectory()))
 		{
@@ -668,6 +708,21 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Welcome to MultiChat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveBulletins();
+			System.out.println("[MultiChat] The files were created!");
+		}
+		File f9 = new File(ConfigDir, "Casts.dat");
+		if ((f9.exists()) && (!f9.isDirectory()))
+		{
+			System.out.println("[MultiChat] Attempting startup load for Casts");
+			CastControl.castList = loadCasts();
+			System.out.println("[MultiChat] Load completed!");
+		}
+		else
+		{
+			System.out.println("[MultiChat] Some casts files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] Welcome to MultiChat! :D");
+			System.out.println("[MultiChat] Attempting to create hash files!");
+			saveCasts();
 			System.out.println("[MultiChat] The files were created!");
 		}
 		System.out.println("[MultiChat] [COMPLETE] Load sequence successful!");

@@ -57,6 +57,7 @@ extends Command
 					MultiChat.saveSocialSpyInfo();
 					MultiChat.saveAnnouncements();
 					MultiChat.saveBulletins();
+					MultiChat.saveCasts();
 					UUIDNameManager.saveUUIDS();
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bSave completed!")).create());
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3If any errors occured they can be viewed in the console log!")).create());

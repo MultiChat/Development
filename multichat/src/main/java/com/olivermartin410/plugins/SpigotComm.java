@@ -152,24 +152,15 @@ implements PluginMessageListener, Listener
 			public void run()
 			{
 				String playername = event.getPlayer().getName();
-				/*if (vault) {
-  		if (Bukkit.getPlayer(playername).getDisplayName().replaceAll("§", "&").contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername))) || Bukkit.getPlayer(playername).getDisplayName().contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
-  			sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
-  		} else {
-  			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + Bukkit.getPlayer(playername).getDisplayName() + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-  		}
-  	} else {
-  		sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
-  	}*/
 				String nickname;
 				if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
 					nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
+					Bukkit.getPlayer(playername).setDisplayName(nickname);
 				} else {
 					nickname =  Bukkit.getPlayer(playername).getName();
 				}
 				if (vault) {
 					sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-					//Bukkit.getPlayer(playername).setDisplayName(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
 				} else {
 					sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
 				}
@@ -218,11 +209,13 @@ implements PluginMessageListener, Listener
 
 			if (args[1].equalsIgnoreCase("off")) {
 				removeNickname(targetUUID);
+				target.setDisplayName(target.getName());
 				sender.sendMessage(ChatColor.GREEN + args[0] + " has had their nickname removed!");
 				return true;
 			}
 
 			addNickname(targetUUID,args[1]);
+			target.setDisplayName(args[1]);
 
 			sender.sendMessage(ChatColor.GREEN + args[0] + " has been nicknamed!");
 
