@@ -247,7 +247,7 @@ implements Listener
 			if (CastControl.castList.containsKey(parts[0].substring(1).toLowerCase())) {
 				if (event.getSender() instanceof ProxiedPlayer) {
 					ProxiedPlayer playerSender = (ProxiedPlayer) event.getSender();
-					if (playerSender.hasPermission("multichat.cast." + parts[0].substring(1).toLowerCase())) {
+					if (playerSender.hasPermission("multichat.cast." + parts[0].substring(1).toLowerCase()) || playerSender.hasPermission("multichat.cast.admin")) {
 						boolean starter = false;
 						String Message = "";
 						for (String part : parts) {

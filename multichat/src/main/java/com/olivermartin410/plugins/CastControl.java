@@ -19,4 +19,8 @@ public class CastControl {
 		castList.remove(castName.toLowerCase());
 	}
 	
+	public static boolean existsCast(String castName) {
+			return castList.containsKey(castName.toLowerCase());
+	}
+	
 }
