@@ -65,7 +65,7 @@ public class CastCommand extends Command {
 
 			if (args[0].toLowerCase().equals("add")) {
 
-				if (!CastControl.existsCast(args[1])) {
+				if (!(CastControl.existsCast(args[1])) && !args[1].equalsIgnoreCase("cast")) {
 					
 					CastControl.addCast(args[1], args[2]);
 					sender.sendMessage(new ComponentBuilder("Added cast: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
