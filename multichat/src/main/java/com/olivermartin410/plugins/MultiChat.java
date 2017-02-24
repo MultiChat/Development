@@ -61,6 +61,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveBulletins();
 				saveCasts();
 				UUIDNameManager.saveUUIDS();
+				getLogger().info("Backup complete. Any errors reported above.");
 			}
 		}, 1L, 60L, TimeUnit.MINUTES);
 	}
@@ -73,7 +74,6 @@ public class MultiChat extends Plugin implements Listener {
 			{
 				if (configman.config.getBoolean("fetch_spigot_display_names") == true)
 				{
-					getLogger().info("Fetching display names!");
 					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -159,7 +159,6 @@ public class MultiChat extends Plugin implements Listener {
 				}
 				catch (NullPointerException ex)
 				{
-					System.out.println("[MultiChat] Could not fetch display name for player");
 				}
 			}
 		}, 4L, TimeUnit.SECONDS);
@@ -207,19 +206,19 @@ public class MultiChat extends Plugin implements Listener {
 				getProxy().getPluginManager().registerCommand(this, new ReplyCommand());
 				getProxy().getPluginManager().registerCommand(this, new SocialSpyCommand());
 			}
-			System.out.println("[MultiChat] VERSION LOADED: " + configversion);
+			System.out.println("[MultiChat] Config Version: " + configversion);
 
 			Startup();
 			UUIDNameManager.Startup();
 
-			getLogger().info("MultiChat has been initiated!");
+			//getLogger().info("MultiChat has been initiated!");
 
 			globalChat = new ChatStream("GLOBAL", configman.config.getString("globalformat"), false, false);
 			for (String server : configman.config.getStringList("no_global")) {
 				globalChat.addServer(server);
 			}
 
-			CastControl.castList.put("casttest","&3[CastTest]&6");
+			//CastControl.castList.put("casttest","&3[CastTest]&6");
 
 			backup();
 			fetchdisplaynames();
@@ -254,11 +253,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(Announcements.getAnnouncementList());
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The announcements file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The announcements file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the announcements file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the announcements file!");
 			e.printStackTrace();
 		}
 	}
@@ -274,11 +273,11 @@ public class MultiChat extends Plugin implements Listener {
 			out.writeInt(Bulletins.getTimeBetween());
 			out.writeObject(Bulletins.getArrayList());
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The bulletins file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The bulletins file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the bulletins file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the bulletins file!");
 			e.printStackTrace();
 		}
 	}
@@ -292,11 +291,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(modchatpreferences);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The mod chat info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The mod chat info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the mod chat info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the mod chat info file!");
 			e.printStackTrace();
 		}
 		try
@@ -306,11 +305,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(adminchatpreferences);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The admin chat info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The admin chat info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the admin chat info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the admin chat info file!");
 			e.printStackTrace();
 		}
 	}
@@ -324,11 +323,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(groupchats);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The group chat info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The group chat info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the group chat info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the group chat info file!");
 			e.printStackTrace();
 		}
 	}
@@ -342,11 +341,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(CastControl.castList);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The casts file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The casts file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the casts file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the casts file!");
 			e.printStackTrace();
 		}
 	}
@@ -360,11 +359,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(allspy);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The group spy info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The group spy info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the group spy info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the group spy info file!");
 			e.printStackTrace();
 		}
 	}
@@ -378,11 +377,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(socialspy);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The social spy info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The social spy info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the social spy info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the social spy info file!");
 			e.printStackTrace();
 		}
 	}
@@ -396,11 +395,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(globalplayers);
 			out.close();
-			System.out.println("[MultiChat] SAVE ROUTINE: The global chat info file was successfully saved!");
+			//System.out.println("[MultiChat] SAVE ROUTINE: The global chat info file was successfully saved!");
 		}
 		catch (IOException e)
 		{
-			System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the global chat info file!");
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the global chat info file!");
 			e.printStackTrace();
 		}
 	}
@@ -416,11 +415,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID, TChatInfo>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The mod chat info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The mod chat info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the mod chat info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the mod chat info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -445,11 +444,11 @@ public class MultiChat extends Plugin implements Listener {
 			if (enabled) {
 				Bulletins.startBulletins(timeBetween);
 			}
-			System.out.println("[MultiChat] LOAD ROUTINE: The bulletins file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The bulletins file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the bulletins file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the bulletins file!");
 			e.printStackTrace();
 		}
 	}
@@ -465,11 +464,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, String>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The announcements file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The announcements file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the announcements file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the announcements file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -486,11 +485,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID, TChatInfo>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The admin chat info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The admin chat info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the admin chat info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the admin chat info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -507,11 +506,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, String>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The casts file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The casts file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the casts file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the casts file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -528,11 +527,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, TGroupChatInfo>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The group chat info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The group chat info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the group chat info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the group chat info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -549,11 +548,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (List<UUID>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The group spy info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The group spy info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the group spy info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the group spy info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -570,11 +569,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (List<UUID>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The social spy info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The social spy info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the social spy info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the social spy info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -591,11 +590,11 @@ public class MultiChat extends Plugin implements Listener {
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (Map<UUID, Boolean>)in.readObject();
 			in.close();
-			System.out.println("[MultiChat] LOAD ROUTINE: The global chat info file was successfully loaded!");
+			//System.out.println("[MultiChat] LOAD ROUTINE: The global chat info file was successfully loaded!");
 		}
 		catch (IOException|ClassNotFoundException e)
 		{
-			System.out.println("[MultiChat] LOAD ROUTINE: An error has occured reading the global chat info file!");
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the global chat info file!");
 			e.printStackTrace();
 		}
 		return result;
@@ -603,14 +602,15 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void Startup()
 	{
+		System.out.println("[MultiChat] Starting load routine for data files");
 		File f = new File(ConfigDir, "StaffChatInfo.dat");
 		File f2 = new File(ConfigDir, "AdminChatInfo.dat");
 		if ((f.exists()) && (!f.isDirectory()) && (f2.exists()) && (!f2.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for StaffChat");
+			//System.out.println("[MultiChat] Attempting startup load for StaffChat");
 			modchatpreferences.putAll(loadModChatInfo());
 			adminchatpreferences.putAll(loadAdminChatInfo());
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -623,9 +623,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f3 = new File(ConfigDir, "GroupChatInfo.dat");
 		if ((f3.exists()) && (!f3.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for GroupChat");
+			//System.out.println("[MultiChat] Attempting startup load for GroupChat");
 			groupchats.putAll(loadGroupChatInfo());
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -638,9 +638,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f4 = new File(ConfigDir, "GroupSpyInfo.dat");
 		if ((f4.exists()) && (!f4.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Group Spy");
+			//System.out.println("[MultiChat] Attempting startup load for Group Spy");
 			allspy = loadGroupSpyInfo();
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -653,9 +653,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f5 = new File(ConfigDir, "GlobalChatInfo.dat");
 		if ((f5.exists()) && (!f5.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Global Chat Info");
+			//System.out.println("[MultiChat] Attempting startup load for Global Chat Info");
 			globalplayers = loadGlobalChatInfo();
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -668,9 +668,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f6 = new File(ConfigDir, "SocialSpyInfo.dat");
 		if ((f6.exists()) && (!f6.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Social Spy");
+			//System.out.println("[MultiChat] Attempting startup load for Social Spy");
 			socialspy = loadSocialSpyInfo();
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -683,9 +683,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f7 = new File(ConfigDir, "Announcements.dat");
 		if ((f7.exists()) && (!f7.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Announcements");
+			//System.out.println("[MultiChat] Attempting startup load for Announcements");
 			Announcements.loadAnnouncementList((loadAnnouncements()));
-			System.out.println("[MultiChat] Load completed!");
+		//	System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -698,9 +698,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f8 = new File(ConfigDir, "Bulletins.dat");
 		if ((f8.exists()) && (!f8.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Bulletins");
+			//System.out.println("[MultiChat] Attempting startup load for Bulletins");
 			loadBulletins();
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -713,9 +713,9 @@ public class MultiChat extends Plugin implements Listener {
 		File f9 = new File(ConfigDir, "Casts.dat");
 		if ((f9.exists()) && (!f9.isDirectory()))
 		{
-			System.out.println("[MultiChat] Attempting startup load for Casts");
+			//System.out.println("[MultiChat] Attempting startup load for Casts");
 			CastControl.castList = loadCasts();
-			System.out.println("[MultiChat] Load completed!");
+			//System.out.println("[MultiChat] Load completed!");
 		}
 		else
 		{
@@ -725,7 +725,7 @@ public class MultiChat extends Plugin implements Listener {
 			saveCasts();
 			System.out.println("[MultiChat] The files were created!");
 		}
-		System.out.println("[MultiChat] [COMPLETE] Load sequence successful!");
+		System.out.println("[MultiChat] [COMPLETE] Load sequence finished! (Any errors reported above)");
 	}
 
 }

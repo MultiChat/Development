@@ -211,7 +211,8 @@ implements Listener
 							finalmessage = chatfix.FixFormatCodes(finalmessage);
 							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 								if ((onlineplayer.hasPermission("multichat.staff.spy")) && (MultiChat.socialspy.contains(onlineplayer.getUniqueId())) && 
-										(onlineplayer.getUniqueId() != player.getUniqueId()) && (onlineplayer.getUniqueId() != target.getUniqueId())) {
+										(onlineplayer.getUniqueId() != player.getUniqueId()) && (onlineplayer.getUniqueId() != target.getUniqueId()) && 
+										(!(player.hasPermission("multichat.staff.spy.bypass") || target.hasPermission("multichat.staff.spy.bypass")))) {
 									onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', finalmessage)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
 								}
 							}

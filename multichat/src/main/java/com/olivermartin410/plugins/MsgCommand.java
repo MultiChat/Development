@@ -109,7 +109,8 @@ extends Command implements TabExecutor
 							finalmessage = chatfix.FixFormatCodes(finalmessage);
 							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 								if ((onlineplayer.hasPermission("multichat.staff.spy")) && (MultiChat.socialspy.contains(onlineplayer.getUniqueId())) && 
-										(onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId()) && (onlineplayer.getUniqueId() != target.getUniqueId())) {
+										(onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId()) && (onlineplayer.getUniqueId() != target.getUniqueId())
+										&& (!(sender.hasPermission("multichat.staff.spy.bypass") || target.hasPermission("multichat.staff.spy.bypass")))) {
 									onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', finalmessage)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
 								}
 							}
