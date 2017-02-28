@@ -120,19 +120,19 @@ extends Command
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/socialspy")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Freeze the chat to stop messages being sent")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/freezechat")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Clear the chat stream for yourself or a group of people")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Clear &3the &3chat &3tream &3for &3yourself &3or &3a &3group &3of &3people")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/clearchat [self,server,global,all]")).create());
 					} else {
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2&lMulti&a&lChat &b&lHelp [Page 3]")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3View announcement commands")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/announcement")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3View bulletin commands")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/bulletin)")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/bulletin")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3View cast commands")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/cast")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Alert staff members of a problem")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/helpme <message>")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Nickname a player (Only works if MultiChat is installed on Spigot as well)")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Nickname a player &3(&3Only &3works &3if &3MultiChat &3is &3installed &3on &3Spigot &3as &3well)")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/nick <player> <nickname/off>")).create());
 					}
 				}
