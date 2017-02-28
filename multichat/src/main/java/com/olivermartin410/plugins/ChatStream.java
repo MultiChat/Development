@@ -79,9 +79,13 @@ public class ChatStream {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 					//TODO hiding & showing streams
-
-					receiver.sendMessage(buildFormat(sender,receiver,format,message));
-
+						if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
+						&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+								(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
+								&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+								(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
+							receiver.sendMessage(buildFormat(sender,receiver,format,message));
+						}
 				}
 			}
 		}
