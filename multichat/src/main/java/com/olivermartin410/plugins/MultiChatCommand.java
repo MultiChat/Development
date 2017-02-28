@@ -45,7 +45,7 @@ extends Command
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b&o/acc <chat colour code> <name colour code>")).create());
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Toggle mod chat &o(Toggle admin chat)")).create());
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/mc &o(/ac)")).create());
-					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto view more commands")).create());
+					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands")).create());
 				}
 				else if (args[0].toLowerCase().equals("save"))
 				{
@@ -99,7 +99,7 @@ extends Command
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b&o/acc <chat colour code> <name colour code>")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Toggle mod chat &o(Toggle admin chat)")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/mc &o(/ac)")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto view more commands")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands")).create());
 					}
 					else if (args[1].toLowerCase().equals("2"))
 					{
