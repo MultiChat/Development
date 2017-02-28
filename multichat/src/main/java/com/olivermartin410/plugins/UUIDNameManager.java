@@ -38,11 +38,11 @@ public class UUIDNameManager
       ObjectOutputStream out = new ObjectOutputStream(saveFile);
       out.writeObject(uuidname);
       out.close();
-      System.out.println("[MultiChat] SAVE ROUTINE: The uuid-name file was saved successfully!");
+      //System.out.println("[MultiChat] SAVE ROUTINE: The uuid-name file was saved successfully!");
     }
     catch (IOException e)
     {
-      System.out.println("[MultiChat] SAVE ROUTINE:  An error has occured writing the uuid-name file!");
+      System.out.println("[MultiChat] [Save Error] An error has occured writing the uuid-name file!");
       e.printStackTrace();
     }
   }
@@ -58,11 +58,11 @@ public static HashMap<UUID, String> loadUUIDS()
       ObjectInputStream in = new ObjectInputStream(saveFile);
       result = (HashMap<UUID,String>)in.readObject();
       in.close();
-      System.out.println("[MultiChat] LOAD ROUTINE: The uuid-name file was successfully loaded!");
+      //System.out.println("[MultiChat] LOAD ROUTINE: The uuid-name file was successfully loaded!");
     }
     catch (IOException|ClassNotFoundException e)
     {
-      System.out.println("[ActivityMonitor] LOAD ROUTINE: An error has occured reading the uuid-name file!");
+      System.out.println("[ActivityMonitor] [Load Error] An error has occured reading the uuid-name file!");
       e.printStackTrace();
     }
     return result;
@@ -73,9 +73,9 @@ public static HashMap<UUID, String> loadUUIDS()
     File f = new File(MultiChat.ConfigDir, "MultiChatUUIDName.dat");
     if ((f.exists()) && (!f.isDirectory()))
     {
-      System.out.println("[MultiChat] Attempting startup load of uuid-name file");
+      //System.out.println("[MultiChat] Attempting startup load of uuid-name file");
       uuidname.putAll(loadUUIDS());
-      System.out.println("[MultiChat] Load completed of uuid-name file!");
+      //System.out.println("[MultiChat] Load completed of uuid-name file!");
     }
     else
     {
