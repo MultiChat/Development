@@ -122,7 +122,14 @@ public class ChatStream {
 		newFormat = newFormat.replace("%NAMET%", receiver.getName());
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
-
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+			newFormat = newFormat.replace("%MODE%", "Local");
+			newFormat = newFormat.replace("%M%", "L");
+		}
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+			newFormat = newFormat.replace("%MODE%", "Global");
+			newFormat = newFormat.replace("%M%", "G");
+		}
 		String[] returnValues = fixFormatCodes(newFormat, "&f");
 		newFormat = returnValues[0] + "%MESSAGE%";
 

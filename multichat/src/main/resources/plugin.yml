@@ -1,5 +1,5 @@
 name: MultiChatBridge
-version: 1.4
+version: 1.4.1
 author: Revilo410
 main: com.olivermartin410.plugins.SpigotComm
 softdepend: [Vault]

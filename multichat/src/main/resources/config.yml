@@ -6,7 +6,7 @@
 
 #################
 #  DO NOT EDIT  #
-version: "1.4"
+version: "1.4.1"
 #################
 
 ##############################################################
@@ -40,6 +40,7 @@ pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 # %NAME% = The name of the sender
 # %DISPLAYNAME% = The display name of the sender
 # %SERVER% = The server of the sender
+# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 
 #Global Chat Format
 #Will display as [FORMAT] [MESSAGE]
