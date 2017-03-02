@@ -103,11 +103,13 @@ public class ChatStream {
 					String URLBIT = getURLBIT(message);
 					receiver.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', fixFormatCodes(message,"&f")[0])).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
 
-					System.out.println("\033[33m[MultiChat][CHAT]" + message);
-
+					
 				}
 			}
 		}
+		
+		System.out.println("\033[33m[MultiChat][CHAT]" + message);
+
 	}
 
 	public BaseComponent[] buildFormat(ProxiedPlayer sender, ProxiedPlayer receiver, String format, String message) {
