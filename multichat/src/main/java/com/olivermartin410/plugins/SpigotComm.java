@@ -113,6 +113,11 @@ implements PluginMessageListener, Listener
 			try
 			{
 				String playername = in.readUTF();
+				
+				if (Bukkit.getPlayer(playername) == null) {
+					return;
+				}
+				
 				/*if (vault) {
         		if (Bukkit.getPlayer(playername).getDisplayName().replaceAll("§", "&").contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername))) || Bukkit.getPlayer(playername).getDisplayName().contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
         			sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
@@ -152,7 +157,11 @@ implements PluginMessageListener, Listener
 		{
 			public void run()
 			{
+				if (event.getPlayer() == null) {
+					return;
+				}
 				String playername = event.getPlayer().getName();
+				
 				String nickname;
 				if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
 					nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());

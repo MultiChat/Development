@@ -89,8 +89,8 @@ public class ChatStream {
 				}
 			}
 		}
-
-		System.out.println("\033[33m[MultiChat][CHAT]" + sender.getName() + ": " + message);
+		
+		ProxyServer.getInstance().getConsole().sendMessage(buildFormatConsole(sender,format,message));
 
 	}
 
@@ -214,6 +214,114 @@ public class ChatStream {
 			String URLBIT = getURLBIT(message);
 
 			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+		}
+
+		return toSend;
+
+	}
+	
+	public BaseComponent[] buildFormatConsole(ProxiedPlayer sender, String format, String message) {
+
+		String newFormat = format;
+
+		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		newFormat = newFormat.replace("%NAME%", sender.getName());
+		newFormat = newFormat.replace("%DISPLAYNAMET%", "CONSOLE");
+		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
+		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
+		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+			newFormat = newFormat.replace("%MODE%", "Local");
+			newFormat = newFormat.replace("%M%", "L");
+		}
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+			newFormat = newFormat.replace("%MODE%", "Global");
+			newFormat = newFormat.replace("%M%", "G");
+		}
+		String[] returnValues = fixFormatCodes(newFormat, "&f");
+		newFormat = returnValues[0] + "%MESSAGE%";
+
+		String lastColour = returnValues[1];
+		BaseComponent[] toSend;
+
+		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
+			newFormat = newFormat.replace("%MESSAGE%", fixFormatCodes(message, lastColour)[0]);
+			String URLBIT = getURLBIT(message);
+			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',"&6[MultiChat][CHAT] " + newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+		} else {
+
+			ChatColor currentColor = null;
+			switch (lastColour.toCharArray()[1]) {
+			case '0':
+				currentColor = ChatColor.BLACK;
+				break;
+			case '1':
+				currentColor = ChatColor.DARK_BLUE;
+				break;
+			case '2':
+				currentColor = ChatColor.DARK_GREEN;
+				break;
+			case '3':
+				currentColor = ChatColor.DARK_AQUA;
+				break;
+			case '4':
+				currentColor = ChatColor.DARK_RED;
+				break;
+			case '5':
+				currentColor = ChatColor.DARK_PURPLE;
+				break;
+			case '6':
+				currentColor = ChatColor.GOLD;
+				break;
+			case '7':
+				currentColor = ChatColor.GRAY;
+				break;
+			case '8':
+				currentColor = ChatColor.DARK_GRAY;
+				break;
+			case '9':
+				currentColor = ChatColor.BLUE;
+				break;
+			case 'a':
+				currentColor = ChatColor.GREEN;
+				break;
+			case 'b':
+				currentColor = ChatColor.AQUA;
+				break;
+			case 'c':
+				currentColor = ChatColor.RED;
+				break;
+			case 'd':
+				currentColor = ChatColor.LIGHT_PURPLE;
+				break;
+			case 'e':
+				currentColor = ChatColor.YELLOW;
+				break;
+			case 'f':
+				currentColor = ChatColor.WHITE;
+				break;
+			case 'r':
+				currentColor = ChatColor.RESET;
+				break;
+			}
+
+			boolean bold = false;
+			boolean italic = false;
+			boolean magic = false;
+			boolean underline = false;
+			boolean strike = false;
+
+			if (lastColour.contains("&l")) bold = true;
+			if (lastColour.contains("&o")) italic = true;
+			if (lastColour.contains("&m")) strike = true;
+			if (lastColour.contains("&n")) underline = true;
+			if (lastColour.contains("&k")) magic = true;
+
+			newFormat = newFormat.replace("%MESSAGE%", "");
+
+			String URLBIT = getURLBIT(message);
+
+			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
 		}
 
 		return toSend;

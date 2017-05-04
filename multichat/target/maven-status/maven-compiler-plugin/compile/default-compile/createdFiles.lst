@@ -3,6 +3,7 @@ com\olivermartin410\plugins\MCCommand.class
 com\olivermartin410\plugins\StaffChatManager.class
 com\olivermartin410\plugins\MultiChatRawDataListener.class
 com\olivermartin410\plugins\SpigotComm.class
+com\olivermartin410\plugins\SpongeComm$2.class
 com\olivermartin410\plugins\AnnouncementCommand.class
 com\olivermartin410\plugins\BungeeComm.class
 com\olivermartin410\plugins\MultiChatCommand.class
@@ -46,6 +47,7 @@ com\olivermartin410\plugins\GlobalCommand.class
 com\olivermartin410\plugins\TViewChat.class
 com\olivermartin410\plugins\ClearChatCommand.class
 com\olivermartin410\plugins\MCCCommand.class
+com\olivermartin410\plugins\SpongeComm$1.class
 com\olivermartin410\plugins\Announcements.class
 com\olivermartin410\plugins\Events.class
 mcmod.info
