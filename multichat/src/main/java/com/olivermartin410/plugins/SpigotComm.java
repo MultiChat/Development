@@ -201,8 +201,6 @@ implements PluginMessageListener, Listener
 				return true;
 			}
 
-			// Make sure that the player specified exactly one argument (the name of the player to freeze)
-
 			if (args.length != 2) {
 				// When onCommand() returns false, the help message associated with that command is displayed.
 				return false;
@@ -213,6 +211,13 @@ implements PluginMessageListener, Listener
 			if (target == null) {
 				sender.sendMessage(ChatColor.DARK_RED + args[0] + " is not currently online so cannot be nicknamed!");
 				return true;
+			}
+			
+			if (target != sender) {
+				if (!sender.hasPermission("multichatbridge.nick.others")) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to nickname other players!");
+					return true;
+				}
 			}
 
 			UUID targetUUID = target.getUniqueId();

@@ -133,6 +133,13 @@ public final class SpongeComm implements CommandExecutor {
 
 		Player target = args.<Player>getOne("player").get();
         String nickname = args.<String>getOne("message").get();
+        
+        if (target != sender) {
+        	if (!sender.hasPermission("multichatsponge.nick.others")) {
+        		sender.sendMessage(Text.of("You do not have permission to nickname other players!"));
+    			return CommandResult.success();
+        	}
+        }
 
 		UUID targetUUID = target.getUniqueId();
 
