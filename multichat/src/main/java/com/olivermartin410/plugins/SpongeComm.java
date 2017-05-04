@@ -88,7 +88,7 @@ public final class SpongeComm implements CommandExecutor {
 				.arguments(
 		                GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
 		                GenericArguments.remainingJoinedStrings(Text.of("message")))
-				.permission("multichatsponge.nick")
+				.permission("multichatsponge.nick.self")
 				.executor(this)
 				.build();
 

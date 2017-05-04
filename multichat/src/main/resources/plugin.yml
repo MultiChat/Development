@@ -7,5 +7,5 @@ commands:
    nick:
       description: Gives a player a nickname
       usage: /nick <player> <nickname / off>
-      permission: multichatbridge.nick
+      permission: multichatbridge.nick.self
       permission-message: You do not have permission (multichatbridge.nick)
