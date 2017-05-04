@@ -23,7 +23,7 @@ public class MultiChatRawDataListener implements RawDataListener {
 	private Text getDisplayName(Player player) {
 		Optional<DisplayNameData> data;
 		if ((data = player.get(DisplayNameData.class)).isPresent()) {
-			System.out.println(data.get().displayName().get().toPlain()) ; return data.get().displayName().get(); }
+			return data.get().displayName().get(); }
 		else
 		    return Text.of(player.getName());
 	}
