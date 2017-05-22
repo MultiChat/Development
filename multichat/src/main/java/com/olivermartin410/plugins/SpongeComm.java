@@ -47,6 +47,7 @@ public final class SpongeComm implements CommandExecutor {
 	@DefaultConfig(sharedRoot = true)
 	private ConfigurationLoader<CommentedConfigurationNode> configLoader;
 
+	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 
@@ -95,6 +96,7 @@ public final class SpongeComm implements CommandExecutor {
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 	}
 
+	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStop(GameStoppingServerEvent event) {
 		Sponge.getChannelRegistrar().unbindChannel(channel);

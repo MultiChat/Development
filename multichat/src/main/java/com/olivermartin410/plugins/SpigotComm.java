@@ -113,12 +113,13 @@ implements PluginMessageListener, Listener
 			try
 			{
 				String playername = in.readUTF();
-				
-				if (Bukkit.getPlayer(playername) == null) {
-					return;
-				}
-				
-				/*if (vault) {
+
+				synchronized (Bukkit.getPlayer(playername)) {
+					if (Bukkit.getPlayer(playername) == null) {
+						return;
+					}
+
+					/*if (vault) {
         		if (Bukkit.getPlayer(playername).getDisplayName().replaceAll("§", "&").contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername))) || Bukkit.getPlayer(playername).getDisplayName().contains(chat.getPlayerPrefix(Bukkit.getPlayer(playername)))) {
         			sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
         		} else {
@@ -127,18 +128,19 @@ implements PluginMessageListener, Listener
         	} else {
         		sendMessage(Bukkit.getPlayer(playername).getDisplayName(), playername);
         	}*/
-				String nickname;
-				if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
-					nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
-				} else {
-					nickname =  Bukkit.getPlayer(playername).getName();
-				}
-				if (vault) {
-					sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-					Bukkit.getPlayer(playername).setDisplayName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-				} else {
-					sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
-					Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+					String nickname;
+					if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
+						nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
+					} else {
+						nickname =  Bukkit.getPlayer(playername).getName();
+					}
+					if (vault) {
+						sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+						Bukkit.getPlayer(playername).setDisplayName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+					} else {
+						sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
+						Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+					}
 				}
 			}
 			catch (IOException e)
@@ -157,22 +159,24 @@ implements PluginMessageListener, Listener
 		{
 			public void run()
 			{
-				if (event.getPlayer() == null) {
-					return;
-				}
-				String playername = event.getPlayer().getName();
-				
-				String nickname;
-				if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
-					nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
-					Bukkit.getPlayer(playername).setDisplayName(nickname);
-				} else {
-					nickname =  Bukkit.getPlayer(playername).getName();
-				}
-				if (vault) {
-					sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
-				} else {
-					sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
+				synchronized (event.getPlayer()) {
+					if (event.getPlayer() == null) {
+						return;
+					}
+					String playername = event.getPlayer().getName();
+
+					String nickname;
+					if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
+						nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
+						Bukkit.getPlayer(playername).setDisplayName(nickname);
+					} else {
+						nickname =  Bukkit.getPlayer(playername).getName();
+					}
+					if (vault) {
+						sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+					} else {
+						sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
+					}
 				}
 			}
 		}
@@ -212,7 +216,7 @@ implements PluginMessageListener, Listener
 				sender.sendMessage(ChatColor.DARK_RED + args[0] + " is not currently online so cannot be nicknamed!");
 				return true;
 			}
-			
+
 			if (target != sender) {
 				if (!sender.hasPermission("multichatbridge.nick.others")) {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to nickname other players!");
