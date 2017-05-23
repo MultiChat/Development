@@ -24,16 +24,22 @@ public class MultiChatRawDataListener implements RawDataListener {
 		synchronized (player) {
 			Optional<DisplayNameData> data;
 			if ((data = player.get(DisplayNameData.class)).isPresent()) {
-				return data.get().displayName().get(); }
-			else
-				return Text.of(player.getName());
+				return data.get().displayName().get();
+			} else {
+				String nickname;
+				if (SpongeComm.nicknames.containsKey(player.getUniqueId())) {
+					nickname = SpongeComm.nicknames.get(player.getUniqueId());
+				} else {
+					nickname = player.getName();
+				}
+				return Text.of(nickname);
+			}
 		}
 	}
 
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
-		String nickname;
 		Optional<Player> player = Sponge.getServer().getPlayer(data.getUTF(0));
 		try {
 			Player p = player.get();
@@ -41,13 +47,9 @@ public class MultiChatRawDataListener implements RawDataListener {
 				if (p == null) {
 					return;
 				}
-				if (SpongeComm.nicknames.containsKey(p.getUniqueId())) {
-					nickname = SpongeComm.nicknames.get(p.getUniqueId());
-				} else {
-					nickname = getDisplayName(p).toPlain();
-				}
 
-				if (p.getOption("prefix").isPresent()) {
+
+				/*if (p.getOption("prefix").isPresent()) {
 					if (p.getOption("suffix").isPresent()) {
 						if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
 							channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname + p.getOption("suffix").get()).writeUTF(p.getName()));
@@ -64,7 +66,9 @@ public class MultiChatRawDataListener implements RawDataListener {
 
 				} else {
 					channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-				}
+				}*/
+
+				channel.sendTo(p,buffer -> buffer.writeUTF(getDisplayName(p).toPlain()).writeUTF(p.getName()));
 			}
 		} catch (NoSuchElementException e) {
 			System.err.println("[MultiChat] An error occurred getting player details, is the server lagging?");

@@ -78,7 +78,7 @@ public final class SpongeComm implements CommandExecutor {
 			e.printStackTrace();
 			nicknames = new HashMap<UUID,String>();
 		}
-	
+
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
 		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "MultiChat");
 		channel.addListener(Platform.Type.SERVER, new MultiChatRawDataListener(channel));
@@ -87,8 +87,8 @@ public final class SpongeComm implements CommandExecutor {
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
 				.arguments(
-		                GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
-		                GenericArguments.remainingJoinedStrings(Text.of("message")))
+						GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
+						GenericArguments.remainingJoinedStrings(Text.of("message")))
 				.permission("multichatsponge.nick.self")
 				.executor(this)
 				.build();
@@ -104,22 +104,47 @@ public final class SpongeComm implements CommandExecutor {
 		ConfigurationNode rootNode;
 
 		//try {
-			rootNode = configLoader.createEmptyNode();
+		rootNode = configLoader.createEmptyNode();
+		try {
+			rootNode.getNode("nicknames").setValue(new TypeToken<Map<UUID,String>>() {}, nicknames);
 			try {
-				rootNode.getNode("nicknames").setValue(new TypeToken<Map<UUID,String>>() {}, nicknames);
-				try {
-					configLoader.save(rootNode);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (ObjectMappingException e) {
+				configLoader.save(rootNode);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
-				System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 			}
+		} catch (ObjectMappingException e) {
+			e.printStackTrace();
+			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
+		}
 		//} catch (IOException e) {
 		//	e.printStackTrace();
 		//}
+
+	}
+
+	private void updatePlayerDisplayName(String playername) {
+
+		String nickname;
+		if (Sponge.getServer().getPlayer(playername).isPresent()) {
+			Player player = Sponge.getServer().getPlayer(playername).get();
+			if (nicknames.containsKey(player.getUniqueId())) {
+				nickname = nicknames.get(player.getUniqueId());
+			} else {
+				nickname =  player.getName();
+			}
+
+			if (player.getOption("prefix").isPresent()) {
+				if (player.getOption("suffix").isPresent()) {
+					player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
+				} else {
+					player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
+				}
+			} else {
+				player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
+			}
+
+		}
 
 	}
 
@@ -134,26 +159,26 @@ public final class SpongeComm implements CommandExecutor {
 		}
 
 		Player target = args.<Player>getOne("player").get();
-        String nickname = args.<String>getOne("message").get();
-        
-        if (target != sender) {
-        	if (!sender.hasPermission("multichatsponge.nick.others")) {
-        		sender.sendMessage(Text.of("You do not have permission to nickname other players!"));
-    			return CommandResult.success();
-        	}
-        }
+		String nickname = args.<String>getOne("message").get();
+
+		if (target != sender) {
+			if (!sender.hasPermission("multichatsponge.nick.others")) {
+				sender.sendMessage(Text.of("You do not have permission to nickname other players!"));
+				return CommandResult.success();
+			}
+		}
 
 		UUID targetUUID = target.getUniqueId();
 
 		if (nickname.equalsIgnoreCase("off")) {
 			removeNickname(targetUUID);
-			target.offer(Keys.DISPLAY_NAME, Text.of(target.getName()));
+			updatePlayerDisplayName(target.getName());
 			sender.sendMessage(Text.of(target.getName() + " has had their nickname removed!"));
 			return CommandResult.success();
 		}
 
 		addNickname(targetUUID,nickname);
-		target.offer(Keys.DISPLAY_NAME, Text.of(nickname));
+		updatePlayerDisplayName(target.getName());
 
 		sender.sendMessage(Text.of(target.getName() + " has been nicknamed!"));
 		return CommandResult.success();
