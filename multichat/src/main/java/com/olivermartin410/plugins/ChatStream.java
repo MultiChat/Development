@@ -9,8 +9,6 @@ import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -80,17 +78,17 @@ public class ChatStream {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 					//TODO hiding & showing streams
-						if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
-						&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-								(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
-								&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-								(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
-							receiver.sendMessage(buildFormat(sender,receiver,format,message));
-						}
+					if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
+							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+							(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
+							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+							(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
+						receiver.sendMessage(buildFormat(sender,receiver,format,message));
+					}
 				}
 			}
 		}
-		
+
 		ProxyServer.getInstance().getConsole().sendMessage(buildFormatConsole(sender,format,message));
 
 	}
@@ -101,14 +99,14 @@ public class ChatStream {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 					//TODO hiding & showing streams
 
-					String URLBIT = getURLBIT(message);
-					receiver.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', fixFormatCodes(message,"&f")[0])).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
+					//String URLBIT = getURLBIT(message);
+					receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 
-					
+
 				}
 			}
 		}
-		
+		//TODO
 		System.out.println("\033[33m[MultiChat][CHAT]" + message);
 
 	}
@@ -131,10 +129,11 @@ public class ChatStream {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}
-		String[] returnValues = fixFormatCodes(newFormat, "&f");
-		newFormat = returnValues[0] + "%MESSAGE%";
 
-		String lastColour = returnValues[1];
+		//String[] returnValues = fixFormatCodes(newFormat, "&f");
+		newFormat = newFormat + "%MESSAGE%";
+
+		//String lastColour = returnValues[1];
 		BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
@@ -145,7 +144,7 @@ public class ChatStream {
 			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat));
 		} else {
 
-			ChatColor currentColor = null;
+			/*ChatColor currentColor = null;
 			switch (lastColour.toCharArray()[1]) {
 			case '0':
 				currentColor = ChatColor.BLACK;
@@ -210,11 +209,11 @@ public class ChatStream {
 			if (lastColour.contains("&o")) italic = true;
 			if (lastColour.contains("&m")) strike = true;
 			if (lastColour.contains("&n")) underline = true;
-			if (lastColour.contains("&k")) magic = true;
+			if (lastColour.contains("&k")) magic = true;*/
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
 
-			String URLBIT = getURLBIT(message);
+			//String URLBIT = getURLBIT(message);
 
 			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
 			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat) + message);
@@ -223,7 +222,7 @@ public class ChatStream {
 		return toSend;
 
 	}
-	
+
 	public BaseComponent[] buildFormatConsole(ProxiedPlayer sender, String format, String message) {
 
 		String newFormat = format;
@@ -242,10 +241,10 @@ public class ChatStream {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}
-		String[] returnValues = fixFormatCodes(newFormat, "&f");
-		newFormat = returnValues[0] + "%MESSAGE%";
+		//String[] returnValues = fixFormatCodes(newFormat, "&f");
+		newFormat = newFormat + "%MESSAGE%";
 
-		String lastColour = returnValues[1];
+		//String lastColour = returnValues[1];
 		BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
@@ -256,7 +255,7 @@ public class ChatStream {
 			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',"&6[MultiChat][CHAT] " + newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
 		} else {
 
-			ChatColor currentColor = null;
+			/*ChatColor currentColor = null;
 			switch (lastColour.toCharArray()[1]) {
 			case '0':
 				currentColor = ChatColor.BLACK;
@@ -321,11 +320,11 @@ public class ChatStream {
 			if (lastColour.contains("&o")) italic = true;
 			if (lastColour.contains("&m")) strike = true;
 			if (lastColour.contains("&n")) underline = true;
-			if (lastColour.contains("&k")) magic = true;
+			if (lastColour.contains("&k")) magic = true;*/
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
 
-			String URLBIT = getURLBIT(message);
+			//String URLBIT = getURLBIT(message);
 
 			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
 			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
@@ -335,7 +334,7 @@ public class ChatStream {
 
 	}
 
-	public String getURLBIT(String Message)
+	/*public String getURLBIT(String Message)
 	{
 		String URLBIT = "";
 		if ((Message.toLowerCase().contains("http://")) || (Message.toLowerCase().contains("https://")) || (Message.toLowerCase().contains("www.")) || (Message.toLowerCase().contains(".com") ) || (Message.toLowerCase().contains(".uk") ) || (Message.toLowerCase().contains(".us") ) || (Message.toLowerCase().contains(".net") ) || (Message.toLowerCase().contains(".org") ))
@@ -353,9 +352,9 @@ public class ChatStream {
 			}
 		}
 		return URLBIT;
-	}
+	}*/
 
-	public static String[] fixFormatCodes(String OriginalMessage, String startColour)
+	/*public static String[] fixFormatCodes(String OriginalMessage, String startColour)
 	{
 		String colour = startColour;
 		char previouschar = ' ';
@@ -404,5 +403,5 @@ public class ChatStream {
 		returnValues[1] = colour;
 
 		return returnValues;
-	}
+	}*/
 }
