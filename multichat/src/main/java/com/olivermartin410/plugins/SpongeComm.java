@@ -124,7 +124,7 @@ public final class SpongeComm implements CommandExecutor {
 
 	}
 
-	private void updatePlayerDisplayName(String playername) {
+	public static void updatePlayerDisplayName(String playername) {
 
 		String nickname;
 		if (Sponge.getServer().getPlayer(playername).isPresent()) {

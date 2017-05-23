@@ -20,6 +20,7 @@ public class MultiChatRawDataListener implements RawDataListener {
 	}
 
 	private Text getDisplayName(Player player) {
+		SpongeComm.updatePlayerDisplayName(player.getName());
 		synchronized (player) {
 			//Optional<Text> data;
 			if ((SpongeComm.displayNames.containsKey(player.getUniqueId()))) {
