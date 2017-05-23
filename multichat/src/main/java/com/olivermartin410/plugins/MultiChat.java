@@ -176,7 +176,7 @@ public class MultiChat extends Plugin implements Listener {
 		configman.startupConfig();
 		jmconfigman.startupConfig();
 		configversion = configman.config.getString("version");
-		if (configversion.equals(latestversion) || configversion.equals("1.3")  || configversion.equals("1.3.1")  || configversion.equals("1.3.2") || configversion.equals("1.3.3") || configversion.equals("1.3.4") || configversion.equals("1.4") || configversion.equals("1.4.1"))
+		if (configversion.equals(latestversion) || configversion.equals("1.3")  || configversion.equals("1.3.1")  || configversion.equals("1.3.2") || configversion.equals("1.3.3") || configversion.equals("1.3.4") || configversion.equals("1.4") || configversion.equals("1.4.1") || configversion.equals("1.4.2"))
 		{
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);

@@ -19,13 +19,15 @@ public class MultiChatRawDataListener implements RawDataListener {
 		super();
 		this.channel = channel;
 	}
-	
+
 	private Text getDisplayName(Player player) {
-		Optional<DisplayNameData> data;
-		if ((data = player.get(DisplayNameData.class)).isPresent()) {
-			return data.get().displayName().get(); }
-		else
-		    return Text.of(player.getName());
+		synchronized (player) {
+			Optional<DisplayNameData> data;
+			if ((data = player.get(DisplayNameData.class)).isPresent()) {
+				return data.get().displayName().get(); }
+			else
+				return Text.of(player.getName());
+		}
 	}
 
 	@Override
@@ -35,30 +37,34 @@ public class MultiChatRawDataListener implements RawDataListener {
 		Optional<Player> player = Sponge.getServer().getPlayer(data.getUTF(0));
 		try {
 			Player p = player.get();
-			
-			if (SpongeComm.nicknames.containsKey(p.getUniqueId())) {
-				nickname = SpongeComm.nicknames.get(p.getUniqueId());
-			} else {
-				nickname = getDisplayName(p).toPlain();
-			}
-			
-			if (p.getOption("prefix").isPresent()) {
-				if (p.getOption("suffix").isPresent()) {
-					if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
-						channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname + p.getOption("suffix").get()).writeUTF(p.getName()));
-					} else {
-						channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-					}
+			synchronized (p) {
+				if (p == null) {
+					return;
+				}
+				if (SpongeComm.nicknames.containsKey(p.getUniqueId())) {
+					nickname = SpongeComm.nicknames.get(p.getUniqueId());
 				} else {
-					if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
-						channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname).writeUTF(p.getName()));
-					} else {
-						channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-					}
+					nickname = getDisplayName(p).toPlain();
 				}
 
-			} else {
-				channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
+				if (p.getOption("prefix").isPresent()) {
+					if (p.getOption("suffix").isPresent()) {
+						if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
+							channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname + p.getOption("suffix").get()).writeUTF(p.getName()));
+						} else {
+							channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
+						}
+					} else {
+						if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
+							channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname).writeUTF(p.getName()));
+						} else {
+							channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
+						}
+					}
+
+				} else {
+					channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
+				}
 			}
 		} catch (NoSuchElementException e) {
 			System.err.println("[MultiChat] An error occurred getting player details, is the server lagging?");

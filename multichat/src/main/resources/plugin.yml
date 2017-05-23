@@ -1,5 +1,5 @@
 name: MultiChatBridge
-version: 1.4.2
+version: 1.5
 author: Revilo410
 main: com.olivermartin410.plugins.SpigotComm
 softdepend: [Vault]
@@ -8,4 +8,4 @@ commands:
       description: Gives a player a nickname
       usage: /nick <player> <nickname / off>
       permission: multichatbridge.nick.self
-      permission-message: You do not have permission (multichatbridge.nick)
+      permission-message: You do not have permission (multichatbridge.nick.self / multichatbridge.nick.others)

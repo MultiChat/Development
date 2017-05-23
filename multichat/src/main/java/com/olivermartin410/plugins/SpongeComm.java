@@ -36,7 +36,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.4.2")
+@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.5")
 public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;

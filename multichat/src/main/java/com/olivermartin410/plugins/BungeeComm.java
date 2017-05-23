@@ -53,9 +53,11 @@ implements Listener
 				String playername = in.readUTF();
 
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playername);
-				if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
-					//player.setDisplayName(playerdisplayname.replaceAll("&", "§"));
-					player.setDisplayName(playerdisplayname.replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+				synchronized (player) {
+					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true && player != null) {
+						//player.setDisplayName(playerdisplayname.replaceAll("&", "§"));
+						player.setDisplayName(playerdisplayname.replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+					}
 				}
 			}
 			catch (IOException e)
