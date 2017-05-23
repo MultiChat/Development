@@ -39,7 +39,6 @@ com\olivermartin410\plugins\MsgCommand.class
 com\olivermartin410\plugins\Bulletins$1.class
 com\olivermartin410\plugins\ReplyCommand.class
 com\olivermartin410\plugins\ConfigManager.class
-com\olivermartin410\plugins\SpongeMultiChatMessage.class
 com\olivermartin410\plugins\ChatStream.class
 com\olivermartin410\plugins\MultiChat$6.class
 com\olivermartin410\plugins\GCCommand.class

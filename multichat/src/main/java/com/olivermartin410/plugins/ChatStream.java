@@ -11,6 +11,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ChatStream {
@@ -137,9 +138,11 @@ public class ChatStream {
 		BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
-			newFormat = newFormat.replace("%MESSAGE%", fixFormatCodes(message, lastColour)[0]);
-			String URLBIT = getURLBIT(message);
-			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			//newFormat = newFormat.replace("%MESSAGE%", fixFormatCodes(message, lastColour)[0]);
+			//String URLBIT = getURLBIT(message);
+			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			newFormat = newFormat.replace("%MESSAGE%", message);
+			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat));
 		} else {
 
 			ChatColor currentColor = null;
@@ -213,7 +216,8 @@ public class ChatStream {
 
 			String URLBIT = getURLBIT(message);
 
-			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat) + message);
 		}
 
 		return toSend;
@@ -245,9 +249,11 @@ public class ChatStream {
 		BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
-			newFormat = newFormat.replace("%MESSAGE%", fixFormatCodes(message, lastColour)[0]);
-			String URLBIT = getURLBIT(message);
-			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',"&6[MultiChat][CHAT] " + newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			//newFormat = newFormat.replace("%MESSAGE%", fixFormatCodes(message, lastColour)[0]);
+			//String URLBIT = getURLBIT(message);
+			newFormat = newFormat.replace("%MESSAGE%", message);
+			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
+			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',"&6[MultiChat][CHAT] " + newFormat)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
 		} else {
 
 			ChatColor currentColor = null;
@@ -321,7 +327,8 @@ public class ChatStream {
 
 			String URLBIT = getURLBIT(message);
 
-			toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			//toSend = new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat)).append(message).color(currentColor).bold(bold).italic(italic).underlined(underline).strikethrough(strike).obfuscated(magic).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create();
+			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
 		}
 
 		return toSend;

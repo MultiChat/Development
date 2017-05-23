@@ -23,7 +23,7 @@ import net.md_5.bungee.event.EventHandler;
 
 public class MultiChat extends Plugin implements Listener {
 
-	public static String latestversion = "1.4.2";
+	public static String latestversion = "1.5";
 	public static Map<UUID, TChatInfo> modchatpreferences = new HashMap<UUID, TChatInfo>();
 	public static Map<UUID, TChatInfo> adminchatpreferences = new HashMap<UUID, TChatInfo>();
 	public static Map<String, TGroupChatInfo> groupchats = new HashMap<String, TGroupChatInfo>();

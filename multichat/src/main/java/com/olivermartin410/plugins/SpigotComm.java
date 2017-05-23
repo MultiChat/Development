@@ -115,9 +115,10 @@ implements PluginMessageListener, Listener
 		if (vault) {
 			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
 			Bukkit.getPlayer(playername).setDisplayName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+			Bukkit.getPlayer(playername).setPlayerListName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 		} else {
 			sendMessage(Bukkit.getPlayer(playername).getDisplayName().replaceAll(Bukkit.getPlayer(playername).getName(), nickname), playername);
-			Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+			Bukkit.getPlayer(playername).setPlayerListName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 		}
 		
 	}
