@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.data.manipulator.mutable.DisplayNameData;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelBuf;
@@ -22,14 +21,18 @@ public class MultiChatRawDataListener implements RawDataListener {
 
 	private Text getDisplayName(Player player) {
 		synchronized (player) {
-			Optional<DisplayNameData> data;
-			if ((data = player.get(DisplayNameData.class)).isPresent()) {
-				return data.get().displayName().get();
+			//Optional<Text> data;
+			if ((SpongeComm.displayNames.containsKey(player.getUniqueId()))) {
+				//data = player.get(Keys.DISPLAY_NAME);
+				//System.out.println(data.get().toPlain());
+				return Text.of(SpongeComm.displayNames.get(player.getUniqueId()));
 			} else {
 				String nickname;
 				if (SpongeComm.nicknames.containsKey(player.getUniqueId())) {
 					nickname = SpongeComm.nicknames.get(player.getUniqueId());
+					//System.out.println("nick: " + nickname);
 				} else {
+					//System.out.println("else: " + player.getName());
 					nickname = player.getName();
 				}
 				return Text.of(nickname);

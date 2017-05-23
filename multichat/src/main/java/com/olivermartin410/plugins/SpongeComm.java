@@ -42,6 +42,7 @@ public final class SpongeComm implements CommandExecutor {
 	ChannelRegistrar channelRegistrar;
 	RawDataChannel channel;
 	public static Map<UUID,String> nicknames;
+	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -130,18 +131,25 @@ public final class SpongeComm implements CommandExecutor {
 			Player player = Sponge.getServer().getPlayer(playername).get();
 			if (nicknames.containsKey(player.getUniqueId())) {
 				nickname = nicknames.get(player.getUniqueId());
+				System.out.println("Has a nickname: " + nickname);
 			} else {
 				nickname =  player.getName();
 			}
 
 			if (player.getOption("prefix").isPresent()) {
 				if (player.getOption("suffix").isPresent()) {
-					player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
+					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname + player.getOption("suffix").get());
+					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get())));
+					//player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
 				} else {
-					player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
+					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname);
+					//player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
+					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname)));
 				}
 			} else {
-				player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
+				displayNames.put(player.getUniqueId(), nickname);
+				//player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
+				Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(nickname)));
 			}
 
 		}
