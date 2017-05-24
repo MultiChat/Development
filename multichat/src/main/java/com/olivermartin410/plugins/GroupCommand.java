@@ -206,10 +206,10 @@ extends Command implements TabExecutor
 						else {
 							sender.sendMessage(new ComponentBuilder("Sorry group name cannot exceed 20 characters!").color(ChatColor.RED).create());
 						}
+					}else {
+						sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
 					}
-				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
-				}
+				} 
 				if (args[0].toLowerCase().equals("join")) {
 					if (MultiChat.groupchats.containsKey(args[1].toLowerCase()))
 					{
