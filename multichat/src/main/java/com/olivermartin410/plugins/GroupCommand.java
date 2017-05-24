@@ -180,31 +180,35 @@ extends Command implements TabExecutor
 					}
 				}
 				if ((args[0].toLowerCase().equals("create")) || (args[0].toLowerCase().equals("make"))) {
-					if (args[1].length() <= 20)
-					{
-						if (!MultiChat.groupchats.containsKey(args[1].toLowerCase()))
+					ProxiedPlayer player = (ProxiedPlayer)sender;
+					if (player.hasPermission("multichat.group.create")) {
+						if (args[1].length() <= 20)
 						{
-							ProxiedPlayer player = (ProxiedPlayer)sender;
-							GroupManager groupman = new GroupManager();
+							if (!MultiChat.groupchats.containsKey(args[1].toLowerCase()))
+							{
+								GroupManager groupman = new GroupManager();
 
-							//Make the new group
-							groupman.createGroup(args[1], player.getUniqueId(), false, "");
-							//Select the new group for the player
-							groupman.setViewedChat(player.getUniqueId(), args[1]);
-							//Announce join to group members
-							sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+								//Make the new group
+								groupman.createGroup(args[1], player.getUniqueId(), false, "");
+								//Select the new group for the player
+								groupman.setViewedChat(player.getUniqueId(), args[1]);
+								//Announce join to group members
+								sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
 
-							groupman.announceJoinGroup(sender.getName(), args[1]);
-							groupman = null;
+								groupman.announceJoinGroup(sender.getName(), args[1]);
+								groupman = null;
+							}
+							else
+							{
+								sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+							}
 						}
-						else
-						{
-							sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						else {
+							sender.sendMessage(new ComponentBuilder("Sorry group name cannot exceed 20 characters!").color(ChatColor.RED).create());
 						}
 					}
-					else {
-						sender.sendMessage(new ComponentBuilder("Sorry group name cannot exceed 20 characters!").color(ChatColor.RED).create());
-					}
+				} else {
+					sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
 				}
 				if (args[0].toLowerCase().equals("join")) {
 					if (MultiChat.groupchats.containsKey(args[1].toLowerCase()))
@@ -350,30 +354,34 @@ extends Command implements TabExecutor
 					sender.sendMessage(new ComponentBuilder("Incorrect command usage, use /group to see a list of commands!").color(ChatColor.RED).create());
 				}
 				if ((args[0].toLowerCase().equals("create")) || (args[0].toLowerCase().equals("make"))) {
-					if ((args[1].length() <= 20) && (args[2].length() <= 20))
-					{
-						if (!MultiChat.groupchats.containsKey(args[1].toLowerCase()))
+					ProxiedPlayer player = (ProxiedPlayer) sender;
+					if (player.hasPermission("multichat.group.create")) {
+						if ((args[1].length() <= 20) && (args[2].length() <= 20))
 						{
-							ProxiedPlayer player = (ProxiedPlayer)sender;
-							GroupManager groupman = new GroupManager();
+							if (!MultiChat.groupchats.containsKey(args[1].toLowerCase()))
+							{
+								GroupManager groupman = new GroupManager();
 
-							//Make the new group
-							groupman.createGroup(args[1], player.getUniqueId(), true, args[2]);
-							//Select the new group for the player
-							groupman.setViewedChat(player.getUniqueId(), args[1]);
-							//Announce join to group members
-							groupman.announceJoinGroup(sender.getName(), args[1]);
+								//Make the new group
+								groupman.createGroup(args[1], player.getUniqueId(), true, args[2]);
+								//Select the new group for the player
+								groupman.setViewedChat(player.getUniqueId(), args[1]);
+								//Announce join to group members
+								groupman.announceJoinGroup(sender.getName(), args[1]);
 
-							sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
-							groupman = null;
+								sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+								groupman = null;
+							}
+							else
+							{
+								sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+							}
 						}
-						else
-						{
-							sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						else {
+							sender.sendMessage(new ComponentBuilder("Sorry neither group name or password must exceed 20 characters").color(ChatColor.RED).create());
 						}
-					}
-					else {
-						sender.sendMessage(new ComponentBuilder("Sorry neither group name or password must exceed 20 characters").color(ChatColor.RED).create());
+					} else {
+						sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
 					}
 				}
 				if (args[0].toLowerCase().equals("join")) {

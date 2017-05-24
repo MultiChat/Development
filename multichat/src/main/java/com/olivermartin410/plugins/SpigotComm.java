@@ -36,6 +36,7 @@ implements PluginMessageListener, Listener
 {
 
 	public static Map<UUID,String> nicknames = new HashMap<UUID,String>();
+	public static Map<String,UUID> realnames = new HashMap<String,UUID>();
 	public static Chat chat = null;
 	public static boolean vault;
 	public static File configDir;
@@ -55,6 +56,9 @@ implements PluginMessageListener, Listener
 		{
 			System.out.println("[MultiChatBridge] Attempting startup load for Nicknames");
 			nicknames = loadNicknames();
+			for (UUID uuid : nicknames.keySet()) {
+				realnames.put(nicknames.get(uuid).toLowerCase(),uuid);
+			}
 			System.out.println("[MultiChatBridge] Load completed!");
 		}
 		else
@@ -103,9 +107,9 @@ implements PluginMessageListener, Listener
 		}
 		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, "MultiChat", stream.toByteArray());
 	}
-	
+
 	private void updatePlayerDisplayName(String playername) {
-		
+
 		String nickname;
 		if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
 			nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
@@ -121,7 +125,7 @@ implements PluginMessageListener, Listener
 			Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 			Bukkit.getPlayer(playername).setPlayerListName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 		}
-		
+
 	}
 
 	public void onPluginMessageReceived(String channel, Player player, byte[] bytes)
@@ -138,9 +142,9 @@ implements PluginMessageListener, Listener
 					if (Bukkit.getPlayer(playername) == null) {
 						return;
 					}
-					
+
 					updatePlayerDisplayName(playername);
-					
+
 				}
 			}
 			catch (IOException e)
@@ -165,7 +169,7 @@ implements PluginMessageListener, Listener
 					}
 					String playername = event.getPlayer().getName();
 					updatePlayerDisplayName(playername);
-					
+
 				}
 			}
 		}
@@ -175,9 +179,11 @@ implements PluginMessageListener, Listener
 
 	private void addNickname(UUID uuid, String nickname) {
 		nicknames.put(uuid,nickname);
+		realnames.put(nickname.toLowerCase(), uuid);
 	}
 
 	private void removeNickname(UUID uuid) {
+		realnames.remove(nicknames.get(uuid).toLowerCase());
 		nicknames.remove(uuid);
 	}
 
@@ -194,9 +200,28 @@ implements PluginMessageListener, Listener
 				return true;
 			}
 
-			if (args.length != 2) {
+			if (args.length < 1 || args.length > 2) {
 				// When onCommand() returns false, the help message associated with that command is displayed.
 				return false;
+			}
+
+			if (args.length == 1) {
+
+				UUID targetUUID = sender.getUniqueId();
+
+				if (args[0].equalsIgnoreCase("off")) {
+					removeNickname(targetUUID);
+					updatePlayerDisplayName(sender.getName());
+					sender.sendMessage("You have had your nickname removed!");
+					return true;
+				}
+
+				addNickname(targetUUID,args[0]);
+				updatePlayerDisplayName(sender.getName());
+
+				sender.sendMessage("You have been nicknamed!");
+
+				return true;
 			}
 
 			Player target = sender.getServer().getPlayer(args[0]);
@@ -228,6 +253,39 @@ implements PluginMessageListener, Listener
 			sender.sendMessage(ChatColor.GREEN + args[0] + " has been nicknamed!");
 
 			return true;
+		} else if (cmd.getName().equalsIgnoreCase("realname")) {
+			
+			Player sender;
+
+			if (commandSender instanceof Player) {
+				sender = (Player) commandSender;
+			} else {
+				commandSender.sendMessage(ChatColor.DARK_RED + "Only players can use this command!");
+				return true;
+			}
+
+			if (args.length != 1) {
+				// When onCommand() returns false, the help message associated with that command is displayed.
+				return false;
+			}
+			
+			if (realnames.containsKey(args[0].toLowerCase())) {
+				if (nicknames.containsKey(realnames.get(args[0].toLowerCase()))) {
+					
+					Player target;
+					target = Bukkit.getServer().getPlayer(nicknames.get(realnames.get(args[0].toLowerCase())));
+					sender.sendMessage(ChatColor.GREEN + "Nickname: '" + args[0] + "' Belongs to player: '" + target.getName() + "'");
+					return true;
+					
+				} else {
+					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+					return true;
+				}
+			} else {
+				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+				return true;
+			}
+			
 		}
 		return false;
 	}
