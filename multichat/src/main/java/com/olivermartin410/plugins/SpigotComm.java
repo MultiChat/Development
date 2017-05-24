@@ -188,8 +188,12 @@ implements PluginMessageListener, Listener
 	}
 
 	private void removeNickname(UUID uuid) {
-		realnames.remove(nicknames.get(uuid).toLowerCase());
-		nicknames.remove(uuid);
+		if (nicknames.containsKey(uuid)) {
+			if (realnames.containsKey(nicknames.get(uuid).toLowerCase())) {
+				realnames.remove(nicknames.get(uuid).toLowerCase());
+			}
+			nicknames.remove(uuid);
+		}
 	}
 
 	@Override
@@ -259,7 +263,7 @@ implements PluginMessageListener, Listener
 
 			return true;
 		} else if (cmd.getName().equalsIgnoreCase("realname")) {
-			
+
 			Player sender;
 
 			if (commandSender instanceof Player) {
@@ -273,15 +277,19 @@ implements PluginMessageListener, Listener
 				// When onCommand() returns false, the help message associated with that command is displayed.
 				return false;
 			}
-			
+
 			if (realnames.containsKey(args[0].toLowerCase())) {
 				if (nicknames.containsKey(realnames.get(args[0].toLowerCase()))) {
-					
+
 					Player target;
-					target = Bukkit.getServer().getPlayer(nicknames.get(realnames.get(args[0].toLowerCase())));
+					target = Bukkit.getServer().getPlayer(realnames.get(args[0].toLowerCase()));
+					if (target == null) {
+						sender.sendMessage(ChatColor.DARK_RED + "No one could be found online with nickname: " + args[0]);
+						return true;
+					}
 					sender.sendMessage(ChatColor.GREEN + "Nickname: '" + args[0] + "' Belongs to player: '" + target.getName() + "'");
 					return true;
-					
+
 				} else {
 					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
 					return true;
@@ -290,7 +298,7 @@ implements PluginMessageListener, Listener
 				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
 				return true;
 			}
-			
+
 		}
 		return false;
 	}
