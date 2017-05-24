@@ -178,6 +178,11 @@ implements PluginMessageListener, Listener
 	}
 
 	private void addNickname(UUID uuid, String nickname) {
+		if (nicknames.containsKey(uuid)) {
+			if (realnames.containsKey(nicknames.get(uuid).toLowerCase())) {
+				realnames.remove(nicknames.get(uuid).toLowerCase());
+			}
+		}
 		nicknames.put(uuid,nickname);
 		realnames.put(nickname.toLowerCase(), uuid);
 	}

@@ -131,7 +131,6 @@ public final class SpongeComm implements CommandExecutor {
 			Player player = Sponge.getServer().getPlayer(playername).get();
 			if (nicknames.containsKey(player.getUniqueId())) {
 				nickname = nicknames.get(player.getUniqueId());
-				System.out.println("Has a nickname: " + nickname);
 			} else {
 				nickname =  player.getName();
 			}
