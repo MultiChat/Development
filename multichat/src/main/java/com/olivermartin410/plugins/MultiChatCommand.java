@@ -130,10 +130,14 @@ extends Command
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/bulletin")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3View cast commands")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/cast")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Use a specified cast from the console")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/usecast <cast> <message>")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Alert staff members of a problem")).create());
 						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/helpme <message>")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Nickname a player &3(&3Only &3works &3if &3MultiChat &3is &3installed &3on &3Spigot &3as &3well)")).create());
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/nick <player> <nickname/off>")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Nickname a player &3(&3Only &3works &3if &3MultiChat &3installed &3on &3Spigot &3/ &3Sponge)")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/nick [player] <nickname/off>")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Get players real name from their nickname &3(&3Only &3works &3on &3Spigot)")).create());
+						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/realname <nickname>")).create());
 					}
 				}
 			}
