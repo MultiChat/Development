@@ -197,7 +197,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerCommand(this, new BulletinCommand());
 			getProxy().getPluginManager().registerCommand(this, new CastCommand());
 			getProxy().getPluginManager().registerCommand(this, new UseCastCommand());
-			getProxy().registerChannel("MultiChat");
+			getProxy().registerChannel("MultiChat:comm");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 			if (configman.config.getBoolean("pm"))
 			{

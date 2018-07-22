@@ -1,8 +1,9 @@
 name: MultiChatBridge
-version: 1.5
+version: 1.5.1
 author: Revilo410
 main: com.olivermartin410.plugins.SpigotComm
 softdepend: [Vault]
+api-version: 1.13
 commands:
    nick:
       description: Gives a player a nickname

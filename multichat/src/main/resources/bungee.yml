@@ -1,4 +1,5 @@
 name: MultiChat
 main: com.olivermartin410.plugins.MultiChat
-version: 1.5
+version: 1.5.1
 author: Revilo410
+api-version: 1.13
