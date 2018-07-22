@@ -69,8 +69,8 @@ implements PluginMessageListener, Listener
 			saveNicknames();
 			System.out.println("[MultiChatBridge] The files were created!");
 		}
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "MultiChat:comm");
-		getServer().getMessenger().registerIncomingPluginChannel(this, "MultiChat:comm", this);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 		getServer().getPluginManager().registerEvents(this, this);
 		vault = setupChat();
 		if (vault) {
@@ -105,7 +105,7 @@ implements PluginMessageListener, Listener
 		{
 			e.printStackTrace();
 		}
-		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, "MultiChat:comm", stream.toByteArray());
+		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, "multichat:comm", stream.toByteArray());
 	}
 
 	private void updatePlayerDisplayName(String playername) {
@@ -130,7 +130,7 @@ implements PluginMessageListener, Listener
 
 	public void onPluginMessageReceived(String channel, Player player, byte[] bytes)
 	{
-		if (channel.equals("MultiChat:comm"))
+		if (channel.equals("multichat:comm"))
 		{
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			DataInputStream in = new DataInputStream(stream);

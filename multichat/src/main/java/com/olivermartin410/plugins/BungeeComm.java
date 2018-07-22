@@ -30,20 +30,20 @@ implements Listener
 		{
 			e.printStackTrace();
 		}
-		server.sendData("MultiChat:comm", stream.toByteArray());
+		server.sendData("multichat:comm", stream.toByteArray());
 
 	}
 
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev)
 	{
-		if (!ev.getTag().equals("MultiChat:comm")) {
+		if (!ev.getTag().equals("multichat:comm")) {
 			return;
 		}
 		if (!(ev.getSender() instanceof Server)) {
 			return;
 		}
-		if (ev.getTag().equals("MultiChat:comm"))
+		if (ev.getTag().equals("multichat:comm"))
 		{
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
