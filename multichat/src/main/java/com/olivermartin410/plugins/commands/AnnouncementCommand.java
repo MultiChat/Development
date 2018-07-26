@@ -10,6 +10,13 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 
+/**
+ * Announcement Command
+ * <p>Allows the user to create, remove or use announcements</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class AnnouncementCommand extends Command {
 
 	private static String[] aliases = new String[] {"announce"};
