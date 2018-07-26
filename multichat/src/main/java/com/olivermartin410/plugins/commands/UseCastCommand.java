@@ -1,4 +1,7 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
+
+import com.olivermartin410.plugins.CastControl;
+import com.olivermartin410.plugins.MultiChat;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

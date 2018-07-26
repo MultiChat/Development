@@ -1,10 +1,15 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import com.olivermartin410.plugins.GroupManager;
+import com.olivermartin410.plugins.MultiChat;
+import com.olivermartin410.plugins.TGroupChatInfo;
+import com.olivermartin410.plugins.UUIDNameManager;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

@@ -1,7 +1,9 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
 
 import java.util.Iterator;
 import java.util.Map;
+
+import com.olivermartin410.plugins.Announcements;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

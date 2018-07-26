@@ -1,7 +1,12 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.olivermartin410.plugins.BungeeComm;
+import com.olivermartin410.plugins.ChatManipulation;
+import com.olivermartin410.plugins.Events;
+import com.olivermartin410.plugins.MultiChat;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

@@ -1,4 +1,9 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
+
+import com.olivermartin410.plugins.ChatManipulation;
+import com.olivermartin410.plugins.Events;
+import com.olivermartin410.plugins.MultiChat;
+import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;

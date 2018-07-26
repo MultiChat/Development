@@ -1,6 +1,10 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
 
 import java.util.UUID;
+
+import com.olivermartin410.plugins.ChatManipulation;
+import com.olivermartin410.plugins.MultiChat;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;

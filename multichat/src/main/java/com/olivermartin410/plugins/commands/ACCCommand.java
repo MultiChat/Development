@@ -1,4 +1,7 @@
-package com.olivermartin410.plugins;
+package com.olivermartin410.plugins.commands;
+
+import com.olivermartin410.plugins.MultiChat;
+import com.olivermartin410.plugins.TChatInfo;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -6,10 +9,20 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
+/**
+ * Admin-Chat colour command
+ * <p> This command allows individual staff members to set their colour of the admin-chat messages they receive</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class ACCCommand extends Command {
+	
+	// Command aliases
+	private static String[] aliases = new String[] {};
 
 	public ACCCommand() {
-		super("acc", "multichat.staff.mod", new String[0]);
+		super("acc", "multichat.staff.mod", aliases);
 	}
 
 	public void execute(CommandSender sender, String[] args) {

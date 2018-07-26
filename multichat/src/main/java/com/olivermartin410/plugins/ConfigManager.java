@@ -12,7 +12,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class ConfigManager
 {
-  Configuration config;
+  public Configuration config;
   int counter;
   
   public void startupConfig()
