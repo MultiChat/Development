@@ -146,7 +146,7 @@ public class GroupManager {
 		 * The INFO announce in a group that a player has joined
 		 */
 		
-		 GCCommand.chatMessage(playername + " has joined the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		 GCCommand.sendMessage(playername + " has joined the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
 		
 	}
 	
@@ -156,7 +156,7 @@ public class GroupManager {
 		 * The INFO announce in a group that a player has left
 		 */
 		
-		 GCCommand.chatMessage(playername + " has left the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		 GCCommand.sendMessage(playername + " has left the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
 		
 	}
 	

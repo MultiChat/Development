@@ -161,7 +161,7 @@ implements Listener
 								(chatinfo.getAdmins().contains(player.getUniqueId()))) {
 							PlayerName = "&o" + PlayerName;
 						}
-						GCCommand.chatMessage(Message, PlayerName, chatinfo);
+						GCCommand.sendMessage(Message, PlayerName, chatinfo);
 					}
 					else
 					{
