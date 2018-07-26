@@ -36,7 +36,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.5")
+@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.5.2")
 public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
@@ -81,7 +81,7 @@ public final class SpongeComm implements CommandExecutor {
 		}
 
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
-		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "MultiChat");
+		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
 		channel.addListener(Platform.Type.SERVER, new MultiChatRawDataListener(channel));
 		this.channel = channel;
 
