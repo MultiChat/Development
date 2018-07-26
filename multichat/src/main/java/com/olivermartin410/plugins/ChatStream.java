@@ -99,7 +99,6 @@ public class ChatStream {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 					//TODO hiding & showing streams
 
-					//String URLBIT = getURLBIT(message);
 					receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 
 
