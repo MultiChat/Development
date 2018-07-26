@@ -19,6 +19,13 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
+/**
+ * The Group Command
+ * <p>From here the player can manipulate group chats in every possible way</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class GroupCommand extends Command implements TabExecutor {
 
 	private static String[] aliases = new String[] {};
