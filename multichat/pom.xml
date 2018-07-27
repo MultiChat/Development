@@ -1,26 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.olivermartin410.plugins</groupId>
+
+	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
 	<version>1.5.2</version>
+
 	<repositories>
+
 		<repository>
 			<id>sponge</id>
 			<url>http://repo.spongepowered.org/maven</url>
 		</repository>
+
 		<repository>
 			<id>bungeecord-repo</id>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
+
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+
 		<repository>
 			<id>vault-repo</id>
 			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
 		</repository>
+
 	</repositories>
 
 	<build>
@@ -38,12 +45,14 @@
 	</build>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.spongepowered</groupId>
 			<artifactId>spongeapi</artifactId>
 			<version>6.0.0</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
@@ -51,6 +60,7 @@
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
@@ -58,17 +68,21 @@
 			<type>javadoc</type>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.13-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
 			<version>1.6</version>
 			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
+
 </project>
