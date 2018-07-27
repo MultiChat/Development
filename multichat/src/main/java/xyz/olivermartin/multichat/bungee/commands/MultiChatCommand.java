@@ -48,6 +48,8 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/mc &o(/ac)")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands")).create());
 
+			break;
+			
 		case 2:
 
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2&lMulti&a&lChat &b&lHelp [Page 2]")).create());
@@ -70,6 +72,8 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Clear &3the &3chat &3tream &3for &3yourself &3or &3a &3group &3of &3people")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/clearchat [self,server,global,all]")).create());
 
+			break;
+			
 		default:
 
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2&lMulti&a&lChat &b&lHelp [Page 3]")).create());
@@ -87,6 +91,9 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/nick [player] <nickname/off>")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Get players real name from their nickname &3(&3Only &3works &3on &3Spigot)")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/realname <nickname>")).create());
+		
+			break;
+		
 		}
 
 	}
