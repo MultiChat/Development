@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.bungee;
+package xyz.olivermartin.multichat.spongebridge;
 
 import java.io.File;
 import java.io.IOException;

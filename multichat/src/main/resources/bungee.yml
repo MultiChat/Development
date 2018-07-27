@@ -1,5 +1,5 @@
 name: MultiChat
-main: com.olivermartin410.plugins.MultiChat
+main: xyz.olivermartin.multichat.bungee.MultiChat
 version: 1.5.2
 author: Revilo410
 api-version: 1.13

@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.bungee;
+package xyz.olivermartin.multichat.spongebridge;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

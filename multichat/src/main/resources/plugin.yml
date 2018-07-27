@@ -1,7 +1,7 @@
 name: MultiChatBridge
 version: 1.5.2
 author: Revilo410
-main: com.olivermartin410.plugins.SpigotComm
+main: xyz.olivermartin.multichat.spigotbridge.SpigotComm
 softdepend: [Vault]
 api-version: 1.13
 commands:

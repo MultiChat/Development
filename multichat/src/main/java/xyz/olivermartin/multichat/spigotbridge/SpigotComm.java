@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.bungee;
+package xyz.olivermartin.multichat.spigotbridge;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
