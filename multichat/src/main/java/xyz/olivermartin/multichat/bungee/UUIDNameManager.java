@@ -10,6 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * UUID - NAME Manager
+ * <p>Manages storage of UUIDS with their currently associated username</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class UUIDNameManager {
 
 	private static Map<UUID, String> uuidname = new HashMap<UUID, String>();
