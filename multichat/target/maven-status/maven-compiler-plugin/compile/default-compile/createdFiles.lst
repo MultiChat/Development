@@ -11,11 +11,12 @@ xyz\olivermartin\multichat\bungee\MultiChat$2.class
 xyz\olivermartin\multichat\bungee\CastControl.class
 xyz\olivermartin\multichat\bungee\MultiChat$6.class
 xyz\olivermartin\multichat\bungee\StaffChatManager.class
-xyz\olivermartin\multichat\bungee\TGroupChatInfo.class
 xyz\olivermartin\multichat\bungee\commands\ACCCommand.class
 xyz\olivermartin\multichat\bungee\TViewChat.class
 xyz\olivermartin\multichat\bungee\commands\AnnouncementCommand.class
+com\olivermartin410\plugins\TChatInfo.class
 xyz\olivermartin\multichat\bungee\commands\DisplayCommand.class
+com\olivermartin410\plugins\TGroupChatInfo.class
 xyz\olivermartin\multichat\bungee\ConfigManager.class
 xyz\olivermartin\multichat\bungee\MultiChat$3.class
 xyz\olivermartin\multichat\spigotbridge\SpigotComm$1.class
@@ -44,7 +45,6 @@ xyz\olivermartin\multichat\bungee\commands\BulletinCommand.class
 xyz\olivermartin\multichat\bungee\UUIDNameManager.class
 xyz\olivermartin\multichat\bungee\commands\GCCommand.class
 xyz\olivermartin\multichat\bungee\commands\UseCastCommand.class
-xyz\olivermartin\multichat\bungee\TChatInfo.class
 xyz\olivermartin\multichat\bungee\Announcements$1.class
 xyz\olivermartin\multichat\bungee\Bulletins$1.class
 xyz\olivermartin\multichat\bungee\BungeeComm.class

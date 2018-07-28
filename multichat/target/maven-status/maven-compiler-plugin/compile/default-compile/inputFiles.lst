@@ -2,7 +2,6 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\LocalCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ChatManipulation.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\CastCommand.java
-C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\TChatInfo.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MCCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\GroupCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\UseCastCommand.java
@@ -17,6 +16,7 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\Events.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\GroupManager.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\HelpMeCommand.java
+C:\Users\Oliver\git\MultiChat\multichat\src\main\java\com\olivermartin410\plugins\TGroupChatInfo.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\Bulletins.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\BungeeComm.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MultiChatCommand.java
@@ -26,10 +26,10 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\SocialSpyCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\ACCCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\ReplyCommand.java
+C:\Users\Oliver\git\MultiChat\multichat\src\main\java\com\olivermartin410\plugins\TChatInfo.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\AnnouncementCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MsgCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MCCCommand.java
-C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\TGroupChatInfo.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\GroupListCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\MultiChat.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\spigotbridge\SpigotComm.java
