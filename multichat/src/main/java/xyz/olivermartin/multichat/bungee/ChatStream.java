@@ -12,6 +12,13 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+/**
+ * Chat Stream
+ * <p>A class to represent a chat stream and control the messages sent etc.</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class ChatStream {
 
 	boolean whitelistMembers;
@@ -239,5 +246,4 @@ public class ChatStream {
 		return toSend;
 
 	}
-
 }
