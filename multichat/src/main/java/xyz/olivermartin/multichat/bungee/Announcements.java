@@ -12,6 +12,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
+/**
+ * Announcements Management
+ * <p>The back-end code which manages the creation, deletion and scheduling of announcements</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class Announcements {
 
 	private static Map<String, Integer> aKey = new HashMap<String, Integer>();

@@ -10,6 +10,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
+/**
+ * Bulletins Management
+ * <p>The back-end code which manages the creation, deletion and scheduling of bulletins</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 public class Bulletins {
 
 	private static int currentlyScheduled = 0;
