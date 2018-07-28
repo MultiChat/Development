@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import com.olivermartin410.plugins.TGroupChatInfo;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,7 +12,6 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.TGroupChatInfo;
 
 /**
  * Group Chat Messaging Command

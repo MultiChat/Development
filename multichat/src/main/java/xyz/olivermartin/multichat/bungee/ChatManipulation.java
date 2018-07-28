@@ -1,5 +1,8 @@
 package xyz.olivermartin.multichat.bungee;
 
+import com.olivermartin410.plugins.TChatInfo;
+import com.olivermartin410.plugins.TGroupChatInfo;
+
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class ChatManipulation

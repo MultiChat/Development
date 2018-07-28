@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.bungee;
+package com.olivermartin410.plugins;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,12 +1,13 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import com.olivermartin410.plugins.TChatInfo;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.TChatInfo;
 
 /**
  * Admin-Chat colour command

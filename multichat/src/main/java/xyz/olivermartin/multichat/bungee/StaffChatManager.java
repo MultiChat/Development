@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee;
 
+import com.olivermartin410.plugins.TChatInfo;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;

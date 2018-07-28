@@ -2,6 +2,8 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.UUID;
 
+import com.olivermartin410.plugins.TGroupChatInfo;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
