@@ -36,6 +36,13 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
+/**
+ * SPONGE COMM - The MAIN class for MultiChatSpongeBridge
+ * <p>Allows MultiChat to fetch data from Sponge and powers /nick etc.</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ *
+ */
 @Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.5.2")
 public final class SpongeComm implements CommandExecutor {
 
@@ -56,28 +63,45 @@ public final class SpongeComm implements CommandExecutor {
 		ConfigurationNode rootNode;
 
 		try {
+
 			rootNode = configLoader.load();
+
 			try {
-				nicknames = (Map<UUID, String>) rootNode.getNode("nicknames").getValue(new TypeToken<Map<UUID,String>>() {});
+				nicknames = (Map<UUID, String>) rootNode.getNode("nicknames").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+
 				if (nicknames == null) {
 					nicknames = new HashMap<UUID,String>();
 					System.out.println("[MultiChatSponge] Created nicknames map");
 				}
+
 				System.out.println("[MultiChatSponge] Nicknames appeared to load correctly!");
+
 			} catch (ClassCastException e) {
+
 				nicknames = new HashMap<UUID,String>();
+
 			} catch (ObjectMappingException e) {
+
 				nicknames = new HashMap<UUID,String>();
+
 			}
+
 			try {
+
 				configLoader.save(rootNode);
+
 			} catch (IOException e) {
+
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+
 			}
+
 		} catch (IOException e) {
+
 			e.printStackTrace();
 			nicknames = new HashMap<UUID,String>();
+
 		}
 
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
@@ -95,40 +119,45 @@ public final class SpongeComm implements CommandExecutor {
 				.build();
 
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
+
 	}
 
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStop(GameStoppingServerEvent event) {
+
 		Sponge.getChannelRegistrar().unbindChannel(channel);
 
 		ConfigurationNode rootNode;
 
-		//try {
 		rootNode = configLoader.createEmptyNode();
+
 		try {
+
 			rootNode.getNode("nicknames").setValue(new TypeToken<Map<UUID,String>>() {}, nicknames);
+
 			try {
 				configLoader.save(rootNode);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		} catch (ObjectMappingException e) {
 			e.printStackTrace();
 			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 		}
-		//} catch (IOException e) {
-		//	e.printStackTrace();
-		//}
 
 	}
 
 	public static void updatePlayerDisplayName(String playername) {
 
 		String nickname;
+
 		if (Sponge.getServer().getPlayer(playername).isPresent()) {
+
 			Player player = Sponge.getServer().getPlayer(playername).get();
+
 			if (nicknames.containsKey(player.getUniqueId())) {
 				nickname = nicknames.get(player.getUniqueId());
 			} else {
@@ -136,23 +165,25 @@ public final class SpongeComm implements CommandExecutor {
 			}
 
 			if (player.getOption("prefix").isPresent()) {
+
 				if (player.getOption("suffix").isPresent()) {
 					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname + player.getOption("suffix").get());
 					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get())));
-					//player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
+					//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
 				} else {
 					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname);
-					//player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
+					//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
 					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname)));
 				}
+
 			} else {
+
 				displayNames.put(player.getUniqueId(), nickname);
-				//player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
+				//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
 				Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(nickname)));
+
 			}
-
 		}
-
 	}
 
 	@Override
@@ -198,5 +229,4 @@ public final class SpongeComm implements CommandExecutor {
 	private void removeNickname(UUID uuid) {
 		nicknames.remove(uuid);
 	}
-
 }
