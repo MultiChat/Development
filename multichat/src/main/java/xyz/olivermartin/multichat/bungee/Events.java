@@ -11,8 +11,8 @@ import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
@@ -188,7 +188,6 @@ implements Listener
 
 				ChatManipulation chatfix = new ChatManipulation();
 
-				String URLBIT = chatfix.getURLBIT(event.getMessage());
 				if (ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId())) != null)
 				{
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId()));
@@ -204,20 +203,17 @@ implements Listener
 							String messagespyformat = MultiChat.configman.config.getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, Message, player, target);
-							finalmessage = chatfix.FixFormatCodes(finalmessage);
-							player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', finalmessage)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
+							player.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 
 							finalmessage = chatfix.replaceMsgVars(messageinformat, Message, player, target);
-							finalmessage = chatfix.FixFormatCodes(finalmessage);
-							target.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', finalmessage)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
+							target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 
 							finalmessage = chatfix.replaceMsgVars(messagespyformat, event.getMessage(), player, target);
-							finalmessage = chatfix.FixFormatCodes(finalmessage);
 							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 								if ((onlineplayer.hasPermission("multichat.staff.spy")) && (MultiChat.socialspy.contains(onlineplayer.getUniqueId())) && 
 										(onlineplayer.getUniqueId() != player.getUniqueId()) && (onlineplayer.getUniqueId() != target.getUniqueId()) && 
 										(!(player.hasPermission("multichat.staff.spy.bypass") || target.hasPermission("multichat.staff.spy.bypass")))) {
-									onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', finalmessage)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
+									onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 								}
 							}
 							if (MultiChat.lastmsg.containsKey(player.getUniqueId())) {
@@ -357,18 +353,18 @@ implements Listener
 			ChatManipulation chatman = new ChatManipulation();
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-			
-//			System.out.println("The normal join format is: " + joinformat);
-//			System.out.println("The silent join format is: " + silentformat);
-//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
+
+			//			System.out.println("The normal join format is: " + joinformat);
+			//			System.out.println("The silent join format is: " + silentformat);
+			//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
-//					System.out.println("Sending a normal join message for " + player.getName() + " to " + onlineplayer.getName());
+					//					System.out.println("Sending a normal join message for " + player.getName() + " to " + onlineplayer.getName());
 					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
 				} else {
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-//						System.out.println("Sending a silent join message for " + player.getName() + " to " + onlineplayer.getName());
+						//						System.out.println("Sending a silent join message for " + player.getName() + " to " + onlineplayer.getName());
 						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
 					}
 				}
@@ -411,18 +407,18 @@ implements Listener
 			ChatManipulation chatman = new ChatManipulation();
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-			
-//			System.out.println("The normal quit format is: " + joinformat);
-//			System.out.println("The silent quit format is: " + silentformat);
-//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
+
+			//			System.out.println("The normal quit format is: " + joinformat);
+			//			System.out.println("The silent quit format is: " + silentformat);
+			//			System.out.println("Does player: " + player.getName() + ", have the permission? - " + player.hasPermission("multichat.staff.silentjoin"));
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
-//					System.out.println("Sending a normal quit message for " + player.getName() + " to " + onlineplayer.getName());
+					//					System.out.println("Sending a normal quit message for " + player.getName() + " to " + onlineplayer.getName());
 					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
 				} else {
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-//						System.out.println("Sending a silent quit message for " + player.getName() + " to " + onlineplayer.getName());
+						//						System.out.println("Sending a silent quit message for " + player.getName() + " to " + onlineplayer.getName());
 						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
 					}
 				}

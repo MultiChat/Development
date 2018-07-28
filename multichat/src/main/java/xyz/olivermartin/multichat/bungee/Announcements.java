@@ -6,8 +6,6 @@ import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
@@ -122,15 +120,13 @@ public class Announcements {
 	public static void playAnnouncement(String name) {
 
 		if (announcements.containsKey(name.toLowerCase())) {
-			String message;
-			String URLBIT;
-			ChatManipulation chatman = new ChatManipulation();
-			message = chatman.FixFormatCodes(announcements.get(name.toLowerCase()));
-			URLBIT = chatman.getURLBIT(announcements.get(name.toLowerCase()));
+
+			String message = announcements.get(name.toLowerCase());
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&',message)).event(new ClickEvent(ClickEvent.Action.OPEN_URL, URLBIT)).create());
+				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
 			}
+
 		}
 	}
 }
