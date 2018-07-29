@@ -68,8 +68,6 @@ public class MultiChatRawDataListener implements RawDataListener {
 					return;
 				}
 
-				// TODO Investigate old display name prefix checking etc. SEE BOTTOM OF THIS CLASS
-
 				channel.sendTo(p,buffer -> buffer.writeUTF(getDisplayName(p).toPlain()).writeUTF(p.getName()));
 
 			}
@@ -81,22 +79,3 @@ public class MultiChatRawDataListener implements RawDataListener {
 		}
 	}
 }
-
-/*if (p.getOption("prefix").isPresent()) {
-if (p.getOption("suffix").isPresent()) {
-	if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
-		channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname + p.getOption("suffix").get()).writeUTF(p.getName()));
-	} else {
-		channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-	}
-} else {
-	if (!getDisplayName(p).toPlain().contains(p.getOption("prefix").get())) {
-		channel.sendTo(p,buffer -> buffer.writeUTF(p.getOption("prefix").get() + nickname).writeUTF(p.getName()));
-	} else {
-		channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-	}
-}
-
-} else {
-channel.sendTo(p,buffer -> buffer.writeUTF(nickname).writeUTF(p.getName()));
-}*/

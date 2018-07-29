@@ -67,6 +67,7 @@ public final class SpongeComm implements CommandExecutor {
 			rootNode = configLoader.load();
 
 			try {
+
 				nicknames = (Map<UUID, String>) rootNode.getNode("nicknames").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
 
 				if (nicknames == null) {
@@ -92,7 +93,6 @@ public final class SpongeComm implements CommandExecutor {
 
 			} catch (IOException e) {
 
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 
 			}
@@ -139,7 +139,6 @@ public final class SpongeComm implements CommandExecutor {
 			try {
 				configLoader.save(rootNode);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -169,17 +168,14 @@ public final class SpongeComm implements CommandExecutor {
 				if (player.getOption("suffix").isPresent()) {
 					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname + player.getOption("suffix").get());
 					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get())));
-					//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get()));
 				} else {
 					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname);
-					//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname));
 					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname)));
 				}
 
 			} else {
 
 				displayNames.put(player.getUniqueId(), nickname);
-				//TODO Investigate: player.offer(Keys.DISPLAY_NAME, Text.of(nickname));
 				Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(nickname)));
 
 			}
