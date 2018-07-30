@@ -1,11 +1,14 @@
 package xyz.olivermartin.multichat.spigotbridge;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * Player Name Manager
@@ -35,6 +38,8 @@ public class NameManager {
 
 	private Map<String,String> mapNickFormatted;
 	private Map<String,String> mapNameFormatted;
+	
+	private List<UUID> online;
 
 	private NameManager() {
 
@@ -45,6 +50,8 @@ public class NameManager {
 
 		mapNickFormatted = new HashMap<String,String>();
 		mapNameFormatted = new HashMap<String,String>();
+		
+		online = new ArrayList<UUID>();
 
 	}
 
@@ -186,5 +193,65 @@ public class NameManager {
 		return Optional.of(getCurrentName(uuid));
 
 	}
+
+	public void registerPlayer(Player player) {
+
+		UUID uuid = player.getUniqueId();
+		String username = player.getName();
+		String oldUsername;
+
+		synchronized (mapUUIDName) {
+
+			if (mapUUIDName.containsKey(uuid)) {
+
+				oldUsername = mapUUIDName.get(uuid);
+
+				if (!oldUsername.equalsIgnoreCase(username)) {
+
+					synchronized (mapNameUUID) {
+
+						mapUUIDName.remove(uuid);
+						mapUUIDName.put(uuid, username.toLowerCase());
+						mapNameUUID.remove(oldUsername);
+						mapNameUUID.put(username.toLowerCase(), uuid);
+
+					}
+
+				}
+
+				mapNameFormatted.remove(oldUsername);
+				mapNameFormatted.put(username.toLowerCase(), username);
+
+			} else {
+
+				synchronized (mapNameUUID) {
+
+					mapUUIDName.put(uuid, username.toLowerCase());
+					mapNameUUID.put(username.toLowerCase(), uuid);
+					mapNameFormatted.put(username.toLowerCase(), username);
+
+				}
+
+			}
+
+		}
+		
+		online.add(uuid);
+		System.out.println("[MultiChat] [SPIGOT] [+] " + username + " has joined this server.");
+
+	}
+	
+	public void unregisterPlayer(Player player) {
+		
+		online.remove(player.getUniqueId());
+		System.out.println("[MultiChat] [SPIGOT] [-] " + player.getName() + " has left this server.");
+		
+	}
+	
+	// TODO SET NICKNAME (w/ (possibly optional) check for duplicates)
+	
+	// TODO REMOVE NICKNAME
+	
+	// TODO EVENTS
 
 }
