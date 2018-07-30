@@ -56,11 +56,14 @@ import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.5.2";
+	public static final String LATEST_VERSION = "1.6";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
+			// TODO REMOVE OLD VERSIONS / CREATE UPDATER FROM 1.5.2 TO 1.6
+			
 			LATEST_VERSION,
+			"1.5.2",
 			"1.5.1",
 			"1.5",
 			"1.4.2",
