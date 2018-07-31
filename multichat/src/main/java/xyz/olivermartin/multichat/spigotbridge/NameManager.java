@@ -38,7 +38,7 @@ public class NameManager {
 
 	private Map<String,String> mapNickFormatted;
 	private Map<String,String> mapNameFormatted;
-	
+
 	private List<UUID> online;
 
 	private NameManager() {
@@ -50,7 +50,7 @@ public class NameManager {
 
 		mapNickFormatted = new HashMap<String,String>();
 		mapNameFormatted = new HashMap<String,String>();
-		
+
 		online = new ArrayList<UUID>();
 
 	}
@@ -194,6 +194,11 @@ public class NameManager {
 
 	}
 
+	/**
+	 * Register a player as online
+	 * <p>Also performs any setup needed to equip nicknames etc.</p>
+	 * @param player
+	 */
 	public void registerPlayer(Player player) {
 
 		UUID uuid = player.getUniqueId();
@@ -235,23 +240,103 @@ public class NameManager {
 			}
 
 		}
-		
+
 		online.add(uuid);
 		System.out.println("[MultiChat] [SPIGOT] [+] " + username + " has joined this server.");
 
 	}
-	
+
+	/**
+	 * Register a player as offline
+	 * @param player
+	 */
 	public void unregisterPlayer(Player player) {
-		
+
 		online.remove(player.getUniqueId());
 		System.out.println("[MultiChat] [SPIGOT] [-] " + player.getName() + " has left this server.");
-		
+
 	}
-	
-	// TODO SET NICKNAME (w/ (possibly optional) check for duplicates)
-	
-	// TODO REMOVE NICKNAME
-	
+
+	/**
+	 * Set the nickname of a player
+	 * @param uuid
+	 * @param nickname
+	 */
+	public void setNickname(UUID uuid, String nickname) {
+
+		if (!mapUUIDName.containsKey(uuid)) {
+			return;
+		}
+
+		String unformattedNickname = ChatColor.stripColor(nickname.toLowerCase());
+
+		synchronized (mapNickUUID) {
+
+			// Check for duplicates
+			if (mapNickUUID.containsKey(unformattedNickname)) {
+				if (mapNickUUID.get(unformattedNickname) != uuid) {
+					return;
+				}
+			}
+
+			mapUUIDNick.put(uuid, unformattedNickname);
+			mapNickUUID.put(unformattedNickname, uuid);
+			mapNickFormatted.put(unformattedNickname, nickname);
+
+		}
+
+	}
+
+	/**
+	 * @param username
+	 * @return If this player has logged into the server before
+	 */
+	public boolean existsPlayer(String username) {
+		return mapNameUUID.containsKey(username.toLowerCase());
+	}
+
+	/**
+	 * @param nickname
+	 * @return If this nickname is currently in use
+	 */
+	public boolean existsNickname(String nickname) {
+		return mapNickUUID.containsKey(ChatColor.stripColor(nickname.toLowerCase()));
+	}
+
+	/**
+	 * @param uuid
+	 * @return If this player is currently online on the server
+	 */
+	public boolean isOnline(UUID uuid) {
+		return online.contains(uuid);
+	}
+
+	/**
+	 * Removes the nickname for a specified player
+	 * @param uuid
+	 */
+	public void removeNickname(UUID uuid) {
+
+		synchronized (mapUUIDNick) {
+
+			if (!mapUUIDNick.containsKey(uuid)) {
+				return;
+			}
+
+			String nickname = mapUUIDNick.get(uuid);
+			
+			mapUUIDNick.remove(uuid);
+			mapNickUUID.remove(nickname);
+			mapNickFormatted.remove(nickname);
+
+		}
+
+	}
+
 	// TODO EVENTS
+
+	// TODO SAVE
+
+	// TODO LOAD
 
 }
