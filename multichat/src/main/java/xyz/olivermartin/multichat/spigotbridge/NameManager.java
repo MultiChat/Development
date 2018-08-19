@@ -14,9 +14,9 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.spongepowered.api.event.Listener;
 
 /**
  * Player Name Manager
@@ -25,7 +25,7 @@ import org.spongepowered.api.event.Listener;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class NameManager {
+public class NameManager implements Listener {
 
 	private static NameManager instance;
 
@@ -513,14 +513,12 @@ public class NameManager {
 	 * EVENT LISTENERS
 	 */
 
-	@Listener
 	public void onLogin(PlayerLoginEvent event) {
 
 		registerPlayer(event.getPlayer());
 
 	}
 
-	@Listener
 	public void onLogout(PlayerQuitEvent event) {
 
 		unregisterPlayer(event.getPlayer());
