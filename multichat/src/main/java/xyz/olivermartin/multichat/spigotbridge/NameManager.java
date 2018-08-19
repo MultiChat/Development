@@ -1,5 +1,10 @@
 package xyz.olivermartin.multichat.spigotbridge;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +14,9 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.spongepowered.api.event.Listener;
 
 /**
  * Player Name Manager
@@ -43,6 +51,14 @@ public class NameManager {
 
 	private NameManager() {
 
+		setDefaultData();
+
+		online = new ArrayList<UUID>();
+
+	}
+
+	private void setDefaultData() {
+
 		mapUUIDNick = new HashMap<UUID,String>();
 		mapUUIDName = new HashMap<UUID,String>();
 		mapNickUUID = new HashMap<String,UUID>();
@@ -50,8 +66,6 @@ public class NameManager {
 
 		mapNickFormatted = new HashMap<String,String>();
 		mapNameFormatted = new HashMap<String,String>();
-
-		online = new ArrayList<UUID>();
 
 	}
 
@@ -324,7 +338,7 @@ public class NameManager {
 			}
 
 			String nickname = mapUUIDNick.get(uuid);
-			
+
 			mapUUIDNick.remove(uuid);
 			mapNickUUID.remove(nickname);
 			mapNickFormatted.remove(nickname);
@@ -333,10 +347,184 @@ public class NameManager {
 
 	}
 
-	// TODO EVENTS
+	/**
+	 * Save all persistent nickname data to file
+	 * 
+	 * @param saveFile The file output stream to use
+	 */
+	public void saveNicknameData(FileOutputStream saveFile) {
 
-	// TODO SAVE
+		try {
 
-	// TODO LOAD
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+
+			out.writeObject(mapUUIDNick);
+			out.writeObject(mapUUIDName);
+			out.writeObject(mapNickUUID);
+			out.writeObject(mapNameUUID);
+			out.writeObject(mapNickFormatted);
+			out.writeObject(mapNameFormatted);
+
+			out.close();
+			System.out.println("[MultiChatBridge] The nicknames file was successfully saved!");
+
+		} catch (IOException e) {
+
+			System.out.println("[MultiChatBridge] An error has occured writing the nicknames file!");
+			e.printStackTrace();
+
+		}
+
+	}
+
+	//	/**
+	//	 * Save all persistent nickname data to file
+	//	 * 
+	//	 * @param configLoader Configuration file loader to use
+	//	 */
+	//	@SuppressWarnings("serial")
+	//	public void SPONGE_saveNicknameData(ConfigurationLoader<CommentedConfigurationNode> configLoader) {
+	//
+	//		ConfigurationNode rootNode;
+	//
+	//		rootNode = configLoader.createEmptyNode();
+	//
+	//		try {
+	//
+	//			rootNode.getNode("nickname_uuidnick").setValue(new TypeToken<Map<UUID,String>>() {}, mapUUIDNick);
+	//			rootNode.getNode("nickname_uuidname").setValue(new TypeToken<Map<UUID,String>>() {}, mapUUIDName);
+	//			rootNode.getNode("nickname_nickuuid").setValue(new TypeToken<Map<String,UUID>>() {}, mapNickUUID);
+	//			rootNode.getNode("nickname_nameuuid").setValue(new TypeToken<Map<String,UUID>>() {}, mapNameUUID);
+	//			rootNode.getNode("nickname_nickformatted").setValue(new TypeToken<Map<String,String>>() {}, mapNickFormatted);
+	//			rootNode.getNode("nickname_nameformatted").setValue(new TypeToken<Map<String,String>>() {}, mapNameFormatted);
+	//
+	//			try {
+	//
+	//				configLoader.save(rootNode);
+	//
+	//			} catch (IOException e) {
+	//				e.printStackTrace();
+	//			}
+	//
+	//		} catch (ObjectMappingException e) {
+	//
+	//			e.printStackTrace();
+	//			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
+	//
+	//		}
+	//
+	//	}
+
+	/**
+	 * Load (or attempt to load) nickname data saved to file
+	 * 
+	 * @param saveFile The file input stream to use
+	 */
+	@SuppressWarnings({ "unchecked" })
+	public void loadNicknameData(FileInputStream saveFile) {
+
+		try {
+
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+
+			mapUUIDNick = (Map<UUID, String>) in.readObject();
+			mapUUIDName = (Map<UUID, String>) in.readObject();
+			mapNickUUID = (Map<String, UUID>) in.readObject();
+			mapNameUUID = (Map<String, UUID>) in.readObject();
+			mapNickFormatted = (Map<String, String>) in.readObject();
+			mapNameFormatted = (Map<String, String>) in.readObject();
+
+			in.close();
+
+			System.out.println("[MultiChatBridge] The nicknames file was successfully loaded!");
+
+		} catch (IOException|ClassNotFoundException e) {
+
+			System.out.println("[MultiChatBridge] An error has occured reading the nicknames file!");
+			e.printStackTrace();
+
+		}
+
+	}
+
+	//	/**
+	//	 * Load (or attempt to load) nickname data saved to file
+	//	 * 
+	//	 * @param configLoader The configuration loader to use
+	//	 */
+	//	@SuppressWarnings("serial")
+	//	public void SPONGE_loadNicknameData(ConfigurationLoader<CommentedConfigurationNode> configLoader) {
+	//
+	//		ConfigurationNode rootNode;
+	//
+	//		try {
+	//
+	//			rootNode = configLoader.load();
+	//
+	//			try {
+	//
+	//				mapUUIDNick = (Map<UUID, String>) rootNode.getNode("nickname_uuidnick").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+	//				mapUUIDName = (Map<UUID, String>) rootNode.getNode("nickname_uuidname").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+	//				mapNickUUID = (Map<String, UUID>) rootNode.getNode("nickname_nickuuid").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
+	//				mapNameUUID = (Map<String, UUID>) rootNode.getNode("nickname_nameuuid").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
+	//				mapNickFormatted = (Map<String, String>) rootNode.getNode("nickname_nickformatted").getValue(new TypeToken<Map<String, String>>() { /* EMPTY */ });
+	//				mapNameFormatted = (Map<String, String>) rootNode.getNode("nickname_nameformatted").getValue(new TypeToken<Map<String, String>>() { /* EMPTY */ });
+	//
+	//				if (mapUUIDNick == null) mapUUIDNick = new HashMap<UUID,String>();
+	//				if (mapUUIDName == null) mapUUIDName = new HashMap<UUID,String>();
+	//				if (mapNickUUID == null) mapNickUUID = new HashMap<String,UUID>();
+	//				if (mapNameUUID == null) mapNameUUID = new HashMap<String,UUID>();
+	//				if (mapNickFormatted == null) mapNickFormatted = new HashMap<String,String>();
+	//				if (mapNameFormatted == null) mapNameFormatted = new HashMap<String,String>();
+	//
+	//
+	//				System.out.println("[MultiChatSponge] Nickname data loaded");
+	//
+	//			} catch (ClassCastException e) {
+	//
+	//				setDefaultData();
+	//
+	//			} catch (ObjectMappingException e) {
+	//
+	//				setDefaultData();
+	//
+	//			}
+	//
+	//			try {
+	//
+	//				configLoader.save(rootNode);
+	//
+	//			} catch (IOException e) {
+	//
+	//				e.printStackTrace();
+	//
+	//			}
+	//
+	//		} catch (IOException e) {
+	//
+	//			e.printStackTrace();
+	//			setDefaultData();
+	//
+	//		}
+	//
+	//	}
+
+	/*
+	 * EVENT LISTENERS
+	 */
+
+	@Listener
+	public void onLogin(PlayerLoginEvent event) {
+
+		registerPlayer(event.getPlayer());
+
+	}
+
+	@Listener
+	public void onLogout(PlayerQuitEvent event) {
+
+		unregisterPlayer(event.getPlayer());
+
+	}
 
 }

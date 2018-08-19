@@ -47,6 +47,8 @@ import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
 import xyz.olivermartin.multichat.bungee.commands.StaffListCommand;
 import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
 
+// NAME IDEAS: Backchat, Totalk, TalkThrough, Sketchat, Talkative, ChaChat, Portalk, chatbee, bChat, Netalk, emailpail, Revtalkr, Chatch, Chatplex, Cheet, BlockChat, Talky, Photalk, Minecast, opentalk, Hello
+
 /**
  * The MAIN MultiChat Class
  * <p>This class is the main plugin. All plugin enable and disable control happens here.</p>
