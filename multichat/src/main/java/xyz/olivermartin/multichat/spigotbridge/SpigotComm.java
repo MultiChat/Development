@@ -39,6 +39,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	//	public static Map<UUID,String> nicknames = new HashMap<UUID,String>();
 	//	public static Map<String,UUID> realnames = new HashMap<String,UUID>();
+	
+	// TODO NICKNAMES ONLY WORK ON FRESH FILES. LEGACY CONVERSION? ANY KIND OF HANDLING WELCOME!!!
 
 	public static Chat chat = null;
 	public static boolean vault;
@@ -103,22 +105,34 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 
 		getServer().getPluginManager().registerEvents(this, this);
+		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
 
 		vault = setupChat();
+		
 		if (vault) {
 			System.out.println("MultiChat has successfully connected to vault!");
 		}
 	}
 
 	private boolean setupChat() {
+		
+		if (getServer().getPluginManager().getPlugin("Vault") == null) {
+			
+            return false;
+            
+        }
 
-		RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		//RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
 
-		if (chatProvider != null) {
-			chat = chatProvider.getProvider();
-		}
-
-		return (chat != null);
+		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
+		
+//		if (chatProvider != null) {
+//			chat = chatProvider.getProvider();
+//		}
+//
+//		return (chat != null);
 	}
 
 	public void onDisable() {
