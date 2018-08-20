@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -513,12 +514,14 @@ public class NameManager implements Listener {
 	 * EVENT LISTENERS
 	 */
 
+	@EventHandler
 	public void onLogin(PlayerLoginEvent event) {
 
 		registerPlayer(event.getPlayer());
 
 	}
 
+	@EventHandler
 	public void onLogout(PlayerQuitEvent event) {
 
 		unregisterPlayer(event.getPlayer());
