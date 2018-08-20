@@ -1,0 +1,138 @@
+##############################################################
+#                   *~~~* MULTICHAT *~~~*                    #
+##############################################################
+#                       BY REVILO410                         #
+##############################################################
+
+#################
+#  DO NOT EDIT  #
+version: "1.6"
+#################
+
+##############################################################
+#                        CHAT FORMATS                        #
+##############################################################
+
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %MESSAGE% = The sent message
+# %NAME% = The name of the sender
+# %NAMET% = The name of the target player
+# %DISPLAYNAME% = The display name of the sender
+# %DISPLAYNAMET% = The display name of the target player
+# %SERVER% = The server of the sender
+# %SERVERT% = The server of the target player
+
+#Sending PM Format
+
+pmout: "&6[&cYou &6-> &c%DISPLAYNAMET%&6] &f%MESSAGE%"
+
+#Receving PM Format
+
+pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
+
+#SocialSpy Format
+
+pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
+
+##############################################################
+
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %SERVER% = The server of the sender
+# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
+
+#Global Chat Format
+#Will display as [FORMAT] [MESSAGE]
+
+globalformat: "&f%DISPLAYNAME%&f: "
+
+##############################################################
+
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# (%DISPLAYNAME% = The display name of the sender) STAFF CHAT ONLY
+# (%SERVER% = The server of the sender) STAFF CHAT ONLY
+# %MESSAGE% = The sent message
+# %CC% = The chat color set by players
+# %NC% = The name color set by players
+# (%GROUPNAME% = Name of the group chat) GROUP CHAT ONLY
+
+modchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "b"
+    ncdefault: "d"
+
+adminchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "d"
+    ncdefault: "b"
+
+groupchat:
+    format: "%CC%(%NC%%GROUPNAME%%CC%)(%NC%%NAME%%CC%) %MESSAGE%"
+    ccdefault: "a"
+    ncdefault: "f"
+
+##############################################################
+#                           COMMANDS                         #
+##############################################################
+
+#NOTE FOR COMMAND ALIASES TO TAKE EFFECT YOU MUST RESTART YOUR BUNGEECORD SERVER (/MULTICHAT RELOAD WONT WORK)
+
+#The /msg command has the following aliases (other than /msg)
+msgcommand:
+- m
+- message
+- t
+- tell
+- w
+- whisper
+- chat
+- pm
+
+#The /r command has the following aliases (other than /r)
+rcommand:
+- reply
+- respond
+
+#The /socialspy command has the following aliases (other than /socialspy)
+socialspycommand:
+- spy
+- sspy
+
+##############################################################
+#                       DISPLAY NAMES                        #
+##############################################################
+
+#Should MultiChat fetch the display names from players respective spigot servers rather than those set on bungeecord to use in the global chat? Set this to true if you want to use display names set by plugins such as Essentials, Vault etc. If you want to use display names set by a bungeecord plugin such as BungeePerms then set this to false. PLEASE NOTE THAT IF THIS IS SET TO TRUE, CHAT WILL ONLY WORK IF YOU ALSO PUT THE MULTICHAT.JAR IN THE SPIGOT SERVERS PLUGIN FOLDERS AS WELL AS IN THE BUNGEECORD PLUGINS FOLDER!
+
+fetch_spigot_display_names: true
+
+##############################################################
+#                  GLOBAL CHAT AND MESSAGING                 #
+##############################################################
+
+#Use global public chat?
+global: true
+
+# Servers to exclude from global chat
+# List like:
+# no_global:
+# - Server1
+# - Server2
+# etc.
+
+no_global: []
+
+#Use private messaging?
+#(MUST REBOOT THE BUNGEECORD SERVER TO TAKE EFFECT)
+pm: true
+
+# Servers to exclude from private messaging
+# List like:
+# no_pm:
+# - Server1
+# - Server2
+# etc.
+
+no_pm: []

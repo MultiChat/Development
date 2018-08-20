@@ -1,11 +1,10 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Events;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
@@ -18,7 +17,7 @@ import xyz.olivermartin.multichat.bungee.StaffChatManager;
 public class ACCommand extends Command {
 
 	private static String[] aliases = new String[] {};
-	
+
 	public ACCommand() {
 		super("ac", "multichat.staff.admin", aliases);
 	}
@@ -35,14 +34,14 @@ public class ACCommand extends Command {
 				toggleresult = Events.toggleAC(player.getUniqueId());
 
 				if (toggleresult == true) {
-					sender.sendMessage(new ComponentBuilder("Admin chat toggled on!").color(ChatColor.LIGHT_PURPLE).create());
+					MessageManager.sendMessage(sender, "command_ac_toggle_on");
 				} else {
-					sender.sendMessage(new ComponentBuilder("Admin chat toggled off!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_ac_toggle_off");
 				}
 
 			} else {
 
-				sender.sendMessage(new ComponentBuilder("Only players can toggle the chat!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_ac_only_players");
 
 			}
 
