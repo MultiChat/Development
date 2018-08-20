@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Announcements;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
  * Announcement Command
@@ -37,12 +38,12 @@ public class AnnouncementCommand extends Command {
 				Map<String,String> announcementList = Announcements.getAnnouncementList();
 				Iterator<String> it = announcementList.keySet().iterator();
 
-				sender.sendMessage(new ComponentBuilder("List of avaliable announcements:").color(ChatColor.GREEN).create());
+				MessageManager.sendMessage(sender, "command_announcement_list");
 
 				String currentItem;
 				while (it.hasNext()) {
 					currentItem = it.next();
-					sender.sendMessage(new ComponentBuilder(currentItem + ": " + announcementList.get(currentItem)).color(ChatColor.AQUA).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_list_item", currentItem + ": " + announcementList.get(currentItem));
 				}
 
 			} else if (Announcements.existsAnnouncemnt(args[0].toLowerCase())) {
@@ -51,7 +52,7 @@ public class AnnouncementCommand extends Command {
 
 			} else {
 
-				sender.sendMessage(new ComponentBuilder("Sorry, no such announcement found: " + args[0].toUpperCase()).color(ChatColor.RED).create());
+				MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", args[0].toUpperCase());
 
 			}
 
