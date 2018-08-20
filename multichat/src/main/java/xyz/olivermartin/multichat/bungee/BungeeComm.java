@@ -59,6 +59,8 @@ public class BungeeComm implements Listener {
 				String playerDisplayName = in.readUTF();
 				String playerName = in.readUTF();
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
+				
+				if (player == null) return;
 
 				synchronized (player) {
 
