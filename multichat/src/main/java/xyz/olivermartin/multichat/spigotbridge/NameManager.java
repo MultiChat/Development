@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -161,7 +161,7 @@ public class NameManager implements Listener {
 	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		nickname = nickname.toLowerCase();
-		nickname = ChatColor.stripColor(nickname);
+		nickname = stripFormat(nickname);
 
 		return getUUIDFromUnformattedNickname(nickname);
 
@@ -283,7 +283,7 @@ public class NameManager implements Listener {
 			return;
 		}
 
-		String unformattedNickname = ChatColor.stripColor(nickname.toLowerCase());
+		String unformattedNickname = stripFormat(nickname.toLowerCase());
 
 		synchronized (mapNickUUID) {
 
@@ -315,7 +315,7 @@ public class NameManager implements Listener {
 	 * @return If this nickname is currently in use
 	 */
 	public boolean existsNickname(String nickname) {
-		return mapNickUUID.containsKey(ChatColor.stripColor(nickname.toLowerCase()));
+		return mapNickUUID.containsKey(stripFormat(nickname.toLowerCase()));
 	}
 
 	/**
@@ -509,6 +509,22 @@ public class NameManager implements Listener {
 	//		}
 	//
 	//	}
+
+	/*
+	 * Remove all colour / format codes from a string (using the '&' char)
+	 */
+	private String stripFormat(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
+
+		if (input == null) {
+			return null;
+		}
+
+		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
+
+	}
 
 	/*
 	 * EVENT LISTENERS

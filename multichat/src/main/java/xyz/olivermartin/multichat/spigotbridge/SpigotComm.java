@@ -41,7 +41,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	//	public static Map<String,UUID> realnames = new HashMap<String,UUID>();
 	
 	// TODO NICKNAMES ONLY WORK ON FRESH FILES. LEGACY CONVERSION? ANY KIND OF HANDLING WELCOME!!!
-
+	// TODO Realname not working for formatted nicknames... :(
+	
 	public static Chat chat = null;
 	public static boolean vault;
 
