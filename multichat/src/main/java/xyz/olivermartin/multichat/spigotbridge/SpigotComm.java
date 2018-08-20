@@ -388,47 +388,4 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		return false;
 	}
 
-	//	public static void saveNicknames() {
-	//
-	//		try {
-	//
-	//			File file = new File(configDir, nameDataFile);
-	//			FileOutputStream saveFile = new FileOutputStream(file);
-	//			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-	//			out.writeObject(nicknames);
-	//			out.close();
-	//			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully saved!");
-	//
-	//		} catch (IOException e) {
-	//
-	//			System.out.println("[MultiChat] [BRIDGE] An error has occured writing the nicknames file!");
-	//			e.printStackTrace();
-	//
-	//		}
-	//	}
-	//
-	//	@SuppressWarnings("unchecked")
-	//	public static HashMap<UUID, String> loadNicknames() {
-	//
-	//		HashMap<UUID, String> result = null;
-	//
-	//		try {
-	//
-	//			File file = new File(configDir, nameDataFile);
-	//			FileInputStream saveFile = new FileInputStream(file);
-	//			ObjectInputStream in = new ObjectInputStream(saveFile);
-	//			result = (HashMap<UUID, String>)in.readObject();
-	//			in.close();
-	//			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully loaded!");
-	//
-	//		} catch (IOException|ClassNotFoundException e) {
-	//
-	//			System.out.println("[MultiChat] [BRIDGE] An error has occured reading the nicknames file!");
-	//			e.printStackTrace();
-	//
-	//		}
-	//
-	//		return result;
-	//
-	//	}
 }
