@@ -282,6 +282,10 @@ public class NameManager implements Listener {
 		if (!mapUUIDName.containsKey(uuid)) {
 			return;
 		}
+		
+		if (mapUUIDNick.containsKey(uuid)) {
+			removeNickname(uuid);
+		}
 
 		String unformattedNickname = stripFormat(nickname.toLowerCase());
 
