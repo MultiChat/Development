@@ -257,7 +257,38 @@ public class NameManager implements Listener {
 		}
 
 		online.add(uuid);
-		System.out.println("[MultiChat] [SPIGOT] [+] " + username + " has joined this server.");
+		System.out.println("[MultiChat] [BRIDGE] [+] " + username + " has joined this server.");
+
+	}
+
+	/**
+	 * Register a player into the system without them being online
+	 * <p>Used mainly for legacy conversion of old nickname file</p>
+	 * @param uuid Player's UUID
+	 */
+	public void registerOfflinePlayerByUUID(UUID uuid, String username) {
+
+		synchronized (mapUUIDName) {
+
+			if (mapUUIDName.containsKey(uuid)) {
+
+				/*
+				 * EMPTY : Player does not need registering
+				 */
+
+			} else {
+
+				synchronized (mapNameUUID) {
+
+					mapUUIDName.put(uuid, username.toLowerCase());
+					mapNameUUID.put(username.toLowerCase(), uuid);
+					mapNameFormatted.put(username.toLowerCase(), username);
+
+				}
+
+			}
+
+		}
 
 	}
 
@@ -268,7 +299,7 @@ public class NameManager implements Listener {
 	public void unregisterPlayer(Player player) {
 
 		online.remove(player.getUniqueId());
-		System.out.println("[MultiChat] [SPIGOT] [-] " + player.getName() + " has left this server.");
+		System.out.println("[MultiChat] [BRIDGE] [-] " + player.getName() + " has left this server.");
 
 	}
 
@@ -282,7 +313,7 @@ public class NameManager implements Listener {
 		if (!mapUUIDName.containsKey(uuid)) {
 			return;
 		}
-		
+
 		if (mapUUIDNick.containsKey(uuid)) {
 			removeNickname(uuid);
 		}
@@ -371,11 +402,11 @@ public class NameManager implements Listener {
 			out.writeObject(mapNameFormatted);
 
 			out.close();
-			System.out.println("[MultiChatBridge] The nicknames file was successfully saved!");
+			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully saved!");
 
 		} catch (IOException e) {
 
-			System.out.println("[MultiChatBridge] An error has occured writing the nicknames file!");
+			System.out.println("[MultiChat] [BRIDGE] An error has occured writing the nicknames file!");
 			e.printStackTrace();
 
 		}
@@ -441,11 +472,11 @@ public class NameManager implements Listener {
 
 			in.close();
 
-			System.out.println("[MultiChatBridge] The nicknames file was successfully loaded!");
+			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully loaded!");
 
 		} catch (IOException|ClassNotFoundException e) {
 
-			System.out.println("[MultiChatBridge] An error has occured reading the nicknames file!");
+			System.out.println("[MultiChat] [BRIDGE] An error has occured reading the nicknames file!");
 			e.printStackTrace();
 
 		}

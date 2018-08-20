@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,67 +39,102 @@ import net.milkbowl.vault.chat.Chat;
  */
 public class SpigotComm extends JavaPlugin implements PluginMessageListener, Listener {
 
-	//	public static Map<UUID,String> nicknames = new HashMap<UUID,String>();
-	//	public static Map<String,UUID> realnames = new HashMap<String,UUID>();
-	
-	// TODO NICKNAMES ONLY WORK ON FRESH FILES. LEGACY CONVERSION? ANY KIND OF HANDLING WELCOME!!!
-	
 	public static Chat chat = null;
 	public static boolean vault;
 
 	public static File configDir;
 
+	private static final String nameDataFile = "namedata.dat";
+	private static File legacyNicknameFile = new File(configDir, "Nicknames.dat");
+
+	@SuppressWarnings("unchecked")
 	public void onEnable() {
 
 		configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
-			System.out.println("[MultiChatBridge] Creating plugin directory!");
+			System.out.println("[MultiChat] [BRIDGE] Creating plugin directory!");
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
 
-		File f = new File(configDir, "Nicknames.dat");
+		File f = new File(configDir, nameDataFile);
 
 		if ((f.exists()) && (!f.isDirectory())) {
 
-			System.out.println("[MultiChatBridge] Attempting startup load for Nicknames");
+			System.out.println("[MultiChat] [BRIDGE] Attempting startup load for Nicknames");
 
-			File file = new File(configDir, "Nicknames.dat");
+			File file = new File(configDir, nameDataFile);
 			FileInputStream saveFile;
 			try {
 				saveFile = new FileInputStream(file);
 				NameManager.getInstance().loadNicknameData(saveFile);
 			} catch (FileNotFoundException e) {
-				System.out.println("[MultiChatBridge] [ERROR] Could not load nickname data");
+				System.out.println("[MultiChat] [BRIDGE] [ERROR] Could not load nickname data");
 				e.printStackTrace();
 			}
 
+			System.out.println("[MultiChat] [BRIDGE] Load completed!");
 
-			//			nicknames = loadNicknames();
+		} else if (legacyNicknameFile.exists()) {
 
-			//			for (UUID uuid : nicknames.keySet()) {
-			//				realnames.put(nicknames.get(uuid).toLowerCase(),uuid);
-			//			}
+			// LEGACY NICKNAME FILE HANDLING --------------------------------------------
 
-			System.out.println("[MultiChatBridge] Load completed!");
+			HashMap<UUID, String> result = null;
+
+			try {
+
+				FileInputStream saveFile = new FileInputStream(legacyNicknameFile);
+				ObjectInputStream in = new ObjectInputStream(saveFile);
+				result = (HashMap<UUID, String>) in.readObject();
+				in.close();
+				System.out.println("[MultiChat] [BRIDGE] Loaded a legacy (pre 1.6) nicknames file. Attempting conversion...");
+
+				int counter = 0;
+
+				for (UUID u : result.keySet()) {
+
+					counter++;
+					NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
+					NameManager.getInstance().setNickname(u, result.get(u));
+
+				}
+
+				File file = new File(configDir, nameDataFile);
+				FileOutputStream saveFile2;
+				try {
+					saveFile2 = new FileOutputStream(file);
+					NameManager.getInstance().saveNicknameData(saveFile2);
+				} catch (FileNotFoundException e) {
+					System.out.println("[MultiChat] [BRIDGE] [ERROR] Could not save nickname data");
+					e.printStackTrace();
+				}
+
+				System.out.println("[MultiChat] [BRIDGE] The files were created!");
+
+			} catch (IOException|ClassNotFoundException e) {
+
+				System.out.println("[MultiChat] [BRIDGE] An error has occured reading the legacy nicknames file. Please delete it.");
+				e.printStackTrace();
+
+			}
 
 		} else {
 
-			System.out.println("[MultiChatBridge] Some nicknames files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChatBridge] Enabling Nicknames! :D");
-			System.out.println("[MultiChatBridge] Attempting to create hash files!");
-			//			saveNicknames();
-			File file = new File(configDir, "Nicknames.dat");
+			System.out.println("[MultiChat] [BRIDGE] Name data files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] [BRIDGE] Enabling Nicknames! :D");
+			System.out.println("[MultiChat] [BRIDGE] Attempting to create hash files!");
+
+			File file = new File(configDir, nameDataFile);
 			FileOutputStream saveFile;
 			try {
 				saveFile = new FileOutputStream(file);
 				NameManager.getInstance().saveNicknameData(saveFile);
 			} catch (FileNotFoundException e) {
-				System.out.println("[MultiChatBridge] [ERROR] Could not save nickname data");
+				System.out.println("[MultiChat] [BRIDGE] [ERROR] Could not save nickname data");
 				e.printStackTrace();
 			}
 
-			System.out.println("[MultiChatBridge] The files were created!");
+			System.out.println("[MultiChat] [BRIDGE] The files were created!");
 
 		}
 
@@ -108,42 +145,35 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
 
 		vault = setupChat();
-		
+
 		if (vault) {
 			System.out.println("MultiChat has successfully connected to vault!");
 		}
 	}
 
 	private boolean setupChat() {
-		
-		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-			
-            return false;
-            
-        }
 
-		//RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+		if (getServer().getPluginManager().getPlugin("Vault") == null) {
+
+			return false;
+
+		}
 
 		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
-        return chat != null;
-		
-//		if (chatProvider != null) {
-//			chat = chatProvider.getProvider();
-//		}
-//
-//		return (chat != null);
+		chat = rsp.getProvider();
+		return chat != null;
+
 	}
 
 	public void onDisable() {
-		//		saveNicknames();
-		File file = new File(configDir, "Nicknames.dat");
+
+		File file = new File(configDir, nameDataFile);
 		FileOutputStream saveFile;
 		try {
 			saveFile = new FileOutputStream(file);
 			NameManager.getInstance().saveNicknameData(saveFile);
 		} catch (FileNotFoundException e) {
-			System.out.println("[MultiChatBridge] [ERROR] Could not save nickname data");
+			System.out.println("[MultiChat] [BRIDGE] [ERROR] Could not save nickname data");
 			e.printStackTrace();
 		}
 	}
@@ -167,12 +197,6 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	private void updatePlayerDisplayName(String playername) {
 
 		String nickname;
-
-		//		if (nicknames.containsKey(Bukkit.getPlayer(playername).getUniqueId())) {
-		//			nickname = nicknames.get(Bukkit.getPlayer(playername).getUniqueId());
-		//		} else {
-		//			nickname =  Bukkit.getPlayer(playername).getName();
-		//		}
 
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
 
@@ -210,7 +234,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 			} catch (IOException e) {
 
-				System.out.println("[MultiChatBridge] Failed to contact bungeecord");
+				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
 				e.printStackTrace();
 
 			}
@@ -240,32 +264,6 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	}
 
-	//	private void addNickname(UUID uuid, String nickname) {
-	//
-	//		if (nicknames.containsKey(uuid)) {
-	//			if (realnames.containsKey(nicknames.get(uuid).toLowerCase())) {
-	//				realnames.remove(nicknames.get(uuid).toLowerCase());
-	//			}
-	//		}
-	//
-	//		nicknames.put(uuid,nickname);
-	//		realnames.put(nickname.toLowerCase(), uuid);
-	//
-	//	}
-	//
-	//	private void removeNickname(UUID uuid) {
-	//
-	//		if (nicknames.containsKey(uuid)) {
-	//
-	//			if (realnames.containsKey(nicknames.get(uuid).toLowerCase())) {
-	//				realnames.remove(nicknames.get(uuid).toLowerCase());
-	//			}
-	//			nicknames.remove(uuid);
-	//
-	//		}
-	//
-	//	}
-
 	@Override
 	public boolean onCommand(CommandSender commandSender, Command cmd, String label, String[] args) {
 
@@ -290,14 +288,12 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				UUID targetUUID = sender.getUniqueId();
 
 				if (args[0].equalsIgnoreCase("off")) {
-					//					removeNickname(targetUUID);
 					NameManager.getInstance().removeNickname(targetUUID);
 					updatePlayerDisplayName(sender.getName());
 					sender.sendMessage("You have had your nickname removed!");
 					return true;
 				}
 
-				//				addNickname(targetUUID,args[0]);
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
 				updatePlayerDisplayName(sender.getName());
 
@@ -325,14 +321,12 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 			UUID targetUUID = target.getUniqueId();
 
 			if (args[1].equalsIgnoreCase("off")) {
-				//				removeNickname(targetUUID);
 				NameManager.getInstance().removeNickname(targetUUID);
 				updatePlayerDisplayName(target.getName());
 				sender.sendMessage(ChatColor.GREEN + args[0] + " has had their nickname removed!");
 				return true;
 			}
 
-			//			addNickname(targetUUID,args[1]);
 			NameManager.getInstance().setNickname(targetUUID, args[1]);
 			updatePlayerDisplayName(target.getName());
 
@@ -380,29 +374,6 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 			}
 
-			//			if (realnames.containsKey(args[0].toLowerCase())) {
-			//
-			//				if (nicknames.containsKey(realnames.get(args[0].toLowerCase()))) {
-			//
-			//					Player target;
-			//					target = Bukkit.getServer().getPlayer(realnames.get(args[0].toLowerCase()));
-			//					if (target == null) {
-			//						sender.sendMessage(ChatColor.DARK_RED + "No one could be found online with nickname: " + args[0]);
-			//						return true;
-			//					}
-			//					sender.sendMessage(ChatColor.GREEN + "Nickname: '" + args[0] + "' Belongs to player: '" + target.getName() + "'");
-			//					return true;
-			//
-			//				} else {
-			//					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
-			//					return true;
-			//				}
-			//
-			//			} else {
-			//				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
-			//				return true;
-			//			}
-
 		}
 		return false;
 	}
@@ -411,16 +382,16 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	//
 	//		try {
 	//
-	//			File file = new File(configDir, "Nicknames.dat");
+	//			File file = new File(configDir, nameDataFile);
 	//			FileOutputStream saveFile = new FileOutputStream(file);
 	//			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 	//			out.writeObject(nicknames);
 	//			out.close();
-	//			System.out.println("[MultiChatBridge] The nicknames file was successfully saved!");
+	//			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully saved!");
 	//
 	//		} catch (IOException e) {
 	//
-	//			System.out.println("[MultiChatBridge] An error has occured writing the nicknames file!");
+	//			System.out.println("[MultiChat] [BRIDGE] An error has occured writing the nicknames file!");
 	//			e.printStackTrace();
 	//
 	//		}
@@ -433,16 +404,16 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	//
 	//		try {
 	//
-	//			File file = new File(configDir, "Nicknames.dat");
+	//			File file = new File(configDir, nameDataFile);
 	//			FileInputStream saveFile = new FileInputStream(file);
 	//			ObjectInputStream in = new ObjectInputStream(saveFile);
 	//			result = (HashMap<UUID, String>)in.readObject();
 	//			in.close();
-	//			System.out.println("[MultiChatBridge] The nicknames file was successfully loaded!");
+	//			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully loaded!");
 	//
 	//		} catch (IOException|ClassNotFoundException e) {
 	//
-	//			System.out.println("[MultiChatBridge] An error has occured reading the nicknames file!");
+	//			System.out.println("[MultiChat] [BRIDGE] An error has occured reading the nicknames file!");
 	//			e.printStackTrace();
 	//
 	//		}
