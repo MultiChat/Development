@@ -95,11 +95,15 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				if (result != null) {
 
-					for (UUID u : result.keySet()) {
+					if (result.keySet() != null) {
 
-						counter++;
-						NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
-						NameManager.getInstance().setNickname(u, result.get(u));
+						for (UUID u : result.keySet()) {
+
+							counter++;
+							NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
+							NameManager.getInstance().setNickname(u, result.get(u));
+
+						}
 
 					}
 
