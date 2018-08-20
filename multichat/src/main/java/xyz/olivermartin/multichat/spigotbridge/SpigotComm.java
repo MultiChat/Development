@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -46,6 +47,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	private static final String nameDataFile = "namedata.dat";
 	private static File legacyNicknameFile; 
+	
+	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9_]+$");
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -303,6 +306,17 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					sender.sendMessage("You have had your nickname removed!");
 					return true;
 				}
+				
+				if (!simpleNickname.matcher(args[0]).matches()) {
+					
+					if (!sender.hasPermission("multichatbridge.nick.format")) {
+						
+						sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
+						return true;
+						
+					}
+					
+				}
 
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
 				updatePlayerDisplayName(sender.getName());
@@ -335,6 +349,17 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				updatePlayerDisplayName(target.getName());
 				sender.sendMessage(ChatColor.GREEN + args[0] + " has had their nickname removed!");
 				return true;
+			}
+			
+			if (!simpleNickname.matcher(args[1]).matches()) {
+				
+				if (!sender.hasPermission("multichatbridge.nick.format")) {
+					
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to give nicknames with special characters!");
+					return true;
+					
+				}
+				
 			}
 
 			NameManager.getInstance().setNickname(targetUUID, args[1]);
