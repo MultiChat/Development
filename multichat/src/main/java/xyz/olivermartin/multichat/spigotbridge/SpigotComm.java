@@ -52,7 +52,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 		configDir = getDataFolder();
 		legacyNicknameFile = new File(configDir, "Nicknames.dat");
-		
+
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] [BRIDGE] Creating plugin directory!");
 			getDataFolder().mkdirs();
@@ -93,11 +93,15 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				int counter = 0;
 
-				for (UUID u : result.keySet()) {
+				if (result != null) {
 
-					counter++;
-					NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
-					NameManager.getInstance().setNickname(u, result.get(u));
+					for (UUID u : result.keySet()) {
+
+						counter++;
+						NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
+						NameManager.getInstance().setNickname(u, result.get(u));
+
+					}
 
 				}
 
