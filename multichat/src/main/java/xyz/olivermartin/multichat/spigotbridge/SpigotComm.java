@@ -45,12 +45,14 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	public static File configDir;
 
 	private static final String nameDataFile = "namedata.dat";
-	private static File legacyNicknameFile = new File(configDir, "Nicknames.dat");
+	private static File legacyNicknameFile; 
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
 
 		configDir = getDataFolder();
+		legacyNicknameFile = new File(configDir, "Nicknames.dat");
+		
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] [BRIDGE] Creating plugin directory!");
 			getDataFolder().mkdirs();
