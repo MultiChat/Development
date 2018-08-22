@@ -61,17 +61,17 @@ public class AnnouncementCommand extends Command {
 			if (args[0].toLowerCase().equals("remove")) {
 
 				if (Announcements.removeAnnouncement(args[1].toLowerCase()) == true) {
-					sender.sendMessage(new ComponentBuilder("Removed announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_removed", args[1].toUpperCase());
 				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry, no such announcement found: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", args[1].toUpperCase());
 				}
 
 			} else if (args[0].toLowerCase().equals("stop") ) {
 
 				if (Announcements.stopAnnouncement(args[1].toLowerCase()) == true) {
-					sender.sendMessage(new ComponentBuilder("Stopped announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_stopped", args[1].toUpperCase());
 				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry, unable to stop announcement: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_stopped_error", args[1].toUpperCase());
 				}
 
 			} else {
@@ -86,9 +86,9 @@ public class AnnouncementCommand extends Command {
 				if (args[0].toLowerCase().equals("start")) {
 
 					if (Announcements.startAnnouncement(args[1].toLowerCase(), Integer.parseInt(args[2])) == true) {
-						sender.sendMessage(new ComponentBuilder("Started announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+						MessageManager.sendSpecialMessage(sender, "command_announcement_started", args[1].toUpperCase());
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry, unable to start announcement: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_announcement_started_error", args[1].toUpperCase());
 					}
 
 				} else {
@@ -100,9 +100,9 @@ public class AnnouncementCommand extends Command {
 			} else if (args[0].toLowerCase().equals("add")) {
 
 				if (Announcements.addAnnouncement(args[1].toLowerCase(), args[2]) == true) {
-					sender.sendMessage(new ComponentBuilder("Added announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_added", args[1].toUpperCase());
 				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry, announcement already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", args[1].toUpperCase());
 				}
 
 			} else {
@@ -126,9 +126,9 @@ public class AnnouncementCommand extends Command {
 				}
 
 				if (Announcements.addAnnouncement(args[1].toLowerCase(), message) == true) {
-					sender.sendMessage(new ComponentBuilder("Added announcement: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_added", args[1].toUpperCase());
 				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry, announcement already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", args[1].toUpperCase());
 				}
 
 			} else {
@@ -161,7 +161,7 @@ public class AnnouncementCommand extends Command {
 
 	private void showCommandUsage(CommandSender sender) {
 
-		sender.sendMessage(new ComponentBuilder("Usage:").color(ChatColor.GREEN).create());
+		MessageManager.sendMessage(sender, "command_announcement_usage");
 		sender.sendMessage(new ComponentBuilder("/announcement add <name> <message>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());
