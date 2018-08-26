@@ -15,6 +15,7 @@ xyz\olivermartin\multichat\bungee\commands\ACCCommand.class
 xyz\olivermartin\multichat\bungee\TViewChat.class
 xyz\olivermartin\multichat\bungee\commands\AnnouncementCommand.class
 com\olivermartin410\plugins\TChatInfo.class
+xyz\olivermartin\multichat\bungee\MessageManager.class
 xyz\olivermartin\multichat\bungee\commands\DisplayCommand.class
 com\olivermartin410\plugins\TGroupChatInfo.class
 xyz\olivermartin\multichat\bungee\ConfigManager.class
