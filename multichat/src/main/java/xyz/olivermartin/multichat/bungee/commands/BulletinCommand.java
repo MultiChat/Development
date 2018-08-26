@@ -46,7 +46,7 @@ public class BulletinCommand extends Command {
 				MessageManager.sendMessage(sender, "command_bulletin_list");
 				while (it.hasNext()) {
 					counter++;
-					MessageManager.sendSpecialMessageWithoutPrefix(sender, "command_bulletin_list_item", counter + ": " + it.next());
+					MessageManager.sendSpecialMessage(sender, "command_bulletin_list_item", counter + ": " + it.next());
 				}
 
 			} else {
