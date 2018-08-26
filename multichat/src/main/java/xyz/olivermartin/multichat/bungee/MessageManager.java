@@ -7,6 +7,12 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
+/**
+ * Message Manager
+ * <p>Used to display all plugin messages to players</p>
+ * 
+ * @author Oliver Martin (Revilo410)
+ */
 public class MessageManager {
 
 	private static MessageManager instance;
