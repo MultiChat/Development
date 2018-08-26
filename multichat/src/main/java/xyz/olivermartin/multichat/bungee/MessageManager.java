@@ -8,17 +8,17 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class MessageManager {
-	
+
 	private static MessageManager instance;
 
 	private static Map<String,String> messages;
 
 	private static String prefix = "&8&l[&2&lM&a&lC&8&l]&f ";
-	
+
 	static {
 		instance = new MessageManager();
 	}
-	
+
 	public static MessageManager getInstance() {
 		return instance;
 	}
@@ -74,11 +74,15 @@ public class MessageManager {
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + getMessage(id).replaceAll("%SPECIAL%", special))));
 	}
-	
+
+	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', getMessage(id).replaceAll("%SPECIAL%", special))));
+	}
+
 	public void startup() {
-		
+
 		/* Empty */
-		
+
 	}
 
 }
