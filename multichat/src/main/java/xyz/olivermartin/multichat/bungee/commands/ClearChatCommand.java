@@ -1,11 +1,11 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -28,7 +28,7 @@ public class ClearChatCommand extends Command {
 		for (int i = 1 ; i<151 ; i++ ) {
 			sender.sendMessage(new ComponentBuilder("").create());
 		}
-		sender.sendMessage(new ComponentBuilder("- Chat Cleared -").color(ChatColor.AQUA).create());
+		MessageManager.sendMessage(sender, "command_clearchat_self");
 
 	}
 
@@ -39,7 +39,7 @@ public class ClearChatCommand extends Command {
 				for (int i = 1 ; i<151 ; i++ ) {
 					onlineplayer.sendMessage(new ComponentBuilder("").create());
 				}
-				onlineplayer.sendMessage(new ComponentBuilder("- Server Chat Cleared -").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(onlineplayer, "command_clearchat_server");
 			}
 		}
 
@@ -52,7 +52,7 @@ public class ClearChatCommand extends Command {
 				for (int i = 1 ; i<151 ; i++ ) {
 					onlineplayer.sendMessage(new ComponentBuilder("").create());
 				}
-				onlineplayer.sendMessage(new ComponentBuilder("- Global Chat Cleared -").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(onlineplayer, "command_clearchat_global");
 			}
 		}
 
@@ -64,7 +64,7 @@ public class ClearChatCommand extends Command {
 			for (int i = 1 ; i<151 ; i++ ) {
 				onlineplayer.sendMessage(new ComponentBuilder("").create());
 			}
-			onlineplayer.sendMessage(new ComponentBuilder("- All Chat Cleared -").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(onlineplayer, "command_clearchat_all");
 		}
 
 	}
@@ -75,9 +75,7 @@ public class ClearChatCommand extends Command {
 
 			clearChatSelf(sender);
 
-		}
-		else
-		{
+		} else {
 			if (args.length == 1) {
 
 				if (args[0].toLowerCase().equals("self")) {
@@ -91,7 +89,7 @@ public class ClearChatCommand extends Command {
 						clearChatAll();
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("You do not have permission to clear ALL chat").color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "ALL");
 					}
 
 				} else if (args[0].toLowerCase().equals("server") ) {
@@ -101,7 +99,7 @@ public class ClearChatCommand extends Command {
 						clearChatServer(sender);
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("You do not have permission to clear SERVER chat").color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "SERVER");
 					}
 
 				} else if (args[0].toLowerCase().equals("global") ) {
@@ -111,13 +109,13 @@ public class ClearChatCommand extends Command {
 						clearChatGlobal();
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("You do not have permission to clear GLOBAL chat").color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "GLOBAL");
 					}
 
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Usage: /clearchat [self/server/global/all]").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_clearchat_usage");
 			}
 		}
 	}

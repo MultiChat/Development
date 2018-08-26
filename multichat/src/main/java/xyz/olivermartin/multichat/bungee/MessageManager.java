@@ -67,6 +67,13 @@ public class MessageManager {
 		messages.put("command_cast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
 		messages.put("command_cast_added", "&aAdded cast: %SPECIAL%");
 		messages.put("command_cast_added_error", "&cSorry, cast already exists: %SPECIAL%");
+		
+		messages.put("command_clearchat_self", "&bYour chat has been cleared");
+		messages.put("command_clearchat_server", "&bServer chat has been cleared");
+		messages.put("command_clearchat_global", "&bGlobal chat has been cleared");
+		messages.put("command_clearchat_all", "&bAll chat has been cleared");
+		messages.put("command_clearchat_no_permission", "&cYou do not have permission to clear %SPECIAL% chat");
+		messages.put("command_clearchat_usage", "&cUsage: /clearchat [self/server/global/all]");
 
 	}
 
