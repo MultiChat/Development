@@ -77,6 +77,9 @@ public class MessageManager {
 		
 		messages.put("command_display_desc", "&3Display a message to the entire network");
 		messages.put("command_display_usage", "&bUsage /display <message>");
+		
+		messages.put("command_freezechat_thawed", "&b&lChat was &3&lTHAWED &b&lby &a&l%SPECIAL%");
+		messages.put("command_freezechat_frozen", "&b&lChat was &3&lFROZEN &b&lby &a&l%SPECIAL%");
 
 	}
 

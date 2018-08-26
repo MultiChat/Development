@@ -1,11 +1,10 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -28,7 +27,7 @@ public class FreezeChatCommand extends Command {
 		if (MultiChat.frozen == true) {
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b&lChat was &3&lTHAWED &b&lby &a&l" + sender.getName())).create());
+				MessageManager.sendSpecialMessage(onlineplayer, "command_freezechat_thawed", sender.getName());
 			}
 
 			MultiChat.frozen = false;
@@ -36,7 +35,7 @@ public class FreezeChatCommand extends Command {
 		} else {
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-				onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b&lChat was &3&lFROZEN &b&lby &a&l" + sender.getName())).create());
+				MessageManager.sendSpecialMessage(onlineplayer, "command_freezechat_frozen", sender.getName());
 			}
 
 			MultiChat.frozen = true;
