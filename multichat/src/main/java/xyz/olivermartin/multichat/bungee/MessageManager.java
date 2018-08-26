@@ -40,7 +40,7 @@ public class MessageManager {
 		messages.put("command_ac_only_players", "&cOnly players can toggle the chat!");
 
 		messages.put("command_announcement_list", "&aList of avaliable announcements:");
-		messages.put("command_announcement_list_item", "&b    %SPECIAL%");
+		messages.put("command_announcement_list_item", "&b -> %SPECIAL%");
 		messages.put("command_announcement_does_not_exist", "&cSorry, no such announcement found: %SPECIAL%");
 		messages.put("command_announcement_removed", "&aRemoved announcement: %SPECIAL%");
 		messages.put("command_announcement_stopped", "&aStopped announcement: %SPECIAL%");
@@ -53,7 +53,7 @@ public class MessageManager {
 
 		messages.put("command_bulletin_stopped", "&bBulletins stopped");
 		messages.put("command_bulletin_list", "&aList of bulletin messages with index:");
-		messages.put("command_bulletin_list_item", "&b    %SPECIAL%");
+		messages.put("command_bulletin_list_item", "&b -> %SPECIAL%");
 		messages.put("command_bulletin_removed", "&bRemoved bulletin");
 		messages.put("command_bulletin_started", "&bStarted bulletin");
 		messages.put("command_bulletin_added", "&bAdded to bulletin");
