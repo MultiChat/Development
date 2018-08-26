@@ -74,6 +74,9 @@ public class MessageManager {
 		messages.put("command_clearchat_all", "&bAll chat has been cleared");
 		messages.put("command_clearchat_no_permission", "&cYou do not have permission to clear %SPECIAL% chat");
 		messages.put("command_clearchat_usage", "&cUsage: /clearchat [self/server/global/all]");
+		
+		messages.put("command_display_desc", "&3Display a message to the entire network");
+		messages.put("command_display_usage", "&bUsage /display <message>");
 
 	}
 
