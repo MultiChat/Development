@@ -7,6 +7,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Bulletins;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
  * Bulletin Command
@@ -35,17 +36,17 @@ public class BulletinCommand extends Command {
 			if (args[0].toLowerCase().equals("stop")) {
 
 				Bulletins.stopBulletins();
-				sender.sendMessage(new ComponentBuilder("Bulletins stopped").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(sender, "command_bulletin_stopped");
 
 			} else if (args[0].toLowerCase().equals("list")) {
 
 				int counter = 0;
 				Iterator<String> it = Bulletins.getIterator();
 
-				sender.sendMessage(new ComponentBuilder("List of bulletin messages with index:").color(ChatColor.GREEN).create());
+				MessageManager.sendMessage(sender, "command_bulletin_list");
 				while (it.hasNext()) {
 					counter++;
-					sender.sendMessage(new ComponentBuilder(counter + ": " + it.next()).color(ChatColor.AQUA).create());
+					MessageManager.sendSpecialMessage(sender, "command_bulletin_list_item", counter + ": " + it.next());
 				}
 
 			} else {
@@ -61,25 +62,25 @@ public class BulletinCommand extends Command {
 				try {
 
 					Bulletins.removeBulletin(Integer.parseInt(args[1]) - 1);
-					sender.sendMessage(new ComponentBuilder("Removed bulletin").color(ChatColor.AQUA).create());
+					MessageManager.sendMessage(sender, "command_bulletin_removed");
 
 				} catch (Exception e) {
-					sender.sendMessage(new ComponentBuilder("Invalid command usage!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
 				}
 
 			} else if (args[0].toLowerCase().equals("start") ) {
 
 				try {
 					Bulletins.startBulletins(Integer.parseInt(args[1]));
-					sender.sendMessage(new ComponentBuilder("Started bulletin").color(ChatColor.AQUA).create());
+					MessageManager.sendMessage(sender, "command_bulletin_started");
 				} catch (Exception e) {
-					sender.sendMessage(new ComponentBuilder("Invalid command usage!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
 				}
 
 			} else if (args[0].toLowerCase().equals("add") ) {
 
 				Bulletins.addBulletin(args[1]);
-				sender.sendMessage(new ComponentBuilder("Added to bulletin").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(sender, "command_bulletin_added");
 
 			} else {
 
@@ -103,7 +104,7 @@ public class BulletinCommand extends Command {
 				}
 
 				Bulletins.addBulletin(message);
-				sender.sendMessage(new ComponentBuilder("Added to bulletin").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(sender, "command_bulletin_added");
 			}
 
 		} else {
@@ -116,7 +117,7 @@ public class BulletinCommand extends Command {
 
 	private void showCommandUsage(CommandSender sender) {
 
-		sender.sendMessage(new ComponentBuilder("Usage:").color(ChatColor.GREEN).create());
+		MessageManager.sendMessage(sender, "command_bulletin_usage");
 		sender.sendMessage(new ComponentBuilder("/bulletin add <message>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/bulletin remove <index>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/bulletin start <interval in minutes>").color(ChatColor.AQUA).create());

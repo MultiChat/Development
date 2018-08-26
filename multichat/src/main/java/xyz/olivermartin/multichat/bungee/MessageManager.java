@@ -41,10 +41,19 @@ public class MessageManager {
 		messages.put("command_announcement_added_error", "&cSorry, announcement already exists: %SPECIAL%");
 		messages.put("command_announcement_usage", "&aUsage:");
 
+		messages.put("command_bulletin_stopped", "&bBulletins stopped");
+		messages.put("command_bulletin_list", "&aList of bulletin messages with index:");
+		messages.put("command_bulletin_list_item", "&b%SPECIAL%");
+		messages.put("command_bulletin_removed", "&bRemoved bulletin");
+		messages.put("command_bulletin_started", "&bStarted bulletin");
+		messages.put("command_bulletin_added", "&bAdded to bulletin");
+		messages.put("command_bulletin_invalid_usage", "&cInvalid command usage!");
+		messages.put("command_bulletin_usage", "&aUsage:");
+
 	}
 
 	public static String getMessage(String id) {
-		if (!messages.containsKey(id)) return "&cNo message defined for: " + id;
+		if (!messages.containsKey(id)) return "&cERROR - Please report to plugin developer - No message defined for: " + id;
 		return messages.get(id.toLowerCase());
 	}
 
