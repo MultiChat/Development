@@ -63,7 +63,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			// TODO REMOVE OLD VERSIONS / CREATE UPDATER FROM 1.5.2 TO 1.6
-			
+
 			LATEST_VERSION,
 			"1.5.2",
 			"1.5.1",
@@ -247,6 +247,8 @@ public class MultiChat extends Plugin implements Listener {
 	}
 
 	public void onEnable() {
+
+		MessageManager.getInstance().startup();
 
 		instance = this;
 
