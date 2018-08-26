@@ -7,6 +7,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
  * Cast Command
@@ -24,7 +25,7 @@ public class CastCommand extends Command {
 	}
 
 	public void showCommandUsage(CommandSender sender) {
-		sender.sendMessage(new ComponentBuilder("Usage:").color(ChatColor.GREEN).create());
+		MessageManager.sendMessage(sender, "command_cast_usage");
 		sender.sendMessage(new ComponentBuilder("/cast add <name> <format>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/cast remove <name>").color(ChatColor.AQUA).create());
 		sender.sendMessage(new ComponentBuilder("/cast list").color(ChatColor.AQUA).create());
@@ -45,10 +46,10 @@ public class CastCommand extends Command {
 				Iterator<String> it = CastControl.castList.keySet().iterator();
 				String currentItem;
 
-				sender.sendMessage(new ComponentBuilder("List of avaliable casts:").color(ChatColor.GREEN).create());
+				MessageManager.sendMessage(sender, "command_cast_list");
 				while (it.hasNext()) {
 					currentItem = it.next();
-					sender.sendMessage(new ComponentBuilder(currentItem + ": " + CastControl.castList.get(currentItem)).color(ChatColor.AQUA).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_list_item", currentItem + ": " + CastControl.castList.get(currentItem));
 				}
 
 			} else {
@@ -62,11 +63,11 @@ public class CastCommand extends Command {
 				if (CastControl.existsCast(args[1])) {
 
 					CastControl.removeCast(args[1]);
-					sender.sendMessage(new ComponentBuilder("Removed cast: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_removed", args[1].toUpperCase());
 
 				} else {
 
-					sender.sendMessage(new ComponentBuilder("Sorry, no such cast found: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_does_not_exist", args[1].toUpperCase());
 				}
 
 			} else {
@@ -82,11 +83,11 @@ public class CastCommand extends Command {
 				if (!(CastControl.existsCast(args[1])) && !args[1].equalsIgnoreCase("cast")) {
 
 					CastControl.addCast(args[1], args[2]);
-					sender.sendMessage(new ComponentBuilder("Added cast: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_added", args[1].toUpperCase());
 
 				} else {
 
-					sender.sendMessage(new ComponentBuilder("Sorry, cast already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_added_error", args[1].toUpperCase());
 				}
 
 			} else {
@@ -113,11 +114,11 @@ public class CastCommand extends Command {
 				if (!CastControl.existsCast(args[1])) {
 
 					CastControl.addCast(args[1], message);
-					sender.sendMessage(new ComponentBuilder("Added cast: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_added", args[1].toUpperCase());
 
 				} else {
 
-					sender.sendMessage(new ComponentBuilder("Sorry, cast already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+					MessageManager.sendSpecialMessage(sender, "command_cast_added_error", args[1].toUpperCase());
 				}
 
 			} else {

@@ -59,6 +59,14 @@ public class MessageManager {
 		messages.put("command_bulletin_added", "&bAdded to bulletin");
 		messages.put("command_bulletin_invalid_usage", "&cInvalid command usage!");
 		messages.put("command_bulletin_usage", "&aUsage:");
+		
+		messages.put("command_cast_usage", "&aUsage:");
+		messages.put("command_cast_list", "&aList of avaliable casts:");
+		messages.put("command_cast_list_item", "&b -> %SPECIAL%");
+		messages.put("command_cast_removed", "&aRemoved cast: %SPECIAL%");
+		messages.put("command_cast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
+		messages.put("command_cast_added", "&aAdded cast: %SPECIAL%");
+		messages.put("command_cast_added_error", "&cSorry, cast already exists: %SPECIAL%");
 
 	}
 
