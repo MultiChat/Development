@@ -29,6 +29,8 @@ import xyz.olivermartin.multichat.bungee.UUIDNameManager;
  */
 public class GroupCommand extends Command implements TabExecutor {
 
+	//TODO The messages sent through GCCommand are not yet customisable!
+
 	private static String[] aliases = new String[] {};
 
 	public GroupCommand() {
@@ -219,26 +221,26 @@ public class GroupCommand extends Command implements TabExecutor {
 
 								GroupManager groupman = new GroupManager();
 
-								//Make the new group
+								// Make the new group
 								groupman.createGroup(args[1], player.getUniqueId(), false, "");
-								//Select the new group for the player
+								// Select the new group for the player
 								groupman.setViewedChat(player.getUniqueId(), args[1]);
-								//Announce join to group members
-								sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+								// Announce join to group members
+								MessageManager.sendSpecialMessage(sender, "command_group_created", args[1].toUpperCase());
 
 								groupman.announceJoinGroup(sender.getName(), args[1]);
 								groupman = null;
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+								MessageManager.sendSpecialMessage(sender, "command_group_already_exists", args[1].toUpperCase());
 							}
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry group name cannot exceed 20 characters!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_max_length");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_group_create_no_permission");
 					}
 				} 
 
@@ -254,13 +256,13 @@ public class GroupCommand extends Command implements TabExecutor {
 
 							//If the join is successful, set their viewed chat
 							groupman.setViewedChat(player.getUniqueId(), args[1]);
-							sender.sendMessage(new ComponentBuilder("You successfully joined and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_joined", args[1].toUpperCase());
 							//Announce their join
 							groupman.announceJoinGroup(player.getName(), args[1]);
 						}   
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -275,7 +277,7 @@ public class GroupCommand extends Command implements TabExecutor {
 						groupman.quitGroup(args[1].toLowerCase(), player.getUniqueId(), player);
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -297,17 +299,17 @@ public class GroupCommand extends Command implements TabExecutor {
 								GCCommand.sendMessage(sender.getName() + " has converted this group to a FORMAL group chat!", "&lINFO", groupChatInfo);
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("Sorry this command can only be used by the group chat owner").color(ChatColor.RED).create());
+								MessageManager.sendMessage(sender, "command_group_formal_not_owner");
 							}
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry this chat is already a formal group chat: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_formal_already_formal", args[1].toUpperCase());
 						}
 
 						groupChatInfo = null;
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -339,11 +341,11 @@ public class GroupCommand extends Command implements TabExecutor {
 							groupChatInfo = null;
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry this command can only be used by group admins/owners").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_formal_not_admin");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -356,7 +358,7 @@ public class GroupCommand extends Command implements TabExecutor {
 						&& (!args[0].toLowerCase().equals("admin")) && (!args[0].toLowerCase().equals("addadmin"))
 						&& (!args[0].toLowerCase().equals("removeadmin")) && (!args[0].toLowerCase().equals("ban"))) {
 
-					sender.sendMessage(new ComponentBuilder("Incorrect command usage, use /group to see a list of commands!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_group_incorrect_usage");
 
 				}
 
@@ -379,19 +381,19 @@ public class GroupCommand extends Command implements TabExecutor {
 								//Announce join to group members
 								groupman.announceJoinGroup(sender.getName(), args[1]);
 
-								sender.sendMessage(new ComponentBuilder("You successfully created, joined, and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+								MessageManager.sendSpecialMessage(sender, "command_group_created", args[1].toUpperCase());
 								groupman = null;
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("Sorry the following group chat already exists: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+								MessageManager.sendSpecialMessage(sender, "command_group_already_exists", args[1].toUpperCase());
 							}
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry neither group name or password must exceed 20 characters").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_max_length_password");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry you do not have permission to create new group chats").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_group_create_no_permission");
 					}
 				}
 
@@ -406,13 +408,13 @@ public class GroupCommand extends Command implements TabExecutor {
 
 							//If the join is successful, set their viewed chat
 							groupman.setViewedChat(player.getUniqueId(), args[1]);
-							sender.sendMessage(new ComponentBuilder("You successfully joined and selected the group: " + args[1].toUpperCase()).color(ChatColor.GREEN).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_joined", args[1].toUpperCase());
 							//Announce their join
 							groupman.announceJoinGroup(player.getName(), args[1]);
 						}   
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -442,24 +444,24 @@ public class GroupCommand extends Command implements TabExecutor {
 										GCCommand.sendMessage(sender.getName() + " has transferred ownership to " + newplayer.getName(), "&lINFO", groupChatInfo);
 
 									} else {
-										sender.sendMessage(new ComponentBuilder("This player is not already a member of the group!").color(ChatColor.RED).create());
+										MessageManager.sendMessage(sender, "command_group_transfer_not_member");
 									}
 
 								} else {
-									sender.sendMessage(new ComponentBuilder("Sorry you are not the owner of this chat!").color(ChatColor.RED).create());
+									MessageManager.sendMessage(sender, "command_group_transfer_not_owner");
 								}
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("This command can only be used on informal chats!").color(ChatColor.RED).create());
+								MessageManager.sendMessage(sender, "command_group_transfer_not_informal");
 							}
 
 							groupChatInfo = null;
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("This player is not online!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_player_not_online");
 						}
 					} else {
-						sender.sendMessage(new ComponentBuilder("Specified Group Does Not Exist!").color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 				}
 
@@ -502,33 +504,33 @@ public class GroupCommand extends Command implements TabExecutor {
 												GCCommand.sendMessage(sender.getName() + " has stepped down as a group admin", "&lINFO", groupChatInfo);
 
 											} else {
-												sender.sendMessage(new ComponentBuilder("You can't step down as a group admin because you are the only one!").color(ChatColor.RED).create());
+												MessageManager.sendMessage(sender, "command_group_formal_only_admin");
 											}
 
 										} else {
-											sender.sendMessage(new ComponentBuilder("You can't demote another group admin!").color(ChatColor.RED).create());
+											MessageManager.sendMessage(sender, "command_group_formal_cannot_demote");
 										}
 
 									} else {
-										sender.sendMessage(new ComponentBuilder("This player is not already a member of the group!").color(ChatColor.RED).create());
+										MessageManager.sendMessage(sender, "command_group_transfer_not_member");
 									}
 
 								} else {
-									sender.sendMessage(new ComponentBuilder("Sorry you are not an admin of this chat!").color(ChatColor.RED).create());
+									MessageManager.sendMessage(sender, "command_group_formal_not_admin");
 								}
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("This command can only be used on formal chats!").color(ChatColor.RED).create());
+								MessageManager.sendMessage(sender, "command_group_not_formal");
 							}
 
 							groupChatInfo = null;
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("This player is not online!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_player_not_online");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Specified Group Does Not Exist!").color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 
 				}
