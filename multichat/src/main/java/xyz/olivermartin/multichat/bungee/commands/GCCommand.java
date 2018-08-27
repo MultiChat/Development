@@ -5,12 +5,12 @@ import com.olivermartin410.plugins.TGroupChatInfo;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.Events;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -38,14 +38,14 @@ public class GCCommand extends Command {
 				boolean toggleresult = Events.toggleGC(player.getUniqueId());
 
 				if (toggleresult == true) {
-					sender.sendMessage(new ComponentBuilder("Group chat toggled on!").color(ChatColor.GREEN).create());
+					MessageManager.sendMessage(sender, "command_gc_toggle_on");
 				} else {
-					sender.sendMessage(new ComponentBuilder("Group chat toggled off!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_gc_toggle_off");
 				}
 
 			} else {
 
-				sender.sendMessage(new ComponentBuilder("Only players can toggle the chat!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_gc_only_players_toggle");
 			}
 
 		} else if ((sender instanceof ProxiedPlayer)) {
@@ -76,15 +76,15 @@ public class GCCommand extends Command {
 
 				} else {
 
-					sender.sendMessage(new ComponentBuilder("Sorry your selected chat no longer exists, please select a chat with /group <group name>").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_gc_no_longer_exists");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Please select the chat you wish to message using /group <group name>").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_gc_no_chat_selected");
 			}
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can speak in group chats").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_gc_only_players_speak");
 		}
 	}
 
@@ -108,4 +108,3 @@ public class GCCommand extends Command {
 		System.out.println("\033[32m[MultiChat] /gc {" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
 	}
 }
-

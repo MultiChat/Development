@@ -86,7 +86,14 @@ public class MessageManager {
 		
 		messages.put("command_freezechat_thawed", "&b&lChat was &3&lTHAWED &b&lby &a&l%SPECIAL%");
 		messages.put("command_freezechat_frozen", "&b&lChat was &3&lFROZEN &b&lby &a&l%SPECIAL%");
-
+		
+		messages.put("command_gc_toggle_on", "&aGroup chat toggled on!");
+		messages.put("command_gc_toggle_off", "&cGroup chat toggled off!");
+		messages.put("command_gc_only_players_toggle", "&cOnly players can toggle the chat!");
+		messages.put("command_gc_no_longer_exists", "&cSorry your selected chat no longer exists, please select a chat with /group <group name>");
+		messages.put("command_gc_no_chat_selected", "&cPlease select the chat you wish to message using /group <group name>");
+		messages.put("command_gc_only_players_speak", "&cOnly players can speak in group chats");
+		
 	}
 
 	public static String getMessage(String id) {
