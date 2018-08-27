@@ -94,6 +94,10 @@ public class MessageManager {
 		messages.put("command_gc_no_chat_selected", "&cPlease select the chat you wish to message using /group <group name>");
 		messages.put("command_gc_only_players_speak", "&cOnly players can speak in group chats");
 		
+		messages.put("command_global_enabled_1", "&3GLOBAL CHAT ENABLED");
+		messages.put("command_global_enabled_2", "&bYou will see messages from players on all servers!");
+		messages.put("command_global_only_players", "&cOnly players can change their chat state");
+		
 	}
 
 	public static String getMessage(String id) {
