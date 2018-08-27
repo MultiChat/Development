@@ -98,6 +98,28 @@ public class MessageManager {
 		messages.put("command_global_enabled_2", "&bYou will see messages from players on all servers!");
 		messages.put("command_global_only_players", "&cOnly players can change their chat state");
 		
+		messages.put("command_group_selected", "&aYour /gc messages will now go to group: %SPECIAL%");
+		messages.put("command_group_not_a_member", "&cSorry you aren't a member of group: %SPECIAL%");
+		messages.put("command_group_does_not_exist", "&cSorry the following group chat does not exist: %SPECIAL%");
+		messages.put("command_group_only_players_select", "&cOnly players can select a group chat");
+		messages.put("command_group_incorrect_usage", "&cIncorrect command usage, use /group to see a list of commands!");
+		messages.put("command_group_member_list", "&a&lShowing members of group: %SPECIAL%");
+		messages.put("command_group_member_list_item", "&b- %SPECIAL%");
+		messages.put("command_group_member_list_item_admin", "&b- &b&o%SPECIAL%");
+		messages.put("command_group_spy_all_disabled_1", "&cGlobal group spy disabled");
+		messages.put("command_group_spy_all_disabled_2", "&cAny groups you previously activated spy for will still be spied on!");
+		messages.put("command_group_spy_all_disabled_3", "&cDisable spy for individual groups with /group spy <groupname>");
+		messages.put("command_group_spy_all_enabled", "&aGlobal group spy enabled for all group chats!");
+		messages.put("command_group_spy_no_permission", "&cSorry this command does not exist, use /group");
+		messages.put("command_group_spy_off", "&cYou are no longer spying on: %SPECIAL%");
+		messages.put("command_group_spy_on", "&aYou are now spying on: %SPECIAL%");
+		messages.put("command_group_spy_already_a_member", "&cYou are already a member of this chat so can't spy on it!");
+		messages.put("command_group_spy_does_not_exist", "&cSorry this group chat does not exist!");
+		messages.put("command_group_", "&");
+		messages.put("command_group_", "&");
+		messages.put("command_group_", "&");
+		messages.put("command_group_", "&");
+		
 	}
 
 	public static String getMessage(String id) {

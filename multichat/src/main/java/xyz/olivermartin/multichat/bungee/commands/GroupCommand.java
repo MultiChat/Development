@@ -16,6 +16,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import xyz.olivermartin.multichat.bungee.GroupManager;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 
@@ -62,19 +63,19 @@ public class GroupCommand extends Command implements TabExecutor {
 							MultiChat.viewedchats.remove(player.getUniqueId());
 							MultiChat.viewedchats.put(player.getUniqueId(), viewedchat);
 
-							sender.sendMessage(new ComponentBuilder("Your /gc messages will now go to group: " + args[0].toUpperCase()).color(ChatColor.GREEN).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_selected", args[0].toUpperCase());
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry you aren't a member of group: " + args[0].toUpperCase()).color(ChatColor.RED).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_not_a_member", args[0].toUpperCase());
 						}
 
 						groupInfo = null;
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[0].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[0].toUpperCase());
 					}
 
 				} else {
-					sender.sendMessage(new ComponentBuilder("Only players can select a group chat").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_group_only_players_select");
 				}
 
 				break;
@@ -88,7 +89,7 @@ public class GroupCommand extends Command implements TabExecutor {
 						&& (!args[0].toLowerCase().equals("quit")) && (!args[0].toLowerCase().equals("leave"))
 						&& (!args[0].toLowerCase().equals("formal")) && (!args[0].toLowerCase().equals("delete"))) {
 
-					sender.sendMessage(new ComponentBuilder("Incorrect command usage, use /group to see a list of commands!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_group_incorrect_usage");
 				}
 
 				if ((args[0].toLowerCase().equals("list")) || (args[0].toLowerCase().equals("members"))) {
@@ -104,24 +105,25 @@ public class GroupCommand extends Command implements TabExecutor {
 
 							List<UUID> memberlist = groupChatInfo.getMembers();
 
-							sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&a&lShowing members of group: " + groupChatInfo.getName().toUpperCase())).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_member_list", groupChatInfo.getName().toUpperCase());
+
 							for (UUID member : memberlist) {
 
 								if (!groupChatInfo.existsAdmin(member)) {
-									sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b- " + UUIDNameManager.getName(member))).create());
+									MessageManager.sendSpecialMessage(sender, "command_group_member_list_item", UUIDNameManager.getName(member));
 								} else {
-									sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b- &b&o" + UUIDNameManager.getName(member))).create());
+									MessageManager.sendSpecialMessage(sender, "command_group_member_list_item_admin", UUIDNameManager.getName(member));
 								}
 							}
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry you aren't a member of the group: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+							MessageManager.sendSpecialMessage(sender, "command_group_not_a_member", args[1].toUpperCase());
 						}
 
 						groupChatInfo = null;
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry the following group chat does not exist: " + args[1].toUpperCase()).color(ChatColor.RED).create());
+						MessageManager.sendSpecialMessage(sender, "command_group_does_not_exist", args[1].toUpperCase());
 					}
 
 				}
@@ -137,18 +139,18 @@ public class GroupCommand extends Command implements TabExecutor {
 							if (MultiChat.allspy.contains(player.getUniqueId())) {
 
 								MultiChat.allspy.remove(player.getUniqueId());
-								sender.sendMessage(new ComponentBuilder("Global group spy disabled").color(ChatColor.RED).create());
-								sender.sendMessage(new ComponentBuilder("Any groups you previously activated spy for will still be spied on!").color(ChatColor.RED).create());
-								sender.sendMessage(new ComponentBuilder("Disable spy for individual groups with /group spy <groupname>").color(ChatColor.RED).create());
+								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_1");
+								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_2");
+								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_3");
 
 							} else {
 
 								MultiChat.allspy.add(player.getUniqueId());
-								sender.sendMessage(new ComponentBuilder("Global group spy enabled for all group chats!").color(ChatColor.GREEN).create());
+								MessageManager.sendMessage(sender, "command_group_spy_all_enabled");
 							}
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry this command does not exist, use /group").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_spy_no_permission");
 						}
 
 					} else if (player.hasPermission("multichat.staff.spy"))	{
@@ -164,29 +166,29 @@ public class GroupCommand extends Command implements TabExecutor {
 									groupChatInfo.delViewer(player.getUniqueId());
 									MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
 									MultiChat.groupchats.put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
-									sender.sendMessage(new ComponentBuilder("You are no longer spying on: " + groupChatInfo.getName().toUpperCase()).color(ChatColor.RED).create());
+									MessageManager.sendSpecialMessage(sender, "command_group_spy_off", groupChatInfo.getName().toUpperCase());
 
 								} else {
 
 									groupChatInfo.addViewer(player.getUniqueId());
 									MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
 									MultiChat.groupchats.put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
-									sender.sendMessage(new ComponentBuilder("You are now spying on: " + groupChatInfo.getName().toUpperCase()).color(ChatColor.GREEN).create());
+									MessageManager.sendSpecialMessage(sender, "command_group_spy_on", groupChatInfo.getName().toUpperCase());
 
 								}
 
 							} else {
-								sender.sendMessage(new ComponentBuilder("You are already a member of this chat so can't spy on it!").color(ChatColor.RED).create());
+								MessageManager.sendMessage(sender, "command_group_spy_already_a_member");
 							}
 
 							groupChatInfo = null;
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry this group chat does not exist!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_group_spy_does_not_exist");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry this command does not exist, use /group").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_group_spy_no_permission");
 					}
 
 				}
