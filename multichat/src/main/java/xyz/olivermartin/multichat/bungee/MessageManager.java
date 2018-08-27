@@ -65,7 +65,7 @@ public class MessageManager {
 		messages.put("command_bulletin_added", "&bAdded to bulletin");
 		messages.put("command_bulletin_invalid_usage", "&cInvalid command usage!");
 		messages.put("command_bulletin_usage", "&aUsage:");
-		
+
 		messages.put("command_cast_usage", "&aUsage:");
 		messages.put("command_cast_list", "&aList of avaliable casts:");
 		messages.put("command_cast_list_item", "&b -> %SPECIAL%");
@@ -73,31 +73,31 @@ public class MessageManager {
 		messages.put("command_cast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
 		messages.put("command_cast_added", "&aAdded cast: %SPECIAL%");
 		messages.put("command_cast_added_error", "&cSorry, cast already exists: %SPECIAL%");
-		
+
 		messages.put("command_clearchat_self", "&bYour chat has been cleared");
 		messages.put("command_clearchat_server", "&bServer chat has been cleared");
 		messages.put("command_clearchat_global", "&bGlobal chat has been cleared");
 		messages.put("command_clearchat_all", "&bAll chat has been cleared");
 		messages.put("command_clearchat_no_permission", "&cYou do not have permission to clear %SPECIAL% chat");
 		messages.put("command_clearchat_usage", "&cUsage: /clearchat [self/server/global/all]");
-		
+
 		messages.put("command_display_desc", "&3Display a message to the entire network");
 		messages.put("command_display_usage", "&bUsage /display <message>");
-		
+
 		messages.put("command_freezechat_thawed", "&b&lChat was &3&lTHAWED &b&lby &a&l%SPECIAL%");
 		messages.put("command_freezechat_frozen", "&b&lChat was &3&lFROZEN &b&lby &a&l%SPECIAL%");
-		
+
 		messages.put("command_gc_toggle_on", "&aGroup chat toggled on!");
 		messages.put("command_gc_toggle_off", "&cGroup chat toggled off!");
 		messages.put("command_gc_only_players_toggle", "&cOnly players can toggle the chat!");
 		messages.put("command_gc_no_longer_exists", "&cSorry your selected chat no longer exists, please select a chat with /group <group name>");
 		messages.put("command_gc_no_chat_selected", "&cPlease select the chat you wish to message using /group <group name>");
 		messages.put("command_gc_only_players_speak", "&cOnly players can speak in group chats");
-		
+
 		messages.put("command_global_enabled_1", "&3GLOBAL CHAT ENABLED");
 		messages.put("command_global_enabled_2", "&bYou will see messages from players on all servers!");
 		messages.put("command_global_only_players", "&cOnly players can change their chat state");
-		
+
 		messages.put("command_group_selected", "&aYour /gc messages will now go to group: %SPECIAL%");
 		messages.put("command_group_not_a_member", "&cSorry you aren't a member of group: %SPECIAL%");
 		messages.put("command_group_does_not_exist", "&cSorry the following group chat does not exist: %SPECIAL%");
@@ -131,11 +131,13 @@ public class MessageManager {
 		messages.put("command_group_formal_only_admin", "&cYou can't step down as a group admin because you are the only one!");
 		messages.put("command_group_formal_cannot_demote", "&cYou can't demote another group admin!");
 		messages.put("command_group_not_formal", "&cThis command can only be used on formal chats!");
-		messages.put("command_group_", "&");
-		messages.put("command_group_", "&");
-		messages.put("command_group_", "&");
-		messages.put("command_group_", "&");
-		
+		messages.put("command_group_banned", "&cYou were banned from group: %SPECIAL%");
+		messages.put("command_group_unbanned", "&aYou were unbanned from group: %SPECIAL%");
+		messages.put("command_group_cannot_ban_admin", "&cYou can't ban a group admin!");
+		messages.put("command_group_color_invalid", "&cInvalid color codes specified: Must be letters a-f or numbers 0-9");
+		messages.put("command_group_color_usage", "&cUsage: /group color/colour <group name> <chatcolorcode> <namecolorcode>");
+		messages.put("command_group_only_players", "&cOnly players can use group chats");
+
 	}
 
 	public static String getMessage(String id) {
