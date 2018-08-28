@@ -2,11 +2,10 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import com.olivermartin410.plugins.TChatInfo;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -29,9 +28,9 @@ public class MCCCommand extends Command {
 		if (args.length != 2) {
 
 			if ((sender instanceof ProxiedPlayer)) {
-				sender.sendMessage(new ComponentBuilder("Usage: /mcc <chatcolorcode> <namecolorcode>").color(ChatColor.GREEN).create());
+				MessageManager.sendMessage(sender, "command_mcc_usage");
 			} else {
-				sender.sendMessage(new ComponentBuilder("Only players can change chat colours!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_mcc_only_players");
 			}
 
 		} else if ((sender instanceof ProxiedPlayer)) {
@@ -59,20 +58,20 @@ public class MCCCommand extends Command {
 
 					MultiChat.modchatpreferences.put(player.getUniqueId(), chatinfo);
 
-					sender.sendMessage(new ComponentBuilder("Mod Chat Colours Changed!").color(ChatColor.GREEN).create());
+					MessageManager.sendMessage(sender, "command_mcc_updated");
 
 				} else {
-					sender.sendMessage(new ComponentBuilder("Invalid color codes specified: Must be letters a-f or numbers 0-9").color(ChatColor.RED).create());
-					sender.sendMessage(new ComponentBuilder("Usage: /mcc <chatcolorcode> <namecolorcode>").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_mcc_invalid");
+					MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Invalid color codes specified: Must be letters a-f or numbers 0-9").color(ChatColor.RED).create());
-				sender.sendMessage(new ComponentBuilder("Usage: /mcc <chatcolorcode> <namecolorcode>").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_mcc_invalid");
+				MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
 			}
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can change chat colours!").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_mcc_only_players");
 		}
 	}
 }

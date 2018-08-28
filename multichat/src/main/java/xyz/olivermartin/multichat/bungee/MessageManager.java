@@ -150,6 +150,16 @@ public class MessageManager {
 		messages.put("command_local_enabled_1", "&3LOCAL CHAT ENABLED");
 		messages.put("command_local_enabled_2", "&bYou will only see messages from players on the same server!");
 		messages.put("command_local_only_players", "&cOnly players can change their chat state");
+		
+		messages.put("command_mcc_usage", "&aUsage: /mcc <chatcolorcode> <namecolorcode>");
+		messages.put("command_mcc_only_players", "&cOnly players can change chat colours!");
+		messages.put("command_mcc_updated", "&aMod-Chat colours updated!");
+		messages.put("command_mcc_invalid", "&cInvalid color codes specified: Must be letters a-f or numbers 0-9");
+		messages.put("command_mcc_invalid_usage", "&cUsage: /mcc <chatcolorcode> <namecolorcode>");
+
+		messages.put("command_mc_toggle_on", "&bMod chat toggled on!");
+		messages.put("command_mc_toggle_off", "&cMod chat toggled off!");
+		messages.put("command_mc_only_players", "&cOnly players can toggle the chat!");
 
 	}
 

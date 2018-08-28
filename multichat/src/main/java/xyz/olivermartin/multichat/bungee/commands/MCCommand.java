@@ -1,11 +1,10 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Events;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
@@ -35,13 +34,13 @@ public class MCCommand extends Command {
 				toggleresult = Events.toggleMC(player.getUniqueId());
 
 				if (toggleresult == true) {
-					sender.sendMessage(new ComponentBuilder("Mod chat toggled on!").color(ChatColor.AQUA).create());
+					MessageManager.sendMessage(sender, "command_mc_toggle_on");
 				} else {
-					sender.sendMessage(new ComponentBuilder("Mod chat toggled off!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_mc_toggle_off");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Only players can toggle the chat!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_mc_only_players");
 			}
 
 		} else if ((sender instanceof ProxiedPlayer)) {
