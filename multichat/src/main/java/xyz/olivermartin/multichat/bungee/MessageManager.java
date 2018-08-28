@@ -179,7 +179,18 @@ public class MessageManager {
 
 		messages.put("command_usecast_usage", "&aUsage:");
 		messages.put("command_usecast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
-
+		
+		// *** GROUPS *** //
+		
+		messages.put("groups_toggled_but_no_longer_exists_1", "&cYou have toggled group chat but selected group doesn't exist!");
+		messages.put("groups_toggled_but_no_longer_exists_2", "&cPlease select the chat you wish to message using /group <group name> or disable the toggle with /gc");
+		
+		// *** FREEZECHAT *** //
+		
+		messages.put("freezechat_frozen", "&bSorry chat has been &3&lFROZEN");
+		
+		// messages.put("freezechat_frozen", "&");
+		
 	}
 
 	public static String getMessage(String id) {

@@ -192,13 +192,13 @@ public class Events implements Listener {
 						GCCommand.sendMessage(message, playerName, chatInfo);
 
 					} else {
-						player.sendMessage(new ComponentBuilder("You have toggled group chat but selected group doesn't exist!").color(ChatColor.RED).create());
-						player.sendMessage(new ComponentBuilder("Please select the chat you wish to message using /group <group name> or disable the toggle with /gc").color(ChatColor.RED).create());
+						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 					}
 
 				} else {
-					player.sendMessage(new ComponentBuilder("You have toggled group chat but you have no group selected!").color(ChatColor.RED).create());
-					player.sendMessage(new ComponentBuilder("Please select the chat you wish to message using /group <group name> or disable the toggle with /gc").color(ChatColor.RED).create());
+					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 				}
 			}
 		}
@@ -265,15 +265,15 @@ public class Events implements Listener {
 							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
 
 						} else {
-							player.sendMessage(new ComponentBuilder("Sorry private messages are disabled on the target player's server!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(player, "command_msg_disabled_target");
 						}
 
 					} else {
-						player.sendMessage(new ComponentBuilder("Sorry private messages are disabled on this server!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(player, "command_msg_disabled_sender");
 					}
 
 				} else {
-					player.sendMessage(new ComponentBuilder("Sorry this player is not online!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(player, "command_msg_not_online");
 				}
 
 				chatfix = null;
@@ -345,7 +345,7 @@ public class Events implements Listener {
 						MultiChat.globalChat.sendMessage(player, message);
 
 					} else {
-						player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bSorry chat has been &3&lFROZEN")).create());
+						MessageManager.sendMessage(player, "freezechat_frozen");
 					}
 
 					event.setCancelled(true);
