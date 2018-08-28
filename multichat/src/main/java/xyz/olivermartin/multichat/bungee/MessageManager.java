@@ -137,20 +137,20 @@ public class MessageManager {
 		messages.put("command_group_color_invalid", "&cInvalid color codes specified: Must be letters a-f or numbers 0-9");
 		messages.put("command_group_color_usage", "&cUsage: /group color/colour <group name> <chatcolorcode> <namecolorcode>");
 		messages.put("command_group_only_players", "&cOnly players can use group chats");
-		
+
 		messages.put("command_grouplist_list", "&a&lGroup List:");
 		messages.put("command_grouplist_list_item", "&b- %SPECIAL%");
-		
+
 		messages.put("command_helpme_desc", "&4Request help from a staff member!");
 		messages.put("command_helpme_usage", "&cUsage: /HelpMe <Message>");
 		messages.put("command_helpme_sent", "&cYour request for help has been sent to all online staff :)");
 		messages.put("command_helpme_only_players", "&4Only players can request help!");
 		messages.put("command_helpme_format", "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%");
-		
+
 		messages.put("command_local_enabled_1", "&3LOCAL CHAT ENABLED");
 		messages.put("command_local_enabled_2", "&bYou will only see messages from players on the same server!");
 		messages.put("command_local_only_players", "&cOnly players can change their chat state");
-		
+
 		messages.put("command_mcc_usage", "&aUsage: /mcc <chatcolorcode> <namecolorcode>");
 		messages.put("command_mcc_only_players", "&cOnly players can change chat colours!");
 		messages.put("command_mcc_updated", "&aMod-Chat colours updated!");
@@ -160,6 +160,15 @@ public class MessageManager {
 		messages.put("command_mc_toggle_on", "&bMod chat toggled on!");
 		messages.put("command_mc_toggle_off", "&cMod chat toggled off!");
 		messages.put("command_mc_only_players", "&cOnly players can toggle the chat!");
+
+		messages.put("command_msg_usage", "&bUsage: /msg <player> [message]");
+		messages.put("command_msg_usage_toggle", "&bUsing /msg <player> with no message will toggle chat to go to that player");
+		messages.put("command_msg_toggle_on", "&ePrivate chat toggled on! [You -> %SPECIAL%] (Type the same command to disable the toggle)");
+		messages.put("command_msg_toggle_off", "&cPrivate chat toggled off!");
+		messages.put("command_msg_only_players", "&cOnly players can toggle the chat!");
+		messages.put("command_msg_not_online", "&cSorry this person is not online!");
+		messages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
+		messages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
 
 	}
 
