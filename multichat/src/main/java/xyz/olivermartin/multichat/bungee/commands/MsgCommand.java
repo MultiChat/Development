@@ -12,6 +12,7 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
@@ -25,7 +26,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class MsgCommand extends Command implements TabExecutor {
 
-	static String[] aliases = (String[]) MultiChat.configman.config.getStringList("msgcommand").toArray(new String[0]);
+	static String[] aliases = (String[]) ConfigManager.getInstance().getStringList("msgcommand").toArray(new String[0]);
 
 	public MsgCommand() {
 		super("msg", "multichat.chat.msg", aliases);
@@ -94,20 +95,20 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
 
 						BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 						BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
 
 					}
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageoutformat = MultiChat.configman.config.getString("pmout");
-							String messageinformat = MultiChat.configman.config.getString("pmin");
-							String messagespyformat = MultiChat.configman.config.getString("pmspy");
+							String messageoutformat = ConfigManager.getInstance().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
 							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));

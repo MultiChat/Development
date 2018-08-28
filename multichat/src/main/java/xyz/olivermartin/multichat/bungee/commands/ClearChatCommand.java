@@ -5,8 +5,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
  * Clear Chat Command
@@ -48,7 +48,7 @@ public class ClearChatCommand extends Command {
 	private void clearChatGlobal() {
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-			if (!MultiChat.configman.config.getStringList("no_global").contains(onlineplayer.getServer().getInfo().getName()) ) {
+			if (!ConfigManager.getInstance().getStringList("no_global").contains(onlineplayer.getServer().getInfo().getName()) ) {
 				for (int i = 1 ; i<151 ; i++ ) {
 					onlineplayer.sendMessage(new ComponentBuilder("").create());
 				}

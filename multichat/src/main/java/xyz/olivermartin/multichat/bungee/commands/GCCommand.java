@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
@@ -92,7 +93,7 @@ public class GCCommand extends Command {
 
 		ChatManipulation chatfix = new ChatManipulation();
 
-		String messageFormat = MultiChat.configman.config.getString("groupchat.format");
+		String messageFormat = ConfigManager.getInstance().getString("groupchat.format");
 		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

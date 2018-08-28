@@ -5,6 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatStream;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 
@@ -49,7 +50,7 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands")).create());
 
 			break;
-			
+
 		case 2:
 
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2&lMulti&a&lChat &b&lHelp [Page 2]")).create());
@@ -73,7 +74,7 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/clearchat [self,server,global,all]")).create());
 
 			break;
-			
+
 		default:
 
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2&lMulti&a&lChat &b&lHelp [Page 3]")).create());
@@ -91,9 +92,9 @@ public class MultiChatCommand extends Command {
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/nick [player] <nickname/off>")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Get players real name from their nickname &3(&3Only &3works &3on &3Spigot)")).create());
 			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b/realname <nickname>")).create());
-		
+
 			break;
-		
+
 		}
 
 	}
@@ -137,14 +138,14 @@ public class MultiChatCommand extends Command {
 
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Preparing to reload config!")).create());
 
-					MultiChat.configman.startupConfig();
-					MultiChat.configversion = MultiChat.configman.config.getString("version");
+					ConfigManager.getInstance().startupConfig();
+					MultiChat.configversion = ConfigManager.getInstance().getString("version");
 					MultiChat.jmconfigman.startupConfig();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 
-					MultiChat.globalChat = new ChatStream("GLOBAL", MultiChat.configman.config.getString("globalformat"), false, false);
-					for (String server : MultiChat.configman.config.getStringList("no_global")) {
+					MultiChat.globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getString("globalformat"), false, false);
+					for (String server : ConfigManager.getInstance().getStringList("no_global")) {
 						MultiChat.globalChat.addServer(server);
 					}
 
@@ -154,9 +155,9 @@ public class MultiChatCommand extends Command {
 			}
 
 			if (args.length == 2) {
-				
+
 				if (args[0].toLowerCase().equals("help")) {
-					
+
 					if (args[1].toLowerCase().equals("1")) {
 						displayHelp(sender,1);
 					} else if (args[1].toLowerCase().equals("2")) {
@@ -164,7 +165,7 @@ public class MultiChatCommand extends Command {
 					} else {
 						displayHelp(sender,3);
 					}
-					
+
 				}
 			}
 		}

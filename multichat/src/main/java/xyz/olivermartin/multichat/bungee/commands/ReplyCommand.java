@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -21,7 +22,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class ReplyCommand extends Command {
 
-	private static String[] aliases = (String[])MultiChat.configman.config.getStringList("rcommand").toArray(new String[0]);
+	private static String[] aliases = (String[])ConfigManager.getInstance().getStringList("rcommand").toArray(new String[0]);
 
 	public ReplyCommand() {
 		super("r", "multichat.chat.msg", aliases);
@@ -49,13 +50,13 @@ public class ReplyCommand extends Command {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId()));
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageoutformat = MultiChat.configman.config.getString("pmout");
-							String messageinformat = MultiChat.configman.config.getString("pmin");
-							String messagespyformat = MultiChat.configman.config.getString("pmspy");
+							String messageoutformat = ConfigManager.getInstance().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
 							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));

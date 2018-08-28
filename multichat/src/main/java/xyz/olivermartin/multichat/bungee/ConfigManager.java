@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
+import java.util.List;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -20,7 +21,47 @@ import net.md_5.bungee.config.YamlConfiguration;
  */
 public class ConfigManager {
 
-	public Configuration config;
+	private static ConfigManager instance;
+
+	static {
+
+		instance = new ConfigManager();
+
+	}
+
+	public static ConfigManager getInstance() {
+		return instance;
+	}
+
+	// END OF STATIC
+
+	private ConfigManager() {
+
+		config = null;
+
+	}
+
+	private Configuration config;
+
+	public Configuration getConfig() {
+		return config;
+	}
+
+	public String getString(String path) {
+		return config.getString(path);
+	}
+
+	public Boolean getBoolean(String path) {
+		return config.getBoolean(path);
+	}
+
+	public Integer getInt(String path) {
+		return config.getInt(path);
+	}
+
+	public List<String> getStringList(String path) {
+		return config.getStringList(path);
+	}
 
 	public void startupConfig() {
 

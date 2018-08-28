@@ -31,8 +31,8 @@ public class GroupManager {
 		newgroup.addViewer(owneruuid);
 		newgroup.addAdmin(owneruuid);
 		newgroup.setName(groupname.toLowerCase());
-		newgroup.setChatColor(MultiChat.configman.config.getString("groupchat.ccdefault").toCharArray()[0]);
-		newgroup.setNameColor(MultiChat.configman.config.getString("groupchat.ncdefault").toCharArray()[0]);
+		newgroup.setChatColor(ConfigManager.getInstance().getString("groupchat.ccdefault").toCharArray()[0]);
+		newgroup.setNameColor(ConfigManager.getInstance().getString("groupchat.ncdefault").toCharArray()[0]);
 		newgroup.setSecret(secret);
 		newgroup.setPassword(password);
 		newgroup.setFormal(false);

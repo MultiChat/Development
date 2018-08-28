@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -15,7 +16,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class SocialSpyCommand extends Command {
 
-	private static String[] aliases = (String[])MultiChat.configman.config.getStringList("socialspycommand").toArray(new String[0]);
+	private static String[] aliases = (String[])ConfigManager.getInstance().getStringList("socialspycommand").toArray(new String[0]);
 
 	public SocialSpyCommand() {
 		super("socialspy", "multichat.staff.spy", aliases);

@@ -130,7 +130,7 @@ public class Events implements Listener {
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
 		///
-		if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+		if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
 			BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 		}
 		///
@@ -219,13 +219,13 @@ public class Events implements Listener {
 					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageOutFormat = MultiChat.configman.config.getString("pmout");
-							String messageInFormat = MultiChat.configman.config.getString("pmin");
-							String messageSpyFormat = MultiChat.configman.config.getString("pmspy");
+							String messageOutFormat = ConfigManager.getInstance().getString("pmout");
+							String messageInFormat = ConfigManager.getInstance().getString("pmin");
+							String messageSpyFormat = ConfigManager.getInstance().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageOutFormat, message, player, target);
 							player.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -331,11 +331,11 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			if (MultiChat.configman.config.getBoolean("global") == true) {
+			if (ConfigManager.getInstance().getBoolean("global") == true) {
 
-				if (!MultiChat.configman.config.getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+				if (!ConfigManager.getInstance().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					}
 
@@ -366,8 +366,8 @@ public class Events implements Listener {
 			if (!MultiChat.modchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(MultiChat.configman.config.getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(MultiChat.configman.config.getString("modchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getString("modchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getString("modchat.ncdefault").toCharArray()[0]);
 				MultiChat.modchatpreferences.put(uuid, chatinfo);
 
 			}
@@ -378,8 +378,8 @@ public class Events implements Listener {
 			if (!MultiChat.adminchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(MultiChat.configman.config.getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(MultiChat.configman.config.getString("adminchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getString("adminchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getString("adminchat.ncdefault").toCharArray()[0]);
 				MultiChat.adminchatpreferences.put(uuid, chatinfo);
 
 			}

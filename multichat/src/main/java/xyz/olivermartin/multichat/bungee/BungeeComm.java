@@ -59,7 +59,7 @@ public class BungeeComm implements Listener {
 				String playerDisplayName = in.readUTF();
 				String playerName = in.readUTF();
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
-				
+
 				if (player == null) return;
 
 				synchronized (player) {
@@ -70,7 +70,7 @@ public class BungeeComm implements Listener {
 					 * (Useful for older servers where char limit in place for display names)
 					 */
 
-					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true && player != null) {
+					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true && player != null) {
 						player.setDisplayName(playerDisplayName.replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 					}
 

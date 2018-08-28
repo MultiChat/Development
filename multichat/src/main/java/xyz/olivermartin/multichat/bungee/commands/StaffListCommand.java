@@ -7,8 +7,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
  * Staff List Command
@@ -42,7 +42,7 @@ public class StaffListCommand extends Command {
 
 					if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
 
-						if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+						if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
 							BungeeComm.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 						}
 
