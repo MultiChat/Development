@@ -248,8 +248,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	public void onEnable() {
 
-		MessageManager.getInstance().startup();
-
 		instance = this;
 
 		ConfigDir = getDataFolder();
