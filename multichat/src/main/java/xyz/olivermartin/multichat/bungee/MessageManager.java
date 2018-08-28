@@ -179,9 +179,9 @@ public class MessageManager {
 
 		messages.put("command_usecast_usage", "&aUsage:");
 		messages.put("command_usecast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
-		
+
 		// *** GROUPS *** //
-		
+
 		messages.put("groups_toggled_but_no_longer_exists_1", "&cYou have toggled group chat but selected group doesn't exist!");
 		messages.put("groups_toggled_but_no_longer_exists_2", "&cPlease select the chat you wish to message using /group <group name> or disable the toggle with /gc");
 		messages.put("groups_password_protected", "&cSorry this group chat is password protected: %SPECIAL%");
@@ -193,13 +193,11 @@ public class MessageManager {
 		messages.put("groups_cannot_quit_owner_2", "&cPlease transfer group ownership first! Use /group transfer %SPECIAL% <playername>");
 		messages.put("groups_cannot_quit_admin_1", "&cSorry you cannot leave as you are the only group admin!: %SPECIAL%");
 		messages.put("groups_cannot_quit_admin_2", "&cPlease appoint a new admin using /group admin %SPECIAL% <playername>");
-		
+
 		// *** FREEZECHAT *** //
-		
+
 		messages.put("freezechat_frozen", "&bSorry chat has been &3&lFROZEN");
-		
-		// messages.put("freezechat_frozen", "&");
-		
+
 	}
 
 	public static String getMessage(String id) {

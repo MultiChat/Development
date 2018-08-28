@@ -47,7 +47,7 @@ import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
 import xyz.olivermartin.multichat.bungee.commands.StaffListCommand;
 import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
 
-// NAME IDEAS: Backchat, Totalk, TalkThrough, Sketchat, Talkative, ChaChat, Portalk, chatbee, bChat, Netalk, emailpail, Revtalkr, Chatch, Chatplex, Cheet, BlockChat, Talky, Photalk, Minecast, opentalk, Hello
+// NAME IDEAS: Backchat, Totalk, Talkative, Portalk, Netalk, Revtalkr, Chatplex, Talky, Photalk
 
 /**
  * The MAIN MultiChat Class
