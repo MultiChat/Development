@@ -184,6 +184,15 @@ public class MessageManager {
 		
 		messages.put("groups_toggled_but_no_longer_exists_1", "&cYou have toggled group chat but selected group doesn't exist!");
 		messages.put("groups_toggled_but_no_longer_exists_2", "&cPlease select the chat you wish to message using /group <group name> or disable the toggle with /gc");
+		messages.put("groups_password_protected", "&cSorry this group chat is password protected: %SPECIAL%");
+		messages.put("groups_password_incorrect", "&cSorry incorrect password for: %SPECIAL%");
+		messages.put("groups_already_joined", "&cSorry you are already a member of the group: %SPECIAL%");
+		messages.put("groups_banned", "&cSorry you are banned from the group: %SPECIAL%");
+		messages.put("groups_quit", "&aYou successfully left the group: %SPECIAL%");
+		messages.put("groups_cannot_quit_owner_1", "&cSorry you cannot leave as you created the group!: %SPECIAL%");
+		messages.put("groups_cannot_quit_owner_2", "&cPlease transfer group ownership first! Use /group transfer %SPECIAL% <playername>");
+		messages.put("groups_cannot_quit_admin_1", "&cSorry you cannot leave as you are the only group admin!: %SPECIAL%");
+		messages.put("groups_cannot_quit_admin_2", "&cPlease appoint a new admin using /group admin %SPECIAL% <playername>");
 		
 		// *** FREEZECHAT *** //
 		
