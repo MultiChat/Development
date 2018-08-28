@@ -146,7 +146,10 @@ public class MessageManager {
 		messages.put("command_helpme_sent", "&cYour request for help has been sent to all online staff :)");
 		messages.put("command_helpme_only_players", "&4Only players can request help!");
 		messages.put("command_helpme_format", "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%");
-		messages.put("command_helpme_", "&");
+		
+		messages.put("command_local_enabled_1", "&3LOCAL CHAT ENABLED");
+		messages.put("command_local_enabled_2", "&bYou will only see messages from players on the same server!");
+		messages.put("command_local_only_players", "&cOnly players can change their chat state");
 
 	}
 
