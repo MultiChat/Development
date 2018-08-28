@@ -167,6 +167,19 @@ public class MessageManager {
 		messages.put("command_reply_no_one_to_reply_to", "&cYou have no one to reply to!");
 		messages.put("command_reply_only_players", "&cOnly players can reply to private messages");
 
+		messages.put("command_socialspy_disabled", "&cSocial Spy Disabled");
+		messages.put("command_socialspy_enabled", "&bSocial Spy Enabled");
+		messages.put("command_socialspy_usage", "&bUsage: /socialspy");
+		messages.put("command_socialspy_desc", "&bToggles if the user has social spy enabled or disabled");
+		messages.put("command_socialspy_only_players", "&cOnly players can toggle socialspy");
+
+		messages.put("command_stafflist_list", "&a&lOnline Staff");
+		messages.put("command_stafflist_list_item", "&b- %SPECIAL%");
+		messages.put("command_stafflist_list_server", "&a%SPECIAL%");
+
+		messages.put("command_usecast_usage", "&aUsage:");
+		messages.put("command_usecast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
+
 	}
 
 	public static String getMessage(String id) {

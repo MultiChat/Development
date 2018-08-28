@@ -1,10 +1,9 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -30,19 +29,19 @@ public class SocialSpyCommand extends Command {
 
 				if (MultiChat.socialspy.contains(((ProxiedPlayer)sender).getUniqueId())) {
 					MultiChat.socialspy.remove(((ProxiedPlayer)sender).getUniqueId());
-					sender.sendMessage(new ComponentBuilder("Social Spy Disabled").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_socialspy_disabled");
 				} else {
 					MultiChat.socialspy.add(((ProxiedPlayer)sender).getUniqueId());
-					sender.sendMessage(new ComponentBuilder("Social Spy Enabled").color(ChatColor.AQUA).create());
+					MessageManager.sendMessage(sender, "command_socialspy_enabled");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Usage: /socialspy").color(ChatColor.AQUA).create());
-				sender.sendMessage(new ComponentBuilder("Toggles if the user has social spy enabled or disabled").color(ChatColor.AQUA).create());
+				MessageManager.sendMessage(sender, "command_socialspy_usage");
+				MessageManager.sendMessage(sender, "command_socialspy_desc");
 			}
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can toggle socialspy").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_socialspy_only_players");
 		}
 	}
 }

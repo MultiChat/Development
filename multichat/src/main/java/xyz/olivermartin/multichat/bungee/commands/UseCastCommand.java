@@ -5,6 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -23,7 +24,7 @@ public class UseCastCommand extends Command {
 	}
 
 	public void displayUsage(CommandSender sender) {
-		sender.sendMessage(new ComponentBuilder("Usage:").color(ChatColor.GREEN).create());
+		MessageManager.sendMessage(sender, "command_usecast_usage");
 		sender.sendMessage(new ComponentBuilder("/usecast <name> <message>").color(ChatColor.AQUA).create());
 	}
 
@@ -51,7 +52,7 @@ public class UseCastCommand extends Command {
 
 		} else {
 
-			sender.sendMessage(new ComponentBuilder("Sorry, no such cast found: " + args[0].toUpperCase()).color(ChatColor.RED).create());
+			MessageManager.sendSpecialMessage(sender, "command_usecast_does_not_exist", args[0].toUpperCase());
 			return;
 
 		}

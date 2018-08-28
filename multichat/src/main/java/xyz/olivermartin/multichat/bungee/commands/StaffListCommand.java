@@ -2,14 +2,12 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import java.util.Iterator;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -31,12 +29,12 @@ public class StaffListCommand extends Command {
 
 		String server;
 
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&a&lOnline Staff")));
+		MessageManager.sendMessage(sender, "command_stafflist_list");
 
 		for (Iterator<String> localIterator1 = ProxyServer.getInstance().getServers().keySet().iterator(); localIterator1.hasNext();) {
 
 			server = (String)localIterator1.next();
-			sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&a" + server)));
+			MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", server);
 
 			for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
 
@@ -48,7 +46,7 @@ public class StaffListCommand extends Command {
 							BungeeComm.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 						}
 
-						sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b- " + onlineplayer2.getDisplayName())).create());
+						MessageManager.sendSpecialMessage(sender, "command_stafflist_list_item", onlineplayer2.getDisplayName());
 
 					}
 				}
