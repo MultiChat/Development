@@ -1,12 +1,10 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
  * 'Help Me' Command
@@ -29,8 +27,8 @@ public class HelpMeCommand extends Command {
 
 			if (args.length < 1) {
 
-				sender.sendMessage(new ComponentBuilder("Request help from a staff member!").color(ChatColor.DARK_RED).create());
-				sender.sendMessage(new ComponentBuilder("Usage: /HelpMe <Message>").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_helpme_desc");
+				MessageManager.sendMessage(sender, "command_helpme_usage");
 
 			} else { 
 
@@ -40,12 +38,12 @@ public class HelpMeCommand extends Command {
 				}
 
 				sendMessage(sender.getName() + ": " + message);
-				sender.sendMessage(new ComponentBuilder("Your request for help has been sent to all online staff :)").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_helpme_sent");
 
 			}
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can request help!").color(ChatColor.DARK_RED).create());
+			MessageManager.sendMessage(sender, "command_helpme_only_players");
 		}
 	}
 
@@ -53,7 +51,7 @@ public class HelpMeCommand extends Command {
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			if (onlineplayer.hasPermission("multichat.staff")) {
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&c&l<< &4HELPME &c&l>> &f&o" + message)));
+				MessageManager.sendSpecialMessage(onlineplayer, "command_helpme_format", message);
 			}
 		}
 

@@ -137,6 +137,16 @@ public class MessageManager {
 		messages.put("command_group_color_invalid", "&cInvalid color codes specified: Must be letters a-f or numbers 0-9");
 		messages.put("command_group_color_usage", "&cUsage: /group color/colour <group name> <chatcolorcode> <namecolorcode>");
 		messages.put("command_group_only_players", "&cOnly players can use group chats");
+		
+		messages.put("command_grouplist_list", "&a&lGroup List:");
+		messages.put("command_grouplist_list_item", "&b- %SPECIAL%");
+		
+		messages.put("command_helpme_desc", "&4Request help from a staff member!");
+		messages.put("command_helpme_usage", "&cUsage: /HelpMe <Message>");
+		messages.put("command_helpme_sent", "&cYour request for help has been sent to all online staff :)");
+		messages.put("command_helpme_only_players", "&4Only players can request help!");
+		messages.put("command_helpme_format", "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%");
+		messages.put("command_helpme_", "&");
 
 	}
 

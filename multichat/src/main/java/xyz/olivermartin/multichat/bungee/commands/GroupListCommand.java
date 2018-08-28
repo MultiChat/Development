@@ -1,9 +1,8 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -23,10 +22,10 @@ public class GroupListCommand extends Command {
 
 	public void execute(CommandSender sender, String[] args) {
 
-		sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&a&lGroup List:")).create());
+		MessageManager.sendMessage(sender, "command_grouplist_list");
 
 		for (String groupname : MultiChat.groupchats.keySet()) {
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&b- " + groupname)).create());
+			MessageManager.sendSpecialMessage(sender, "command_grouplist_list_item", groupname);
 		}
 
 	}
