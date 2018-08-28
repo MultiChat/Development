@@ -5,11 +5,11 @@ import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -31,8 +31,8 @@ public class ReplyCommand extends Command {
 
 		if (args.length < 1) {
 
-			sender.sendMessage(new ComponentBuilder("Usage: /r <message>").color(ChatColor.AQUA).create());
-			sender.sendMessage(new ComponentBuilder("Reply to the person who you private messaged most recently").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(sender, "command_reply_usage");
+			MessageManager.sendMessage(sender, "command_reply_desc");
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
@@ -93,25 +93,25 @@ public class ReplyCommand extends Command {
 							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on the target player's server!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_msg_disabled_target");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on this server!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
 				} else {
-					sender.sendMessage(new ComponentBuilder("You have no one to reply to!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("You have no one to reply to!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 			}
 
 			chatfix = null;
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can reply to private messages").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_reply_only_players");
 		}
 	}
 }

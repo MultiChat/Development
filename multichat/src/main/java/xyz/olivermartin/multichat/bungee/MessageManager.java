@@ -162,6 +162,11 @@ public class MessageManager {
 		messages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
 		messages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
 
+		messages.put("command_reply_usage", "&bUsage: /r <message>");
+		messages.put("command_reply_desc", "&bReply to the person who you private messaged most recently");
+		messages.put("command_reply_no_one_to_reply_to", "&cYou have no one to reply to!");
+		messages.put("command_reply_only_players", "&cOnly players can reply to private messages");
+
 	}
 
 	public static String getMessage(String id) {
