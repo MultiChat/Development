@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
-import java.util.Optional;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -24,47 +23,46 @@ public class ConfigHandler {
 	// The config file
 	private Configuration config;
 	// Path of config file
-	private String configPath;
+	private File configPath;
+	// Name of config file
+	private String fileName;
 
-	/**
-	 * 
-	 * @param configPath Must have the path to the folder, i.e. MultiChat.ConfigDir AND the file name like "config.yml"
-	 */
-	public ConfigHandler(String configPath) {
+	public ConfigHandler(File configPath, String fileName) {
 
 		this.configPath = configPath;
 		this.config = null;
+		this.fileName = fileName;
 		this.startupConfig();
 
 	}
 
-	public Optional<Configuration> getConfig() {
-		if (config == null) return Optional.empty();
-		return Optional.of(config);
+	public Configuration getConfig() {
+		if (config == null) startupConfig();
+		return config;
 	}
 
 	public void startupConfig() {
 
 		try {
 
-			File file = new File(configPath);
+			File file = new File(configPath, fileName);
 
 			if (!file.exists()) {
 
-				System.out.println("[MultiChat] File config.yml not found... Creating new one.");
+				System.out.println("[MultiChat] Config file " + fileName + " not found... Creating new one.");
 				saveDefaultConfig();
 
 				loadConfig();
 
 			} else {
 
-				System.out.println("[MultiChat] Loading config.yml...");
+				System.out.println("[MultiChat] Loading " + fileName + "...");
 				loadConfig();
 
 			}
 
 		} catch (Exception e) {
-			System.out.println("[MultiChat] [ERROR] Could not load config.yml");
+			System.out.println("[MultiChat] [ERROR] Could not load  " + fileName);
 			e.printStackTrace();
 		}
 	}
@@ -72,13 +70,13 @@ public class ConfigHandler {
 	private void saveDefaultConfig() {
 
 		// Load default file into input stream
-		InputStream inputStream = getClass().getClassLoader().getResourceAsStream("config.yml");
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
 
 		// Copy to desired location
 		try {
-			Files.copy(inputStream, new File(configPath).toPath(), new CopyOption[0]);
+			Files.copy(inputStream, new File(configPath, fileName).toPath(), new CopyOption[0]);
 		} catch (IOException e) {
-			System.err.println("[MultiChat] [ERROR] Could not create new config.yml file...");
+			System.err.println("[MultiChat] [ERROR] Could not create new " + fileName + " file...");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -131,7 +129,7 @@ public class ConfigHandler {
 
 		try {
 
-			this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(configPath));
+			this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(configPath, fileName));
 
 		} catch (IOException e) {
 

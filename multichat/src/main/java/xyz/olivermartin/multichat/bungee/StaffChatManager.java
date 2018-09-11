@@ -18,7 +18,7 @@ public class StaffChatManager {
 	public void sendModMessage(String username, String displayname, String server, String message) {
 
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getString("modchat.format");
+		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
 		String original = message;
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
@@ -28,8 +28,8 @@ public class StaffChatManager {
 				if (!MultiChat.modchatpreferences.containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getString("modchat.ccdefault").toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getString("modchat.ncdefault").toCharArray()[0]);
+					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
+					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
 
 					MultiChat.modchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
 
@@ -49,7 +49,7 @@ public class StaffChatManager {
 
 		String original = message;
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getString("adminchat.format");
+		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.format");
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -58,8 +58,8 @@ public class StaffChatManager {
 				if (!MultiChat.adminchatpreferences.containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getString("adminchat.ccdefault").toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getString("adminchat.ncdefault").toCharArray()[0]);
+					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
+					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
 
 					MultiChat.adminchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
 

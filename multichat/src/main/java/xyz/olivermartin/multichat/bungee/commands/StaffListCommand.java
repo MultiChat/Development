@@ -42,7 +42,7 @@ public class StaffListCommand extends Command {
 
 					if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
 
-						if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 							BungeeComm.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 						}
 

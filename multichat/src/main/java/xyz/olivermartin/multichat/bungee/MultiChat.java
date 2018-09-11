@@ -23,6 +23,7 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.bungee.commands.ACCCommand;
 import xyz.olivermartin.multichat.bungee.commands.ACCommand;
@@ -92,7 +93,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static String configversion;
 
 	//public static ConfigManager configman = new ConfigManager();
-	public static JMConfigManager jmconfigman = new JMConfigManager();
+	//public static JMConfigManager jmconfigman = new JMConfigManager();
 
 	public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
 
@@ -138,7 +139,7 @@ public class MultiChat extends Plugin implements Listener {
 
 			public void run() {
 
-				if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
@@ -175,7 +176,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -193,7 +194,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -212,7 +213,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -231,7 +232,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -256,10 +257,18 @@ public class MultiChat extends Plugin implements Listener {
 			getDataFolder().mkdirs();
 		}
 
-		ConfigManager.getInstance().startupConfig();
-		jmconfigman.startupConfig();
+		ConfigManager.getInstance().registerHandler("config.yml", ConfigDir);
+		ConfigManager.getInstance().registerHandler("joinmessages.yml", ConfigDir);
 
-		configversion = ConfigManager.getInstance().getString("version");
+		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+
+		ConfigManager.getInstance().getHandler("config.yml").startupConfig();
+		ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
+		//ConfigManager.getInstance().startupConfig();
+		//jmconfigman.startupConfig();
+
+		//configversion = ConfigManager.getInstance().getString("version");
+		configversion = configYML.getString("version");
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
 
@@ -291,14 +300,14 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register PM commands
-			if (ConfigManager.getInstance().getBoolean("pm")) {
+			if (configYML.getBoolean("pm")) {
 				getProxy().getPluginManager().registerCommand(this, new MsgCommand());
 				getProxy().getPluginManager().registerCommand(this, new ReplyCommand());
 				getProxy().getPluginManager().registerCommand(this, new SocialSpyCommand());
 			}
 
 			// Register global chat commands
-			if (ConfigManager.getInstance().getBoolean("global")) {
+			if (configYML.getBoolean("global")) {
 				getProxy().getPluginManager().registerCommand(this, new LocalCommand());
 				getProxy().getPluginManager().registerCommand(this, new GlobalCommand());
 			}
@@ -310,10 +319,10 @@ public class MultiChat extends Plugin implements Listener {
 			UUIDNameManager.Startup();
 
 			//TODO REPLACE THIS... Create hard-coded global chat stream
-			globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getString("globalformat"), false, false);
+			globalChat = new ChatStream("GLOBAL", configYML.getString("globalformat"), false, false);
 
 			// Add all appropriate servers to this hardcoded global chat stream
-			for (String server : ConfigManager.getInstance().getStringList("no_global")) {
+			for (String server : configYML.getStringList("no_global")) {
 				globalChat.addServer(server);
 			}
 

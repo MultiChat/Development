@@ -93,7 +93,7 @@ public class GCCommand extends Command {
 
 		ChatManipulation chatfix = new ChatManipulation();
 
-		String messageFormat = ConfigManager.getInstance().getString("groupchat.format");
+		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("groupchat.format");
 		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

@@ -130,7 +130,7 @@ public class Events implements Listener {
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
 		///
-		if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 			BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 		}
 		///
@@ -219,13 +219,13 @@ public class Events implements Listener {
 					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
 
-					if (!ConfigManager.getInstance().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
 
-						if (!ConfigManager.getInstance().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageOutFormat = ConfigManager.getInstance().getString("pmout");
-							String messageInFormat = ConfigManager.getInstance().getString("pmin");
-							String messageSpyFormat = ConfigManager.getInstance().getString("pmspy");
+							String messageOutFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageInFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messageSpyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageOutFormat, message, player, target);
 							player.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -331,11 +331,11 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			if (ConfigManager.getInstance().getBoolean("global") == true) {
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
 
-				if (!ConfigManager.getInstance().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+				if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-					if (ConfigManager.getInstance().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					}
 
@@ -366,8 +366,8 @@ public class Events implements Listener {
 			if (!MultiChat.modchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getString("modchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
 				MultiChat.modchatpreferences.put(uuid, chatinfo);
 
 			}
@@ -378,8 +378,8 @@ public class Events implements Listener {
 			if (!MultiChat.adminchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getString("adminchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
 				MultiChat.adminchatpreferences.put(uuid, chatinfo);
 
 			}
@@ -411,10 +411,11 @@ public class Events implements Listener {
 		ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
 		///
 
-		if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
+		//if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
+		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
 
-			String joinformat = MultiChat.jmconfigman.config.getString("serverjoin");
-			String silentformat = MultiChat.jmconfigman.config.getString("silentjoin");
+			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
+			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 
 			ChatManipulation chatman = new ChatManipulation();
 
@@ -464,10 +465,10 @@ public class Events implements Listener {
 
 		System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
 
-		if ( MultiChat.jmconfigman.config.getBoolean("showquit") == true ) {
+		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
-			String joinformat = MultiChat.jmconfigman.config.getString("networkquit");
-			String silentformat = MultiChat.jmconfigman.config.getString("silentquit");
+			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");
+			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentquit");
 
 			ChatManipulation chatman = new ChatManipulation();
 

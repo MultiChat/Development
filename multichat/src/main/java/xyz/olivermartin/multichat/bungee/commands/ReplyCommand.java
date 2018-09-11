@@ -22,7 +22,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class ReplyCommand extends Command {
 
-	private static String[] aliases = (String[])ConfigManager.getInstance().getStringList("rcommand").toArray(new String[0]);
+	private static String[] aliases = (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("rcommand").toArray(new String[0]);
 
 	public ReplyCommand() {
 		super("r", "multichat.chat.msg", aliases);
@@ -50,13 +50,13 @@ public class ReplyCommand extends Command {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId()));
 
-					if (!ConfigManager.getInstance().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!ConfigManager.getInstance().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageoutformat = ConfigManager.getInstance().getString("pmout");
-							String messageinformat = ConfigManager.getInstance().getString("pmin");
-							String messagespyformat = ConfigManager.getInstance().getString("pmspy");
+							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
 							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));

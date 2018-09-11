@@ -138,14 +138,15 @@ public class MultiChatCommand extends Command {
 
 					sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&3Preparing to reload config!")).create());
 
-					ConfigManager.getInstance().startupConfig();
-					MultiChat.configversion = ConfigManager.getInstance().getString("version");
-					MultiChat.jmconfigman.startupConfig();
+					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
+					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
+					//MultiChat.jmconfigman.startupConfig();
+					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 
-					MultiChat.globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getString("globalformat"), false, false);
-					for (String server : ConfigManager.getInstance().getStringList("no_global")) {
+					MultiChat.globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), false, false);
+					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
 						MultiChat.globalChat.addServer(server);
 					}
 

@@ -16,7 +16,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class SocialSpyCommand extends Command {
 
-	private static String[] aliases = (String[])ConfigManager.getInstance().getStringList("socialspycommand").toArray(new String[0]);
+	private static String[] aliases = (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("socialspycommand").toArray(new String[0]);
 
 	public SocialSpyCommand() {
 		super("socialspy", "multichat.staff.spy", aliases);
