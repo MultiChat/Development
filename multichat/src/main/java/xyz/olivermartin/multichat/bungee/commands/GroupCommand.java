@@ -27,8 +27,6 @@ import xyz.olivermartin.multichat.bungee.UUIDNameManager;
  */
 public class GroupCommand extends Command implements TabExecutor {
 
-	//TODO The messages sent through GCCommand are not yet customisable!
-
 	private static String[] aliases = new String[] {};
 
 	public GroupCommand() {
@@ -294,7 +292,7 @@ public class GroupCommand extends Command implements TabExecutor {
 								groupChatInfo.setFormal(true);
 								MultiChat.groupchats.remove(groupChatInfo.getName());
 								MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
-								GCCommand.sendMessage(sender.getName() + " has converted this group to a FORMAL group chat!", "&lINFO", groupChatInfo);
+								GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_formal"), "&lINFO", groupChatInfo);
 
 							} else {
 								MessageManager.sendMessage(sender, "command_group_formal_not_owner");
@@ -331,8 +329,8 @@ public class GroupCommand extends Command implements TabExecutor {
 								}
 							}
 
-							GCCommand.sendMessage(sender.getName() + " has deleted this group chat!", "&lINFO", groupChatInfo);
-							GCCommand.sendMessage("Goodbye! If you want to see group chat commands do /group", "&lINFO", groupChatInfo);
+							GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_deleted"), "&lINFO", groupChatInfo);
+							GCCommand.sendMessage(MessageManager.getMessage("groups_info_goodbye"), "&lINFO", groupChatInfo);
 
 							MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
 
@@ -439,7 +437,7 @@ public class GroupCommand extends Command implements TabExecutor {
 										MultiChat.groupchats.remove(groupChatInfo.getName());
 										MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-										GCCommand.sendMessage(sender.getName() + " has transferred ownership to " + newplayer.getName(), "&lINFO", groupChatInfo);
+										GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_transfer") + newplayer.getName(), "&lINFO", groupChatInfo);
 
 									} else {
 										MessageManager.sendMessage(sender, "command_group_transfer_not_member");
@@ -488,7 +486,7 @@ public class GroupCommand extends Command implements TabExecutor {
 											MultiChat.groupchats.remove(groupChatInfo.getName());
 											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-											GCCommand.sendMessage(sender.getName() + " has promoted the following member to group admin: " + newplayer.getName(), "&lINFO", groupChatInfo);
+											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_promoted") + newplayer.getName(), "&lINFO", groupChatInfo);
 
 										} else if (newplayer.getUniqueId().equals(player.getUniqueId())) {
 
@@ -499,7 +497,7 @@ public class GroupCommand extends Command implements TabExecutor {
 												MultiChat.groupchats.remove(groupChatInfo.getName());
 												MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-												GCCommand.sendMessage(sender.getName() + " has stepped down as a group admin", "&lINFO", groupChatInfo);
+												GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_step_down"), "&lINFO", groupChatInfo);
 
 											} else {
 												MessageManager.sendMessage(sender, "command_group_formal_only_admin");
@@ -562,13 +560,13 @@ public class GroupCommand extends Command implements TabExecutor {
 												MultiChat.viewedchats.remove(newPlayer.getUniqueId());
 												MultiChat.viewedchats.put(newPlayer.getUniqueId(), null);
 
-												GCCommand.sendMessage(sender.getName() + " kicked the following player from the group chat: " + newPlayer.getName(), "&lINFO", groupChatInfo);
+												GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_kick") + newPlayer.getName(), "&lINFO", groupChatInfo);
 											}
 
 											MultiChat.groupchats.remove(groupChatInfo.getName());
 											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-											GCCommand.sendMessage(sender.getName() + " has banned the following player from the group chat: " + newPlayer.getName(), "&lINFO", groupChatInfo);
+											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_ban") + newPlayer.getName(), "&lINFO", groupChatInfo);
 
 											MessageManager.sendSpecialMessage(newPlayer, "command_group_banned", groupChatInfo.getName());
 
@@ -580,7 +578,7 @@ public class GroupCommand extends Command implements TabExecutor {
 											MultiChat.groupchats.remove(groupChatInfo.getName());
 											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-											GCCommand.sendMessage(sender.getName() + " has unbanned the following player from the group chat: " + newPlayer.getName(), "&lINFO", groupChatInfo);
+											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_unban") + newPlayer.getName(), "&lINFO", groupChatInfo);
 
 											MessageManager.sendSpecialMessage(newPlayer, "command_group_unbanned", groupChatInfo.getName());
 										}
@@ -644,7 +642,7 @@ public class GroupCommand extends Command implements TabExecutor {
 
 									MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
 
-									GCCommand.sendMessage("Group Chat Colours Changed by " + sender.getName(), "&lINFO", groupChatInfo);
+									GCCommand.sendMessage(MessageManager.getMessage("groups_info_colors") + sender.getName(), "&lINFO", groupChatInfo);
 
 								} else {
 									MessageManager.sendMessage(sender, "command_group_color_invalid");

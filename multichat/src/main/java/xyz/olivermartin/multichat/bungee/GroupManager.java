@@ -4,9 +4,7 @@ import java.util.UUID;
 
 import com.olivermartin410.plugins.TGroupChatInfo;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 
@@ -154,7 +152,7 @@ public class GroupManager {
 	 */
 	public void announceJoinGroup(String playername, String groupname) {
 
-		GCCommand.sendMessage(playername + " has joined the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_joined"), "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
 
 	}
 
@@ -163,7 +161,7 @@ public class GroupManager {
 	 */
 	public void announceQuitGroup(String playername, String groupname) {
 
-		GCCommand.sendMessage(playername + " has left the group chat!", "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_quit"), "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
 
 	}
 
@@ -223,44 +221,11 @@ public class GroupManager {
 
 		if (page == 1) {
 
-			// TODO ADD TO MESSAGE MANAGER
-
-			sender.sendMessage(new ComponentBuilder("Group Chats Command Usage [Page 1] - INFORMAL GROUP CHATS").color(ChatColor.RED).create());
-			sender.sendMessage(new ComponentBuilder("MAKE A NEW GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group create/make <group name> [password]").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("JOIN AN EXISTING GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group join <group name> [password]").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("LEAVE A GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group leave/quit <group name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("SELECT THE GROUP CHAT YOU WISH FOR YOUR MESSAGES TO GO TO").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group <group name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("SET THE COLOURS OF YOUR GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group color/colour <group name> <chatcolorcode> <namecolorcode>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("TRANSFER OWNERSHIP OF YOUR INFORMAL GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group transfer <group name> <player name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("DELETE A GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group delete <group name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("LIST GROUP CHAT MEMBERS").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group list/members <group name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("SEND A MESSAGE TO THE SELECTED GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/gc <message>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("To see FORMAL group chat commands do /group help 2").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "groups_help_1");
 
 		} else {
 
-			sender.sendMessage(new ComponentBuilder("Group Chats Command Usage [Page 2] - FORMAL GROUP CHATS").color(ChatColor.RED).create());
-			sender.sendMessage(new ComponentBuilder("All group chats default to informal group chats").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("If you are a group owner you can convert your group to a formal group chat").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("Formal group chats restrict changing colours to appointed group admins only").color(ChatColor.DARK_AQUA).create());  
-			sender.sendMessage(new ComponentBuilder("Appointed group admins will also be able to ban people from the chat").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("CONVERSION TO A FORMAL GROUP CHAT IS IRREVERSIBLE").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("CONVERT YOUR GROUP CHAT TO A FORMAL GROUP CHAT (IRREVERSIBLE)").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group formal <group name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("ADD OR REMOVE AN ADMIN FROM A FORMAL GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group admin <group name> <player name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("BAN/UNBAN A PLAYER FROM YOUR FORMAL GROUP CHAT").color(ChatColor.DARK_GREEN).create());
-			sender.sendMessage(new ComponentBuilder("/group ban <group name> <player name>").color(ChatColor.GREEN).create());
-			sender.sendMessage(new ComponentBuilder("To see INFORMAL group chat commands do /group help 1").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "groups_help_2");
 
 		}
 	}

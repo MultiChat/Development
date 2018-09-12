@@ -222,7 +222,7 @@ public class MessageManager {
 						+ "&b/nick [player] <nickname/off>\n"
 						+ "&3Get players real name from their nickname (Only works on Spigot)\n"
 						+ "&b/realname <nickname>");
-		
+
 		defaultMessages.put("command_multichat_save_prepare", "&3Preparing to save multichat files!");
 		defaultMessages.put("command_multichat_save_completed", "&bSave completed!");
 		defaultMessages.put("command_multichat_reload_prepare", "&3Preparing to reload multichat files!");
@@ -259,6 +259,56 @@ public class MessageManager {
 		defaultMessages.put("groups_cannot_quit_owner_2", "&cPlease transfer group ownership first! Use /group transfer %SPECIAL% <playername>");
 		defaultMessages.put("groups_cannot_quit_admin_1", "&cSorry you cannot leave as you are the only group admin!: %SPECIAL%");
 		defaultMessages.put("groups_cannot_quit_admin_2", "&cPlease appoint a new admin using /group admin %SPECIAL% <playername>");
+		
+		defaultMessages.put("groups_info_joined", " has joined the group chat!");
+		defaultMessages.put("groups_info_quit", " has left the group chat!");
+		defaultMessages.put("groups_info_formal", " has converted this group to a FORMAL group chat!");
+		defaultMessages.put("groups_info_deleted", " has deleted this group chat!");
+		defaultMessages.put("groups_info_goodbye", "Goodbye! If you want to see group chat commands do /group");
+		defaultMessages.put("groups_info_transfer", " has transferred ownership to ");
+		defaultMessages.put("groups_info_promoted", " has promoted the following member to group admin: ");
+		defaultMessages.put("groups_info_step_down", " has stepped down as a group admin");
+		defaultMessages.put("groups_info_kick", " kicked the following player from the group chat: ");
+		defaultMessages.put("groups_info_ban", " has banned the following player from the group chat: ");
+		defaultMessages.put("groups_info_unban", " has unbanned the following player from the group chat: ");
+		defaultMessages.put("groups_info_colors", "Group chat colours changed by ");
+
+		defaultMessages.put("groups_help_1",
+				"&cGroup Chats Command Usage [Page 1] - INFORMAL GROUP CHATS\n"
+						+ "&2MAKE A NEW GROUP CHAT\n"
+						+ "&a/group create/make <group name> [password]\n"
+						+ "&2JOIN AN EXISTING GROUP CHAT\n"
+						+ "&a/group join <group name> [password]\n"
+						+ "&2LEAVE A GROUP CHAT\n"
+						+ "&a/group leave/quit <group name>\n"
+						+ "&2SELECT THE GROUP CHAT YOU WISH FOR YOUR MESSAGES TO GO TO\n"
+						+ "&a/group <group name>\n"
+						+ "&2SET THE COLOURS OF YOUR GROUP CHAT\n"
+						+ "&a/group color/colour <group name> <chatcolorcode> <namecolorcode>\n"
+						+ "&2TRANSFER OWNERSHIP OF YOUR INFORMAL GROUP CHAT\n"
+						+ "&a/group transfer <group name> <player name>\n"
+						+ "&2DELETE A GROUP CHAT\n"
+						+ "&a/group delete <group name>\n"
+						+ "&2LIST GROUP CHAT MEMBERS\n"
+						+ "&a/group list/members <group name>\n"
+						+ "&2SEND A MESSAGE TO THE SELECTED GROUP CHAT\n"
+						+ "&a/gc <message>\n"
+						+ "&cTo see FORMAL group chat commands do /group help 2");
+
+		defaultMessages.put("groups_help_2",
+				"&cGroup Chats Command Usage [Page 2] - FORMAL GROUP CHATS\n"
+						+ "&3All group chats default to informal group chats\n"
+						+ "&3If you are a group owner you can convert your group to a formal group chat\n"
+						+ "&3Formal group chats restrict changing colours to appointed group admins only\n"
+						+ "&3Appointed group admins will also be able to ban people from the chat\n"
+						+ "&3CONVERSION TO A FORMAL GROUP CHAT IS IRREVERSIBLE\n"
+						+ "&2CONVERT YOUR GROUP CHAT TO A FORMAL GROUP CHAT (IRREVERSIBLE)\n"
+						+ "&a/group formal <group name>\n"
+						+ "&2ADD OR REMOVE AN ADMIN FROM A FORMAL GROUP CHAT\n"
+						+ "&a/group admin <group name> <player name>\n"
+						+ "&2BAN/UNBAN A PLAYER FROM YOUR FORMAL GROUP CHAT\n"
+						+ "&a/group ban <group name> <player name>\n"
+						+ "&cTo see INFORMAL group chat commands do /group help 1");
 
 		// *** FREEZECHAT *** //
 
