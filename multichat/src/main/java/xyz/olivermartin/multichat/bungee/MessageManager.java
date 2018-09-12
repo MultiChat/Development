@@ -6,6 +6,7 @@ import java.util.Map;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.config.Configuration;
 
 /**
  * Message Manager
@@ -259,7 +260,7 @@ public class MessageManager {
 		defaultMessages.put("groups_cannot_quit_owner_2", "&cPlease transfer group ownership first! Use /group transfer %SPECIAL% <playername>");
 		defaultMessages.put("groups_cannot_quit_admin_1", "&cSorry you cannot leave as you are the only group admin!: %SPECIAL%");
 		defaultMessages.put("groups_cannot_quit_admin_2", "&cPlease appoint a new admin using /group admin %SPECIAL% <playername>");
-		
+
 		defaultMessages.put("groups_info_joined", " has joined the group chat!");
 		defaultMessages.put("groups_info_quit", " has left the group chat!");
 		defaultMessages.put("groups_info_formal", " has converted this group to a FORMAL group chat!");
@@ -317,8 +318,13 @@ public class MessageManager {
 	}
 
 	public static String getMessage(String id) {
+
+		Configuration config = ConfigManager.getInstance().getHandler("messages.yml").getConfig();
+
+		if (config.contains(id)) return config.getString(id);
 		if (!defaultMessages.containsKey(id)) return "&cERROR - Please report to plugin developer - No message defined for: " + id;
 		return defaultMessages.get(id.toLowerCase());
+
 	}
 
 	public static void sendMessage(CommandSender sender, String id) {
