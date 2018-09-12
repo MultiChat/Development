@@ -90,6 +90,7 @@ public class MultiChatCommand extends Command {
 					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
 					//MultiChat.jmconfigman.startupConfig();
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 

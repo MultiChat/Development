@@ -183,7 +183,7 @@ public class MessageManager {
 						+ "&b&o/acc <chat colour code> <name colour code>\n"
 						+ "&3Toggle mod chat &o(Toggle admin chat)\n"
 						+ "&b/mc &o(/ac)\n"
-						+ "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands");
+						+ "&3&lType &b&l/multichat help <page number> &3&lto view more commands");
 
 		defaultMessages.put("command_multichat_help_2",
 				"&2&lMulti&a&lChat &b&lHelp [Page 2]\n"
