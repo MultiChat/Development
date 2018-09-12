@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatStream;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
@@ -115,6 +116,13 @@ public class MultiChatCommand extends Command {
 				if (args[0].toLowerCase().equals("help")) {
 
 					displayHelp(sender, 1);
+
+				} else if (args[0].toLowerCase().equals("debugmessages")) {
+
+					sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&bDebug message displays\n"
+							+ "&aIs this on a new line?\n"
+							+ "Is this still green? \n"
+							+ "&cIs this on a new line?")));
 
 				} else if (args[0].toLowerCase().equals("save")) {
 
