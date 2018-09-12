@@ -24,7 +24,9 @@ public class MessageManager {
 
 		defaultMessages = new HashMap<String,String>();
 
-		prefix = "&8&l[&2&lM&a&lC&8&l]&f ";
+		// *** PREFIX *** //
+
+		defaultMessages.put("prefix", "&8&l[&2&lM&a&lC&8&l]&f ");
 
 		// *** COMMANDS *** //
 
@@ -328,15 +330,30 @@ public class MessageManager {
 	}
 
 	public static void sendMessage(CommandSender sender, String id) {
+		updatePrefix();
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + getMessage(id))));
 	}
 
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
+		updatePrefix();
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + getMessage(id).replaceAll("%SPECIAL%", special))));
 	}
 
 	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {
+		updatePrefix();
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', getMessage(id).replaceAll("%SPECIAL%", special))));
+	}
+
+	private static void updatePrefix() {
+
+		Configuration config = ConfigManager.getInstance().getHandler("messages.yml").getConfig();
+
+		if (config.contains("prefix")) {
+			prefix = config.getString("prefix");
+		} else {
+			prefix = defaultMessages.get("prefix");
+		}
+
 	}
 
 }
