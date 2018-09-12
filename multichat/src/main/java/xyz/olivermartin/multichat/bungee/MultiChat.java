@@ -262,8 +262,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
-		ConfigManager.getInstance().getHandler("config.yml").startupConfig();
-		ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
+		//ConfigManager.getInstance().getHandler("config.yml").startupConfig();
+		//ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 		//ConfigManager.getInstance().startupConfig();
 		//jmconfigman.startupConfig();
 

@@ -162,6 +162,72 @@ public class MessageManager {
 		defaultMessages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
 		defaultMessages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
 
+		// TODO Somehow combine all these into one message but provide a special method like "displayMessagePage()" in this
+		// message manager which automatically decides how many lines to show for the page specified to the message manager.
+		defaultMessages.put("command_multichat_help_1",
+				"&2&lMulti&a&lChat &b&lHelp\n"
+						+ "&3Display plugin version info\n"
+						+ "&b/multichat\n"
+						+ "&3Reload the plugin config\n"
+						+ "&b/multichat reload\n"
+						+ "&3Save ALL plugin data\n"
+						+ "&b/multichat save\n"
+						+ "&3Display a message to all players\n"
+						+ "&b/display <message>\n"
+						+ "&3View group chat help\n"
+						+ "&b/group\n"
+						+ "&3Send mod chat message &o(Send admin chat message)\n"
+						+ "&b/mc <message> &o(/ac <message>)\n"
+						+ "&3Change mod/&oadmin &3chat colours\n"
+						+ "&b/mcc <chat colour code> <name colour code>\n"
+						+ "&b&o/acc <chat colour code> <name colour code>\n"
+						+ "&3Toggle mod chat &o(Toggle admin chat)\n"
+						+ "&b/mc &o(/ac)\n"
+						+ "&3&lType &b&l/multichat help <page number> &3&lto &3&lview &3&lmore &3&lcommands");
+
+		defaultMessages.put("command_multichat_help_2",
+				"&2&lMulti&a&lChat &b&lHelp [Page 2]\n"
+						+ "&3View all global chat (Enabled by default)\n"
+						+ "&b/global\n"
+						+ "&3Only view chat from your current server\n"
+						+ "&b/local\n"
+						+ "&3See a list of online staff members\n"
+						+ "&b/staff\n"
+						+ "&3See a list of all group chats\n"
+						+ "&b/groups\n"
+						+ "&3Send a player a private message\n"
+						+ "&b/msg <player> [message]\n"
+						+ "&3Reply to your last message\n"
+						+ "&b/r <message>\n"
+						+ "&3Toggle socialspy to view private messages\n"
+						+ "&b/socialspy\n"
+						+ "&3Freeze the chat to stop messages being sent\n"
+						+ "&b/freezechat\n"
+						+ "&3Clear the chat stream for yourself or a group of people\n"
+						+ "&b/clearchat [self,server,global,all]");
+
+		defaultMessages.put("command_multichat_help_3",
+				"&2&lMulti&a&lChat &b&lHelp [Page 3]\n"
+						+ "&3View announcement commands\n"
+						+ "&b/announcement\n"
+						+ "&3View bulletin commands\n"
+						+ "&b/bulletin\n"
+						+ "&3View cast commands\n"
+						+ "&b/cast\n"
+						+ "&3Use a specified cast from the console\n"
+						+ "&b/usecast <cast> <message>\n"
+						+ "&3Alert staff members of a problem\n"
+						+ "&b/helpme <message>\n"
+						+ "&3Nickname a player (Only works if MultiChat installed on Spigot / Sponge)\n"
+						+ "&b/nick [player] <nickname/off>\n"
+						+ "&3Get players real name from their nickname (Only works on Spigot)\n"
+						+ "&b/realname <nickname>");
+		
+		defaultMessages.put("command_multichat_save_prepare", "&3Preparing to save multichat files!");
+		defaultMessages.put("command_multichat_save_completed", "&bSave completed!");
+		defaultMessages.put("command_multichat_reload_prepare", "&3Preparing to reload multichat files!");
+		defaultMessages.put("command_multichat_reload_completed", "&bReload completed!");
+
 		defaultMessages.put("command_reply_usage", "&bUsage: /r <message>");
 		defaultMessages.put("command_reply_desc", "&bReply to the person who you private messaged most recently");
 		defaultMessages.put("command_reply_no_one_to_reply_to", "&cYou have no one to reply to!");
