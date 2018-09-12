@@ -1,5 +1,6 @@
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\CastControl.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\LocalCommand.java
+C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ConfigHandler.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ChatManipulation.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\CastCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MCCommand.java
@@ -10,7 +11,6 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\StaffListCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\Announcements.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\FreezeChatCommand.java
-C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\JMConfigManager.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\ACCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\GlobalCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\Events.java

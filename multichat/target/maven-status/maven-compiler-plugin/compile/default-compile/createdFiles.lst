@@ -18,6 +18,7 @@ com\olivermartin410\plugins\TChatInfo.class
 xyz\olivermartin\multichat\bungee\MessageManager.class
 xyz\olivermartin\multichat\bungee\commands\DisplayCommand.class
 com\olivermartin410\plugins\TGroupChatInfo.class
+xyz\olivermartin\multichat\bungee\ConfigHandler.class
 xyz\olivermartin\multichat\bungee\ConfigManager.class
 xyz\olivermartin\multichat\bungee\MultiChat$3.class
 xyz\olivermartin\multichat\spigotbridge\SpigotComm$1.class
@@ -33,7 +34,6 @@ xyz\olivermartin\multichat\bungee\commands\SocialSpyCommand.class
 xyz\olivermartin\multichat\bungee\commands\ReplyCommand.class
 xyz\olivermartin\multichat\bungee\commands\MCCommand.class
 xyz\olivermartin\multichat\bungee\commands\MsgCommand.class
-xyz\olivermartin\multichat\bungee\JMConfigManager.class
 xyz\olivermartin\multichat\bungee\Bulletins.class
 xyz\olivermartin\multichat\bungee\commands\GlobalCommand.class
 xyz\olivermartin\multichat\bungee\MultiChat.class
