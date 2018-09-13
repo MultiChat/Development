@@ -31,7 +31,7 @@ public class PlayerMetaManager {
 	public void registerPlayer(UUID uuid, String name) {
 		this.metaMap.put(uuid, new PlayerMeta(uuid, name));
 	}
-	
+
 	public void unregisterPlayer(UUID uuid) {
 		metaMap.remove(uuid);
 	}
@@ -53,14 +53,14 @@ public class PlayerMetaManager {
 			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("set_display_name")) {
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("set_display_name")) {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
-						player.setDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format"));
+						player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
 					} else {
 						player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
 					}
 				}
 			} else {
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
-					player.setDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format"));
+					player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
 				} else {
 					player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
 				}
