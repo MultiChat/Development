@@ -31,6 +31,13 @@ version: "1.6" #
 # AS IN THE BUNGEECORD PLUGINS FOLDER!
 fetch_spigot_display_names: true
 
+# Should MultiChat set the display name of users to be used in things like the tab list and /glist?
+set_display_name: true
+
+# Display name format
+# You can use %NAME% %NICK% %PREFIX% %SUFFIX%
+display_name_format: "%PREFIX%%NICK%%SUFFIX%"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                  Private Messaging                   | #

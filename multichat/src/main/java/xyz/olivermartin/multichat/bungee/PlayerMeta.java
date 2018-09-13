@@ -13,7 +13,7 @@ public class PlayerMeta {
 	public PlayerMeta(UUID uuid, String name) {
 		this.uuid = uuid;
 		this.name = name;
-		nick = "";
+		nick = this.name;
 		prefix = "";
 		suffix = "";
 	}
