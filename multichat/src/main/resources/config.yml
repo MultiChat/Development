@@ -184,7 +184,7 @@ groupchat:
 # %NC% = The name color set by players
 
 modchat:
-    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    format: "%CC%MC: {%NC%%NAME%%CC%} %MESSAGE%"
     ccdefault: "b"
     ncdefault: "d"
 

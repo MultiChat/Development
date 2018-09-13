@@ -23,6 +23,7 @@ xyz\olivermartin\multichat\bungee\ConfigManager.class
 xyz\olivermartin\multichat\bungee\MultiChat$3.class
 xyz\olivermartin\multichat\spigotbridge\SpigotComm$1.class
 xyz\olivermartin\multichat\bungee\commands\FreezeChatCommand.class
+xyz\olivermartin\multichat\bungee\CommandManager.class
 xyz\olivermartin\multichat\bungee\commands\StaffListCommand.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm$2.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm.class

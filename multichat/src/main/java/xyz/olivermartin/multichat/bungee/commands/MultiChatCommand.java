@@ -86,6 +86,9 @@ public class MultiChatCommand extends Command {
 				} else if (args[0].toLowerCase().equals("reload")) {
 
 					MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
+					
+					// Unregister commands
+					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
 
 					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
 					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
@@ -93,9 +96,7 @@ public class MultiChatCommand extends Command {
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
 					
-					// Unregister, reload, and register commands
-					// THIS IS NEW AND EXPERIMENTAL!
-					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
+					// Reload, and re-register commands
 					CommandManager.reload();
 					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
 
