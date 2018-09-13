@@ -284,7 +284,6 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerCommand(this, new ACCCommand());
 			getProxy().getPluginManager().registerCommand(this, new GCCommand());
 			getProxy().getPluginManager().registerCommand(this, new GroupCommand());
-			getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
 			getProxy().getPluginManager().registerCommand(this, new GroupListCommand());
 			getProxy().getPluginManager().registerCommand(this, new MultiChatCommand());
 			getProxy().getPluginManager().registerCommand(this, new DisplayCommand());
@@ -311,6 +310,15 @@ public class MultiChat extends Plugin implements Listener {
 			if (configYML.getBoolean("global")) {
 				getProxy().getPluginManager().registerCommand(this, new LocalCommand());
 				getProxy().getPluginManager().registerCommand(this, new GlobalCommand());
+			}
+			
+			// Register staff list command /staff
+			if (configYML.contains("staff_list")) {
+				if (configYML.getBoolean("staff_list")) {
+					getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
+				}
+			} else {
+				getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
 			}
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
