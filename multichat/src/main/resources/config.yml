@@ -42,7 +42,6 @@ fetch_spigot_display_names: true
 #############
 
 # Use private messaging?
-# (MUST REBOOT THE BUNGEECORD SERVER TO TAKE EFFECT)
 pm: true
 
 # Servers to exclude from private messaging
@@ -82,8 +81,6 @@ pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 ##############
 # PM ALIASES #
 ##############
-
-#NOTE FOR COMMAND ALIASES TO TAKE EFFECT YOU MUST RESTART YOUR BUNGEECORD SERVER (/MULTICHAT RELOAD WONT WORK)
 
 #The /msg command has the following aliases (other than /msg)
 msgcommand:
@@ -184,7 +181,7 @@ groupchat:
 # %NC% = The name color set by players
 
 modchat:
-    format: "%CC%MC: {%NC%%NAME%%CC%} %MESSAGE%"
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
     ccdefault: "b"
     ncdefault: "d"
 
