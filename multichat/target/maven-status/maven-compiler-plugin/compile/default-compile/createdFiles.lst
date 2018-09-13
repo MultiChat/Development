@@ -1,4 +1,5 @@
 xyz\olivermartin\multichat\bungee\commands\MultiChatCommand.class
+xyz\olivermartin\multichat\bungee\PlayerMetaManager.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm$1.class
 xyz\olivermartin\multichat\spigotbridge\SpigotComm.class
 xyz\olivermartin\multichat\bungee\ChatManipulation.class
@@ -27,6 +28,7 @@ xyz\olivermartin\multichat\bungee\CommandManager.class
 xyz\olivermartin\multichat\bungee\commands\StaffListCommand.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm$2.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm.class
+xyz\olivermartin\multichat\bungee\PlayerMeta.class
 xyz\olivermartin\multichat\bungee\commands\GroupCommand.class
 xyz\olivermartin\multichat\spongebridge\MultiChatRawDataListener.class
 xyz\olivermartin\multichat\bungee\commands\ACCommand.class

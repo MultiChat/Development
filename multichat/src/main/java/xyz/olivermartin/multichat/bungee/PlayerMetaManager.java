@@ -31,6 +31,10 @@ public class PlayerMetaManager {
 	public void registerPlayer(UUID uuid, String name) {
 		this.metaMap.put(uuid, new PlayerMeta(uuid, name));
 	}
+	
+	public void unregisterPlayer(UUID uuid) {
+		metaMap.remove(uuid);
+	}
 
 	public Optional<PlayerMeta> getPlayer(UUID uuid) {
 		if (!metaMap.containsKey(uuid)) return Optional.empty();

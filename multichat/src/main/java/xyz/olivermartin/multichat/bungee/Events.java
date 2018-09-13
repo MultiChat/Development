@@ -384,6 +384,8 @@ public class Events implements Listener {
 
 			}
 		}
+		
+		PlayerMetaManager.getInstance().registerPlayer(uuid, event.getPlayer().getName());
 
 		if (!MultiChat.viewedchats.containsKey(uuid)) {
 
@@ -462,6 +464,8 @@ public class Events implements Listener {
 		if (MultiChat.viewedchats.containsKey(uuid)) {
 			MultiChat.viewedchats.remove(uuid);
 		}
+		
+		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
 
 		System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
 
