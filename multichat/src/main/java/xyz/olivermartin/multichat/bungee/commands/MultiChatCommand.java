@@ -7,6 +7,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatStream;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
@@ -65,6 +66,11 @@ public class MultiChatCommand extends Command {
 				if (args[0].toLowerCase().equals("help")) {
 
 					displayHelp(sender, 1);
+
+				} else if (args[0].toLowerCase().equals("debug")) {
+
+					DebugManager.toggle();
+					DebugManager.log("Debug mode toggled");
 
 				} else if (args[0].toLowerCase().equals("save")) {
 
