@@ -25,28 +25,6 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
-import xyz.olivermartin.multichat.bungee.commands.ACCCommand;
-import xyz.olivermartin.multichat.bungee.commands.ACCommand;
-import xyz.olivermartin.multichat.bungee.commands.AnnouncementCommand;
-import xyz.olivermartin.multichat.bungee.commands.BulletinCommand;
-import xyz.olivermartin.multichat.bungee.commands.CastCommand;
-import xyz.olivermartin.multichat.bungee.commands.ClearChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.DisplayCommand;
-import xyz.olivermartin.multichat.bungee.commands.FreezeChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.GCCommand;
-import xyz.olivermartin.multichat.bungee.commands.GlobalCommand;
-import xyz.olivermartin.multichat.bungee.commands.GroupCommand;
-import xyz.olivermartin.multichat.bungee.commands.GroupListCommand;
-import xyz.olivermartin.multichat.bungee.commands.HelpMeCommand;
-import xyz.olivermartin.multichat.bungee.commands.LocalCommand;
-import xyz.olivermartin.multichat.bungee.commands.MCCCommand;
-import xyz.olivermartin.multichat.bungee.commands.MCCommand;
-import xyz.olivermartin.multichat.bungee.commands.MsgCommand;
-import xyz.olivermartin.multichat.bungee.commands.MultiChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.ReplyCommand;
-import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
-import xyz.olivermartin.multichat.bungee.commands.StaffListCommand;
-import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
 
 // NAME IDEAS: Backchat, Totalk, Talkative, Portalk, Netalk, Revtalkr, Chatplex, Talky, Photalk
 
@@ -278,22 +256,22 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, this);
 
 			// Register main commands
-			getProxy().getPluginManager().registerCommand(this, new MCCommand());
-			getProxy().getPluginManager().registerCommand(this, new ACCommand());
-			getProxy().getPluginManager().registerCommand(this, new MCCCommand());
-			getProxy().getPluginManager().registerCommand(this, new ACCCommand());
-			getProxy().getPluginManager().registerCommand(this, new GCCommand());
-			getProxy().getPluginManager().registerCommand(this, new GroupCommand());
-			getProxy().getPluginManager().registerCommand(this, new GroupListCommand());
-			getProxy().getPluginManager().registerCommand(this, new MultiChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new DisplayCommand());
-			getProxy().getPluginManager().registerCommand(this, new FreezeChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new HelpMeCommand());
-			getProxy().getPluginManager().registerCommand(this, new ClearChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new AnnouncementCommand());
-			getProxy().getPluginManager().registerCommand(this, new BulletinCommand());
-			getProxy().getPluginManager().registerCommand(this, new CastCommand());
-			getProxy().getPluginManager().registerCommand(this, new UseCastCommand());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getAc());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMcc());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMc());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getGc());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getGroup());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getClearchat());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getAnnouncement());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getBulletin());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
 
 			// Register communication channels and appropriate listeners
 			getProxy().registerChannel("multichat:comm");
@@ -301,24 +279,24 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Register PM commands
 			if (configYML.getBoolean("pm")) {
-				getProxy().getPluginManager().registerCommand(this, new MsgCommand());
-				getProxy().getPluginManager().registerCommand(this, new ReplyCommand());
-				getProxy().getPluginManager().registerCommand(this, new SocialSpyCommand());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getMsg());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getReply());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getSocialspy());
 			}
 
 			// Register global chat commands
 			if (configYML.getBoolean("global")) {
-				getProxy().getPluginManager().registerCommand(this, new LocalCommand());
-				getProxy().getPluginManager().registerCommand(this, new GlobalCommand());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
 			}
-			
+
 			// Register staff list command /staff
 			if (configYML.contains("staff_list")) {
 				if (configYML.getBoolean("staff_list")) {
-					getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
+					getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
 				}
 			} else {
-				getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
 			}
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
