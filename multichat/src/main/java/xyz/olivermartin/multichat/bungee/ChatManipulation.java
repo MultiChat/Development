@@ -29,15 +29,6 @@ public class ChatManipulation {
 
 	}
 
-	public String replaceChatVars(String MessageFormat, ProxiedPlayer sender) {
-
-		MessageFormat = MessageFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
-		MessageFormat = MessageFormat.replace("%NAME%", sender.getName());
-		MessageFormat = MessageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
-		return MessageFormat;
-
-	}
-
 	public String replaceModChatVars(String MessageFormat, String playername, String displayname, String server, String Message, ProxiedPlayer target) {
 
 		MessageFormat = MessageFormat.replace("%DISPLAYNAME%", displayname);

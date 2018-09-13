@@ -152,6 +152,9 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		}
 
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 
 		getServer().getPluginManager().registerEvents(this, this);
@@ -206,17 +209,40 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, "multichat:comm", stream.toByteArray());
 
 	}
+	
+	public void sendPluginChannelMessage(String channel, UUID uuid, String message) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			out.writeUTF(uuid.toString());
+			out.writeUTF(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, channel, stream.toByteArray());
+
+	}
 
 	private void updatePlayerDisplayName(String playername) {
 
 		String nickname;
 
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
+		
+		sendPluginChannelMessage("multichat:nick", Bukkit.getPlayer(playername).getUniqueId(), nickname);
 
 		if (vault) {
+			
 			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+			sendPluginChannelMessage("multichat:prefix", Bukkit.getPlayer(playername).getUniqueId(), chat.getPlayerPrefix(Bukkit.getPlayer(playername)));
+			sendPluginChannelMessage("multichat:suffix", Bukkit.getPlayer(playername).getUniqueId(), chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
+			
 			Bukkit.getPlayer(playername).setDisplayName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
 			Bukkit.getPlayer(playername).setPlayerListName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+		
 		} else {
 			sendMessage(nickname, playername);
 			Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
