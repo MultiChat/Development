@@ -5,6 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatStream;
+import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
@@ -91,6 +92,12 @@ public class MultiChatCommand extends Command {
 					//MultiChat.jmconfigman.startupConfig();
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
+					
+					// Unregister, reload, and register commands
+					// THIS IS NEW AND EXPERIMENTAL!
+					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
+					CommandManager.reload();
+					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 

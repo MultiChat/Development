@@ -340,5 +340,33 @@ public class CommandManager {
 	public static void setUsecast(Command usecast) {
 		CommandManager.usecast = usecast;
 	}
+	
+	/**
+	 * Generates new instances of all commands
+	 */
+	public static void reload() {
+		acc = new ACCCommand();
+		ac = new ACCommand();
+		announcement = new AnnouncementCommand();
+		bulletin = new BulletinCommand();
+		cast = new CastCommand();
+		clearchat = new ClearChatCommand();
+		display = new DisplayCommand();
+		freezechat = new FreezeChatCommand();
+		gc = new GCCommand();
+		global = new GlobalCommand();
+		group = new GroupCommand();
+		grouplist = new GroupListCommand();
+		helpme = new HelpMeCommand();
+		local = new LocalCommand();
+		mcc = new MCCCommand();
+		mc = new MCCommand();
+		msg = new MsgCommand();
+		multichat = new MultiChatCommand();
+		reply = new ReplyCommand();
+		socialspy = new SocialSpyCommand();
+		stafflist = new StaffListCommand();
+		usecast = new UseCastCommand();
+	}
 
 }

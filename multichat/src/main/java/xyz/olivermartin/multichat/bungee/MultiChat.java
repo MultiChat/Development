@@ -241,12 +241,6 @@ public class MultiChat extends Plugin implements Listener {
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
-		//ConfigManager.getInstance().getHandler("config.yml").startupConfig();
-		//ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
-		//ConfigManager.getInstance().startupConfig();
-		//jmconfigman.startupConfig();
-
-		//configversion = ConfigManager.getInstance().getString("version");
 		configversion = configYML.getString("version");
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
@@ -255,49 +249,12 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);
 
-			// Register main commands
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getAc());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getMcc());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getMc());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getGc());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getGroup());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getClearchat());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getAnnouncement());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getBulletin());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
-			getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
-
 			// Register communication channels and appropriate listeners
 			getProxy().registerChannel("multichat:comm");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
-			// Register PM commands
-			if (configYML.getBoolean("pm")) {
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getMsg());
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getReply());
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getSocialspy());
-			}
-
-			// Register global chat commands
-			if (configYML.getBoolean("global")) {
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
-			}
-
-			// Register staff list command /staff
-			if (configYML.contains("staff_list")) {
-				if (configYML.getBoolean("staff_list")) {
-					getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
-				}
-			} else {
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
-			}
+			// Register commands
+			registerCommands(configYML);
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
@@ -337,6 +294,94 @@ public class MultiChat extends Plugin implements Listener {
 		saveBulletins();
 		saveCasts();
 		UUIDNameManager.saveUUIDS();
+
+	}
+
+	public void registerCommands(Configuration configYML) {
+
+		// Register main commands
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMcc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGroup());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getClearchat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAnnouncement());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getBulletin());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
+
+		// Register PM commands
+		if (configYML.getBoolean("pm")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMsg());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getReply());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getSocialspy());
+		}
+
+		// Register global chat commands
+		if (configYML.getBoolean("global")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
+		}
+
+		// Register staff list command /staff
+		if (configYML.contains("staff_list")) {
+			if (configYML.getBoolean("staff_list")) {
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
+			}
+		} else {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
+		}
+
+	}
+
+	public void unregisterCommands(Configuration configYML) {
+
+		// Unregister main commands
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAcc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMcc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGroup());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getClearchat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAnnouncement());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getBulletin());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
+
+		// Unregister PM commands
+		if (configYML.getBoolean("pm")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMsg());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getReply());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getSocialspy());
+		}
+
+		// Unregister global chat commands
+		if (configYML.getBoolean("global")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocal());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getGlobal());
+		}
+
+		// Unregister staff list command /staff
+		if (configYML.contains("staff_list")) {
+			if (configYML.getBoolean("staff_list")) {
+				getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
+			}
+		} else {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
+		}
 
 	}
 
