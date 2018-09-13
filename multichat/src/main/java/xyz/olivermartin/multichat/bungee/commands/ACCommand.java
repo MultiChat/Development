@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
@@ -30,8 +31,12 @@ public class ACCommand extends Command {
 
 			if ((sender instanceof ProxiedPlayer)) {
 
+				DebugManager.log("[ACCommand] Command sender is a player");
+
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 				toggleresult = Events.toggleAC(player.getUniqueId());
+
+				DebugManager.log("[ACCommand] AC new toggle state: " + toggleresult);
 
 				if (toggleresult == true) {
 					MessageManager.sendMessage(sender, "command_ac_toggle_on");
@@ -47,6 +52,8 @@ public class ACCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
+			DebugManager.log("[ACCommand] Command sender is a player");
+
 			String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
@@ -55,10 +62,14 @@ public class ACCommand extends Command {
 			ProxiedPlayer player = (ProxiedPlayer)sender;
 			StaffChatManager chatman = new StaffChatManager();
 
+			DebugManager.log("[ACCommand] Next line of code will send the message, if no errors, then it worked!");
+
 			chatman.sendAdminMessage(player.getName(), player.getDisplayName(), player.getServer().getInfo().getName(), message);
 			chatman = null;
 
 		} else {
+
+			DebugManager.log("[ACCommand] Command sender is the console");
 
 			String message = "";
 			for (String arg : args) {
@@ -66,6 +77,9 @@ public class ACCommand extends Command {
 			}
 
 			StaffChatManager chatman = new StaffChatManager();
+
+			DebugManager.log("[ACCommand] Next line of code will send the message, if no errors, then it worked!");
+
 			chatman.sendAdminMessage("CONSOLE", "CONSOLE", "#", message);
 			chatman = null;
 

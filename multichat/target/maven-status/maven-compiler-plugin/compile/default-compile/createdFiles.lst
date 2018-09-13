@@ -38,6 +38,7 @@ xyz\olivermartin\multichat\bungee\commands\MsgCommand.class
 xyz\olivermartin\multichat\bungee\Bulletins.class
 xyz\olivermartin\multichat\bungee\commands\GlobalCommand.class
 xyz\olivermartin\multichat\bungee\MultiChat.class
+xyz\olivermartin\multichat\bungee\DebugManager.class
 xyz\olivermartin\multichat\bungee\Events.class
 xyz\olivermartin\multichat\bungee\MultiChat$1.class
 xyz\olivermartin\multichat\bungee\ChatStream.class

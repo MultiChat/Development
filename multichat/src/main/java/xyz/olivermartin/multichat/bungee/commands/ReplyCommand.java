@@ -10,7 +10,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -25,8 +24,6 @@ public class ReplyCommand extends Command {
 
 	public ReplyCommand() {
 		super("r", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("rcommand").toArray(new String[0]));
-		// TODO remove
-		DebugManager.log("Reply command has been (re)loaded");
 	}
 
 	public void execute(CommandSender sender, String[] args) {

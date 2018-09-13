@@ -5,6 +5,7 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -37,6 +38,8 @@ public class ACCCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
+			DebugManager.log("[ACCCommand] Command sender is a player");
+
 			TChatInfo chatinfo = new TChatInfo();
 			ProxiedPlayer player = (ProxiedPlayer)sender;
 
@@ -54,11 +57,15 @@ public class ACCCommand extends Command {
 						|| (args[1].equals("2")) || (args[1].equals("3")) || (args[1].equals("4")) || (args[1].equals("5"))
 						|| (args[1].equals("6")) || (args[1].equals("7")) || (args[1].equals("8")) || (args[1].equals("9"))) {
 
+					DebugManager.log("[ACCCommand] Colour codes are valid");
+
 					chatinfo.setChatColor(args[0].charAt(0));
 					chatinfo.setNameColor(args[1].charAt(0));
 
 					MultiChat.adminchatpreferences.remove(player.getUniqueId());
 					MultiChat.adminchatpreferences.put(player.getUniqueId(), chatinfo);
+
+					DebugManager.log("[ACCCommand] Preferences updated");
 
 					MessageManager.sendMessage(sender, "command_acc_updated");
 
