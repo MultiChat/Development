@@ -44,6 +44,4 @@ public class MultiChatBypassCommand extends Command {
 
 	}
 
-
-
 }
