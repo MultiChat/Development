@@ -378,6 +378,7 @@ public class CommandManager {
 		mc = new MCCommand();
 		msg = new MsgCommand();
 		multichat = new MultiChatCommand();
+		multichatbypass = new MultiChatBypassCommand();
 		reply = new ReplyCommand();
 		socialspy = new SocialSpyCommand();
 		stafflist = new StaffListCommand();

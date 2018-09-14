@@ -53,6 +53,7 @@ xyz\olivermartin\multichat\bungee\commands\UseCastCommand.class
 xyz\olivermartin\multichat\spigotbridge\NameManager.class
 xyz\olivermartin\multichat\bungee\Announcements$1.class
 xyz\olivermartin\multichat\bungee\Bulletins$1.class
+xyz\olivermartin\multichat\bungee\commands\MultiChatBypassCommand.class
 xyz\olivermartin\multichat\bungee\BungeeComm.class
 xyz\olivermartin\multichat\bungee\MultiChat$5.class
 xyz\olivermartin\multichat\bungee\commands\GroupListCommand.class
