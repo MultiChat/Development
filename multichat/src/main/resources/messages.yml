@@ -264,7 +264,7 @@ groups_info_unban: " has unbanned the following player from the group chat: "
 groups_info_colors: "Group chat colours changed by "
 
 groups_help_1: |
- &cGroup Chats Command Usage [Page 1] - INFORMAL GROUP CHATS
+ &cGroup Chat Command Usage [Page 1] - INFORMAL GROUPS
  &2MAKE A NEW GROUP CHAT
  &a/group create/make <group name> [password]
  &2JOIN AN EXISTING GROUP CHAT
@@ -286,7 +286,7 @@ groups_help_1: |
  &cTo see FORMAL group chat commands do /group help 2
 
 groups_help_2: |
- &cGroup Chats Command Usage [Page 2] - FORMAL GROUP CHATS
+ &cGroup Chat Command Usage [Page 2] - FORMAL GROUPS
  &3All group chats default to informal group chats
  &3If you are a group owner you can convert your group to a formal group chat
  &3Formal group chats restrict changing colours to appointed group admins only

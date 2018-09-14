@@ -277,7 +277,7 @@ public class MessageManager {
 		defaultMessages.put("groups_info_colors", "Group chat colours changed by ");
 
 		defaultMessages.put("groups_help_1",
-				"&cGroup Chats Command Usage [Page 1] - INFORMAL GROUP CHATS\n"
+				"&cGroup Chat Command Usage [Page 1] - INFORMAL GROUPS\n"
 						+ "&2MAKE A NEW GROUP CHAT\n"
 						+ "&a/group create/make <group name> [password]\n"
 						+ "&2JOIN AN EXISTING GROUP CHAT\n"
@@ -299,7 +299,7 @@ public class MessageManager {
 						+ "&cTo see FORMAL group chat commands do /group help 2");
 
 		defaultMessages.put("groups_help_2",
-				"&cGroup Chats Command Usage [Page 2] - FORMAL GROUP CHATS\n"
+				"&cGroup Chat Command Usage [Page 2] - FORMAL GROUPS\n"
 						+ "&3All group chats default to informal group chats\n"
 						+ "&3If you are a group owner you can convert your group to a formal group chat\n"
 						+ "&3Formal group chats restrict changing colours to appointed group admins only\n"
