@@ -18,18 +18,29 @@ version: "1.6" #
 ############################################################
 
 # These are custom regular expression rules to alter messages sent through the chat.
-# The regular expression in "search_for", is replaced by the value in "replace_with".
+# The regular expression in "look_for", is replaced by the value in "replace_with".
 
 # These can be used to filter inappropriate language from chat as well as many other things.
 # Some examples are shown below...
 
 regex_rules:
 # Example rule to replace [bold] with the format code %l to make bold text
-- search_for: '\[bold\]'
-replace_with: "&l"
+- look_for: '\[bold\]'
+  replace_with: "&l"
 # Example rule to replace [italic] with the format code %o to make italic text
-- search_for: '\[italic\]'
-replace_with: "&o"
+- look_for: '\[italic\]'
+  replace_with: "&o"
+
+apply_rules_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  staff_chats: false
+  display_command: false
+  announcements: false
+  bulletins: false
+  casts: false
+  helpme: false
 
 ############################################################
 # +------------------------------------------------------+ #
