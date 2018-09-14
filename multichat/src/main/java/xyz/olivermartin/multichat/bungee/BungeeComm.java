@@ -14,6 +14,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 
 /**
@@ -31,7 +32,28 @@ public class BungeeComm implements Listener {
 		DataOutputStream out = new DataOutputStream(stream);
 
 		try {
+			// Players name
 			out.writeUTF(message);
+
+			// Should display name be set?
+			Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+			if (configYML.contains("set_display_name")) {
+				if (configYML.getBoolean("set_display_name")) {
+					out.writeUTF("T");
+				} else {
+					out.writeUTF("F");
+				}
+			} else {
+				out.writeUTF("T");
+			}
+
+			// Display name format
+			if (configYML.contains("display_name_format")) {
+				out.writeUTF(configYML.getString("display_name_format"));
+			} else {
+				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

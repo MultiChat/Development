@@ -47,8 +47,11 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	private static final String nameDataFile = "namedata.dat";
 	private static File legacyNicknameFile; 
-	
+
 	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9_]+$");
+
+	private static boolean setDisplayNameLastVal = false;
+	private static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -194,22 +197,6 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		}
 	}
 
-	public void sendMessage(String message, String playername) {
-
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(stream);
-
-		try {
-			out.writeUTF(message);
-			out.writeUTF(playername);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, "multichat:comm", stream.toByteArray());
-
-	}
-	
 	public void sendPluginChannelMessage(String channel, UUID uuid, String message) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -226,27 +213,43 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	}
 
-	private void updatePlayerDisplayName(String playername) {
+	private void updatePlayerMeta(String playername, boolean setDisplayName, String displayNameFormat) {
 
 		String nickname;
 
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
-		
+
 		sendPluginChannelMessage("multichat:nick", Bukkit.getPlayer(playername).getUniqueId(), nickname);
 
 		if (vault) {
-			
-			sendMessage(chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername)), playername);
+
 			sendPluginChannelMessage("multichat:prefix", Bukkit.getPlayer(playername).getUniqueId(), chat.getPlayerPrefix(Bukkit.getPlayer(playername)));
 			sendPluginChannelMessage("multichat:suffix", Bukkit.getPlayer(playername).getUniqueId(), chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
-			
-			Bukkit.getPlayer(playername).setDisplayName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-			Bukkit.getPlayer(playername).setPlayerListName((chat.getPlayerPrefix(Bukkit.getPlayer(playername)) + nickname + chat.getPlayerSuffix(Bukkit.getPlayer(playername))).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-		
+
+			if (setDisplayName) {
+
+				displayNameFormat = displayNameFormat.replaceAll("%NICK%", nickname);
+				displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
+				displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", chat.getPlayerPrefix(Bukkit.getPlayer(playername)));
+				displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
+				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
+
+				Bukkit.getPlayer(playername).setDisplayName(displayNameFormat);
+				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
+			}
 		} else {
-			sendMessage(nickname, playername);
-			Bukkit.getPlayer(playername).setDisplayName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-			Bukkit.getPlayer(playername).setPlayerListName((nickname).replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
+
+			if (setDisplayName) {
+
+				displayNameFormat = displayNameFormat.replaceAll("%NICK%", nickname);
+				displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
+				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
+
+				Bukkit.getPlayer(playername).setDisplayName(displayNameFormat);
+				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
+
+			}
+
 		}
 
 	}
@@ -260,6 +263,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 			try {
 
+				boolean setDisplayName = false;
+				String displayNameFormat = "";
 				String playername = in.readUTF();
 
 				synchronized (Bukkit.getPlayer(playername)) {
@@ -267,7 +272,17 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					if (Bukkit.getPlayer(playername) == null) {
 						return;
 					}
-					updatePlayerDisplayName(playername);
+
+					if (in.readUTF().equals("T")) {
+						setDisplayName = true;
+					}
+
+					displayNameFormat = in.readUTF();
+
+					setDisplayNameLastVal = setDisplayName;
+					displayNameFormatLastVal = displayNameFormat;
+
+					updatePlayerMeta(playername, setDisplayName, displayNameFormat);
 
 				}
 
@@ -292,8 +307,10 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					if (event.getPlayer() == null) {
 						return;
 					}
+
 					String playername = event.getPlayer().getName();
-					updatePlayerDisplayName(playername);
+
+					updatePlayerMeta(playername, setDisplayNameLastVal, displayNameFormatLastVal);
 
 				}
 
@@ -328,24 +345,24 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				if (args[0].equalsIgnoreCase("off")) {
 					NameManager.getInstance().removeNickname(targetUUID);
-					updatePlayerDisplayName(sender.getName());
+					updatePlayerMeta(sender.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 					sender.sendMessage("You have had your nickname removed!");
 					return true;
 				}
-				
+
 				if (!simpleNickname.matcher(args[0]).matches()) {
-					
+
 					if (!sender.hasPermission("multichatbridge.nick.format")) {
-						
+
 						sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
 						return true;
-						
+
 					}
-					
+
 				}
 
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
-				updatePlayerDisplayName(sender.getName());
+				updatePlayerMeta(sender.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 
 				sender.sendMessage("You have been nicknamed!");
 
@@ -372,24 +389,24 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 			if (args[1].equalsIgnoreCase("off")) {
 				NameManager.getInstance().removeNickname(targetUUID);
-				updatePlayerDisplayName(target.getName());
+				updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 				sender.sendMessage(ChatColor.GREEN + args[0] + " has had their nickname removed!");
 				return true;
 			}
-			
+
 			if (!simpleNickname.matcher(args[1]).matches()) {
-				
+
 				if (!sender.hasPermission("multichatbridge.nick.format")) {
-					
+
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to give nicknames with special characters!");
 					return true;
-					
+
 				}
-				
+
 			}
 
 			NameManager.getInstance().setNickname(targetUUID, args[1]);
-			updatePlayerDisplayName(target.getName());
+			updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 
 			sender.sendMessage(ChatColor.GREEN + args[0] + " has been nicknamed!");
 
