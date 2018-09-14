@@ -17,11 +17,11 @@ version: "1.6" #
 # +------------------------------------------------------+ #
 ############################################################
 
-#Should network join messages be displayed?
+# Should network join messages be displayed?
 
 showjoin: true
 
-#Should network quit messages be displayed?
+# Should network quit messages be displayed?
 
 showquit: true
 

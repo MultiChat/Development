@@ -70,18 +70,24 @@ no_pm: []
 # %NAMET% = The name of the target player
 # %DISPLAYNAME% = The display name of the sender
 # %DISPLAYNAMET% = The display name of the target player
+# %PREFIX% = The prefix of the sender
+# %PREFIXT% = The prefix of the target
+# %SUFFIX% = The suffix of the sender
+# %SUFFIXT% = The suffix of the target
+# %NICK% = The nickname of the sender
+# %NICKT% = The nickname of the target
 # %SERVER% = The server of the sender
 # %SERVERT% = The server of the target player
 
-#Sending PM Format
+# Sending PM Format
 
 pmout: "&6[&cYou &6-> &c%DISPLAYNAMET%&6] &f%MESSAGE%"
 
-#Receving PM Format
+# Receving PM Format
 
 pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
 
-#SocialSpy Format
+# SocialSpy Format
 
 pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 
@@ -89,7 +95,7 @@ pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 # PM ALIASES #
 ##############
 
-#The /msg command has the following aliases (other than /msg)
+# The /msg command has the following aliases (other than /msg)
 msgcommand:
 - m
 - message
@@ -100,12 +106,12 @@ msgcommand:
 - chat
 - pm
 
-#The /r command has the following aliases (other than /r)
+# The /r command has the following aliases (other than /r)
 rcommand:
 - reply
 - respond
 
-#The /socialspy command has the following aliases (other than /socialspy)
+# The /socialspy command has the following aliases (other than /socialspy)
 socialspycommand:
 - spy
 - sspy
@@ -120,7 +126,7 @@ socialspycommand:
 # Global Chat Module #
 ######################
 
-#Use global public chat?
+# Use global public chat?
 global: true
 
 # Servers to exclude from global chat
@@ -145,8 +151,8 @@ no_global: []
 # %SERVER% = The server of the sender
 # %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 
-#Global Chat Format
-#Will display as [FORMAT] [MESSAGE]
+# Global Chat Format
+# Will display as [FORMAT] [MESSAGE]
 
 globalformat: "&f%DISPLAYNAME%&f: "
 
@@ -208,3 +214,8 @@ adminchat:
 
 # Set to false to disable the '/staff' staff list command
 staff_list: true
+
+# MultiChat bypass command aliases (other than /multichatbypass)
+multichatbypasscommand:
+- mcb
+- bypass
