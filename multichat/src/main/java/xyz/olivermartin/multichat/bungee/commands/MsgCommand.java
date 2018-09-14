@@ -26,10 +26,8 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class MsgCommand extends Command implements TabExecutor {
 
-	static String[] aliases = (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("msgcommand").toArray(new String[0]);
-
 	public MsgCommand() {
-		super("msg", "multichat.chat.msg", aliases);
+		super("msg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("msgcommand").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

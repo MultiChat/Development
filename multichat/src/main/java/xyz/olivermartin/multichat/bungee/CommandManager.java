@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.bungee.commands.LocalCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCommand;
 import xyz.olivermartin.multichat.bungee.commands.MsgCommand;
+import xyz.olivermartin.multichat.bungee.commands.MultiChatBypassCommand;
 import xyz.olivermartin.multichat.bungee.commands.MultiChatCommand;
 import xyz.olivermartin.multichat.bungee.commands.ReplyCommand;
 import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
@@ -46,6 +47,7 @@ public class CommandManager {
 		mc = new MCCommand();
 		msg = new MsgCommand();
 		multichat = new MultiChatCommand();
+		multichatbypass = new MultiChatBypassCommand();
 		reply = new ReplyCommand();
 		socialspy = new SocialSpyCommand();
 		stafflist = new StaffListCommand();
@@ -71,6 +73,7 @@ public class CommandManager {
 	private static Command mc;
 	private static Command msg;
 	private static Command multichat;
+	private static Command multichatbypass;
 	private static Command reply;
 	private static Command socialspy;
 	private static Command stafflist;
@@ -293,6 +296,18 @@ public class CommandManager {
 		CommandManager.multichat = multichat;
 	}
 	/**
+	 * @return the multichatbypass
+	 */
+	public static Command getMultichatBypass() {
+		return multichatbypass;
+	}
+	/**
+	 * @param multichatbypass the multichatbypass to set
+	 */
+	public static void setMultichatBypass(Command multichatbypass) {
+		CommandManager.multichatbypass = multichatbypass;
+	}
+	/**
 	 * @return the reply
 	 */
 	public static Command getReply() {
@@ -340,7 +355,7 @@ public class CommandManager {
 	public static void setUsecast(Command usecast) {
 		CommandManager.usecast = usecast;
 	}
-	
+
 	/**
 	 * Generates new instances of all commands
 	 */

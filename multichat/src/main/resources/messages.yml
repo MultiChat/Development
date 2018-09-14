@@ -220,6 +220,12 @@ command_multichat_save_completed: "&bSave completed!"
 command_multichat_reload_prepare: "&3Preparing to reload multichat files!"
 command_multichat_reload_completed: "&bReload completed!"
 
+command_multichatbypass_usage: |
+ &4Usage: /mcb
+ &c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.
+command_multichatbypass_enabled: "&aMultiChat BYPASS Enabled"
+command_multichatbypass_disabled: "&bMultiChat BYPASS Disabled"
+
 command_reply_usage: "&bUsage: /r <message>"
 command_reply_desc: "&bReply to the person who you private messaged most recently"
 command_reply_no_one_to_reply_to: "&cYou have no one to reply to!"

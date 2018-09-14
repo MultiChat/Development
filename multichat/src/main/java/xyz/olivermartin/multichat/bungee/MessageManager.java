@@ -230,6 +230,11 @@ public class MessageManager {
 		defaultMessages.put("command_multichat_save_completed", "&bSave completed!");
 		defaultMessages.put("command_multichat_reload_prepare", "&3Preparing to reload multichat files!");
 		defaultMessages.put("command_multichat_reload_completed", "&bReload completed!");
+		
+		defaultMessages.put("command_multichatbypass_usage", "&4Usage: /mcb\n"
+				+ "&c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.");
+		defaultMessages.put("command_multichatbypass_enabled", "&aMultiChat BYPASS Enabled");
+		defaultMessages.put("command_multichatbypass_disabled", "&bMultiChat BYPASS Disabled");
 
 		defaultMessages.put("command_reply_usage", "&bUsage: /r <message>");
 		defaultMessages.put("command_reply_desc", "&bReply to the person who you private messaged most recently");

@@ -31,6 +31,8 @@ import xyz.olivermartin.multichat.bungee.commands.GCCommand;
  */
 public class Events implements Listener {
 
+	public static List<UUID> mcbPlayers = new ArrayList<UUID>();
+
 	private static List<UUID> MCToggle = new ArrayList<UUID>();
 	private static List<UUID> ACToggle = new ArrayList<UUID>();
 	private static List<UUID> GCToggle = new ArrayList<UUID>();
@@ -128,6 +130,11 @@ public class Events implements Listener {
 	public void onChat(ChatEvent event) {
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
+
+		// If player is bypassing MultiChat
+		if (mcbPlayers.contains(player.getUniqueId())) {
+			return;
+		}
 
 		///
 		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
@@ -384,7 +391,7 @@ public class Events implements Listener {
 
 			}
 		}
-		
+
 		PlayerMetaManager.getInstance().registerPlayer(uuid, event.getPlayer().getName());
 
 		if (!MultiChat.viewedchats.containsKey(uuid)) {
@@ -447,6 +454,10 @@ public class Events implements Listener {
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = event.getPlayer().getUniqueId();
 
+		if (mcbPlayers.contains(uuid)) {
+			mcbPlayers.remove(uuid);
+		}
+
 		if (MCToggle.contains(uuid)) {
 			MCToggle.remove(uuid);
 		}
@@ -464,7 +475,7 @@ public class Events implements Listener {
 		if (MultiChat.viewedchats.containsKey(uuid)) {
 			MultiChat.viewedchats.remove(uuid);
 		}
-		
+
 		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
 
 		System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
