@@ -44,7 +44,7 @@ public class ReplyCommand extends Command {
 
 			Optional<String> crm;
 
-			crm = ChatControl.applyChatRules(message, "private_messages");
+			crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
 
 			if (crm.isPresent()) {
 				message = crm.get();

@@ -25,7 +25,7 @@ public class StaffChatManager {
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "staff_chats");
+		crm = ChatControl.applyChatRules(message, "staff_chats", username);
 
 		if (crm.isPresent()) {
 			message = crm.get();
@@ -65,7 +65,7 @@ public class StaffChatManager {
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "staff_chats");
+		crm = ChatControl.applyChatRules(message, "staff_chats", username);
 
 		if (crm.isPresent()) {
 			message = crm.get();

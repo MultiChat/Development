@@ -221,7 +221,7 @@ public class Events implements Listener {
 
 				event.setCancelled(true);
 
-				crm = ChatControl.applyChatRules(message, "private_messages");
+				crm = ChatControl.applyChatRules(message, "private_messages", player.getName());
 
 				if (crm.isPresent()) {
 					message = crm.get();
@@ -364,7 +364,7 @@ public class Events implements Listener {
 
 						Optional<String> crm;
 
-						crm = ChatControl.applyChatRules(message, "global_chat");
+						crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
 
 						if (crm.isPresent()) {
 							message = crm.get();

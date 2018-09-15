@@ -98,7 +98,7 @@ public class GCCommand extends Command {
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "group_chats");
+		crm = ChatControl.applyChatRules(message, "group_chats", playerName);
 
 		if (crm.isPresent()) {
 			message = crm.get();

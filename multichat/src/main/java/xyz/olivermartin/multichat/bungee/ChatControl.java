@@ -16,7 +16,7 @@ public class ChatControl {
 	 * @return The message to send with rules applied, or empty if the chat message should be cancelled
 	 */
 	@SuppressWarnings("rawtypes")
-	public static Optional<String>applyChatRules(String input, String chatType) {
+	public static Optional<String>applyChatRules(String input, String chatType, String playerName) {
 
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 		boolean cancel = false;
@@ -50,13 +50,13 @@ public class ChatControl {
 							if ((Boolean) dictionary.get("cancel")) {
 								cancel = true;
 							}
-							
+
 							if ((Boolean) dictionary.get("spigot")) {
 								// TODO
 							} else {
-								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command"))); 
+								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName)); 
 							}
-							
+
 
 						}
 

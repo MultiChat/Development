@@ -40,7 +40,7 @@ public class HelpMeCommand extends Command {
 					message = message + arg + " ";
 				}
 
-				sendMessage(sender.getName() + ": " + message);
+				sendMessage(sender.getName() + ": " + message, sender.getName());
 				MessageManager.sendMessage(sender, "command_helpme_sent");
 
 			}
@@ -50,11 +50,11 @@ public class HelpMeCommand extends Command {
 		}
 	}
 
-	public static void sendMessage(String message) {
+	public static void sendMessage(String message, String username) {
 		
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "helpme");
+		crm = ChatControl.applyChatRules(message, "helpme", username);
 
 		if (crm.isPresent()) {
 			message = crm.get();
