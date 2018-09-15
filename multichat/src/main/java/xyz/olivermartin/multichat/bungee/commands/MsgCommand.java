@@ -11,6 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
+import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
@@ -86,6 +87,8 @@ public class MsgCommand extends Command implements TabExecutor {
 						message = message + arg + " ";
 					}
 				}
+				
+				message = ChatControl.applyChatRules(message, "private_messages");
 
 				ChatManipulation chatfix = new ChatManipulation();
 

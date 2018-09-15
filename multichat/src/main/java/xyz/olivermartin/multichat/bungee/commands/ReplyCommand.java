@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
@@ -39,6 +40,8 @@ public class ReplyCommand extends Command {
 			for (String arg : args) {
 				message = message + arg + " ";
 			}
+			
+			message = ChatControl.applyChatRules(message, "private_messages");
 
 			ChatManipulation chatfix = new ChatManipulation();
 

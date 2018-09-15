@@ -215,6 +215,8 @@ public class Events implements Listener {
 			String message = event.getMessage();
 
 			if (!event.isCommand()) {
+				
+				message = ChatControl.applyChatRules(message, "private_messages");
 
 				event.setCancelled(true);
 				ChatManipulation chatfix = new ChatManipulation();
@@ -349,7 +351,7 @@ public class Events implements Listener {
 					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
 						String message = event.getMessage();
-						ChatControl.applyChatRules(message, "global_chat");
+						message = ChatControl.applyChatRules(message, "global_chat");
 						MultiChat.globalChat.sendMessage(player, message);
 
 					} else {
