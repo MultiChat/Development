@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.Optional;
+
 import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.ChatColor;
@@ -94,7 +96,15 @@ public class GCCommand extends Command {
 
 		ChatManipulation chatfix = new ChatManipulation();
 
-		message = ChatControl.applyChatRules(message, "group_chats");
+		Optional<String> crm;
+
+		crm = ChatControl.applyChatRules(message, "group_chats");
+
+		if (crm.isPresent()) {
+			message = crm.get();
+		} else {
+			return;
+		}
 
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("groupchat.format");
 		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());

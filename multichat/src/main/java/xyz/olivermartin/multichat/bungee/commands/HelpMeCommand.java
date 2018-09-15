@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.Optional;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -49,8 +51,16 @@ public class HelpMeCommand extends Command {
 	}
 
 	public static void sendMessage(String message) {
+		
+		Optional<String> crm;
 
-		message = ChatControl.applyChatRules(message, "helpme");
+		crm = ChatControl.applyChatRules(message, "helpme");
+
+		if (crm.isPresent()) {
+			message = crm.get();
+		} else {
+			return;
+		}
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			if (onlineplayer.hasPermission("multichat.staff")) {

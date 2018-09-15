@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -40,8 +41,16 @@ public class ReplyCommand extends Command {
 			for (String arg : args) {
 				message = message + arg + " ";
 			}
-			
-			message = ChatControl.applyChatRules(message, "private_messages");
+
+			Optional<String> crm;
+
+			crm = ChatControl.applyChatRules(message, "private_messages");
+
+			if (crm.isPresent()) {
+				message = crm.get();
+			} else {
+				return;
+			}
 
 			ChatManipulation chatfix = new ChatManipulation();
 

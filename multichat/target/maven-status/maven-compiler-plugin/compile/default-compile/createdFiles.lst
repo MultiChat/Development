@@ -56,5 +56,6 @@ xyz\olivermartin\multichat\bungee\Bulletins$1.class
 xyz\olivermartin\multichat\bungee\commands\MultiChatBypassCommand.class
 xyz\olivermartin\multichat\bungee\BungeeComm.class
 xyz\olivermartin\multichat\bungee\MultiChat$5.class
+xyz\olivermartin\multichat\bungee\ChatControl.class
 xyz\olivermartin\multichat\bungee\commands\GroupListCommand.class
 mcmod.info

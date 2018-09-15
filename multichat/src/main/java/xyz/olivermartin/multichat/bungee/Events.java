@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.olivermartin410.plugins.TChatInfo;
@@ -215,10 +216,19 @@ public class Events implements Listener {
 			String message = event.getMessage();
 
 			if (!event.isCommand()) {
-				
-				message = ChatControl.applyChatRules(message, "private_messages");
+
+				Optional<String> crm;
 
 				event.setCancelled(true);
+
+				crm = ChatControl.applyChatRules(message, "private_messages");
+
+				if (crm.isPresent()) {
+					message = crm.get();
+				} else {
+					return;
+				}
+
 				ChatManipulation chatfix = new ChatManipulation();
 
 				if (ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId())) != null) {
@@ -351,7 +361,18 @@ public class Events implements Listener {
 					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
 						String message = event.getMessage();
-						message = ChatControl.applyChatRules(message, "global_chat");
+
+						Optional<String> crm;
+
+						crm = ChatControl.applyChatRules(message, "global_chat");
+
+						if (crm.isPresent()) {
+							message = crm.get();
+						} else {
+							event.setCancelled(true);
+							return;
+						}
+
 						MultiChat.globalChat.sendMessage(player, message);
 
 					} else {

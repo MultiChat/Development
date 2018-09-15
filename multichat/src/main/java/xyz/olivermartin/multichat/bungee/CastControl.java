@@ -15,7 +15,7 @@ public class CastControl {
 	public static Map<String,String> castList = new HashMap<String,String>();
 
 	public static void sendCast(String castName, String castMessage, ChatStream chatStream) {
-		castMessage = ChatControl.applyChatRules(castMessage, "casts");
+		castMessage = ChatControl.applyChatRules(castMessage, "casts").get();
 		chatStream.sendMessage(castList.get(castName.toLowerCase()) + " " + castMessage);
 	}
 

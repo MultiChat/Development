@@ -42,6 +42,31 @@ apply_rules_to:
   casts: false
   helpme: false
 
+# These are custom regular expression triggered actions.
+# The regular expression in "look_for", triggers the command in "command"
+# You can choose to cancel the players chat event by setting "cancel" to true
+# Setting "spigot" to true will send the command to the local spigot server the
+# player is currently on and execute it there instead of bungeecord.
+
+# These can be used to filter inappropriate language from chat as well as many other things.
+# Some examples are shown below...
+
+# You can use %PLAYER% to refer to the player sending the message
+
+regex_actions:
+# Example rule to kick someone who says a specific phrase
+- look_for: 'kickmeplzrightnow'
+  command: "kick %PLAYER% You asked for it!"
+  cancel: false
+  spigot: false # <-- COMING SOON
+
+apply_actions_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  staff_chats: false
+  helpme: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |               Mute and Ignore Settings               | #

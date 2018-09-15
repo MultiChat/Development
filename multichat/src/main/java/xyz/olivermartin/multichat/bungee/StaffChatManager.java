@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee;
 
+import java.util.Optional;
+
 import com.olivermartin410.plugins.TChatInfo;
 
 import net.md_5.bungee.api.ChatColor;
@@ -20,8 +22,16 @@ public class StaffChatManager {
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
 		String original = message;
-		
-		message = ChatControl.applyChatRules(message, "staff_chats");
+
+		Optional<String> crm;
+
+		crm = ChatControl.applyChatRules(message, "staff_chats");
+
+		if (crm.isPresent()) {
+			message = crm.get();
+		} else {
+			return;
+		}
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -53,8 +63,16 @@ public class StaffChatManager {
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.format");
 
-		message = ChatControl.applyChatRules(message, "staff_chats");
-		
+		Optional<String> crm;
+
+		crm = ChatControl.applyChatRules(message, "staff_chats");
+
+		if (crm.isPresent()) {
+			message = crm.get();
+		} else {
+			return;
+		}
+
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if (onlineplayer.hasPermission("multichat.staff.admin")) {

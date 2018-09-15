@@ -34,7 +34,7 @@ public class Announcements {
 				public void run() {
 					String message = announcements.get(name.toLowerCase());
 					
-					message = ChatControl.applyChatRules(message, "announcements");
+					message = ChatControl.applyChatRules(message, "announcements").get();
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
@@ -125,7 +125,7 @@ public class Announcements {
 
 			String message = announcements.get(name.toLowerCase());
 			
-			message = ChatControl.applyChatRules(message, "announcements");
+			message = ChatControl.applyChatRules(message, "announcements").get();
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));

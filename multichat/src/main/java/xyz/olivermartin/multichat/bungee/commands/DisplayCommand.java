@@ -45,7 +45,7 @@ public class DisplayCommand extends Command {
 
 	public static void displayMessage(String message) {
 		
-		message = ChatControl.applyChatRules(message, "display_command");
+		message = ChatControl.applyChatRules(message, "display_command").get();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
