@@ -20,6 +20,8 @@ public class StaffChatManager {
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
 		String original = message;
+		
+		message = ChatControl.applyChatRules(message, "staff_chats");
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -51,6 +53,8 @@ public class StaffChatManager {
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.format");
 
+		message = ChatControl.applyChatRules(message, "staff_chats");
+		
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if (onlineplayer.hasPermission("multichat.staff.admin")) {
