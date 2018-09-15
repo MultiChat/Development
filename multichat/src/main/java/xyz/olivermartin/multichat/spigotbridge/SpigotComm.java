@@ -159,6 +159,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", this);
 
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
@@ -285,6 +286,22 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					updatePlayerMeta(playername, setDisplayName, displayNameFormat);
 
 				}
+
+			} catch (IOException e) {
+
+				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				e.printStackTrace();
+
+			}
+		} else if (channel.equals("multichat:action")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				String command = in.readUTF();
+				getServer().dispatchCommand(getServer().getConsoleSender(), command); 
 
 			} catch (IOException e) {
 
