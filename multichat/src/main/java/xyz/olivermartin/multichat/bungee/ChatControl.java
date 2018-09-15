@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
 
 public class ChatControl {
@@ -52,7 +53,10 @@ public class ChatControl {
 							}
 
 							if ((Boolean) dictionary.get("spigot")) {
-								// TODO
+
+								ServerInfo server = ProxyServer.getInstance().getPlayer(playerName).getServer().getInfo();
+								BungeeComm.sendCommandMessage(String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName), server);
+
 							} else {
 								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName)); 
 							}

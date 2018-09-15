@@ -61,6 +61,24 @@ public class BungeeComm implements Listener {
 		server.sendData("multichat:comm", stream.toByteArray());
 
 	}
+	
+	public static void sendCommandMessage(String command, ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			
+			// Command
+			out.writeUTF(command);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:action", stream.toByteArray());
+
+	}
 
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
