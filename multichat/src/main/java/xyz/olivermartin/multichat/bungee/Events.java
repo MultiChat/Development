@@ -349,6 +349,7 @@ public class Events implements Listener {
 					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
 						String message = event.getMessage();
+						ChatControl.applyChatRules(message, "global_chat");
 						MultiChat.globalChat.sendMessage(player, message);
 
 					} else {
