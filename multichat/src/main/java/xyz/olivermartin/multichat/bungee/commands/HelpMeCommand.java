@@ -40,8 +40,9 @@ public class HelpMeCommand extends Command {
 					message = message + arg + " ";
 				}
 
-				sendMessage(sender.getName() + ": " + message, sender.getName());
-				MessageManager.sendMessage(sender, "command_helpme_sent");
+				if ( sendMessage(sender.getName() + ": " + message, sender.getName()) ) {
+					MessageManager.sendMessage(sender, "command_helpme_sent");
+				}
 
 			}
 
@@ -50,15 +51,15 @@ public class HelpMeCommand extends Command {
 		}
 	}
 
-	public static void sendMessage(String message, String username) {
-		
+	public static boolean sendMessage(String message, String username) {
+
 		Optional<String> crm;
-		
+
 		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(username);
 		if (potentialPlayer != null) {
 			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "helpme")) {
 				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
-				return;
+				return false;
 			}
 		}
 
@@ -67,7 +68,7 @@ public class HelpMeCommand extends Command {
 		if (crm.isPresent()) {
 			message = crm.get();
 		} else {
-			return;
+			return false;
 		}
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
@@ -77,6 +78,8 @@ public class HelpMeCommand extends Command {
 		}
 
 		System.out.println("\033[31m[MultiChat][HELPME] " + message);
+
+		return true;
 
 	}
 }
