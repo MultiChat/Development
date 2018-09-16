@@ -11,6 +11,9 @@
 version: "1.6" #
 ################
 
+# 1. Chat Control Rules
+# 2. Mute and Ignore Settings
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                  Chat Control Rules                  | #
@@ -95,3 +98,22 @@ apply_mute_to:
 mutecommand:
 - mute
 - mcmute
+
+##################
+# Ignore Command #
+##################
+
+# MultiChat ignore command to stop seeing messages from specific players
+
+# In what types of chat should ignore be enforced?
+
+apply_ignore_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  helpme: false
+
+# Ignore command aliases (in addition to /ignore)
+
+ignorecommand:
+- blockchat
