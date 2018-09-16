@@ -53,6 +53,14 @@ public class HelpMeCommand extends Command {
 	public static void sendMessage(String message, String username) {
 		
 		Optional<String> crm;
+		
+		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(username);
+		if (potentialPlayer != null) {
+			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "helpme")) {
+				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
+				return;
+			}
+		}
 
 		crm = ChatControl.applyChatRules(message, "helpme", username);
 

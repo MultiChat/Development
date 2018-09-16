@@ -90,6 +90,11 @@ public class MsgCommand extends Command implements TabExecutor {
 				}
 
 				Optional<String> crm;
+				
+				if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
+					MessageManager.sendMessage(sender, "mute_cannot_send_message");
+					return;
+				}
 
 				crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
 

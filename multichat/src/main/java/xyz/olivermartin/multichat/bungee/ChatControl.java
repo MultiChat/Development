@@ -1,14 +1,23 @@
 package xyz.olivermartin.multichat.bungee;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
 
 public class ChatControl {
+
+	static {
+		mutedPlayers = new HashSet<UUID>();
+	}
+
+	private static Set<UUID> mutedPlayers;
 
 	/**
 	 * 
@@ -75,6 +84,22 @@ public class ChatControl {
 		} else {
 			return Optional.of(input);
 		}
+
+	}
+
+	public static boolean isMuted(UUID uuid, String chatType) {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (!config.getBoolean("mute")) return false;
+
+		if (!mutedPlayers.contains(uuid)) return false;
+
+		if (!config.contains("apply_mute_to." + chatType)) return false;
+
+		if (!config.getBoolean("apply_mute_to." + chatType)) return false;
+
+		return true;
 
 	}
 

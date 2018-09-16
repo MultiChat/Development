@@ -72,3 +72,26 @@ apply_actions_to:
 # |               Mute and Ignore Settings               | #
 # +------------------------------------------------------+ #
 ############################################################
+
+################
+# Mute Command #
+################
+
+# Use MultiChat mute command?
+# Set to false if you have another BUNGEECORD plugin which deals with muting
+
+mute: false
+
+# In what types of chat should mute be enforced?
+
+apply_mute_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  helpme: false
+
+# Mute command aliases (in addition to /multichatmute)
+
+mutecommand:
+- mute
+- mcmute

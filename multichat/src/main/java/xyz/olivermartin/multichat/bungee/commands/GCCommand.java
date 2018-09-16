@@ -95,6 +95,14 @@ public class GCCommand extends Command {
 	public static void sendMessage(String message, String playerName, TGroupChatInfo groupInfo) {
 
 		ChatManipulation chatfix = new ChatManipulation();
+		
+		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(playerName);
+		if (potentialPlayer != null) {
+			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "group_chats")) {
+				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
+				return;
+			}
+		}
 
 		Optional<String> crm;
 

@@ -322,6 +322,12 @@ public class MessageManager {
 
 		defaultMessages.put("freezechat_frozen", "&bSorry chat has been &3&lFROZEN");
 
+		// *** MUTE ***//
+		
+		defaultMessages.put("mute_muted", "&cYou have been muted by staff! You can no longer send chat messages.");
+		defaultMessages.put("mute_unmuted", "&aYou have been unmuted by staff, you can now send messages.");
+		defaultMessages.put("mute_cannot_send_message", "&cYou are currently muted so cannot send messages!");
+		
 	}
 
 	public static String getMessage(String id) {
