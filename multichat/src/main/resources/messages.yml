@@ -307,3 +307,12 @@ groups_help_2: |
  &cTo see INFORMAL group chat commands do /group help 1
 
 freezechat_frozen: "&bSorry chat has been &3&lFROZEN"
+
+mute_muted: "&cYou have been muted by staff! You can no longer send chat messages."
+mute_unmuted: "&aYou have been unmuted by staff, you can now send messages."
+mute_muted_staff: "&cPlayer has been muted!"
+mute_unmuted_staff: "&aPlayer has been unmuted!"
+mute_cannot_send_message: "&cYou are currently muted so cannot send messages!"
+mute_usage: "&cUsage: /mute <player> (Also used to unmute players)"
+mute_player_not_found: "&cPlayer cannot be muted as they are not online"
+mute_bypass: "&cYou cannot mute this player"

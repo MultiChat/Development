@@ -326,7 +326,12 @@ public class MessageManager {
 		
 		defaultMessages.put("mute_muted", "&cYou have been muted by staff! You can no longer send chat messages.");
 		defaultMessages.put("mute_unmuted", "&aYou have been unmuted by staff, you can now send messages.");
+		defaultMessages.put("mute_muted_staff", "&cPlayer has been muted!");
+		defaultMessages.put("mute_unmuted_staff", "&aPlayer has been unmuted!");
 		defaultMessages.put("mute_cannot_send_message", "&cYou are currently muted so cannot send messages!");
+		defaultMessages.put("mute_usage", "&cUsage: /mute <player> (Also used to unmute players)");
+		defaultMessages.put("mute_player_not_found", "&cPlayer cannot be muted as they are not online");
+		defaultMessages.put("mute_bypass", "&cYou cannot mute this player");
 		
 	}
 

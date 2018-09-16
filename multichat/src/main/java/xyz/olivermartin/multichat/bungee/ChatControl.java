@@ -102,5 +102,29 @@ public class ChatControl {
 		return true;
 
 	}
+	
+	public static boolean isMutedAnywhere(UUID uuid) {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (!config.getBoolean("mute")) return false;
+
+		if (!mutedPlayers.contains(uuid)) return false;
+
+		return true;
+
+	}
+
+	public static void mute(UUID uuid) {
+
+		mutedPlayers.add(uuid);
+
+	}
+
+	public static void unmute(UUID uuid) {
+
+		mutedPlayers.remove(uuid);
+
+	}
 
 }
