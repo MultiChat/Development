@@ -226,7 +226,9 @@ public class MessageManager {
 						+ "&3Get players real name from their nickname (Only works on Spigot)\n"
 						+ "&b/realname <nickname>\n"
 						+ "&3Mute players to prevent them sending messages\n"
-						+ "&b/mute <player>");
+						+ "&b/mute <player>\n"
+						+ "&3Ignore players to stop seeing their messages\n"
+						+ "&b/ignore <player>");
 
 		defaultMessages.put("command_multichat_save_prepare", "&3Preparing to save multichat files!");
 		defaultMessages.put("command_multichat_save_completed", "&bSave completed!");
