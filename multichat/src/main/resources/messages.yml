@@ -214,6 +214,8 @@ command_multichat_help_3: |
  &b/nick [player] <nickname/off>
  &3Get players real name from their nickname (Only works on Spigot)
  &b/realname <nickname>
+ &3Mute players to prevent them sending messages
+ &b/mute <player>
 
 command_multichat_save_prepare: "&3Preparing to save multichat files!"
 command_multichat_save_completed: "&bSave completed!"

@@ -224,13 +224,15 @@ public class MessageManager {
 						+ "&3Nickname a player (Only works if MultiChat installed on Spigot / Sponge)\n"
 						+ "&b/nick [player] <nickname/off>\n"
 						+ "&3Get players real name from their nickname (Only works on Spigot)\n"
-						+ "&b/realname <nickname>");
+						+ "&b/realname <nickname>\n"
+						+ "&3Mute players to prevent them sending messages\n"
+						+ "&b/mute <player>");
 
 		defaultMessages.put("command_multichat_save_prepare", "&3Preparing to save multichat files!");
 		defaultMessages.put("command_multichat_save_completed", "&bSave completed!");
 		defaultMessages.put("command_multichat_reload_prepare", "&3Preparing to reload multichat files!");
 		defaultMessages.put("command_multichat_reload_completed", "&bReload completed!");
-		
+
 		defaultMessages.put("command_multichatbypass_usage", "&4Usage: /mcb\n"
 				+ "&c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.");
 		defaultMessages.put("command_multichatbypass_enabled", "&aMultiChat BYPASS Enabled");
@@ -323,7 +325,7 @@ public class MessageManager {
 		defaultMessages.put("freezechat_frozen", "&bSorry chat has been &3&lFROZEN");
 
 		// *** MUTE ***//
-		
+
 		defaultMessages.put("mute_muted", "&cYou have been muted by staff! You can no longer send chat messages.");
 		defaultMessages.put("mute_unmuted", "&aYou have been unmuted by staff, you can now send messages.");
 		defaultMessages.put("mute_muted_staff", "&cPlayer has been muted!");
@@ -332,7 +334,7 @@ public class MessageManager {
 		defaultMessages.put("mute_usage", "&cUsage: /mute <player> (Also used to unmute players)");
 		defaultMessages.put("mute_player_not_found", "&cPlayer cannot be muted as they are not online");
 		defaultMessages.put("mute_bypass", "&cYou cannot mute this player");
-		
+
 	}
 
 	public static String getMessage(String id) {

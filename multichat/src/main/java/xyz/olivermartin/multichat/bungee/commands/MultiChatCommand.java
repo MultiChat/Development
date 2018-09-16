@@ -84,7 +84,7 @@ public class MultiChatCommand extends Command {
 					MultiChat.saveAnnouncements();
 					MultiChat.saveBulletins();
 					MultiChat.saveCasts();
-
+					MultiChat.saveMute();
 					UUIDNameManager.saveUUIDS();
 
 					MessageManager.sendMessage(sender, "command_multichat_save_completed");
@@ -92,20 +92,20 @@ public class MultiChatCommand extends Command {
 				} else if (args[0].toLowerCase().equals("reload")) {
 
 					MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
-					
+
 					// Unregister commands
-					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
+					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
 
 					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
 					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
-					//MultiChat.jmconfigman.startupConfig();
+
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("chatcontrol.yml").startupConfig();
-					
+
 					// Reload, and re-register commands
 					CommandManager.reload();
-					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig());
+					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 

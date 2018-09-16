@@ -18,6 +18,14 @@ public class ChatControl {
 	}
 
 	private static Set<UUID> mutedPlayers;
+	
+	public static Set<UUID> getMutedPlayers() {
+		return mutedPlayers;
+	}
+	
+	public static void setMutedPlayers(Set<UUID> mutedPlayers) {
+		ChatControl.mutedPlayers = mutedPlayers;
+	}
 
 	/**
 	 * 

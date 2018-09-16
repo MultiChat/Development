@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -70,9 +71,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static File ConfigDir;
 	public static String configversion;
 
-	//public static ConfigManager configman = new ConfigManager();
-	//public static JMConfigManager jmconfigman = new JMConfigManager();
-
 	public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
 
 	public static boolean frozen;
@@ -101,6 +99,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveAnnouncements();
 				saveBulletins();
 				saveCasts();
+				saveMute();
 				UUIDNameManager.saveUUIDS();
 
 				getLogger().info("Backup complete. Any errors reported above.");
@@ -241,6 +240,7 @@ public class MultiChat extends Plugin implements Listener {
 		ConfigManager.getInstance().registerHandler("chatcontrol.yml", ConfigDir);
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
 		configversion = configYML.getString("version");
 
@@ -252,7 +252,6 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Register communication channels and appropriate listeners
 			getProxy().registerChannel("multichat:comm");
-			// Register new listeners for improved data transfer
 			getProxy().registerChannel("multichat:prefix");
 			getProxy().registerChannel("multichat:suffix");
 			getProxy().registerChannel("multichat:nick");
@@ -260,7 +259,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register commands
-			registerCommands(configYML);
+			registerCommands(configYML, chatcontrolYML);
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
@@ -299,11 +298,12 @@ public class MultiChat extends Plugin implements Listener {
 		saveAnnouncements();
 		saveBulletins();
 		saveCasts();
+		saveMute();
 		UUIDNameManager.saveUUIDS();
 
 	}
 
-	public void registerCommands(Configuration configYML) {
+	public void registerCommands(Configuration configYML, Configuration chatcontrolYML) {
 
 		// Register main commands
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
@@ -346,9 +346,14 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
 		}
 
+		// Register mute command
+		if (chatcontrolYML.getBoolean("mute")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMute());
+		}
+
 	}
 
-	public void unregisterCommands(Configuration configYML) {
+	public void unregisterCommands(Configuration configYML, Configuration chatcontrolYML) {
 
 		// Unregister main commands
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getAcc());
@@ -389,6 +394,11 @@ public class MultiChat extends Plugin implements Listener {
 			}
 		} else {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
+		}
+
+		// UnRegister mute command
+		if (chatcontrolYML.getBoolean("mute")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
 		}
 
 	}
@@ -521,6 +531,21 @@ public class MultiChat extends Plugin implements Listener {
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the global chat info file!");
+			e.printStackTrace();
+		}
+
+	}
+	
+	public static void saveMute() {
+
+		try {
+			File file = new File(ConfigDir, "Mute.dat");
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(ChatControl.getMutedPlayers());
+			out.close();
+		} catch (IOException e) {
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the mute file!");
 			e.printStackTrace();
 		}
 
@@ -711,6 +736,26 @@ public class MultiChat extends Plugin implements Listener {
 		return result;
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static Set<UUID> loadMute() {
+
+		Set<UUID> result = null;
+
+		try {
+			File file = new File(ConfigDir, "Mute.dat");
+			FileInputStream saveFile = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+			result = (Set<UUID>)in.readObject();
+			in.close();
+		} catch (IOException|ClassNotFoundException e) {
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the mute file!");
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
 
 	public static void Startup() {
 
@@ -842,6 +887,22 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Welcome to MultiChat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveCasts();
+			System.out.println("[MultiChat] The files were created!");
+
+		}
+		
+		File f10 = new File(ConfigDir, "Mute.dat");
+
+		if ((f10.exists()) && (!f10.isDirectory())) {
+
+			ChatControl.setMutedPlayers(loadMute());
+
+		} else {
+
+			System.out.println("[MultiChat] Some mute files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] Welcome to MultiChat! :D");
+			System.out.println("[MultiChat] Attempting to create hash files!");
+			saveMute();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
