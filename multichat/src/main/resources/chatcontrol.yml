@@ -113,7 +113,7 @@ notify_ignore: false
 
 apply_ignore_to:
   global_chat: true
-  private_messages: false
+  private_messages: true
   group_chats: false
 
 # Ignore command aliases (in addition to /ignore)

@@ -159,7 +159,7 @@ command_msg_disabled_sender: "&cSorry private messages are disabled on this serv
 command_multichat_help_1: |
  &2&lMulti&a&lChat &b&lHelp
  &3Display plugin version info
- &b/multichat\n
+ &b/multichat
  &3Reload the plugin config
  &b/multichat reload
  &3Save ALL plugin data
