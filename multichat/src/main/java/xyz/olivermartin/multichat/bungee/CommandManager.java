@@ -14,6 +14,7 @@ import xyz.olivermartin.multichat.bungee.commands.GlobalCommand;
 import xyz.olivermartin.multichat.bungee.commands.GroupCommand;
 import xyz.olivermartin.multichat.bungee.commands.GroupListCommand;
 import xyz.olivermartin.multichat.bungee.commands.HelpMeCommand;
+import xyz.olivermartin.multichat.bungee.commands.IgnoreCommand;
 import xyz.olivermartin.multichat.bungee.commands.LocalCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCommand;
@@ -43,6 +44,7 @@ public class CommandManager {
 		group = new GroupCommand();
 		grouplist = new GroupListCommand();
 		helpme = new HelpMeCommand();
+		ignore = new IgnoreCommand();
 		local = new LocalCommand();
 		mcc = new MCCCommand();
 		mc = new MCCommand();
@@ -70,6 +72,7 @@ public class CommandManager {
 	private static Command group;
 	private static Command grouplist;
 	private static Command helpme;
+	private static Command ignore;
 	private static Command local;
 	private static Command mcc;
 	private static Command mc;
@@ -239,6 +242,18 @@ public class CommandManager {
 		CommandManager.helpme = helpme;
 	}
 	/**
+	 * @return the ignore
+	 */
+	public static Command getIgnore() {
+		return ignore;
+	}
+	/**
+	 * @param ignore the ignore to set
+	 */
+	public static void setIgnore(Command ignore) {
+		CommandManager.ignore = ignore;
+	}
+	/**
 	 * @return the local
 	 */
 	public static Command getLocal() {
@@ -388,6 +403,7 @@ public class CommandManager {
 		group = new GroupCommand();
 		grouplist = new GroupListCommand();
 		helpme = new HelpMeCommand();
+		ignore = new IgnoreCommand();
 		local = new LocalCommand();
 		mcc = new MCCCommand();
 		mc = new MCCommand();

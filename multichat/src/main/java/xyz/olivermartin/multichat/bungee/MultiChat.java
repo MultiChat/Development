@@ -100,6 +100,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveBulletins();
 				saveCasts();
 				saveMute();
+				saveIgnore();
 				UUIDNameManager.saveUUIDS();
 
 				getLogger().info("Backup complete. Any errors reported above.");
@@ -299,6 +300,7 @@ public class MultiChat extends Plugin implements Listener {
 		saveBulletins();
 		saveCasts();
 		saveMute();
+		saveIgnore();
 		UUIDNameManager.saveUUIDS();
 
 	}
@@ -323,6 +325,7 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getBulletin());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getIgnore());
 
 		// Register PM commands
 		if (configYML.getBoolean("pm")) {
@@ -373,6 +376,7 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getBulletin());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getIgnore());
 
 		// Unregister PM commands
 		if (configYML.getBoolean("pm")) {
@@ -535,7 +539,7 @@ public class MultiChat extends Plugin implements Listener {
 		}
 
 	}
-	
+
 	public static void saveMute() {
 
 		try {
@@ -546,6 +550,21 @@ public class MultiChat extends Plugin implements Listener {
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the mute file!");
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void saveIgnore() {
+
+		try {
+			File file = new File(ConfigDir, "Ignore.dat");
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(ChatControl.getIgnoreMap());
+			out.close();
+		} catch (IOException e) {
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
 
@@ -736,7 +755,7 @@ public class MultiChat extends Plugin implements Listener {
 		return result;
 
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static Set<UUID> loadMute() {
 
@@ -750,6 +769,26 @@ public class MultiChat extends Plugin implements Listener {
 			in.close();
 		} catch (IOException|ClassNotFoundException e) {
 			System.out.println("[MultiChat] [Load Error] An error has occured reading the mute file!");
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<UUID, Set<UUID>> loadIgnore() {
+
+		Map<UUID, Set<UUID>> result = null;
+
+		try {
+			File file = new File(ConfigDir, "Ignore.dat");
+			FileInputStream saveFile = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+			result = (Map<UUID, Set<UUID>>)in.readObject();
+			in.close();
+		} catch (IOException|ClassNotFoundException e) {
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the ignore file!");
 			e.printStackTrace();
 		}
 
@@ -890,7 +929,7 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] The files were created!");
 
 		}
-		
+
 		File f10 = new File(ConfigDir, "Mute.dat");
 
 		if ((f10.exists()) && (!f10.isDirectory())) {
@@ -900,6 +939,22 @@ public class MultiChat extends Plugin implements Listener {
 		} else {
 
 			System.out.println("[MultiChat] Some mute files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] Welcome to MultiChat! :D");
+			System.out.println("[MultiChat] Attempting to create hash files!");
+			saveMute();
+			System.out.println("[MultiChat] The files were created!");
+
+		}
+
+		File f11 = new File(ConfigDir, "Ignore.dat");
+
+		if ((f11.exists()) && (!f11.isDirectory())) {
+
+			ChatControl.setIgnoreMap(loadIgnore());
+
+		} else {
+
+			System.out.println("[MultiChat] Some ignore files do not exist to load. Must be first startup!");
 			System.out.println("[MultiChat] Welcome to MultiChat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveMute();

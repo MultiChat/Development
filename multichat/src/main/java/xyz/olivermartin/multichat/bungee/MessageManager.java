@@ -339,6 +339,12 @@ public class MessageManager {
 		
 		defaultMessages.put("ignore_sender", "&cYou cannot message this person");
 		defaultMessages.put("ignore_target", "&c[%SPECIAL% sent a message, but you ignore them]");
+		defaultMessages.put("ignore_ignored", "&bYou will no longer see chat messages from %SPECIAL%");
+		defaultMessages.put("ignore_unignored", "&bYou have un-ignored %SPECIAL%");
+		defaultMessages.put("ignore_player_not_found", "&cPlayer cannot be ignored as they are not online");
+		defaultMessages.put("ignore_usage", "&cUsage: /ignore <player> (Also used to un-ignore players)");
+		defaultMessages.put("ignore_bypass", "&cYou cannot ignore this player");
+		defaultMessages.put("ignore_only_players", "&cOnly players can use this command");
 
 	}
 

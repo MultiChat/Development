@@ -321,3 +321,8 @@ mute_bypass: "&cYou cannot mute this player"
 
 ignore_sender: "&cYou cannot message this person"
 ignore_target: "&c[%SPECIAL% sent a message, but you ignore them]"
+ignore_ignored: "&bYou will no longer see chat messages from %SPECIAL%"
+ignore_unignored: "&bYou have un-ignored %SPECIAL%"
+ignore_player_not_found: "&cPlayer cannot be ignored as they are not online"
+ignore_usage: "&cUsage: /ignore <player> (Also used to un-ignore players)"
+ignore_bypass: "&cYou cannot ignore this player"

@@ -173,6 +173,26 @@ public class ChatControl {
 		return true;
 
 	}
+	
+	/**
+	 * Tests if the target is ignoring the sender, and hence should not receive the message
+	 * @param sender The player trying to send a message
+	 * @param target The player who will see the message
+	 * @return TRUE if the target ignores the sender and the message should not be sent, FALSE otherwise
+	 */
+	public static boolean ignoresAnywhere(UUID sender, UUID target) {
+
+		if (!ignoreMap.containsKey(target)) return false;
+
+		Set<UUID> ignoredPlayers = ignoreMap.get(target);
+
+		if (ignoredPlayers == null) return false;
+
+		if (!ignoredPlayers.contains(sender)) return false;
+
+		return true;
+
+	}
 
 	public static void ignore(UUID ignorer, UUID ignoree) {
 

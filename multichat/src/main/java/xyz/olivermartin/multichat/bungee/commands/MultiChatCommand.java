@@ -85,6 +85,7 @@ public class MultiChatCommand extends Command {
 					MultiChat.saveBulletins();
 					MultiChat.saveCasts();
 					MultiChat.saveMute();
+					MultiChat.saveIgnore();
 					UUIDNameManager.saveUUIDS();
 
 					MessageManager.sendMessage(sender, "command_multichat_save_completed");
