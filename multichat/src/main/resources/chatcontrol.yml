@@ -105,13 +105,16 @@ mutecommand:
 
 # MultiChat ignore command to stop seeing messages from specific players
 
+# Should a notification be sent to players if a player they ignore sent a message?
+
+notify_ignore: false
+
 # In what types of chat should ignore be enforced?
 
 apply_ignore_to:
   global_chat: true
   private_messages: false
   group_chats: false
-  helpme: false
 
 # Ignore command aliases (in addition to /ignore)
 

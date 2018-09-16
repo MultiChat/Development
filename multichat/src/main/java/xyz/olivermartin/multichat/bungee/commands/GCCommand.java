@@ -95,7 +95,7 @@ public class GCCommand extends Command {
 	public static void sendMessage(String message, String playerName, TGroupChatInfo groupInfo) {
 
 		ChatManipulation chatfix = new ChatManipulation();
-		
+
 		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(playerName);
 		if (potentialPlayer != null) {
 			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "group_chats")) {
@@ -120,7 +120,17 @@ public class GCCommand extends Command {
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if (((groupInfo.existsViewer(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.group"))) || ((MultiChat.allspy.contains(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.staff.spy")))) {
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+
+				if (potentialPlayer != null) {
+					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					} else {
+						ChatControl.sendIgnoreNotifications(onlineplayer, potentialPlayer, "group_chats");
+					}
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				}
+
 			}
 
 		}

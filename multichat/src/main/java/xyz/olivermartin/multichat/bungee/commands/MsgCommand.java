@@ -121,6 +121,11 @@ public class MsgCommand extends Command implements TabExecutor {
 
 						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
+							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+								return;
+							}
+							
 							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");

@@ -318,3 +318,6 @@ mute_cannot_send_message: "&cYou are currently muted so cannot send messages!"
 mute_usage: "&cUsage: /mute <player> (Also used to unmute players)"
 mute_player_not_found: "&cPlayer cannot be muted as they are not online"
 mute_bypass: "&cYou cannot mute this player"
+
+ignore_sender: "&cYou cannot message this person"
+ignore_target: "&c[%SPECIAL% sent a message, but you ignore them]"

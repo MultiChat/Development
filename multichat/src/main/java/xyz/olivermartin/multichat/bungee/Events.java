@@ -247,6 +247,11 @@ public class Events implements Listener {
 
 						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
+							if (ChatControl.ignores(player.getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, player, "private_messages");
+								return;
+							}
+							
 							String messageOutFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 							String messageInFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 							String messageSpyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");

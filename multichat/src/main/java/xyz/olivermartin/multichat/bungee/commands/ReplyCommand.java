@@ -43,7 +43,7 @@ public class ReplyCommand extends Command {
 			}
 
 			Optional<String> crm;
-			
+
 			if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
 				MessageManager.sendMessage(sender, "mute_cannot_send_message");
 				return;
@@ -68,6 +68,11 @@ public class ReplyCommand extends Command {
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
 						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+
+							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+								return;
+							}
 
 							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");

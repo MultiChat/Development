@@ -334,6 +334,11 @@ public class MessageManager {
 		defaultMessages.put("mute_usage", "&cUsage: /mute <player> (Also used to unmute players)");
 		defaultMessages.put("mute_player_not_found", "&cPlayer cannot be muted as they are not online");
 		defaultMessages.put("mute_bypass", "&cYou cannot mute this player");
+		
+		// *** IGNORE *** //
+		
+		defaultMessages.put("ignore_sender", "&cYou cannot message this person");
+		defaultMessages.put("ignore_target", "&c[%SPECIAL% sent a message, but you ignore them]");
 
 	}
 

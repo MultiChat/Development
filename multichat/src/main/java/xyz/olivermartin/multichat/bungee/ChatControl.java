@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.bungee;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
@@ -15,16 +17,26 @@ public class ChatControl {
 
 	static {
 		mutedPlayers = new HashSet<UUID>();
+		ignoreMap = new HashMap<UUID, Set<UUID>>();
 	}
 
 	private static Set<UUID> mutedPlayers;
-	
+	private static Map<UUID, Set<UUID>> ignoreMap;
+
 	public static Set<UUID> getMutedPlayers() {
 		return mutedPlayers;
 	}
-	
+
 	public static void setMutedPlayers(Set<UUID> mutedPlayers) {
 		ChatControl.mutedPlayers = mutedPlayers;
+	}
+
+	public static Map<UUID, Set<UUID>> getIgnoreMap() {
+		return ignoreMap;
+	}
+
+	public static void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
+		ChatControl.ignoreMap = ignoreMap;
 	}
 
 	/**
@@ -110,7 +122,7 @@ public class ChatControl {
 		return true;
 
 	}
-	
+
 	public static boolean isMutedAnywhere(UUID uuid) {
 
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
@@ -133,6 +145,90 @@ public class ChatControl {
 
 		mutedPlayers.remove(uuid);
 
+	}
+
+	/**
+	 * Tests if the target is ignoring the sender, and hence should not receive the message
+	 * @param sender The player trying to send a message
+	 * @param target The player who will see the message
+	 * @return TRUE if the target ignores the sender and the message should not be sent, FALSE otherwise
+	 */
+	public static boolean ignores(UUID sender, UUID target, String chatType) {
+		
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (!ignoreMap.containsKey(target)) return false;
+
+		Set<UUID> ignoredPlayers = ignoreMap.get(target);
+
+		if (ignoredPlayers == null) return false;
+
+		if (!ignoredPlayers.contains(sender)) return false;
+		
+		if (!config.contains("apply_ignore_to." + chatType)) return false;
+
+		if (!config.getBoolean("apply_ignore_to." + chatType)) return false;
+
+
+		return true;
+
+	}
+
+	public static void ignore(UUID ignorer, UUID ignoree) {
+
+		Set<UUID> ignoredPlayers;
+
+		if (ignoreMap.containsKey(ignorer)) {
+
+			ignoredPlayers = ignoreMap.get(ignorer);
+
+		} else {
+
+			ignoredPlayers = new HashSet<UUID>();
+
+		}
+
+		ignoredPlayers.add(ignoree);
+		ignoreMap.put(ignorer, ignoredPlayers);
+
+	}
+
+	public static void unignore(UUID ignorer, UUID ignoree) {
+
+		Set<UUID> ignoredPlayers;
+
+		if (ignoreMap.containsKey(ignorer)) {
+
+			ignoredPlayers = ignoreMap.get(ignorer);
+
+		} else {
+
+			return;
+
+		}
+
+		ignoredPlayers.remove(ignoree);
+
+		if (ignoredPlayers.size() < 1) {
+			ignoreMap.remove(ignorer);
+		} else {
+			ignoreMap.put(ignorer, ignoredPlayers);
+		}
+
+	}
+	
+	public static void sendIgnoreNotifications(CommandSender ignorer, CommandSender ignoree, String chatType) {
+		
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		
+		if (config.getBoolean("notify_ignore")) {
+			MessageManager.sendSpecialMessage(ignorer, "ignore_target", ignoree.getName());
+		}
+		
+		if (!chatType.equals("private_messages")) return;
+		
+		MessageManager.sendMessage(ignoree, "ignore_sender");
+		
 	}
 
 }
