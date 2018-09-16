@@ -220,7 +220,7 @@ public class Events implements Listener {
 				Optional<String> crm;
 
 				event.setCancelled(true);
-				
+
 				if (ChatControl.isMuted(player.getUniqueId(), "private_messages")) {
 					MessageManager.sendMessage(player, "mute_cannot_send_message");
 					return;
@@ -366,9 +366,10 @@ public class Events implements Listener {
 					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
 						String message = event.getMessage();
-						
+
 						if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
 							MessageManager.sendMessage(player, "mute_cannot_send_message");
+							event.setCancelled(true);
 							return;
 						}
 
