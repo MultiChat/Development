@@ -36,7 +36,7 @@ public class MuteCommand extends Command {
 					return;
 				}
 				
-				if (ChatControl.isMutedAnywhere(target.getUniqueId())) {
+				if (!ChatControl.isMutedAnywhere(target.getUniqueId())) {
 					ChatControl.mute(target.getUniqueId());
 					MessageManager.sendMessage(sender, "mute_muted_staff");
 					MessageManager.sendMessage(target, "mute_muted");

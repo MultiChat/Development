@@ -8,6 +8,7 @@ xyz\olivermartin\multichat\bungee\commands\ClearChatCommand.class
 xyz\olivermartin\multichat\bungee\commands\MCCCommand.class
 xyz\olivermartin\multichat\bungee\GroupManager.class
 xyz\olivermartin\multichat\bungee\commands\HelpMeCommand.class
+xyz\olivermartin\multichat\bungee\commands\MuteCommand.class
 xyz\olivermartin\multichat\bungee\MultiChat$2.class
 xyz\olivermartin\multichat\bungee\CastControl.class
 xyz\olivermartin\multichat\bungee\MultiChat$6.class
