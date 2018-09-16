@@ -30,6 +30,11 @@ public class IgnoreCommand extends Command {
 				ProxiedPlayer target = ProxyServer.getInstance().getPlayer(username);
 
 				if (target != null) {
+					
+					if (target.getName().equals(sender.getName())) {
+						MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
+						return;
+					}
 
 					if (target.hasPermission("multichat.ignore.bypass")) {
 						MessageManager.sendMessage(sender, "ignore_bypass");
@@ -38,10 +43,10 @@ public class IgnoreCommand extends Command {
 
 					if (!ChatControl.ignoresAnywhere(target.getUniqueId(), ((ProxiedPlayer) sender).getUniqueId())) {
 						ChatControl.ignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
-						MessageManager.sendMessage(sender, "ignore_ignored");
+						MessageManager.sendSpecialMessage(sender, "ignore_ignored", target.getName());
 					} else {
 						ChatControl.unignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
-						MessageManager.sendMessage(sender, "ignore_unignored");
+						MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
 					}
 
 				} else {

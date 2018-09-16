@@ -345,6 +345,7 @@ public class MessageManager {
 		defaultMessages.put("ignore_usage", "&cUsage: /ignore <player> (Also used to un-ignore players)");
 		defaultMessages.put("ignore_bypass", "&cYou cannot ignore this player");
 		defaultMessages.put("ignore_only_players", "&cOnly players can use this command");
+		defaultMessages.put("ignore_cannot_ignore_yourself", "&cYou cannot ignore yourself!");
 
 	}
 

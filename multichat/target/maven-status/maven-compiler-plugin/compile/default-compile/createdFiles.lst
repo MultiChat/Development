@@ -48,6 +48,7 @@ xyz\olivermartin\multichat\bungee\ChatStream.class
 xyz\olivermartin\multichat\bungee\MultiChat$4.class
 xyz\olivermartin\multichat\bungee\Announcements.class
 xyz\olivermartin\multichat\bungee\commands\BulletinCommand.class
+xyz\olivermartin\multichat\bungee\commands\IgnoreCommand.class
 xyz\olivermartin\multichat\bungee\UUIDNameManager.class
 xyz\olivermartin\multichat\bungee\commands\GCCommand.class
 xyz\olivermartin\multichat\bungee\commands\UseCastCommand.class
