@@ -72,6 +72,56 @@ apply_actions_to:
 
 ############################################################
 # +------------------------------------------------------+ #
+# |                  Anti-Spam Settings                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should MultiChat Anti-Spam be enabled
+
+anti_spam: true
+
+#################
+# Timer Trigger #
+#################
+
+# If a player sends 4 messages in this many seconds then anti-spam will be triggered
+anti_spam_time: 4
+
+########################
+# Same Message Trigger #
+########################
+
+# Sending the same message this many times in a row will also trigger anti-spam
+spam_same_message: 4
+
+#####################
+# Anti-Spam Actions #
+#####################
+
+# How many seconds must a player wait before sending a message once they trigger anti-spam?
+anti_spam_cooldown: 60
+
+# Should a command be triggered if anti-spam activates a certain amount of times for the same player?
+anti_spam_action: true
+
+# Should this command be executed on spigot (as opposed to bungeecord)
+anti_spam_spigot: true
+
+# How many times must anti-spam be triggered before sending the command?
+anti_spam_trigger: 3
+
+# What command should be sent? (%PLAYER% is the player who triggered the anti-spam)
+anti_spam_command: "/kick %PLAYER% Spamming is not allowed"
+
+# In what types of chat should anti_spam be enforced?
+apply_anti_spam_to:
+  global_chat: true
+  private_messages: true
+  group_chats: true
+  helpme: true
+
+############################################################
+# +------------------------------------------------------+ #
 # |               Mute and Ignore Settings               | #
 # +------------------------------------------------------+ #
 ############################################################
