@@ -19,6 +19,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
@@ -506,6 +507,12 @@ public class Events implements Listener {
 		}
 		if (GCToggle.contains(uuid)) {
 			GCToggle.remove(uuid);
+		}
+		
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		
+		if (config.getBoolean("session_ignore")) {
+			ChatControl.unignoreAll(uuid);
 		}
 
 		///
