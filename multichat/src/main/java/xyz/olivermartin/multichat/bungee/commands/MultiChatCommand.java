@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatStream;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
@@ -107,6 +108,8 @@ public class MultiChatCommand extends Command {
 					// Reload, and re-register commands
 					CommandManager.reload();
 					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
+
+					ChatControl.reload();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 

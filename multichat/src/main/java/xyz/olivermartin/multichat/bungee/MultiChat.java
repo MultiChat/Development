@@ -557,6 +557,10 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveIgnore() {
 
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (config.getBoolean("session_ignore")) return;
+
 		try {
 			File file = new File(ConfigDir, "Ignore.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
@@ -778,6 +782,10 @@ public class MultiChat extends Plugin implements Listener {
 
 	@SuppressWarnings("unchecked")
 	public static Map<UUID, Set<UUID>> loadIgnore() {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (config.getBoolean("session_ignore")) return new HashMap<UUID, Set<UUID>>();
 
 		Map<UUID, Set<UUID>> result = null;
 

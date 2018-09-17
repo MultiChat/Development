@@ -11,6 +11,7 @@ import java.util.UUID;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 
 public class ChatControl {
@@ -154,7 +155,7 @@ public class ChatControl {
 	 * @return TRUE if the target ignores the sender and the message should not be sent, FALSE otherwise
 	 */
 	public static boolean ignores(UUID sender, UUID target, String chatType) {
-		
+
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
 		if (!ignoreMap.containsKey(target)) return false;
@@ -164,7 +165,7 @@ public class ChatControl {
 		if (ignoredPlayers == null) return false;
 
 		if (!ignoredPlayers.contains(sender)) return false;
-		
+
 		if (!config.contains("apply_ignore_to." + chatType)) return false;
 
 		if (!config.getBoolean("apply_ignore_to." + chatType)) return false;
@@ -173,7 +174,7 @@ public class ChatControl {
 		return true;
 
 	}
-	
+
 	/**
 	 * Tests if the target is ignoring the sender, and hence should not receive the message
 	 * @param sender The player trying to send a message
@@ -236,19 +237,46 @@ public class ChatControl {
 		}
 
 	}
-	
+
+	public static void unignoreAll(UUID ignorer) {
+
+		ignoreMap.remove(ignorer);
+
+	}
+
 	public static void sendIgnoreNotifications(CommandSender ignorer, CommandSender ignoree, String chatType) {
-		
+
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-		
+
 		if (config.getBoolean("notify_ignore")) {
 			MessageManager.sendSpecialMessage(ignorer, "ignore_target", ignoree.getName());
 		}
-		
+
 		if (!chatType.equals("private_messages")) return;
-		
+
 		MessageManager.sendMessage(ignoree, "ignore_sender");
-		
+
+	}
+
+	/**
+	 * If sessional ignore is enabled, removes any offline players from the ignore map
+	 */
+	public static void reload() {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (config.getBoolean("session_ignore")) {
+			
+			for (UUID uuid : ignoreMap.keySet()) {
+				
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+				
+				if (player == null) ignoreMap.remove(uuid);
+				
+			}
+			
+		}
+
 	}
 
 }

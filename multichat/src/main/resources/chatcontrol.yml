@@ -109,6 +109,11 @@ mutecommand:
 
 notify_ignore: false
 
+# Session ignore (Should /ignore only last until you log out?)
+# WARNING: Enabling sessional ignore will (obviously) delete stored ignore data of offline players
+
+session_ignore: false
+
 # In what types of chat should ignore be enforced?
 
 apply_ignore_to:

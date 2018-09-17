@@ -176,7 +176,6 @@ command_multichat_help_1: |
  &3Toggle mod chat &o(Toggle admin chat)
  &b/mc &o(/ac)
  &3&lType &b&l/multichat help <page number> &3&lto view more commands
-
 command_multichat_help_2: |
  &2&lMulti&a&lChat &b&lHelp [Page 2]
  &3View all global chat (Enabled by default)
@@ -197,7 +196,6 @@ command_multichat_help_2: |
  &b/freezechat
  &3Clear the chat stream for yourself or a group of people
  &b/clearchat [self,server,global,all]
-
 command_multichat_help_3: |
  &2&lMulti&a&lChat &b&lHelp [Page 3]
  &3View announcement commands
@@ -218,7 +216,6 @@ command_multichat_help_3: |
  &b/mute <player>
  &3Ignore players to stop seeing their messages
  &b/ignore <player>
-
 command_multichat_save_prepare: "&3Preparing to save multichat files!"
 command_multichat_save_completed: "&bSave completed!"
 command_multichat_reload_prepare: "&3Preparing to reload multichat files!"
@@ -294,7 +291,6 @@ groups_help_1: |
  &2SEND A MESSAGE TO THE SELECTED GROUP CHAT
  &a/gc <message>
  &cTo see FORMAL group chat commands do /group help 2
-
 groups_help_2: |
  &cGroup Chat Command Usage [Page 2] - FORMAL GROUPS
  &3All group chats default to informal group chats
