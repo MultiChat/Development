@@ -267,12 +267,15 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				boolean setDisplayName = false;
 				String displayNameFormat = "";
 				String playername = in.readUTF();
+				Player bukkitPlayer;
+				
+				bukkitPlayer = Bukkit.getPlayer(playername);
+				
+				if (bukkitPlayer == null) {
+					return;
+				}
 
-				synchronized (Bukkit.getPlayer(playername)) {
-
-					if (Bukkit.getPlayer(playername) == null) {
-						return;
-					}
+				synchronized (bukkitPlayer) {
 
 					if (in.readUTF().equals("T")) {
 						setDisplayName = true;
