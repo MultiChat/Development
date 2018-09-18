@@ -31,11 +31,12 @@ xyz\olivermartin\multichat\spongebridge\SpongeComm$2.class
 xyz\olivermartin\multichat\spongebridge\SpongeComm.class
 xyz\olivermartin\multichat\bungee\PlayerMeta.class
 xyz\olivermartin\multichat\bungee\commands\GroupCommand.class
-xyz\olivermartin\multichat\spongebridge\MultiChatRawDataListener.class
 xyz\olivermartin\multichat\bungee\commands\ACCommand.class
 xyz\olivermartin\multichat\bungee\commands\LocalCommand.class
 xyz\olivermartin\multichat\bungee\commands\SocialSpyCommand.class
 xyz\olivermartin\multichat\bungee\commands\ReplyCommand.class
+xyz\olivermartin\multichat\spongebridge\MetaListener.class
+xyz\olivermartin\multichat\spongebridge\BungeeCommandListener.class
 xyz\olivermartin\multichat\bungee\commands\MCCommand.class
 xyz\olivermartin\multichat\bungee\commands\MsgCommand.class
 xyz\olivermartin\multichat\bungee\Bulletins.class

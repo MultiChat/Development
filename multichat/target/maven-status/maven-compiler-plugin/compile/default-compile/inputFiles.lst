@@ -1,6 +1,7 @@
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\CastControl.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\LocalCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\PlayerMetaManager.java
+C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\spongebridge\BungeeCommandListener.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\CastCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MCCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\PlayerMeta.java
@@ -31,7 +32,6 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ConfigHandler.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ChatManipulation.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MultiChatBypassCommand.java
-C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\spongebridge\MultiChatRawDataListener.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\FreezeChatCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\ChatControl.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MuteCommand.java
@@ -40,6 +40,7 @@ C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\com\olivermartin410\plugins\TGroupChatInfo.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\MultiChatCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\UUIDNameManager.java
+C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\spongebridge\MetaListener.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\spongebridge\SpongeComm.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\xyz\olivermartin\multichat\bungee\commands\SocialSpyCommand.java
 C:\Users\Oliver\git\MultiChat\multichat\src\main\java\com\olivermartin410\plugins\TChatInfo.java

@@ -40,11 +40,11 @@ public class MetaListener implements RawDataListener {
 					return;
 				}
 
-				if (data.getUTF(1).equals("T")) {
+				if (data.getUTF(0).equals("T")) {
 					setDisplayName = true;
 				}
 
-				displayNameFormat = data.getUTF(2);
+				displayNameFormat = data.getUTF(0);
 
 				SpongeComm.setDisplayNameLastVal = setDisplayName;
 				SpongeComm.displayNameFormatLastVal = displayNameFormat;
