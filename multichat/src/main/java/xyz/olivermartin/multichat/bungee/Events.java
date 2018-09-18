@@ -384,6 +384,7 @@ public class Events implements Listener {
 						}
 						
 						if (ChatControl.handleSpam(player, message, "global_chat")) {
+							event.setCancelled(true);
 							return;
 						}
 

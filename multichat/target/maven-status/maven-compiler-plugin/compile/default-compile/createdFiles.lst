@@ -53,6 +53,7 @@ xyz\olivermartin\multichat\bungee\UUIDNameManager.class
 xyz\olivermartin\multichat\bungee\commands\GCCommand.class
 xyz\olivermartin\multichat\bungee\commands\UseCastCommand.class
 xyz\olivermartin\multichat\spigotbridge\NameManager.class
+xyz\olivermartin\multichat\bungee\ChatControl$PlayerSpamInfo.class
 xyz\olivermartin\multichat\bungee\Announcements$1.class
 xyz\olivermartin\multichat\bungee\Bulletins$1.class
 xyz\olivermartin\multichat\bungee\commands\MultiChatBypassCommand.class

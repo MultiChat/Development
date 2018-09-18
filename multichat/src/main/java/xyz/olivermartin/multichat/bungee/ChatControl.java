@@ -292,6 +292,8 @@ public class ChatControl {
 	public static boolean handleSpam(ProxiedPlayer player, String message, String chatType) {
 
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		
+		if (player.hasPermission("multichat.spam.bypass")) return false;
 
 		if (!config.getBoolean("anti_spam")) return false;
 
@@ -356,7 +358,14 @@ public class ChatControl {
 			long deltaTime = currentTime - messageTimeBuffer[2];
 
 			if (lastMessage.equalsIgnoreCase(message)) {
-				sameMessageCounter++;
+				// This is a hard coded test. If the same message is sent 4 times in a row, it is spam...
+				// However; this extra bit states that if it has been longer than 10 times the usual spam time
+				// then this should not be considered spam. And hence the counter is reset.
+				if ((currentTime - messageTimeBuffer[0]) < (1000 * config.getInt("anti_spam_time")*10)) {
+					sameMessageCounter++;
+				} else {
+					sameMessageCounter = 0;
+				}
 			} else {
 				sameMessageCounter = 0;
 				lastMessage = message;
@@ -390,7 +399,8 @@ public class ChatControl {
 		}
 
 		public long getCooldownSeconds() {
-			return (System.currentTimeMillis() - lastSpamTime)/1000;
+			Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+			return config.getInt("anti_spam_cooldown") - ((System.currentTimeMillis() - lastSpamTime)/1000);
 		}
 
 	}
