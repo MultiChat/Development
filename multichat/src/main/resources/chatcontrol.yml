@@ -111,7 +111,7 @@ anti_spam_spigot: true
 anti_spam_trigger: 3
 
 # What command should be sent? (%PLAYER% is the player who triggered the anti-spam)
-anti_spam_command: "/kick %PLAYER% Spamming is not allowed"
+anti_spam_command: "kick %PLAYER% Spamming is not allowed"
 
 # In what types of chat should anti_spam be enforced?
 apply_anti_spam_to:
