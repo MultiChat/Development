@@ -325,3 +325,5 @@ ignore_player_not_found: "&cPlayer cannot be ignored as they are not online"
 ignore_usage: "&cUsage: /ignore <player> (Also used to un-ignore players)"
 ignore_bypass: "&cYou cannot ignore this player"
 ignore_cannot_ignore_yourself: "&cYou cannot ignore yourself!"
+
+anti_spam_cooldown: "&cANTI-SPAM: Your messages have been blocked. You cannot chat for another %SPECIAL% seconds."
