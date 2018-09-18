@@ -102,6 +102,10 @@ public class GCCommand extends Command {
 				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
 				return;
 			}
+			
+			if (ChatControl.handleSpam(potentialPlayer, message, "group_chats")) {
+				return;
+			}
 		}
 
 		Optional<String> crm;

@@ -19,10 +19,12 @@ public class ChatControl {
 	static {
 		mutedPlayers = new HashSet<UUID>();
 		ignoreMap = new HashMap<UUID, Set<UUID>>();
+		spamMap = new HashMap<UUID, PlayerSpamInfo>();
 	}
 
 	private static Set<UUID> mutedPlayers;
 	private static Map<UUID, Set<UUID>> ignoreMap;
+	private static Map<UUID, PlayerSpamInfo> spamMap;
 
 	public static Set<UUID> getMutedPlayers() {
 		return mutedPlayers;
@@ -266,15 +268,129 @@ public class ChatControl {
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
 		if (config.getBoolean("session_ignore")) {
-			
+
 			for (UUID uuid : ignoreMap.keySet()) {
-				
+
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
-				
+
 				if (player == null) ignoreMap.remove(uuid);
-				
+
 			}
-			
+
+		}
+
+	}
+
+	public static void spamPardonPlayer(UUID uuid) {
+		spamMap.remove(uuid);
+	}
+
+	/**
+	 * 
+	 * @return true if the player is spamming and the message should be blocked
+	 */
+	public static boolean handleSpam(ProxiedPlayer player, String message, String chatType) {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (!config.getBoolean("anti_spam")) return false;
+
+		if (!config.contains("apply_anti_spam_to." + chatType)) return false;
+
+		if (!config.getBoolean("apply_anti_spam_to." + chatType)) return false;
+
+		if (!spamMap.containsKey(player.getUniqueId())) spamMap.put(player.getUniqueId(), new PlayerSpamInfo());
+
+		PlayerSpamInfo spamInfo = spamMap.get(player.getUniqueId());
+
+		boolean spam = spamInfo.checkSpam(message);
+
+		if (spam) {
+
+			MessageManager.sendSpecialMessage(player, "anti_spam_cooldown", String.valueOf(spamInfo.getCooldownSeconds()));
+
+			if (spamInfo.getSpamTriggerCount() >= config.getInt("anti_spam_trigger")) {
+
+				spamInfo.resetSpamTriggerCount();
+
+				if (config.getBoolean("anti_spam_action")) {
+
+					if (config.getBoolean("anti_spam_spigot")) {
+						ServerInfo server = player.getServer().getInfo();
+						BungeeComm.sendCommandMessage(config.getString("anti_spam_command").replaceAll("%PLAYER%", player.getName()), server);
+					} else {
+						ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), config.getString("anti_spam_command").replaceAll("%PLAYER%", player.getName())); 
+					}
+
+				}
+
+			}
+
+		}
+
+		return spam;
+
+	}
+
+	public static class PlayerSpamInfo {
+
+		int spamTriggerCount = 0;
+		long lastSpamTime = 0L;
+		long messageTimeBuffer[] = {0L, 0L, 0L};
+		int sameMessageCounter = 0;
+		String lastMessage = "";
+
+		/**
+		 * 
+		 * @return true if the user is spamming and message should be cancelled
+		 */
+		public boolean checkSpam(String message) {
+
+			boolean spam = false;
+			long currentTime = System.currentTimeMillis();
+			Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+			// If the user triggered anti-spam, check if they are still on cooldown
+			if (currentTime - lastSpamTime < (1000 * config.getInt("anti_spam_cooldown"))) return true;
+
+			long deltaTime = currentTime - messageTimeBuffer[2];
+
+			if (lastMessage.equalsIgnoreCase(message)) {
+				sameMessageCounter++;
+			} else {
+				sameMessageCounter = 0;
+				lastMessage = message;
+			}
+
+			rotateMessages(currentTime);
+
+			// Max messages in time limit or same message in row check
+			if (deltaTime < (1000 * config.getInt("anti_spam_time"))
+					|| !(sameMessageCounter + 1 < config.getInt("spam_same_message"))) {
+				spam = true;
+				lastSpamTime = currentTime;
+				spamTriggerCount++;
+			}
+
+			return spam;
+		}
+
+		private void rotateMessages(long currentTime) {
+			messageTimeBuffer[2] = messageTimeBuffer[1];
+			messageTimeBuffer[1] = messageTimeBuffer[0];
+			messageTimeBuffer[0] = currentTime;
+		}
+
+		public int getSpamTriggerCount() {
+			return spamTriggerCount;
+		}
+
+		public void resetSpamTriggerCount() {
+			spamTriggerCount = spamTriggerCount - 1;
+		}
+
+		public long getCooldownSeconds() {
+			return (System.currentTimeMillis() - lastSpamTime)/1000;
 		}
 
 	}

@@ -226,6 +226,10 @@ public class Events implements Listener {
 					MessageManager.sendMessage(player, "mute_cannot_send_message");
 					return;
 				}
+				
+				if (ChatControl.handleSpam(player, message, "private_messages")) {
+					return;
+				}
 
 				crm = ChatControl.applyChatRules(message, "private_messages", player.getName());
 
@@ -378,6 +382,10 @@ public class Events implements Listener {
 							event.setCancelled(true);
 							return;
 						}
+						
+						if (ChatControl.handleSpam(player, message, "global_chat")) {
+							return;
+						}
 
 						Optional<String> crm;
 
@@ -514,6 +522,9 @@ public class Events implements Listener {
 		if (config.getBoolean("session_ignore")) {
 			ChatControl.unignoreAll(uuid);
 		}
+		
+		// Reset their spam data on logout (nothing is stored persistantly)
+		ChatControl.spamPardonPlayer(uuid);
 
 		///
 		ChatStream.removePlayer(player.getUniqueId());

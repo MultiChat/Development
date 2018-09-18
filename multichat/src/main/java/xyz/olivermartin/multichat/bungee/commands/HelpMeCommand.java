@@ -61,6 +61,10 @@ public class HelpMeCommand extends Command {
 				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
 				return false;
 			}
+			
+			if (ChatControl.handleSpam(potentialPlayer, message, "helpme")) {
+				return false;
+			}
 		}
 
 		crm = ChatControl.applyChatRules(message, "helpme", username);
