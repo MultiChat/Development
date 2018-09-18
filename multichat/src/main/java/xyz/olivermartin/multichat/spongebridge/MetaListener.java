@@ -10,7 +10,6 @@ import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
-import org.spongepowered.api.text.Text;
 
 /**
  * RAW DATA MESSAGING CHANNEL SPONGE LISTENER
@@ -21,37 +20,8 @@ import org.spongepowered.api.text.Text;
  */
 public class MetaListener implements RawDataListener {
 
-	private RawDataChannel channel;
-
 	public MetaListener(RawDataChannel channel) {
 		super();
-		this.channel = channel;
-	}
-
-	private Text getDisplayName(Player player) {
-
-		SpongeComm.updatePlayerDisplayName(player.getName());
-
-		synchronized (player) {
-
-			if ((SpongeComm.displayNames.containsKey(player.getUniqueId()))) {
-
-				return Text.of(SpongeComm.displayNames.get(player.getUniqueId()));
-
-			} else {
-
-				String nickname;
-
-				if (SpongeComm.nicknames.containsKey(player.getUniqueId())) {
-					nickname = SpongeComm.nicknames.get(player.getUniqueId());
-				} else {
-					nickname = player.getName();
-				}
-
-				return Text.of(nickname);
-
-			}
-		}
 	}
 
 	@Override
@@ -62,13 +32,24 @@ public class MetaListener implements RawDataListener {
 		try {
 
 			Player p = player.get();
+			boolean setDisplayName = false;
+			String displayNameFormat = "";
 
 			synchronized (p) {
 				if (p == null) {
 					return;
 				}
 
-				channel.sendTo(p,buffer -> buffer.writeUTF(getDisplayName(p).toPlain()).writeUTF(p.getName()));
+				if (data.getUTF(1).equals("T")) {
+					setDisplayName = true;
+				}
+
+				displayNameFormat = data.getUTF(2);
+
+				SpongeComm.setDisplayNameLastVal = setDisplayName;
+				SpongeComm.displayNameFormatLastVal = displayNameFormat;
+
+				SpongeComm.updatePlayerMeta(p.getName(), setDisplayName, displayNameFormat);
 
 			}
 

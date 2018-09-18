@@ -7,8 +7,8 @@ import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
 
 /**
- * RAW DATA MESSAGING CHANNEL SPONGE LISTENER
- * Data Listener For SPONGE COMMUNICATION with BUNGEECORD
+ * Used to execute command send from MultiChat on bungeecord
+ * I.e. for anti spam and regex actions
  * 
  * @author Oliver Martin (Revilo410)
  *
