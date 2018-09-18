@@ -188,15 +188,17 @@ public final class SpongeComm implements CommandExecutor {
 
 		if (player.getOption("prefix").isPresent()) {
 			prefix = player.getOption("prefix").get();
-			final String fPrefix = prefix;
-			prefixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fPrefix));
 		}
+		
+		final String fPrefix = prefix;
+		prefixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fPrefix));
 
 		if (player.getOption("suffix").isPresent()) {
 			suffix = player.getOption("suffix").get();
-			final String fSuffix = suffix;
-			suffixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fSuffix));
 		}
+		
+		final String fSuffix = suffix;
+		suffixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fSuffix));
 
 		if (setDisplayName) {
 
