@@ -383,7 +383,10 @@ public class Events implements Listener {
 							return;
 						}
 						
+						DebugManager.log(player.getName() + "ABOUT TO DO THE CHECKING FOR SPAM METHODS!");
+						
 						if (ChatControl.handleSpam(player, message, "global_chat")) {
+							DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
 							event.setCancelled(true);
 							return;
 						}
