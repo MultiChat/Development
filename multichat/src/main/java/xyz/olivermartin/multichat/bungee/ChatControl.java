@@ -290,16 +290,24 @@ public class ChatControl {
 	 * @return true if the player is spamming and the message should be blocked
 	 */
 	public static boolean handleSpam(ProxiedPlayer player, String message, String chatType) {
+		
+		DebugManager.log(player.getName() + " - checking for spam...");
 
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 		
 		if (player.hasPermission("multichat.spam.bypass")) return false;
+		
+		DebugManager.log(player.getName() + " - does not have bypass perm...");
 
 		if (!config.getBoolean("anti_spam")) return false;
+		
+		DebugManager.log(player.getName() + " - anti spam IS enabled...");
 
 		if (!config.contains("apply_anti_spam_to." + chatType)) return false;
 
 		if (!config.getBoolean("apply_anti_spam_to." + chatType)) return false;
+		
+		DebugManager.log(player.getName() + " - anti spam IS enabled for " + chatType + "...");
 
 		if (!spamMap.containsKey(player.getUniqueId())) spamMap.put(player.getUniqueId(), new PlayerSpamInfo());
 
@@ -308,14 +316,22 @@ public class ChatControl {
 		boolean spam = spamInfo.checkSpam(message);
 
 		if (spam) {
+			
+			DebugManager.log(player.getName() + " - PLAYER IS SPAMMING!");
 
 			MessageManager.sendSpecialMessage(player, "anti_spam_cooldown", String.valueOf(spamInfo.getCooldownSeconds()));
+			
+			DebugManager.log(player.getName() + " - sent cooldown message to player...");
 
 			if (spamInfo.getSpamTriggerCount() >= config.getInt("anti_spam_trigger")) {
+				
+				DebugManager.log(player.getName() + " - they have set off the trigger...");
 
 				spamInfo.resetSpamTriggerCount();
 
 				if (config.getBoolean("anti_spam_action")) {
+					
+					DebugManager.log(player.getName() + " - trigger IS enabled...");
 
 					if (config.getBoolean("anti_spam_spigot")) {
 						ServerInfo server = player.getServer().getInfo();
@@ -329,6 +345,8 @@ public class ChatControl {
 			}
 
 		}
+		
+		DebugManager.log(player.getName() + " - returning " + spam);
 
 		return spam;
 
