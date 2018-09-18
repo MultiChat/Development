@@ -19,11 +19,11 @@ import org.spongepowered.api.text.Text;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class MultiChatRawDataListener implements RawDataListener {
+public class MetaListener implements RawDataListener {
 
 	private RawDataChannel channel;
 
-	public MultiChatRawDataListener(RawDataChannel channel) {
+	public MetaListener(RawDataChannel channel) {
 		super();
 		this.channel = channel;
 	}

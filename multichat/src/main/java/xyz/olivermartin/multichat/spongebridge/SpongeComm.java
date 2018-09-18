@@ -48,6 +48,7 @@ public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
 	RawDataChannel channel;
+	RawDataChannel actionChannel;
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
 
@@ -106,8 +107,11 @@ public final class SpongeComm implements CommandExecutor {
 
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
 		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
-		channel.addListener(Platform.Type.SERVER, new MultiChatRawDataListener(channel));
+		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
+		channel.addListener(Platform.Type.SERVER, new MetaListener(channel));
+		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		this.channel = channel;
+		this.actionChannel = actionChannel;
 
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
@@ -127,6 +131,7 @@ public final class SpongeComm implements CommandExecutor {
 	public void onServerStop(GameStoppingServerEvent event) {
 
 		Sponge.getChannelRegistrar().unbindChannel(channel);
+		Sponge.getChannelRegistrar().unbindChannel(actionChannel);
 
 		ConfigurationNode rootNode;
 
