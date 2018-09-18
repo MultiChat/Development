@@ -90,12 +90,12 @@ public class MsgCommand extends Command implements TabExecutor {
 				}
 
 				Optional<String> crm;
-				
+
 				if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
 					MessageManager.sendMessage(sender, "mute_cannot_send_message");
 					return;
 				}
-				
+
 				if (ChatControl.handleSpam(((ProxiedPlayer)sender), message, "private_messages")) {
 					return;
 				}
@@ -129,7 +129,7 @@ public class MsgCommand extends Command implements TabExecutor {
 								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
 								return;
 							}
-							
+
 							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
@@ -200,10 +200,10 @@ public class MsgCommand extends Command implements TabExecutor {
 
 			for ( ProxiedPlayer player : ProxyServer.getInstance().getPlayers() ) {
 
-				// TODO Hide staff members (people with silent join) from tab complete who haven't spoken yet
-
 				if ( player.getName().toLowerCase().startsWith( search ) ) {
-					matches.add( player.getName() );
+					if (!Events.hiddenStaff.contains(player.getUniqueId())) {
+						matches.add( player.getName() );
+					}
 				}
 
 			}

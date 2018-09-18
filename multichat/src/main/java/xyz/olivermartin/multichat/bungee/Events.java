@@ -2,9 +2,11 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.olivermartin410.plugins.TChatInfo;
@@ -39,6 +41,8 @@ public class Events implements Listener {
 	private static List<UUID> ACToggle = new ArrayList<UUID>();
 	private static List<UUID> GCToggle = new ArrayList<UUID>();
 	public static Map<UUID, UUID> PMToggle = new HashMap<UUID, UUID>();
+	
+	public static Set<UUID> hiddenStaff = new HashSet<UUID>();
 
 	public static boolean toggleMC(UUID uuid) {
 
@@ -403,6 +407,10 @@ public class Events implements Listener {
 						}
 
 						MultiChat.globalChat.sendMessage(player, message);
+						
+						if (hiddenStaff.contains(player.getUniqueId())) {
+							hiddenStaff.remove(player.getUniqueId());
+						}
 
 					} else {
 						MessageManager.sendMessage(player, "freezechat_frozen");
@@ -491,6 +499,8 @@ public class Events implements Listener {
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {
+					
+					hiddenStaff.add(player.getUniqueId());
 
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
@@ -506,6 +516,10 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = event.getPlayer().getUniqueId();
+		
+		if (hiddenStaff.contains(uuid)) {
+			hiddenStaff.remove(uuid);
+		}
 
 		if (mcbPlayers.contains(uuid)) {
 			mcbPlayers.remove(uuid);
