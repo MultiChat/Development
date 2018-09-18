@@ -42,8 +42,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
-			// TODO REMOVE OLD VERSIONS / CREATE UPDATER FROM 1.5.2 TO 1.6
-
 			LATEST_VERSION,
 			"1.5.2",
 			"1.5.1",
@@ -246,6 +244,17 @@ public class MultiChat extends Plugin implements Listener {
 		configversion = configYML.getString("version");
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
+			
+			// TODO - Remove for future 1.6.X versions!
+			if (!configversion.equals(LATEST_VERSION)) {
+				
+				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
+				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
+				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES (config.yml & joinmessages.yml) AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
+				getLogger().info("[!!!] [WARNING] THANK YOU");
+				
+			}
 
 			// Register listeners
 			getProxy().getPluginManager().registerListener(this, new Events());
