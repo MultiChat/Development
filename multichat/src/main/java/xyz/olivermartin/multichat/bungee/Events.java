@@ -2,8 +2,11 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import com.olivermartin410.plugins.TChatInfo;
@@ -18,6 +21,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
@@ -31,10 +35,14 @@ import xyz.olivermartin.multichat.bungee.commands.GCCommand;
  */
 public class Events implements Listener {
 
+	public static List<UUID> mcbPlayers = new ArrayList<UUID>();
+
 	private static List<UUID> MCToggle = new ArrayList<UUID>();
 	private static List<UUID> ACToggle = new ArrayList<UUID>();
 	private static List<UUID> GCToggle = new ArrayList<UUID>();
 	public static Map<UUID, UUID> PMToggle = new HashMap<UUID, UUID>();
+	
+	public static Set<UUID> hiddenStaff = new HashSet<UUID>();
 
 	public static boolean toggleMC(UUID uuid) {
 
@@ -129,8 +137,13 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
+		// If player is bypassing MultiChat
+		if (mcbPlayers.contains(player.getUniqueId())) {
+			return;
+		}
+
 		///
-		if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 			BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 		}
 		///
@@ -192,13 +205,13 @@ public class Events implements Listener {
 						GCCommand.sendMessage(message, playerName, chatInfo);
 
 					} else {
-						player.sendMessage(new ComponentBuilder("You have toggled group chat but selected group doesn't exist!").color(ChatColor.RED).create());
-						player.sendMessage(new ComponentBuilder("Please select the chat you wish to message using /group <group name> or disable the toggle with /gc").color(ChatColor.RED).create());
+						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 					}
 
 				} else {
-					player.sendMessage(new ComponentBuilder("You have toggled group chat but you have no group selected!").color(ChatColor.RED).create());
-					player.sendMessage(new ComponentBuilder("Please select the chat you wish to message using /group <group name> or disable the toggle with /gc").color(ChatColor.RED).create());
+					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 				}
 			}
 		}
@@ -209,7 +222,27 @@ public class Events implements Listener {
 
 			if (!event.isCommand()) {
 
+				Optional<String> crm;
+
 				event.setCancelled(true);
+
+				if (ChatControl.isMuted(player.getUniqueId(), "private_messages")) {
+					MessageManager.sendMessage(player, "mute_cannot_send_message");
+					return;
+				}
+				
+				if (ChatControl.handleSpam(player, message, "private_messages")) {
+					return;
+				}
+
+				crm = ChatControl.applyChatRules(message, "private_messages", player.getName());
+
+				if (crm.isPresent()) {
+					message = crm.get();
+				} else {
+					return;
+				}
+
 				ChatManipulation chatfix = new ChatManipulation();
 
 				if (ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId())) != null) {
@@ -219,13 +252,18 @@ public class Events implements Listener {
 					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageOutFormat = MultiChat.configman.config.getString("pmout");
-							String messageInFormat = MultiChat.configman.config.getString("pmin");
-							String messageSpyFormat = MultiChat.configman.config.getString("pmspy");
+							if (ChatControl.ignores(player.getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, player, "private_messages");
+								return;
+							}
+							
+							String messageOutFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageInFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messageSpyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageOutFormat, message, player, target);
 							player.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -265,15 +303,15 @@ public class Events implements Listener {
 							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
 
 						} else {
-							player.sendMessage(new ComponentBuilder("Sorry private messages are disabled on the target player's server!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(player, "command_msg_disabled_target");
 						}
 
 					} else {
-						player.sendMessage(new ComponentBuilder("Sorry private messages are disabled on this server!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(player, "command_msg_disabled_sender");
 					}
 
 				} else {
-					player.sendMessage(new ComponentBuilder("Sorry this player is not online!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(player, "command_msg_not_online");
 				}
 
 				chatfix = null;
@@ -331,21 +369,51 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			if (MultiChat.configman.config.getBoolean("global") == true) {
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
 
-				if (!MultiChat.configman.config.getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+				if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 					}
 
 					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
 						String message = event.getMessage();
+
+						if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
+							MessageManager.sendMessage(player, "mute_cannot_send_message");
+							event.setCancelled(true);
+							return;
+						}
+						
+						DebugManager.log(player.getName() + "- about to check for spam");
+						
+						if (ChatControl.handleSpam(player, message, "global_chat")) {
+							DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
+							event.setCancelled(true);
+							return;
+						}
+
+						Optional<String> crm;
+
+						crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+
+						if (crm.isPresent()) {
+							message = crm.get();
+						} else {
+							event.setCancelled(true);
+							return;
+						}
+
 						MultiChat.globalChat.sendMessage(player, message);
+						
+						if (hiddenStaff.contains(player.getUniqueId())) {
+							hiddenStaff.remove(player.getUniqueId());
+						}
 
 					} else {
-						player.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bSorry chat has been &3&lFROZEN")).create());
+						MessageManager.sendMessage(player, "freezechat_frozen");
 					}
 
 					event.setCancelled(true);
@@ -366,8 +434,8 @@ public class Events implements Listener {
 			if (!MultiChat.modchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(MultiChat.configman.config.getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(MultiChat.configman.config.getString("modchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
 				MultiChat.modchatpreferences.put(uuid, chatinfo);
 
 			}
@@ -378,12 +446,14 @@ public class Events implements Listener {
 			if (!MultiChat.adminchatpreferences.containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(MultiChat.configman.config.getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(MultiChat.configman.config.getString("adminchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
 				MultiChat.adminchatpreferences.put(uuid, chatinfo);
 
 			}
 		}
+
+		PlayerMetaManager.getInstance().registerPlayer(uuid, event.getPlayer().getName());
 
 		if (!MultiChat.viewedchats.containsKey(uuid)) {
 
@@ -411,10 +481,11 @@ public class Events implements Listener {
 		ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
 		///
 
-		if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
+		//if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
+		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
 
-			String joinformat = MultiChat.jmconfigman.config.getString("serverjoin");
-			String silentformat = MultiChat.jmconfigman.config.getString("silentjoin");
+			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
+			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 
 			ChatManipulation chatman = new ChatManipulation();
 
@@ -428,6 +499,8 @@ public class Events implements Listener {
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {
+					
+					hiddenStaff.add(player.getUniqueId());
 
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
@@ -443,6 +516,14 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = event.getPlayer().getUniqueId();
+		
+		if (hiddenStaff.contains(uuid)) {
+			hiddenStaff.remove(uuid);
+		}
+
+		if (mcbPlayers.contains(uuid)) {
+			mcbPlayers.remove(uuid);
+		}
 
 		if (MCToggle.contains(uuid)) {
 			MCToggle.remove(uuid);
@@ -453,6 +534,15 @@ public class Events implements Listener {
 		if (GCToggle.contains(uuid)) {
 			GCToggle.remove(uuid);
 		}
+		
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		
+		if (config.getBoolean("session_ignore")) {
+			ChatControl.unignoreAll(uuid);
+		}
+		
+		// Reset their spam data on logout (nothing is stored persistantly)
+		ChatControl.spamPardonPlayer(uuid);
 
 		///
 		ChatStream.removePlayer(player.getUniqueId());
@@ -462,12 +552,14 @@ public class Events implements Listener {
 			MultiChat.viewedchats.remove(uuid);
 		}
 
+		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
+
 		System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
 
-		if ( MultiChat.jmconfigman.config.getBoolean("showquit") == true ) {
+		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
-			String joinformat = MultiChat.jmconfigman.config.getString("networkquit");
-			String silentformat = MultiChat.jmconfigman.config.getString("silentquit");
+			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");
+			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentquit");
 
 			ChatManipulation chatman = new ChatManipulation();
 

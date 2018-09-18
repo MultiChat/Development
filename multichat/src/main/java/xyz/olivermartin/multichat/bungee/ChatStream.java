@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -90,7 +91,13 @@ public class ChatStream {
 							(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
 							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
 							(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
-						receiver.sendMessage(buildFormat(sender,receiver,format,message));
+
+						if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+							receiver.sendMessage(buildFormat(sender,receiver,format,message));
+						} else {
+							ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+						}
+
 					}
 				}
 			}
@@ -123,8 +130,24 @@ public class ChatStream {
 
 		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		newFormat = newFormat.replace("%NAME%", sender.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
+		if (opm.isPresent()) {
+			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
+			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
+			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+		}
+
 		newFormat = newFormat.replace("%DISPLAYNAMET%", receiver.getDisplayName());
 		newFormat = newFormat.replace("%NAMET%", receiver.getName());
+
+		Optional<PlayerMeta> opmt = PlayerMetaManager.getInstance().getPlayer(receiver.getUniqueId());
+		if (opmt.isPresent()) {
+			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
+			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
+			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+		}
+
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
@@ -165,6 +188,14 @@ public class ChatStream {
 		newFormat = newFormat.replace("%NAME%", name);
 		newFormat = newFormat.replace("%DISPLAYNAMET%", receiver.getDisplayName());
 		newFormat = newFormat.replace("%NAMET%", receiver.getName());
+
+		Optional<PlayerMeta> opmt = PlayerMetaManager.getInstance().getPlayer(receiver.getUniqueId());
+		if (opmt.isPresent()) {
+			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
+			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
+			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+		}
+
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
@@ -188,6 +219,14 @@ public class ChatStream {
 
 		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		newFormat = newFormat.replace("%NAME%", sender.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
+		if (opm.isPresent()) {
+			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
+			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
+			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+		}
+
 		newFormat = newFormat.replace("%DISPLAYNAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());

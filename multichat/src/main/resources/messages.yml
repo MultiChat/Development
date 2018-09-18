@@ -1,0 +1,329 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+################
+#  DON'T EDIT  #
+version: "1.6" #
+################
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Customise Messages                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Prefix to be shown in front of all plugin messages
+prefix: "&8&l[&2&lM&a&lC&8&l]&f "
+
+# Plugin messages
+command_acc_usage: "&aUsage: /acc <chatcolorcode> <namecolorcode>"
+command_acc_only_players: "&cOnly players can change chat colours!"
+command_acc_updated: "&aAdmin-Chat colours updated!"
+command_acc_invalid: "&cInvalid color codes specified: Must be letters a-f or numbers 0-9"
+command_acc_invalid_usage: "&cUsage: /acc <chatcolorcode> <namecolorcode>"
+
+command_ac_toggle_on: "&dAdmin chat toggled on!"
+command_ac_toggle_off: "&cAdmin chat toggled off!"
+command_ac_only_players: "&cOnly players can toggle the chat!"
+
+command_announcement_list: "&aList of avaliable announcements:"
+command_announcement_list_item: "&b -> %SPECIAL%"
+command_announcement_does_not_exist: "&cSorry, no such announcement found: %SPECIAL%"
+command_announcement_removed: "&aRemoved announcement: %SPECIAL%"
+command_announcement_stopped: "&aStopped announcement: %SPECIAL%"
+command_announcement_stopped_error: "&cSorry, unable to stop announcement: %SPECIAL%"
+command_announcement_started: "&aStarted announcement: %SPECIAL%"
+command_announcement_started_error: "&cSorry, unable to start announcement: %SPECIAL%"
+command_announcement_added: "&aAdded announcement: %SPECIAL%"
+command_announcement_added_error: "&cSorry, announcement already exists: %SPECIAL%"
+command_announcement_usage: "&aUsage:"
+
+command_bulletin_stopped: "&bBulletins stopped"
+command_bulletin_list: "&aList of bulletin messages with index:"
+command_bulletin_list_item: "&b -> %SPECIAL%"
+command_bulletin_removed: "&bRemoved bulletin"
+command_bulletin_started: "&bStarted bulletin"
+command_bulletin_added: "&bAdded to bulletin"
+command_bulletin_invalid_usage: "&cInvalid command usage!"
+command_bulletin_usage: "&aUsage:"
+
+command_cast_usage: "&aUsage:"
+command_cast_list: "&aList of avaliable casts:"
+command_cast_list_item: "&b -> %SPECIAL%"
+command_cast_removed: "&aRemoved cast: %SPECIAL%"
+command_cast_does_not_exist: "&cSorry, no such cast found: %SPECIAL%"
+command_cast_added: "&aAdded cast: %SPECIAL%"
+command_cast_added_error: "&cSorry, cast already exists: %SPECIAL%"
+
+command_clearchat_self: "&bYour chat has been cleared"
+command_clearchat_server: "&bServer chat has been cleared"
+command_clearchat_global: "&bGlobal chat has been cleared"
+command_clearchat_all: "&bAll chat has been cleared"
+command_clearchat_no_permission: "&cYou do not have permission to clear %SPECIAL% chat"
+command_clearchat_usage: "&cUsage: /clearchat [self/server/global/all]"
+
+command_display_desc: "&3Display a message to the entire network"
+command_display_usage: "&bUsage /display <message>"
+
+command_freezechat_thawed: "&b&lChat was &3&lTHAWED &b&lby &a&l%SPECIAL%"
+command_freezechat_frozen: "&b&lChat was &3&lFROZEN &b&lby &a&l%SPECIAL%"
+
+command_gc_toggle_on: "&aGroup chat toggled on!"
+command_gc_toggle_off: "&cGroup chat toggled off!"
+command_gc_only_players_toggle: "&cOnly players can toggle the chat!"
+command_gc_no_longer_exists: "&cSorry your selected chat no longer exists, please select a chat with /group <group name>"
+command_gc_no_chat_selected: "&cPlease select the chat you wish to message using /group <group name>"
+command_gc_only_players_speak: "&cOnly players can speak in group chats"
+
+command_global_enabled_1: "&3GLOBAL CHAT ENABLED"
+command_global_enabled_2: "&bYou will see messages from players on all servers!"
+command_global_only_players: "&cOnly players can change their chat state"
+
+command_group_selected: "&aYour /gc messages will now go to group: %SPECIAL%"
+command_group_not_a_member: "&cSorry you aren't a member of group: %SPECIAL%"
+command_group_does_not_exist: "&cSorry the following group chat does not exist: %SPECIAL%"
+command_group_only_players_select: "&cOnly players can select a group chat"
+command_group_incorrect_usage: "&cIncorrect command usage, use /group to see a list of commands!"
+command_group_member_list: "&a&lShowing members of group: %SPECIAL%"
+command_group_member_list_item: "&b- %SPECIAL%"
+command_group_member_list_item_admin: "&b- &b&o%SPECIAL%"
+command_group_spy_all_disabled_1: "&cGlobal group spy disabled"
+command_group_spy_all_disabled_2: "&cAny groups you previously activated spy for will still be spied on!"
+command_group_spy_all_disabled_3: "&cDisable spy for individual groups with /group spy <groupname>"
+command_group_spy_all_enabled: "&aGlobal group spy enabled for all group chats!"
+command_group_spy_no_permission: "&cSorry this command does not exist, use /group"
+command_group_spy_off: "&cYou are no longer spying on: %SPECIAL%"
+command_group_spy_on: "&aYou are now spying on: %SPECIAL%"
+command_group_spy_already_a_member: "&cYou are already a member of this chat so can't spy on it!"
+command_group_spy_does_not_exist: "&cSorry this group chat does not exist!"
+command_group_created: "&aYou successfully created, joined, and selected the group: %SPECIAL%"
+command_group_already_exists: "&cSorry the following group chat already exists: %SPECIAL%"
+command_group_max_length: "&cSorry group name cannot exceed 20 characters!"
+command_group_create_no_permission: "&cSorry you do not have permission to create new group chats"
+command_group_joined: "&aYou successfully joined and selected the group: %SPECIAL%"
+command_group_formal_not_owner: "&cSorry this command can only be used by the group chat owner"
+command_group_formal_already_formal: "&cSorry this chat is already a formal group chat: %SPECIAL%"
+command_group_formal_not_admin: "&cSorry this command can only be used by group admins/owners"
+command_group_max_length_password: "&cSorry neither group name or password must exceed 20 characters"
+command_group_transfer_not_member: "&cThis player is not already a member of the group!"
+command_group_transfer_not_owner: "&cSorry you are not the owner of this chat!"
+command_group_transfer_not_informal: "&cThis command can only be used on informal chats!"
+command_group_player_not_online: "&cThis player is not online!"
+command_group_formal_only_admin: "&cYou can't step down as a group admin because you are the only one!"
+command_group_formal_cannot_demote: "&cYou can't demote another group admin!"
+command_group_not_formal: "&cThis command can only be used on formal chats!"
+command_group_banned: "&cYou were banned from group: %SPECIAL%"
+command_group_unbanned: "&aYou were unbanned from group: %SPECIAL%"
+command_group_cannot_ban_admin: "&cYou can't ban a group admin!"
+command_group_color_invalid: "&cInvalid color codes specified: Must be letters a-f or numbers 0-9"
+command_group_color_usage: "&cUsage: /group color/colour <group name> <chatcolorcode> <namecolorcode>"
+command_group_only_players: "&cOnly players can use group chats"
+
+command_grouplist_list: "&a&lGroup List:"
+command_grouplist_list_item: "&b- %SPECIAL%"
+
+command_helpme_desc: "&4Request help from a staff member!"
+command_helpme_usage: "&cUsage: /HelpMe <Message>"
+command_helpme_sent: "&cYour request for help has been sent to all online staff :)"
+command_helpme_only_players: "&4Only players can request help!"
+command_helpme_format: "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%"
+
+command_local_enabled_1: "&3LOCAL CHAT ENABLED"
+command_local_enabled_2: "&bYou will only see messages from players on the same server!"
+command_local_only_players: "&cOnly players can change their chat state"
+
+command_mcc_usage: "&aUsage: /mcc <chatcolorcode> <namecolorcode>"
+command_mcc_only_players: "&cOnly players can change chat colours!"
+command_mcc_updated: "&aMod-Chat colours updated!"
+command_mcc_invalid: "&cInvalid color codes specified: Must be letters a-f or numbers 0-9"
+command_mcc_invalid_usage: "&cUsage: /mcc <chatcolorcode> <namecolorcode>"
+
+command_mc_toggle_on: "&bMod chat toggled on!"
+command_mc_toggle_off: "&cMod chat toggled off!"
+command_mc_only_players: "&cOnly players can toggle the chat!"
+
+command_msg_usage: "&bUsage: /msg <player> [message]"
+command_msg_usage_toggle: "&bUsing /msg <player> with no message will toggle chat to go to that player"
+command_msg_toggle_on: "&ePrivate chat toggled on! [You -> %SPECIAL%] (Type the same command to disable the toggle)"
+command_msg_toggle_off: "&cPrivate chat toggled off!"
+command_msg_only_players: "&cOnly players can toggle the chat!"
+command_msg_not_online: "&cSorry this person is not online!"
+command_msg_disabled_target: "&cSorry private messages are disabled on the target player's server!"
+command_msg_disabled_sender: "&cSorry private messages are disabled on this server!"
+
+command_multichat_help_1: |
+ &2&lMulti&a&lChat &b&lHelp
+ &3Display plugin version info
+ &b/multichat
+ &3Reload the plugin config
+ &b/multichat reload
+ &3Save ALL plugin data
+ &b/multichat save
+ &3Display a message to all players
+ &b/display <message>
+ &3View group chat help
+ &b/group
+ &3Send mod chat message &o(Send admin chat message)
+ &b/mc <message> &o(/ac <message>)
+ &3Change mod/&oadmin &3chat colours
+ &b/mcc <chat colour code> <name colour code>
+ &b&o/acc <chat colour code> <name colour code>
+ &3Toggle mod chat &o(Toggle admin chat)
+ &b/mc &o(/ac)
+ &3&lType &b&l/multichat help <page number> &3&lto view more commands
+command_multichat_help_2: |
+ &2&lMulti&a&lChat &b&lHelp [Page 2]
+ &3View all global chat (Enabled by default)
+ &b/global
+ &3Only view chat from your current server
+ &b/local
+ &3See a list of online staff members
+ &b/staff
+ &3See a list of all group chats
+ &b/groups
+ &3Send a player a private message
+ &b/msg <player> [message]
+ &3Reply to your last message
+ &b/r <message>
+ &3Toggle socialspy to view private messages
+ &b/socialspy
+ &3Freeze the chat to stop messages being sent
+ &b/freezechat
+ &3Clear the chat stream for yourself or a group of people
+ &b/clearchat [self,server,global,all]
+command_multichat_help_3: |
+ &2&lMulti&a&lChat &b&lHelp [Page 3]
+ &3View announcement commands
+ &b/announcement
+ &3View bulletin commands
+ &b/bulletin
+ &3View cast commands
+ &b/cast
+ &3Use a specified cast from the console
+ &b/usecast <cast> <message>
+ &3Alert staff members of a problem
+ &b/helpme <message>
+ &3Nickname a player (Only works if MultiChat installed on Spigot / Sponge)
+ &b/nick [player] <nickname/off>
+ &3Get players real name from their nickname (Only works on Spigot)
+ &b/realname <nickname>
+ &3Mute players to prevent them sending messages
+ &b/mute <player>
+ &3Ignore players to stop seeing their messages
+ &b/ignore <player>
+command_multichat_save_prepare: "&3Preparing to save multichat files!"
+command_multichat_save_completed: "&bSave completed!"
+command_multichat_reload_prepare: "&3Preparing to reload multichat files!"
+command_multichat_reload_completed: "&bReload completed!"
+
+command_multichatbypass_usage: |
+ &4Usage: /mcb
+ &c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.
+command_multichatbypass_enabled: "&aMultiChat BYPASS Enabled"
+command_multichatbypass_disabled: "&bMultiChat BYPASS Disabled"
+
+command_reply_usage: "&bUsage: /r <message>"
+command_reply_desc: "&bReply to the person who you private messaged most recently"
+command_reply_no_one_to_reply_to: "&cYou have no one to reply to!"
+command_reply_only_players: "&cOnly players can reply to private messages"
+
+command_socialspy_disabled: "&cSocial Spy Disabled"
+command_socialspy_enabled: "&bSocial Spy Enabled"
+command_socialspy_usage: "&bUsage: /socialspy"
+command_socialspy_desc: "&bToggles if the user has social spy enabled or disabled"
+command_socialspy_only_players: "&cOnly players can toggle socialspy"
+
+command_stafflist_list: "&a&lOnline Staff"
+command_stafflist_list_item: "&b- %SPECIAL%"
+command_stafflist_list_server: "&a%SPECIAL%"
+
+command_usecast_usage: "&aUsage:"
+command_usecast_does_not_exist: "&cSorry, no such cast found: %SPECIAL%"
+
+groups_toggled_but_no_longer_exists_1: "&cYou have toggled group chat but selected group doesn't exist!"
+groups_toggled_but_no_longer_exists_2: "&cPlease select the chat you wish to message using /group <group name> or disable the toggle with /gc"
+groups_password_protected: "&cSorry this group chat is password protected: %SPECIAL%"
+groups_password_incorrect: "&cSorry incorrect password for: %SPECIAL%"
+groups_already_joined: "&cSorry you are already a member of the group: %SPECIAL%"
+groups_banned: "&cSorry you are banned from the group: %SPECIAL%"
+groups_quit: "&aYou successfully left the group: %SPECIAL%"
+groups_cannot_quit_owner_1: "&cSorry you cannot leave as you created the group!: %SPECIAL%"
+groups_cannot_quit_owner_2: "&cPlease transfer group ownership first! Use /group transfer %SPECIAL% <playername>"
+groups_cannot_quit_admin_1: "&cSorry you cannot leave as you are the only group admin!: %SPECIAL%"
+groups_cannot_quit_admin_2: "&cPlease appoint a new admin using /group admin %SPECIAL% <playername>"
+    
+groups_info_joined: " has joined the group chat!"
+groups_info_quit: " has left the group chat!"
+groups_info_formal: " has converted this group to a FORMAL group chat!"
+groups_info_deleted: " has deleted this group chat!"
+groups_info_goodbye: "Goodbye! If you want to see group chat commands do /group"
+groups_info_transfer: " has transferred ownership to "
+groups_info_promoted: " has promoted the following member to group admin: "
+groups_info_step_down: " has stepped down as a group admin"
+groups_info_kick: " kicked the following player from the group chat: "
+groups_info_ban: " has banned the following player from the group chat: "
+groups_info_unban: " has unbanned the following player from the group chat: "
+groups_info_colors: "Group chat colours changed by "
+
+groups_help_1: |
+ &cGroup Chat Command Usage [Page 1] - INFORMAL GROUPS
+ &2MAKE A NEW GROUP CHAT
+ &a/group create/make <group name> [password]
+ &2JOIN AN EXISTING GROUP CHAT
+ &a/group join <group name> [password]
+ &2LEAVE A GROUP CHAT
+ &a/group leave/quit <group name>
+ &2SELECT THE GROUP CHAT YOU WISH FOR YOUR MESSAGES TO GO TO
+ &a/group <group name>
+ &2SET THE COLOURS OF YOUR GROUP CHAT
+ &a/group color/colour <group name> <chatcolorcode> <namecolorcode>
+ &2TRANSFER OWNERSHIP OF YOUR INFORMAL GROUP CHAT
+ &a/group transfer <group name> <player name>
+ &2DELETE A GROUP CHAT
+ &a/group delete <group name>
+ &2LIST GROUP CHAT MEMBERS
+ &a/group list/members <group name>
+ &2SEND A MESSAGE TO THE SELECTED GROUP CHAT
+ &a/gc <message>
+ &cTo see FORMAL group chat commands do /group help 2
+groups_help_2: |
+ &cGroup Chat Command Usage [Page 2] - FORMAL GROUPS
+ &3All group chats default to informal group chats
+ &3If you are a group owner you can convert your group to a formal group chat
+ &3Formal group chats restrict changing colours to appointed group admins only
+ &3Appointed group admins will also be able to ban people from the chat
+ &3CONVERSION TO A FORMAL GROUP CHAT IS IRREVERSIBLE
+ &2CONVERT YOUR GROUP CHAT TO A FORMAL GROUP CHAT (IRREVERSIBLE)
+ &a/group formal <group name>
+ &2ADD OR REMOVE AN ADMIN FROM A FORMAL GROUP CHAT
+ &a/group admin <group name> <player name>
+ &2BAN/UNBAN A PLAYER FROM YOUR FORMAL GROUP CHAT
+ &a/group ban <group name> <player name>
+ &cTo see INFORMAL group chat commands do /group help 1
+
+freezechat_frozen: "&bSorry chat has been &3&lFROZEN"
+
+mute_muted: "&cYou have been muted by staff! You can no longer send chat messages."
+mute_unmuted: "&aYou have been unmuted by staff, you can now send messages."
+mute_muted_staff: "&cPlayer has been muted!"
+mute_unmuted_staff: "&aPlayer has been unmuted!"
+mute_cannot_send_message: "&cYou are currently muted so cannot send messages!"
+mute_usage: "&cUsage: /mute <player> (Also used to unmute players)"
+mute_player_not_found: "&cPlayer cannot be muted as they are not online"
+mute_bypass: "&cYou cannot mute this player"
+
+ignore_sender: "&cYou cannot message this person"
+ignore_target: "&c[%SPECIAL% sent a message, but you ignore them]"
+ignore_ignored: "&bYou will no longer see chat messages from %SPECIAL%"
+ignore_unignored: "&bYou have un-ignored %SPECIAL%"
+ignore_player_not_found: "&cPlayer cannot be ignored as they are not online"
+ignore_usage: "&cUsage: /ignore <player> (Also used to un-ignore players)"
+ignore_bypass: "&cYou cannot ignore this player"
+ignore_cannot_ignore_yourself: "&cYou cannot ignore yourself!"
+
+anti_spam_cooldown: "&cANTI-SPAM: Your messages have been blocked. You cannot chat for another %SPECIAL% seconds."

@@ -1,19 +1,22 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
+import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -25,18 +28,16 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class MsgCommand extends Command implements TabExecutor {
 
-	static String[] aliases = (String[]) MultiChat.configman.config.getStringList("msgcommand").toArray(new String[0]);
-
 	public MsgCommand() {
-		super("msg", "multichat.chat.msg", aliases);
+		super("msg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("msgcommand").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
 
 		if (args.length < 1) {
 
-			sender.sendMessage(new ComponentBuilder("Usage: /msg <player> [message]").color(ChatColor.AQUA).create());
-			sender.sendMessage(new ComponentBuilder("Using /msg <player> with no message will toggle chat to go to that player").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(sender, "command_msg_usage");
+			MessageManager.sendMessage(sender, "command_msg_usage_toggle");
 
 		} else {
 
@@ -54,13 +55,13 @@ public class MsgCommand extends Command implements TabExecutor {
 						toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
 
 						if (toggleresult == true) {
-							sender.sendMessage(new ComponentBuilder("Private chat toggled on! [You -> " + target.getName() + "] (Type the same command to disable the toggle)").color(ChatColor.YELLOW).create());
+							MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
 						} else {
-							sender.sendMessage(new ComponentBuilder("Private chat toggled off!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_msg_toggle_off");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Only players can toggle the chat!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_only_players");
 					}
 
 				} else {
@@ -69,9 +70,9 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if ( Events.PMToggle.containsKey(player.getUniqueId())) {
 						Events.PMToggle.remove(player.getUniqueId());
-						sender.sendMessage(new ComponentBuilder("Private chat toggled off!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_toggle_off");
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry this person is not online!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_not_online");
 					}
 
 				}
@@ -88,26 +89,50 @@ public class MsgCommand extends Command implements TabExecutor {
 					}
 				}
 
+				Optional<String> crm;
+
+				if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
+					MessageManager.sendMessage(sender, "mute_cannot_send_message");
+					return;
+				}
+
+				if (ChatControl.handleSpam(((ProxiedPlayer)sender), message, "private_messages")) {
+					return;
+				}
+
+				crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+
+				if (crm.isPresent()) {
+					message = crm.get();
+				} else {
+					return;
+				}
+
 				ChatManipulation chatfix = new ChatManipulation();
 
 				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-					if (MultiChat.configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 						BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
 
 					}
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageoutformat = MultiChat.configman.config.getString("pmout");
-							String messageinformat = MultiChat.configman.config.getString("pmin");
-							String messagespyformat = MultiChat.configman.config.getString("pmspy");
+							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+								return;
+							}
+
+							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
 							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -145,21 +170,21 @@ public class MsgCommand extends Command implements TabExecutor {
 							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on the target player's server!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_msg_disabled_target");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on this server!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
 				} else {
-					sender.sendMessage(new ComponentBuilder("Sorry this player is not online!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_msg_not_online");
 				}
 
 				chatfix = null;
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("Only players can send private messages").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_msg_only_players");
 			}
 		}
 	}
@@ -176,7 +201,9 @@ public class MsgCommand extends Command implements TabExecutor {
 			for ( ProxiedPlayer player : ProxyServer.getInstance().getPlayers() ) {
 
 				if ( player.getName().toLowerCase().startsWith( search ) ) {
-					matches.add( player.getName() );
+					if (!Events.hiddenStaff.contains(player.getUniqueId())) {
+						matches.add( player.getName() );
+					}
 				}
 
 			}

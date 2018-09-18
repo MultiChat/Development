@@ -1,10 +1,9 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -29,11 +28,11 @@ public class LocalCommand extends Command {
 			MultiChat.globalplayers.remove(((ProxiedPlayer)sender).getUniqueId());
 			MultiChat.globalplayers.put(((ProxiedPlayer)sender).getUniqueId(), Boolean.valueOf(false));
 
-			sender.sendMessage(new ComponentBuilder("LOCAL CHAT ENABLED").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("You will only see messages from players on the same server!").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(sender, "command_local_enabled_1");
+			MessageManager.sendMessage(sender, "command_local_enabled_2");
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can change their chat state").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_local_only_players");
 		}
 	}
 }

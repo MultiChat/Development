@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -23,29 +24,10 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
-import xyz.olivermartin.multichat.bungee.commands.ACCCommand;
-import xyz.olivermartin.multichat.bungee.commands.ACCommand;
-import xyz.olivermartin.multichat.bungee.commands.AnnouncementCommand;
-import xyz.olivermartin.multichat.bungee.commands.BulletinCommand;
-import xyz.olivermartin.multichat.bungee.commands.CastCommand;
-import xyz.olivermartin.multichat.bungee.commands.ClearChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.DisplayCommand;
-import xyz.olivermartin.multichat.bungee.commands.FreezeChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.GCCommand;
-import xyz.olivermartin.multichat.bungee.commands.GlobalCommand;
-import xyz.olivermartin.multichat.bungee.commands.GroupCommand;
-import xyz.olivermartin.multichat.bungee.commands.GroupListCommand;
-import xyz.olivermartin.multichat.bungee.commands.HelpMeCommand;
-import xyz.olivermartin.multichat.bungee.commands.LocalCommand;
-import xyz.olivermartin.multichat.bungee.commands.MCCCommand;
-import xyz.olivermartin.multichat.bungee.commands.MCCommand;
-import xyz.olivermartin.multichat.bungee.commands.MsgCommand;
-import xyz.olivermartin.multichat.bungee.commands.MultiChatCommand;
-import xyz.olivermartin.multichat.bungee.commands.ReplyCommand;
-import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
-import xyz.olivermartin.multichat.bungee.commands.StaffListCommand;
-import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
+
+// NAME IDEAS: Backchat, Totalk, Talkative, Portalk, Netalk, Revtalkr, Chatplex, Talky, Photalk
 
 /**
  * The MAIN MultiChat Class
@@ -56,11 +38,12 @@ import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.5.2";
+	public static final String LATEST_VERSION = "1.6";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.5.2",
 			"1.5.1",
 			"1.5",
 			"1.4.2",
@@ -85,9 +68,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static File ConfigDir;
 	public static String configversion;
-
-	public static ConfigManager configman = new ConfigManager();
-	public static JMConfigManager jmconfigman = new JMConfigManager();
 
 	public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
 
@@ -117,6 +97,8 @@ public class MultiChat extends Plugin implements Listener {
 				saveAnnouncements();
 				saveBulletins();
 				saveCasts();
+				saveMute();
+				saveIgnore();
 				UUIDNameManager.saveUUIDS();
 
 				getLogger().info("Backup complete. Any errors reported above.");
@@ -133,7 +115,7 @@ public class MultiChat extends Plugin implements Listener {
 
 			public void run() {
 
-				if (configman.config.getBoolean("fetch_spigot_display_names") == true) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
@@ -170,7 +152,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -188,7 +170,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -207,7 +189,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -226,7 +208,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (configman.config.getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -251,52 +233,43 @@ public class MultiChat extends Plugin implements Listener {
 			getDataFolder().mkdirs();
 		}
 
-		configman.startupConfig();
-		jmconfigman.startupConfig();
+		ConfigManager.getInstance().registerHandler("config.yml", ConfigDir);
+		ConfigManager.getInstance().registerHandler("joinmessages.yml", ConfigDir);
+		ConfigManager.getInstance().registerHandler("messages.yml", ConfigDir);
+		ConfigManager.getInstance().registerHandler("chatcontrol.yml", ConfigDir);
 
-		configversion = configman.config.getString("version");
+		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		configversion = configYML.getString("version");
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
+			
+			// TODO - Remove for future 1.6.X versions!
+			if (!configversion.equals(LATEST_VERSION)) {
+				
+				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
+				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
+				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES (config.yml & joinmessages.yml) AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
+				getLogger().info("[!!!] [WARNING] THANK YOU");
+				
+			}
 
 			// Register listeners
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);
 
-			// Register main commands
-			getProxy().getPluginManager().registerCommand(this, new MCCommand());
-			getProxy().getPluginManager().registerCommand(this, new ACCommand());
-			getProxy().getPluginManager().registerCommand(this, new MCCCommand());
-			getProxy().getPluginManager().registerCommand(this, new ACCCommand());
-			getProxy().getPluginManager().registerCommand(this, new GCCommand());
-			getProxy().getPluginManager().registerCommand(this, new GroupCommand());
-			getProxy().getPluginManager().registerCommand(this, new StaffListCommand());
-			getProxy().getPluginManager().registerCommand(this, new GroupListCommand());
-			getProxy().getPluginManager().registerCommand(this, new MultiChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new DisplayCommand());
-			getProxy().getPluginManager().registerCommand(this, new FreezeChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new HelpMeCommand());
-			getProxy().getPluginManager().registerCommand(this, new ClearChatCommand());
-			getProxy().getPluginManager().registerCommand(this, new AnnouncementCommand());
-			getProxy().getPluginManager().registerCommand(this, new BulletinCommand());
-			getProxy().getPluginManager().registerCommand(this, new CastCommand());
-			getProxy().getPluginManager().registerCommand(this, new UseCastCommand());
-
 			// Register communication channels and appropriate listeners
 			getProxy().registerChannel("multichat:comm");
+			getProxy().registerChannel("multichat:prefix");
+			getProxy().registerChannel("multichat:suffix");
+			getProxy().registerChannel("multichat:nick");
+			getProxy().registerChannel("multichat:action");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
-			// Register PM commands
-			if (configman.config.getBoolean("pm")) {
-				getProxy().getPluginManager().registerCommand(this, new MsgCommand());
-				getProxy().getPluginManager().registerCommand(this, new ReplyCommand());
-				getProxy().getPluginManager().registerCommand(this, new SocialSpyCommand());
-			}
-
-			// Register global chat commands
-			if (configman.config.getBoolean("global")) {
-				getProxy().getPluginManager().registerCommand(this, new LocalCommand());
-				getProxy().getPluginManager().registerCommand(this, new GlobalCommand());
-			}
+			// Register commands
+			registerCommands(configYML, chatcontrolYML);
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
@@ -305,10 +278,10 @@ public class MultiChat extends Plugin implements Listener {
 			UUIDNameManager.Startup();
 
 			//TODO REPLACE THIS... Create hard-coded global chat stream
-			globalChat = new ChatStream("GLOBAL", configman.config.getString("globalformat"), false, false);
+			globalChat = new ChatStream("GLOBAL", configYML.getString("globalformat"), false, false);
 
 			// Add all appropriate servers to this hardcoded global chat stream
-			for (String server : configman.config.getStringList("no_global")) {
+			for (String server : configYML.getStringList("no_global")) {
 				globalChat.addServer(server);
 			}
 
@@ -335,7 +308,111 @@ public class MultiChat extends Plugin implements Listener {
 		saveAnnouncements();
 		saveBulletins();
 		saveCasts();
+		saveMute();
+		saveIgnore();
 		UUIDNameManager.saveUUIDS();
+
+	}
+
+	public void registerCommands(Configuration configYML, Configuration chatcontrolYML) {
+
+		// Register main commands
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMcc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGc());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGroup());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichatBypass());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getClearchat());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getAnnouncement());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getBulletin());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getIgnore());
+
+		// Register PM commands
+		if (configYML.getBoolean("pm")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMsg());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getReply());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getSocialspy());
+		}
+
+		// Register global chat commands
+		if (configYML.getBoolean("global")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
+		}
+
+		// Register staff list command /staff
+		if (configYML.contains("staff_list")) {
+			if (configYML.getBoolean("staff_list")) {
+				getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
+			}
+		} else {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
+		}
+
+		// Register mute command
+		if (chatcontrolYML.getBoolean("mute")) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMute());
+		}
+
+	}
+
+	public void unregisterCommands(Configuration configYML, Configuration chatcontrolYML) {
+
+		// Unregister main commands
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAcc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMcc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGc());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGroup());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichatBypass());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getClearchat());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getAnnouncement());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getBulletin());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getIgnore());
+
+		// Unregister PM commands
+		if (configYML.getBoolean("pm")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMsg());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getReply());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getSocialspy());
+		}
+
+		// Unregister global chat commands
+		if (configYML.getBoolean("global")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocal());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getGlobal());
+		}
+
+		// Unregister staff list command /staff
+		if (configYML.contains("staff_list")) {
+			if (configYML.getBoolean("staff_list")) {
+				getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
+			}
+		} else {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
+		}
+
+		// UnRegister mute command
+		if (chatcontrolYML.getBoolean("mute")) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
+		}
 
 	}
 
@@ -467,6 +544,40 @@ public class MultiChat extends Plugin implements Listener {
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the global chat info file!");
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void saveMute() {
+
+		try {
+			File file = new File(ConfigDir, "Mute.dat");
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(ChatControl.getMutedPlayers());
+			out.close();
+		} catch (IOException e) {
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the mute file!");
+			e.printStackTrace();
+		}
+
+	}
+
+	public static void saveIgnore() {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (config.getBoolean("session_ignore")) return;
+
+		try {
+			File file = new File(ConfigDir, "Ignore.dat");
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(ChatControl.getIgnoreMap());
+			out.close();
+		} catch (IOException e) {
+			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
 
@@ -658,6 +769,50 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Set<UUID> loadMute() {
+
+		Set<UUID> result = null;
+
+		try {
+			File file = new File(ConfigDir, "Mute.dat");
+			FileInputStream saveFile = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+			result = (Set<UUID>)in.readObject();
+			in.close();
+		} catch (IOException|ClassNotFoundException e) {
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the mute file!");
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<UUID, Set<UUID>> loadIgnore() {
+
+		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+
+		if (config.getBoolean("session_ignore")) return new HashMap<UUID, Set<UUID>>();
+
+		Map<UUID, Set<UUID>> result = null;
+
+		try {
+			File file = new File(ConfigDir, "Ignore.dat");
+			FileInputStream saveFile = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(saveFile);
+			result = (Map<UUID, Set<UUID>>)in.readObject();
+			in.close();
+		} catch (IOException|ClassNotFoundException e) {
+			System.out.println("[MultiChat] [Load Error] An error has occured reading the ignore file!");
+			e.printStackTrace();
+		}
+
+		return result;
+
+	}
+
 	public static void Startup() {
 
 		System.out.println("[MultiChat] Starting load routine for data files");
@@ -788,6 +943,38 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Welcome to MultiChat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveCasts();
+			System.out.println("[MultiChat] The files were created!");
+
+		}
+
+		File f10 = new File(ConfigDir, "Mute.dat");
+
+		if ((f10.exists()) && (!f10.isDirectory())) {
+
+			ChatControl.setMutedPlayers(loadMute());
+
+		} else {
+
+			System.out.println("[MultiChat] Some mute files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] Welcome to MultiChat! :D");
+			System.out.println("[MultiChat] Attempting to create hash files!");
+			saveMute();
+			System.out.println("[MultiChat] The files were created!");
+
+		}
+
+		File f11 = new File(ConfigDir, "Ignore.dat");
+
+		if ((f11.exists()) && (!f11.isDirectory())) {
+
+			ChatControl.setIgnoreMap(loadIgnore());
+
+		} else {
+
+			System.out.println("[MultiChat] Some ignore files do not exist to load. Must be first startup!");
+			System.out.println("[MultiChat] Welcome to MultiChat! :D");
+			System.out.println("[MultiChat] Attempting to create hash files!");
+			saveMute();
 			System.out.println("[MultiChat] The files were created!");
 
 		}

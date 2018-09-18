@@ -1,23 +1,27 @@
-##############################################################
-#                   *~~~* MULTICHAT *~~~*                    #
-##############################################################
-#                       BY REVILO410                         #
-##############################################################
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
 
-#################
-#  DO NOT EDIT  #
-version: "1.5.2"
-#################
+# By Revilo410
 
-##############################################################
-#                       JOIN MESSAGES                        #
-##############################################################
+################
+#  DON'T EDIT  #
+version: "1.6" #
+################
 
-#Should network join messages be displayed?
+############################################################
+# +------------------------------------------------------+ #
+# |                    Join Messages                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should network join messages be displayed?
 
 showjoin: true
 
-#Should network quit messages be displayed?
+# Should network quit messages be displayed?
 
 showquit: true
 
@@ -26,19 +30,19 @@ showquit: true
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
 
-#NETWORK join message
+# NETWORK join message
 
 serverjoin: "&e%NAME% &ejoined the network"
 
-#SERVER SILENT switch message
+# NETWORK SILENT join message
 
 silentjoin: "&b&o%NAME% &b&ojoined the network silently"
 
-#NETWORK quit message
+# NETWORK quit message
 
 networkquit: "&e%NAME% left the network"
 
-#NETWORK SILENT quit message
+# NETWORK SILENT quit message
 
 silentquit: "&b&o%NAME% &b&oleft the network silently"
 

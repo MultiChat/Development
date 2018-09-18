@@ -3,10 +3,11 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
  * Display Command
@@ -27,8 +28,8 @@ public class DisplayCommand extends Command {
 
 		if (args.length < 1) {
 
-			sender.sendMessage(new ComponentBuilder("Display a message to the entire network").color(ChatColor.DARK_AQUA).create());
-			sender.sendMessage(new ComponentBuilder("Usage /display <message>").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(sender, "command_display_desc");
+			MessageManager.sendMessage(sender, "command_display_usage");
 
 		} else {
 
@@ -43,6 +44,8 @@ public class DisplayCommand extends Command {
 	}
 
 	public static void displayMessage(String message) {
+		
+		message = ChatControl.applyChatRules(message, "display_command", "").get();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));

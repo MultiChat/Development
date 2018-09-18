@@ -1,17 +1,68 @@
-##############################################################
-#                   *~~~* MULTICHAT *~~~*                    #
-##############################################################
-#                       BY REVILO410                         #
-##############################################################
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
 
-#################
-#  DO NOT EDIT  #
-version: "1.5.2"
-#################
+# By Revilo410
 
-##############################################################
-#                        CHAT FORMATS                        #
-##############################################################
+################
+#  DON'T EDIT  #
+version: "1.6" #
+################
+
+# 1. General
+# 2. Private Messaging
+# 3. Global Chat
+# 4. Group Chats
+# 5. Staff Chats
+# 6. Other
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       General                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should MultiChat fetch the display names from players respective spigot servers rather than those set on bungeecord to use in the global chat?
+# Set this to true if you want to use display names set by plugins such as Essentials, Vault etc.
+# If you want to use display names set by a bungeecord plugin such as BungeePerms then set this to false.
+# PLEASE NOTE THAT IF THIS IS SET TO TRUE, CHAT WILL ONLY WORK IF YOU ALSO PUT THE MULTICHAT.JAR IN THE SPIGOT SERVERS PLUGIN FOLDERS AS WELL
+# AS IN THE BUNGEECORD PLUGINS FOLDER!
+fetch_spigot_display_names: true
+
+# Should MultiChat set the display name of users to be used in things like the tab list and /glist?
+set_display_name: true
+
+# Display name format
+# You can use %NAME% %NICK% %PREFIX% %SUFFIX%
+display_name_format: "%PREFIX%%NICK%%SUFFIX%"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Private Messaging                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+#############
+# PM MODULE #
+#############
+
+# Use private messaging?
+pm: true
+
+# Servers to exclude from private messaging
+# List like:
+# no_pm:
+# - Server1
+# - Server2
+# etc.
+
+no_pm: []
+
+##############
+# PM FORMATS #
+##############
 
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %MESSAGE% = The sent message
@@ -19,67 +70,32 @@ version: "1.5.2"
 # %NAMET% = The name of the target player
 # %DISPLAYNAME% = The display name of the sender
 # %DISPLAYNAMET% = The display name of the target player
+# %PREFIX% = The prefix of the sender
+# %PREFIXT% = The prefix of the target
+# %SUFFIX% = The suffix of the sender
+# %SUFFIXT% = The suffix of the target
+# %NICK% = The nickname of the sender
+# %NICKT% = The nickname of the target
 # %SERVER% = The server of the sender
 # %SERVERT% = The server of the target player
 
-#Sending PM Format
+# Sending PM Format
 
 pmout: "&6[&cYou &6-> &c%DISPLAYNAMET%&6] &f%MESSAGE%"
 
-#Receving PM Format
+# Receving PM Format
 
 pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
 
-#SocialSpy Format
+# SocialSpy Format
 
 pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 
-##############################################################
+##############
+# PM ALIASES #
+##############
 
-# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
-# %NAME% = The name of the sender
-# %DISPLAYNAME% = The display name of the sender
-# %SERVER% = The server of the sender
-# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
-
-#Global Chat Format
-#Will display as [FORMAT] [MESSAGE]
-
-globalformat: "&f%DISPLAYNAME%&f: "
-
-##############################################################
-
-# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
-# %NAME% = The name of the sender
-# (%DISPLAYNAME% = The display name of the sender) STAFF CHAT ONLY
-# (%SERVER% = The server of the sender) STAFF CHAT ONLY
-# %MESSAGE% = The sent message
-# %CC% = The chat color set by players
-# %NC% = The name color set by players
-# (%GROUPNAME% = Name of the group chat) GROUP CHAT ONLY
-
-modchat:
-    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
-    ccdefault: "b"
-    ncdefault: "d"
-
-adminchat:
-    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
-    ccdefault: "d"
-    ncdefault: "b"
-
-groupchat:
-    format: "%CC%(%NC%%GROUPNAME%%CC%)(%NC%%NAME%%CC%) %MESSAGE%"
-    ccdefault: "a"
-    ncdefault: "f"
-
-##############################################################
-#                           COMMANDS                         #
-##############################################################
-
-#NOTE FOR COMMAND ALIASES TO TAKE EFFECT YOU MUST RESTART YOUR BUNGEECORD SERVER (/MULTICHAT RELOAD WONT WORK)
-
-#The /msg command has the following aliases (other than /msg)
+# The /msg command has the following aliases (other than /msg)
 msgcommand:
 - m
 - message
@@ -90,29 +106,27 @@ msgcommand:
 - chat
 - pm
 
-#The /r command has the following aliases (other than /r)
+# The /r command has the following aliases (other than /r)
 rcommand:
 - reply
 - respond
 
-#The /socialspy command has the following aliases (other than /socialspy)
+# The /socialspy command has the following aliases (other than /socialspy)
 socialspycommand:
 - spy
 - sspy
 
-##############################################################
-#                       DISPLAY NAMES                        #
-##############################################################
+############################################################
+# +------------------------------------------------------+ #
+# |                     Global Chat                      | #
+# +------------------------------------------------------+ #
+############################################################
 
-#Should MultiChat fetch the display names from players respective spigot servers rather than those set on bungeecord to use in the global chat? Set this to true if you want to use display names set by plugins such as Essentials, Vault etc. If you want to use display names set by a bungeecord plugin such as BungeePerms then set this to false. PLEASE NOTE THAT IF THIS IS SET TO TRUE, CHAT WILL ONLY WORK IF YOU ALSO PUT THE MULTICHAT.JAR IN THE SPIGOT SERVERS PLUGIN FOLDERS AS WELL AS IN THE BUNGEECORD PLUGINS FOLDER!
+######################
+# Global Chat Module #
+######################
 
-fetch_spigot_display_names: true
-
-##############################################################
-#                  GLOBAL CHAT AND MESSAGING                 #
-##############################################################
-
-#Use global public chat?
+# Use global public chat?
 global: true
 
 # Servers to exclude from global chat
@@ -124,15 +138,84 @@ global: true
 
 no_global: []
 
-#Use private messaging?
-#(MUST REBOOT THE BUNGEECORD SERVER TO TAKE EFFECT)
-pm: true
+#######################
+# Global Chat Formats #
+#######################
 
-# Servers to exclude from private messaging
-# List like:
-# no_pm:
-# - Server1
-# - Server2
-# etc.
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %SERVER% = The server of the sender
+# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 
-no_pm: []
+# Global Chat Format
+# Will display as [FORMAT] [MESSAGE]
+
+globalformat: "&f%DISPLAYNAME%&f: "
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     Group Chats                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+######################
+# Group Chat Formats #
+######################
+
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %MESSAGE% = The sent message
+# %CC% = The chat color set by players
+# %NC% = The name color set by players
+# %GROUPNAME% = Name of the group chat
+
+groupchat:
+    format: "%CC%(%NC%%GROUPNAME%%CC%)(%NC%%NAME%%CC%) %MESSAGE%"
+    ccdefault: "a"
+    ncdefault: "f"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     Staff Chats                      | #
+# +------------------------------------------------------+ #
+############################################################
+
+######################
+# Staff Chat Formats #
+######################
+
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %SERVER% = The server of the sender
+# %MESSAGE% = The sent message
+# %CC% = The chat color set by players
+# %NC% = The name color set by players
+
+modchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "b"
+    ncdefault: "d"
+
+adminchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "d"
+    ncdefault: "b"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Other                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Set to false to disable the '/staff' staff list command
+staff_list: true
+
+# MultiChat bypass command aliases (other than /multichatbypass)
+multichatbypasscommand:
+- mcb
+- bypass

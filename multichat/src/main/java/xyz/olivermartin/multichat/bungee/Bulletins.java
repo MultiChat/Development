@@ -106,6 +106,8 @@ public class Bulletins {
 				} else {
 
 					message = bulletin.get(nextBulletin);
+					
+					message = ChatControl.applyChatRules(message, "bulletins", "").get();
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));

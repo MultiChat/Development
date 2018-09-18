@@ -1,15 +1,18 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
@@ -21,24 +24,41 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class ReplyCommand extends Command {
 
-	private static String[] aliases = (String[])MultiChat.configman.config.getStringList("rcommand").toArray(new String[0]);
-
 	public ReplyCommand() {
-		super("r", "multichat.chat.msg", aliases);
+		super("r", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("rcommand").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
 
 		if (args.length < 1) {
 
-			sender.sendMessage(new ComponentBuilder("Usage: /r <message>").color(ChatColor.AQUA).create());
-			sender.sendMessage(new ComponentBuilder("Reply to the person who you private messaged most recently").color(ChatColor.AQUA).create());
+			MessageManager.sendMessage(sender, "command_reply_usage");
+			MessageManager.sendMessage(sender, "command_reply_desc");
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
 			String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
+			}
+
+			Optional<String> crm;
+
+			if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
+				MessageManager.sendMessage(sender, "mute_cannot_send_message");
+				return;
+			}
+			
+			if (ChatControl.handleSpam(((ProxiedPlayer)sender), message, "private_messages")) {
+				return;
+			}
+
+			crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+
+			if (crm.isPresent()) {
+				message = crm.get();
+			} else {
+				return;
 			}
 
 			ChatManipulation chatfix = new ChatManipulation();
@@ -49,13 +69,18 @@ public class ReplyCommand extends Command {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId()));
 
-					if (!MultiChat.configman.config.getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!MultiChat.configman.config.getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-							String messageoutformat = MultiChat.configman.config.getString("pmout");
-							String messageinformat = MultiChat.configman.config.getString("pmin");
-							String messagespyformat = MultiChat.configman.config.getString("pmspy");
+							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
+								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+								return;
+							}
+
+							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
 							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -93,25 +118,25 @@ public class ReplyCommand extends Command {
 							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
-							sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on the target player's server!").color(ChatColor.RED).create());
+							MessageManager.sendMessage(sender, "command_msg_disabled_target");
 						}
 
 					} else {
-						sender.sendMessage(new ComponentBuilder("Sorry private messages are disabled on this server!").color(ChatColor.RED).create());
+						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
 				} else {
-					sender.sendMessage(new ComponentBuilder("You have no one to reply to!").color(ChatColor.RED).create());
+					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 				}
 
 			} else {
-				sender.sendMessage(new ComponentBuilder("You have no one to reply to!").color(ChatColor.RED).create());
+				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 			}
 
 			chatfix = null;
 
 		} else {
-			sender.sendMessage(new ComponentBuilder("Only players can reply to private messages").color(ChatColor.RED).create());
+			MessageManager.sendMessage(sender, "command_reply_only_players");
 		}
 	}
 }

@@ -43,13 +43,19 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.5.2")
+@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6")
 public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
 	RawDataChannel channel;
+	RawDataChannel actionChannel;
+	static RawDataChannel prefixChannel;
+	static RawDataChannel suffixChannel;
+	static RawDataChannel nickChannel;
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
+	public static boolean setDisplayNameLastVal = false;
+	public static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -106,8 +112,17 @@ public final class SpongeComm implements CommandExecutor {
 
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
 		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
-		channel.addListener(Platform.Type.SERVER, new MultiChatRawDataListener(channel));
+		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
+		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
+		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
+		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
+		channel.addListener(Platform.Type.SERVER, new MetaListener(channel));
+		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		this.channel = channel;
+		this.actionChannel = actionChannel;
+		SpongeComm.prefixChannel = prefixChannel;
+		SpongeComm.suffixChannel = suffixChannel;
+		SpongeComm.nickChannel = nickChannel;
 
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
@@ -127,6 +142,10 @@ public final class SpongeComm implements CommandExecutor {
 	public void onServerStop(GameStoppingServerEvent event) {
 
 		Sponge.getChannelRegistrar().unbindChannel(channel);
+		Sponge.getChannelRegistrar().unbindChannel(actionChannel);
+		Sponge.getChannelRegistrar().unbindChannel(prefixChannel);
+		Sponge.getChannelRegistrar().unbindChannel(suffixChannel);
+		Sponge.getChannelRegistrar().unbindChannel(nickChannel);
 
 		ConfigurationNode rootNode;
 
@@ -149,37 +168,52 @@ public final class SpongeComm implements CommandExecutor {
 
 	}
 
-	public static void updatePlayerDisplayName(String playername) {
+	public static void updatePlayerMeta(String playername, boolean setDisplayName, String displayNameFormat) {
 
-		String nickname;
+		if (!Sponge.getServer().getPlayer(playername).isPresent()) return;
 
-		if (Sponge.getServer().getPlayer(playername).isPresent()) {
+		Player player = Sponge.getServer().getPlayer(playername).get();
+		String nickname = "";
+		String prefix = "";
+		String suffix = "";
 
-			Player player = Sponge.getServer().getPlayer(playername).get();
-
-			if (nicknames.containsKey(player.getUniqueId())) {
-				nickname = nicknames.get(player.getUniqueId());
-			} else {
-				nickname =  player.getName();
-			}
-
-			if (player.getOption("prefix").isPresent()) {
-
-				if (player.getOption("suffix").isPresent()) {
-					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname + player.getOption("suffix").get());
-					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname + player.getOption("suffix").get())));
-				} else {
-					displayNames.put(player.getUniqueId(), player.getOption("prefix").get() + nickname);
-					Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(player.getOption("prefix").get() + nickname)));
-				}
-
-			} else {
-
-				displayNames.put(player.getUniqueId(), nickname);
-				Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(nickname)));
-
-			}
+		if (nicknames.containsKey(player.getUniqueId())) {
+			nickname = nicknames.get(player.getUniqueId());
+		} else {
+			nickname =  player.getName();
 		}
+
+		final String fNickname = nickname;
+		nickChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fNickname));
+
+		if (player.getOption("prefix").isPresent()) {
+			prefix = player.getOption("prefix").get();
+		}
+		
+		final String fPrefix = prefix;
+		prefixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fPrefix));
+
+		if (player.getOption("suffix").isPresent()) {
+			suffix = player.getOption("suffix").get();
+		}
+		
+		final String fSuffix = suffix;
+		suffixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fSuffix));
+
+		if (setDisplayName) {
+
+			displayNameFormat = displayNameFormat.replaceAll("%NICK%", nickname);
+			displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
+			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", prefix);
+			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", suffix);
+			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
+
+			final String finalDisplayName = displayNameFormat;
+
+			Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(finalDisplayName)));
+
+		}
+
 	}
 
 	@Override
@@ -206,13 +240,13 @@ public final class SpongeComm implements CommandExecutor {
 
 		if (nickname.equalsIgnoreCase("off")) {
 			removeNickname(targetUUID);
-			updatePlayerDisplayName(target.getName());
+			updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 			sender.sendMessage(Text.of(target.getName() + " has had their nickname removed!"));
 			return CommandResult.success();
 		}
 
 		addNickname(targetUUID,nickname);
-		updatePlayerDisplayName(target.getName());
+		updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 
 		sender.sendMessage(Text.of(target.getName() + " has been nicknamed!"));
 		return CommandResult.success();
