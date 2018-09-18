@@ -548,7 +548,7 @@ public class NameManager implements Listener {
 	/*
 	 * Remove all colour / format codes from a string (using the '&' char)
 	 */
-	private String stripFormat(String input) {
+	public String stripFormat(String input) {
 
 		char COLOR_CHAR = '&';
 		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");

@@ -380,6 +380,13 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					}
 
 				}
+				
+				if (NameManager.getInstance().stripFormat(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
+					return true;
+
+				}
 
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
 				updatePlayerMeta(sender.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
