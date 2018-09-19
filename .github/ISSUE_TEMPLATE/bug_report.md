@@ -32,11 +32,5 @@ If applicable, add screenshots to help explain your problem.
  - Proxy Version: [e.g. Bungeecord-1523, Waterfall-156]
  - Local Server Version: [e.g. craftbukkit234, spigot-1256, paperclip-456, spongevanilla-2456]
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
 **Additional context**
 Add any other context about the problem here.
