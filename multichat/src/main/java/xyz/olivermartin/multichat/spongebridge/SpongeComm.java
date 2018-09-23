@@ -43,7 +43,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6")
+@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6.1")
 public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;

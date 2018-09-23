@@ -38,11 +38,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.6";
+	public static final String LATEST_VERSION = "1.6.1";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.6",
 			"1.5.2",
 			"1.5.1",
 			"1.5",
@@ -246,7 +247,7 @@ public class MultiChat extends Plugin implements Listener {
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
 			
 			// TODO - Remove for future 1.6.X versions!
-			if (!configversion.equals(LATEST_VERSION)) {
+			if (!configversion.equals(LATEST_VERSION) || !configversion.equals("1.6")) {
 				
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
 				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");

@@ -473,7 +473,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				return true;
 
-			} else {
+			} else if (sender.hasPermission("multichatbridge.realname.partial")) {
 
 				Optional<Set<UUID>> matches = NameManager.getInstance().getPartialNicknameMatches(args[0]);
 
@@ -504,6 +504,11 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				return true;
 
+			} else {
+				
+				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+				return true;
+				
 			}
 
 		}
