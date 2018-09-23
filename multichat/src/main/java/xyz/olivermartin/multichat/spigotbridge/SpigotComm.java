@@ -426,14 +426,25 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				return true;
 			}
 
-			if (!simpleNickname.matcher(args[1]).matches()) {
+			if (NameManager.getInstance().containsColorCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
+				return true;
+			}
 
-				if (!sender.hasPermission("multichatbridge.nick.format")) {
+			if (NameManager.getInstance().containsFormatCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
+				return true;
+			}
 
-					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to give nicknames with special characters!");
-					return true;
+			if (!simpleNickname.matcher(args[1]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
+				return true;
+			}
 
-				}
+			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
+				return true;
 
 			}
 
