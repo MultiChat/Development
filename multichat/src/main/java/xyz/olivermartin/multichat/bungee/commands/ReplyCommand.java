@@ -48,7 +48,7 @@ public class ReplyCommand extends Command {
 				MessageManager.sendMessage(sender, "mute_cannot_send_message");
 				return;
 			}
-			
+
 			if (ChatControl.handleSpam(((ProxiedPlayer)sender), message, "private_messages")) {
 				return;
 			}
@@ -125,6 +125,54 @@ public class ReplyCommand extends Command {
 						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
+				} else if ( MultiChat.lastmsg.get( ((ProxiedPlayer)sender ).getUniqueId()).equals(new UUID(0L, 0L)) ) {
+
+					// Console target stuff
+
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+
+						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+
+						String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
+						ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
+
+						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+
+							if ((onlineplayer.hasPermission("multichat.staff.spy"))
+									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+									&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())) {
+
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+							}
+
+						}
+
+						if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+							MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
+						}
+
+						MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
+
+						if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
+							MultiChat.lastmsg.remove(new UUID(0L, 0L));
+						}
+
+						MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+
+					} else {
+						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+					}
+
+					// End console target stuff
+
 				} else {
 					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 				}
@@ -136,7 +184,76 @@ public class ReplyCommand extends Command {
 			chatfix = null;
 
 		} else {
-			MessageManager.sendMessage(sender, "command_reply_only_players");
+
+			// New console reply
+
+			String message = "";
+			for (String arg : args) {
+				message = message + arg + " ";
+			}
+
+			ChatManipulation chatfix = new ChatManipulation();
+
+			if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
+
+				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L)))) != null) {
+
+					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L))));
+
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+
+						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+
+						String finalmessage = chatfix.replaceMsgConsoleSenderVars(messageoutformat, message, target);
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleSenderVars(messageinformat, message, target);
+						target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleSenderVars(messagespyformat, message, target);
+
+						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+
+							if ((onlineplayer.hasPermission("multichat.staff.spy"))
+									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+									&& (onlineplayer.getUniqueId() != target.getUniqueId())) {
+
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+							}
+
+						}
+
+						if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
+							MultiChat.lastmsg.remove(new UUID(0L,0L));
+						}
+
+						MultiChat.lastmsg.put(new UUID(0L,0L), target.getUniqueId());
+
+						if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
+							MultiChat.lastmsg.remove(target.getUniqueId());
+						}
+
+						MultiChat.lastmsg.put(target.getUniqueId(), new UUID(0L,0L));
+
+					} else {
+						MessageManager.sendMessage(sender, "command_msg_disabled_target");
+					}
+
+				} else {
+					MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+				}
+
+			} else {
+				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
+			}
+
+			chatfix = null;
+
+			// End new console stuff
+
 		}
 	}
 }

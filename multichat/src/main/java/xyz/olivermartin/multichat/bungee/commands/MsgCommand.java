@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -177,6 +178,59 @@ public class MsgCommand extends Command implements TabExecutor {
 						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
+				} else if (args[0].equalsIgnoreCase("console")) {
+
+					// New console target stuff here!
+
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+
+						BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+
+					}
+
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+
+							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+
+							String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
+							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+							finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
+							ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+							finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
+							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+
+								if ((onlineplayer.hasPermission("multichat.staff.spy"))
+										&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+										&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
+										&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
+
+									onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+								}
+
+							}
+
+							if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+								MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
+							}
+
+							MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
+
+							if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
+								MultiChat.lastmsg.remove(new UUID(0L, 0L));
+							}
+
+							MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+
+					} else {
+						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+					}
+					
+					// End of console target stuff
+
 				} else {
 					MessageManager.sendMessage(sender, "command_msg_not_online");
 				}
@@ -184,7 +238,78 @@ public class MsgCommand extends Command implements TabExecutor {
 				chatfix = null;
 
 			} else {
-				MessageManager.sendMessage(sender, "command_msg_only_players");
+
+				// new console messaging here!
+
+				boolean starter = false;
+				String message = "";
+				for (String arg : args) {
+					if (!starter) {
+						starter = true;
+					} else {
+						message = message + arg + " ";
+					}
+				}
+
+				ChatManipulation chatfix = new ChatManipulation();
+
+				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
+
+					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
+
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+
+						BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
+
+					}
+
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+
+						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+
+						String finalmessage = chatfix.replaceMsgConsoleSenderVars(messageoutformat, message, target);
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleSenderVars(messageinformat, message, target);
+						target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+
+						finalmessage = chatfix.replaceMsgConsoleSenderVars(messagespyformat, message, target);
+						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+
+							if ((onlineplayer.hasPermission("multichat.staff.spy"))
+									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+									&& (onlineplayer.getUniqueId() != target.getUniqueId())
+									&& (!(target.hasPermission("multichat.staff.spy.bypass")))) {
+
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+							}
+
+						}
+
+						if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
+							MultiChat.lastmsg.remove(new UUID(0L, 0L));
+						}
+
+						MultiChat.lastmsg.put(new UUID(0L, 0L), target.getUniqueId());
+
+						if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
+							MultiChat.lastmsg.remove(target.getUniqueId());
+						}
+
+						MultiChat.lastmsg.put(target.getUniqueId(), new UUID(0L, 0L));
+
+					} else {
+						MessageManager.sendMessage(sender, "command_msg_disabled_target");
+					}
+
+				} else {
+					MessageManager.sendMessage(sender, "command_msg_not_online");
+				}
+
+				chatfix = null;
+
 			}
 		}
 	}

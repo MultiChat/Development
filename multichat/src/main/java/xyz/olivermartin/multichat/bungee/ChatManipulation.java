@@ -47,6 +47,58 @@ public class ChatManipulation {
 
 	}
 
+	public String replaceMsgConsoleTargetVars(String messageFormat, String message, ProxiedPlayer sender) {
+
+		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		messageFormat = messageFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		messageFormat = messageFormat.replace("%NAME%", sender.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
+		if (opm.isPresent()) {
+			messageFormat = messageFormat.replace("%PREFIX%", opm.get().prefix);
+			messageFormat = messageFormat.replace("%SUFFIX%", opm.get().suffix);
+			messageFormat = messageFormat.replace("%NICK%", opm.get().nick);
+		}
+
+		messageFormat = messageFormat.replace("%DISPLAYNAMET%", "CONSOLE");
+		messageFormat = messageFormat.replace("%NAMET%", "CONSOLE");
+
+		messageFormat = messageFormat.replace("%PREFIXT%", "");
+		messageFormat = messageFormat.replace("%SUFFIXT%", "");
+		messageFormat = messageFormat.replace("%NICKT%", "CONSOLE");
+
+		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
+		messageFormat = messageFormat.replace("%SERVERT%", "CONSOLE");
+		return messageFormat;
+
+	}
+
+	public String replaceMsgConsoleSenderVars(String messageFormat, String message, ProxiedPlayer target) {
+
+		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		messageFormat = messageFormat.replace("%DISPLAYNAME%", "CONSOLE");
+		messageFormat = messageFormat.replace("%NAME%", "CONSOLE");
+
+		messageFormat = messageFormat.replace("%PREFIX%", "");
+		messageFormat = messageFormat.replace("%SUFFIX%", "");
+		messageFormat = messageFormat.replace("%NICK%", "CONSOLE");
+
+		messageFormat = messageFormat.replace("%DISPLAYNAMET%", target.getDisplayName());
+		messageFormat = messageFormat.replace("%NAMET%", target.getName());
+
+		Optional<PlayerMeta> opmt = PlayerMetaManager.getInstance().getPlayer(target.getUniqueId());
+		if (opmt.isPresent()) {
+			messageFormat = messageFormat.replace("%PREFIXT%", opmt.get().prefix);
+			messageFormat = messageFormat.replace("%SUFFIXT%", opmt.get().suffix);
+			messageFormat = messageFormat.replace("%NICKT%", opmt.get().nick);
+		}
+
+		messageFormat = messageFormat.replace("%SERVER%", "CONSOLE");
+		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
+		return messageFormat;
+
+	}
+
 	public String replaceModChatVars(String messageFormat, String playername, String displayname, String server, String message, ProxiedPlayer target) {
 
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", displayname);
