@@ -163,7 +163,7 @@ public class NameManager implements Listener {
 	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		nickname = nickname.toLowerCase();
-		nickname = stripFormat(nickname);
+		nickname = stripAllFormattingCodes(nickname);
 
 		return getUUIDFromUnformattedNickname(nickname);
 
@@ -320,7 +320,7 @@ public class NameManager implements Listener {
 			removeNickname(uuid);
 		}
 
-		String unformattedNickname = stripFormat(nickname.toLowerCase());
+		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
 
 		synchronized (mapNickUUID) {
 
@@ -352,7 +352,7 @@ public class NameManager implements Listener {
 	 * @return If this nickname is currently in use
 	 */
 	public boolean existsNickname(String nickname) {
-		return mapNickUUID.containsKey(stripFormat(nickname.toLowerCase()));
+		return mapNickUUID.containsKey(stripAllFormattingCodes(nickname.toLowerCase()));
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class NameManager implements Listener {
 	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
 
 		Set<String> nickSet = mapNickUUID.keySet();
-		nickname = stripFormat(nickname);
+		nickname = stripAllFormattingCodes(nickname);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String nick : nickSet) {
@@ -595,7 +595,7 @@ public class NameManager implements Listener {
 	/*
 	 * Remove all colour / format codes from a string (using the '&' char)
 	 */
-	public String stripFormat(String input) {
+	public String stripAllFormattingCodes(String input) {
 
 		char COLOR_CHAR = '&';
 		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
@@ -605,6 +605,40 @@ public class NameManager implements Listener {
 		}
 
 		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
+
+	}
+
+	/**
+	 * @param input
+	 * @return True if the input contains colour codes (e.g. '&a')
+	 */
+	public boolean containsColorCodes(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-F]");
+
+		if (input == null) {
+			return false;
+		}
+
+		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
+
+	}
+
+	/**
+	 * @param input
+	 * @return True if the input contains format codes (e.g. '&l')
+	 */
+	public boolean containsFormatCodes(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[K-OR]");
+
+		if (input == null) {
+			return false;
+		}
+
+		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
 
 	}
 

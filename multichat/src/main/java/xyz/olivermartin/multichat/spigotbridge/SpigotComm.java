@@ -49,7 +49,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	private static final String nameDataFile = "namedata.dat";
 	private static File legacyNicknameFile; 
 
-	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9_]+$");
+	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
 
 	private static boolean setDisplayNameLastVal = false;
 	private static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
@@ -371,18 +371,22 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					return true;
 				}
 
-				if (!simpleNickname.matcher(args[0]).matches()) {
-
-					if (!sender.hasPermission("multichatbridge.nick.format")) {
-
-						sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
-						return true;
-
-					}
-
+				if (NameManager.getInstance().containsColorCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
+					return true;
 				}
 
-				if (NameManager.getInstance().stripFormat(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+				if (NameManager.getInstance().containsFormatCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
+					return true;
+				}
+
+				if (!simpleNickname.matcher(args[0]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
+					return true;
+				}
+
+				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
 					return true;
@@ -505,10 +509,10 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				return true;
 
 			} else {
-				
+
 				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
 				return true;
-				
+
 			}
 
 		}
