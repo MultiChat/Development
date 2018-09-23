@@ -7,9 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -351,6 +353,51 @@ public class NameManager implements Listener {
 	 */
 	public boolean existsNickname(String nickname) {
 		return mapNickUUID.containsKey(stripFormat(nickname.toLowerCase()));
+	}
+
+	/**
+	 * Return the UUIDs of players who have nicknames containing characters provided in the nickname argument
+	 * @param nickname The characters of the nickname to check
+	 * @return An optional which might contain a players UUID if a partial match was found
+	 */
+	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
+
+		Set<String> nickSet = mapNickUUID.keySet();
+		nickname = stripFormat(nickname);
+		Set<UUID> uuidSet = new HashSet<UUID>();
+
+		for (String nick : nickSet) {
+
+			if (nick.startsWith(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String nick : nickSet) {
+
+			if (nick.contains(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String nick : nickSet) {
+
+			if (nick.matches(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		return Optional.empty();
+
 	}
 
 	/**

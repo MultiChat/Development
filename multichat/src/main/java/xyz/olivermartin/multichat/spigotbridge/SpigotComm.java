@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -268,9 +269,9 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				String displayNameFormat = "";
 				String playername = in.readUTF();
 				Player bukkitPlayer;
-				
+
 				bukkitPlayer = Bukkit.getPlayer(playername);
-				
+
 				if (bukkitPlayer == null) {
 					return;
 				}
@@ -380,7 +381,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					}
 
 				}
-				
+
 				if (NameManager.getInstance().stripFormat(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
@@ -474,7 +475,33 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 			} else {
 
-				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+				Optional<Set<UUID>> matches = NameManager.getInstance().getPartialNicknameMatches(args[0]);
+
+				if (matches.isPresent()) {
+
+					int limit = 10;
+
+					sender.sendMessage(ChatColor.DARK_AQUA + "No one could be found with the exact nickname: " + args[0]);
+					sender.sendMessage(ChatColor.AQUA + "The following were found as partial matches:");
+
+					for (UUID uuid : matches.get()) {
+
+						if (limit > 0 || sender.hasPermission("multichatbridge.realname.nolimit")) {
+							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
+							limit--;
+						} else {
+							sender.sendMessage(ChatColor.DARK_GREEN + "Only the first 10 results have been shown, please try a more specific query!");
+							break;
+						}
+
+					}
+
+				} else {
+
+					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+
+				}
+
 				return true;
 
 			}
