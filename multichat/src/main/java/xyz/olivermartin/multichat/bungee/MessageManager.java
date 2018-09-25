@@ -239,6 +239,12 @@ public class MessageManager {
 				+ "&c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.");
 		defaultMessages.put("command_multichatbypass_enabled", "&aMultiChat BYPASS Enabled");
 		defaultMessages.put("command_multichatbypass_disabled", "&bMultiChat BYPASS Disabled");
+		
+		defaultMessages.put("command_execute_usage", "&2Usage: /mce [-s <server-regex>] [-p <player-regex>] <command>\n"
+				+ "&a&oThis command allows you to execute a command over all your spigot servers.\n"
+				+ "By default the command will be executed by console, you can instead make players execute the command using the -p flag\n"
+				+ "By default the command will be executed on all servers, you can limit which servers using the -s flag.");
+		defaultMessages.put("command_execute_sent", "&2The command has been sent");
 
 		defaultMessages.put("command_reply_usage", "&bUsage: /r <message>");
 		defaultMessages.put("command_reply_desc", "&bReply to the person who you private messaged most recently");

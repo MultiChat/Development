@@ -227,6 +227,13 @@ command_multichatbypass_usage: |
 command_multichatbypass_enabled: "&aMultiChat BYPASS Enabled"
 command_multichatbypass_disabled: "&bMultiChat BYPASS Disabled"
 
+command_execute_usage: |
+ &2Usage: /mce [-s <server-regex>] [-p <player-regex>] <command>
+ &a&oThis command allows you to execute a command over all your spigot servers.
+ By default the command will be executed by console, you can instead make players execute the command using the -p flag.
+ By default the command will be executed on all servers, you can limit which servers using the -s flag.
+command_execute_sent: "&2The command has been sent"
+
 command_reply_usage: "&bUsage: /r <message>"
 command_reply_desc: "&bReply to the person who you private messaged most recently"
 command_reply_no_one_to_reply_to: "&cYou have no one to reply to!"

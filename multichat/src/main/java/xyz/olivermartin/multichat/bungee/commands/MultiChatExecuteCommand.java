@@ -26,7 +26,6 @@ public class MultiChatExecuteCommand extends Command {
 
 		if (args.length < 1) {
 
-			// TODO make message
 			MessageManager.sendMessage(sender, "command_execute_usage");
 
 		} else {
@@ -84,7 +83,6 @@ public class MultiChatExecuteCommand extends Command {
 
 			}
 
-			// TODO
 			MessageManager.sendMessage(sender, "command_execute_sent");
 
 		}
