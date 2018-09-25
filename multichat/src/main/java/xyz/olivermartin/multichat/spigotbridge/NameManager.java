@@ -363,7 +363,7 @@ public class NameManager implements Listener {
 	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
 
 		Set<String> nickSet = mapNickUUID.keySet();
-		nickname = stripAllFormattingCodes(nickname);
+		nickname = stripAllFormattingCodes(nickname.toLowerCase());
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String nick : nickSet) {
