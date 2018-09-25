@@ -243,7 +243,7 @@ public class ReplyCommand extends Command {
 					}
 
 				} else {
-					MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 				}
 
 			} else {

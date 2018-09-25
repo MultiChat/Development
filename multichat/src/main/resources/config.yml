@@ -219,3 +219,11 @@ staff_list: true
 multichatbypasscommand:
 - mcb
 - bypass
+
+# MultiChat execute command aliases (other than /multichatexecute)
+multichatexecutecommand:
+- mcexecute
+- mce
+- gexecute
+- gexe
+- gcommand

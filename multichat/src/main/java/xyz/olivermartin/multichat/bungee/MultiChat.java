@@ -245,16 +245,16 @@ public class MultiChat extends Plugin implements Listener {
 		configversion = configYML.getString("version");
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
-			
+
 			// TODO - Remove for future 1.6.X versions!
 			if (!configversion.equals(LATEST_VERSION) || !configversion.equals("1.6")) {
-				
+
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
 				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
 				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES (config.yml & joinmessages.yml) AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
-				
+
 			}
 
 			// Register listeners
@@ -267,6 +267,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:suffix");
 			getProxy().registerChannel("multichat:nick");
 			getProxy().registerChannel("multichat:action");
+			getProxy().registerChannel("multichat:paction");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register commands
@@ -327,6 +328,7 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichatBypass());
+		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
@@ -378,6 +380,7 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichatBypass());
+		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
