@@ -12,6 +12,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.bungee.events.MultiChatBroadcastIRCEvent;
+import xyz.olivermartin.multichat.bungee.events.MultiChatGlobalIRCEvent;
 
 /**
  * Chat Stream
@@ -81,6 +83,9 @@ public class ChatStream {
 	}
 
 	public void sendMessage(ProxiedPlayer sender, String message) {
+		
+		// Alert IRC plugins
+		ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatGlobalIRCEvent(sender, message, format));
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
@@ -108,6 +113,10 @@ public class ChatStream {
 	}
 
 	public void sendMessage(String message) {
+		
+		// Alert IRC plugins
+		ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatBroadcastIRCEvent("cast", message));
+		
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {

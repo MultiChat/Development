@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
+import xyz.olivermartin.multichat.bungee.events.MultiChatBroadcastIRCEvent;
 
 /**
  * Bulletins Management
@@ -106,8 +107,11 @@ public class Bulletins {
 				} else {
 
 					message = bulletin.get(nextBulletin);
-					
+
 					message = ChatControl.applyChatRules(message, "bulletins", "").get();
+
+					// Alert IRC plugins
+					ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatBroadcastIRCEvent("bulletin", message));
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
