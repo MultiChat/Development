@@ -247,7 +247,7 @@ public class MultiChat extends Plugin implements Listener {
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
 
 			// TODO - Remove for future 1.6.X versions!
-			if (!configversion.equals(LATEST_VERSION) || !configversion.equals("1.6")) {
+			if ( !( configversion.equals(LATEST_VERSION) || configversion.equals("1.6") ) ) {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
 				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
@@ -255,6 +255,13 @@ public class MultiChat extends Plugin implements Listener {
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES (config.yml & joinmessages.yml) AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
 
+			} else if (!configversion.equals(LATEST_VERSION)) {
+				
+				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
+				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6.1 HAS SOME NEW FEATURES NOT IN YOUR 1.6 FILE");
+				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILE (config.yml) AND DELETE FROM THE MULTICHAT FOLDER TO ACCESS THE NEW FEATURES");
+				getLogger().info("[!!!] [WARNING] THANK YOU");
+				
 			}
 
 			// Register listeners
