@@ -8,7 +8,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import xyz.olivermartin.multichat.bungee.events.MultiChatStaffIRCEvent;
+import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
 
 /**
  * Staff Chat Manager
@@ -34,15 +34,6 @@ public class StaffChatManager {
 			return;
 		}
 
-		// Alert IRC plugins
-		if (username.equalsIgnoreCase("console")) {
-			ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatStaffIRCEvent("mod", ProxyServer.getInstance().getConsole() , original));
-		} else {
-			if (ProxyServer.getInstance().getPlayer(username) != null) {
-				ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatStaffIRCEvent("mod", ProxyServer.getInstance().getPlayer(username) , original));
-			}
-		}
-
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if (onlineplayer.hasPermission("multichat.staff.mod")) {
@@ -60,6 +51,15 @@ public class StaffChatManager {
 				message = chatfix.replaceModChatVars(messageFormat, username, displayname, server, original, onlineplayer);
 				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 
+			}
+		}
+
+		// Trigger PostStaffChatEvent
+		if (username.equalsIgnoreCase("console")) {
+			ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("mod", ProxyServer.getInstance().getConsole() , original));
+		} else {
+			if (ProxyServer.getInstance().getPlayer(username) != null) {
+				ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("mod", ProxyServer.getInstance().getPlayer(username) , original));
 			}
 		}
 
@@ -83,15 +83,6 @@ public class StaffChatManager {
 			return;
 		}
 
-		// Alert IRC plugins
-		if (username.equalsIgnoreCase("console")) {
-			ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatStaffIRCEvent("admin", ProxyServer.getInstance().getConsole() , original));
-		} else {
-			if (ProxyServer.getInstance().getPlayer(username) != null) {
-				ProxyServer.getInstance().getPluginManager().callEvent(new MultiChatStaffIRCEvent("admin", ProxyServer.getInstance().getPlayer(username) , original));
-			}
-		}
-
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if (onlineplayer.hasPermission("multichat.staff.admin")) {
@@ -109,6 +100,15 @@ public class StaffChatManager {
 				message = chatfix.replaceAdminChatVars(messageFormat, username, displayname, server, original, onlineplayer);
 				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 
+			}
+		}
+
+		// Trigger PostStaffChatEvent
+		if (username.equalsIgnoreCase("console")) {
+			ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("admin", ProxyServer.getInstance().getConsole() , original));
+		} else {
+			if (ProxyServer.getInstance().getPlayer(username) != null) {
+				ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("admin", ProxyServer.getInstance().getPlayer(username) , original));
 			}
 		}
 
