@@ -8,6 +8,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
 /**
  * Display Command
@@ -50,6 +51,9 @@ public class DisplayCommand extends Command {
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 		}
+		
+		// Trigger PostBroadcastEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("display", message));
 
 		System.out.println("\033[33m[MultiChat][Display] " + message);
 	}

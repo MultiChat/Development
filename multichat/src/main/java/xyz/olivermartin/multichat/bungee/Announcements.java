@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
+import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
 /**
  * Announcements Management
@@ -33,12 +34,15 @@ public class Announcements {
 				@Override
 				public void run() {
 					String message = announcements.get(name.toLowerCase());
-					
+
 					message = ChatControl.applyChatRules(message, "announcements", "").get();
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
 					}
+					
+					// Trigger PostBroadcastEvent
+					ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("announcement", message));
 				}
 
 			}, 0, minutes, TimeUnit.MINUTES);
@@ -124,12 +128,15 @@ public class Announcements {
 		if (announcements.containsKey(name.toLowerCase())) {
 
 			String message = announcements.get(name.toLowerCase());
-			
+
 			message = ChatControl.applyChatRules(message, "announcements", "").get();
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
 			}
+			
+			// Trigger PostBroadcastEvent
+			ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("announcement", message));
 
 		}
 	}

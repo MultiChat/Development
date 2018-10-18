@@ -12,6 +12,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 
 /**
  * Chat Stream
@@ -102,12 +104,16 @@ public class ChatStream {
 				}
 			}
 		}
+		
+		// Trigger PostGlobalChatEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
 		ProxyServer.getInstance().getConsole().sendMessage(buildFormatConsole(sender,format,message));
 
 	}
 
 	public void sendMessage(String message) {
+		
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
@@ -119,6 +125,10 @@ public class ChatStream {
 				}
 			}
 		}
+		
+		// Trigger PostBroadcastEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
+		
 		//TODO
 		System.out.println("\033[33m[MultiChat][CHAT]" + message);
 

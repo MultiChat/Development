@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -48,7 +49,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	private static final String nameDataFile = "namedata.dat";
 	private static File legacyNicknameFile; 
 
-	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9_]+$");
+	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
 
 	private static boolean setDisplayNameLastVal = false;
 	private static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
@@ -160,6 +161,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:paction", this);
 
 		getServer().getPluginManager().registerEvents(this, this);
 		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
@@ -268,9 +270,9 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				String displayNameFormat = "";
 				String playername = in.readUTF();
 				Player bukkitPlayer;
-				
+
 				bukkitPlayer = Bukkit.getPlayer(playername);
-				
+
 				if (bukkitPlayer == null) {
 					return;
 				}
@@ -305,6 +307,30 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 				String command = in.readUTF();
 				getServer().dispatchCommand(getServer().getConsoleSender(), command); 
+
+			} catch (IOException e) {
+
+				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				e.printStackTrace();
+
+			}
+		} else if (channel.equals("multichat:paction")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				String playerRegex = in.readUTF();
+				String command = in.readUTF();
+
+				for (Player p : getServer().getOnlinePlayers()) {
+
+					if (p.getName().matches(playerRegex)) {
+						getServer().dispatchCommand(p, command);
+					}
+
+				}
 
 			} catch (IOException e) {
 
@@ -370,18 +396,22 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					return true;
 				}
 
-				if (!simpleNickname.matcher(args[0]).matches()) {
-
-					if (!sender.hasPermission("multichatbridge.nick.format")) {
-
-						sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
-						return true;
-
-					}
-
+				if (NameManager.getInstance().containsColorCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
+					return true;
 				}
-				
-				if (NameManager.getInstance().stripFormat(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+
+				if (NameManager.getInstance().containsFormatCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
+					return true;
+				}
+
+				if (!simpleNickname.matcher(args[0]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
+					return true;
+				}
+
+				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
 					return true;
@@ -421,14 +451,25 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				return true;
 			}
 
-			if (!simpleNickname.matcher(args[1]).matches()) {
+			if (NameManager.getInstance().containsColorCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
+				return true;
+			}
 
-				if (!sender.hasPermission("multichatbridge.nick.format")) {
+			if (NameManager.getInstance().containsFormatCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
+				return true;
+			}
 
-					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to give nicknames with special characters!");
-					return true;
+			if (!simpleNickname.matcher(args[1]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
+				return true;
+			}
 
-				}
+			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
+				return true;
 
 			}
 
@@ -463,6 +504,37 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				if (player.isPresent()) {
 
 					sender.sendMessage(ChatColor.GREEN + "Nickname: '" + args[0] + "' Belongs to player: '" + player.get() + "'");
+
+				} else {
+
+					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+
+				}
+
+				return true;
+
+			} else if (sender.hasPermission("multichatbridge.realname.partial")) {
+
+				Optional<Set<UUID>> matches = NameManager.getInstance().getPartialNicknameMatches(args[0]);
+
+				if (matches.isPresent()) {
+
+					int limit = 10;
+
+					sender.sendMessage(ChatColor.DARK_AQUA + "No one could be found with the exact nickname: " + args[0]);
+					sender.sendMessage(ChatColor.AQUA + "The following were found as partial matches:");
+
+					for (UUID uuid : matches.get()) {
+
+						if (limit > 0 || sender.hasPermission("multichatbridge.realname.nolimit")) {
+							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
+							limit--;
+						} else {
+							sender.sendMessage(ChatColor.DARK_GREEN + "Only the first 10 results have been shown, please try a more specific query!");
+							break;
+						}
+
+					}
 
 				} else {
 

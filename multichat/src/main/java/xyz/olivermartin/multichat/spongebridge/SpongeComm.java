@@ -43,12 +43,13 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6")
+@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6.1")
 public final class SpongeComm implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
 	RawDataChannel channel;
 	RawDataChannel actionChannel;
+	RawDataChannel playerActionChannel;
 	static RawDataChannel prefixChannel;
 	static RawDataChannel suffixChannel;
 	static RawDataChannel nickChannel;
@@ -113,13 +114,16 @@ public final class SpongeComm implements CommandExecutor {
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
 		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
 		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
+		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:paction");
 		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
 		channel.addListener(Platform.Type.SERVER, new MetaListener(channel));
 		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
+		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
 		this.channel = channel;
 		this.actionChannel = actionChannel;
+		this.playerActionChannel = playerActionChannel;
 		SpongeComm.prefixChannel = prefixChannel;
 		SpongeComm.suffixChannel = suffixChannel;
 		SpongeComm.nickChannel = nickChannel;
@@ -189,14 +193,14 @@ public final class SpongeComm implements CommandExecutor {
 		if (player.getOption("prefix").isPresent()) {
 			prefix = player.getOption("prefix").get();
 		}
-		
+
 		final String fPrefix = prefix;
 		prefixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fPrefix));
 
 		if (player.getOption("suffix").isPresent()) {
 			suffix = player.getOption("suffix").get();
 		}
-		
+
 		final String fSuffix = suffix;
 		suffixChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fSuffix));
 

@@ -7,9 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -161,7 +163,7 @@ public class NameManager implements Listener {
 	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		nickname = nickname.toLowerCase();
-		nickname = stripFormat(nickname);
+		nickname = stripAllFormattingCodes(nickname);
 
 		return getUUIDFromUnformattedNickname(nickname);
 
@@ -318,7 +320,7 @@ public class NameManager implements Listener {
 			removeNickname(uuid);
 		}
 
-		String unformattedNickname = stripFormat(nickname.toLowerCase());
+		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
 
 		synchronized (mapNickUUID) {
 
@@ -350,7 +352,52 @@ public class NameManager implements Listener {
 	 * @return If this nickname is currently in use
 	 */
 	public boolean existsNickname(String nickname) {
-		return mapNickUUID.containsKey(stripFormat(nickname.toLowerCase()));
+		return mapNickUUID.containsKey(stripAllFormattingCodes(nickname.toLowerCase()));
+	}
+
+	/**
+	 * Return the UUIDs of players who have nicknames containing characters provided in the nickname argument
+	 * @param nickname The characters of the nickname to check
+	 * @return An optional which might contain a players UUID if a partial match was found
+	 */
+	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
+
+		Set<String> nickSet = mapNickUUID.keySet();
+		nickname = stripAllFormattingCodes(nickname.toLowerCase());
+		Set<UUID> uuidSet = new HashSet<UUID>();
+
+		for (String nick : nickSet) {
+
+			if (nick.startsWith(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String nick : nickSet) {
+
+			if (nick.contains(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String nick : nickSet) {
+
+			if (nick.matches(nickname)) {
+				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		return Optional.empty();
+
 	}
 
 	/**
@@ -548,7 +595,7 @@ public class NameManager implements Listener {
 	/*
 	 * Remove all colour / format codes from a string (using the '&' char)
 	 */
-	public String stripFormat(String input) {
+	public String stripAllFormattingCodes(String input) {
 
 		char COLOR_CHAR = '&';
 		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
@@ -558,6 +605,40 @@ public class NameManager implements Listener {
 		}
 
 		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
+
+	}
+
+	/**
+	 * @param input
+	 * @return True if the input contains colour codes (e.g. '&a')
+	 */
+	public boolean containsColorCodes(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-F]");
+
+		if (input == null) {
+			return false;
+		}
+
+		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
+
+	}
+
+	/**
+	 * @param input
+	 * @return True if the input contains format codes (e.g. '&l')
+	 */
+	public boolean containsFormatCodes(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[K-OR]");
+
+		if (input == null) {
+			return false;
+		}
+
+		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
 
 	}
 
