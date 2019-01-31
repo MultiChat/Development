@@ -73,7 +73,7 @@ public class MultiChatExecuteCommand extends Command {
 					if (playerFlag) {
 						for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
 							if (p.getName().matches(player)) {
-								BungeeComm.sendPlayerCommandMessage(message, player, s);
+								BungeeComm.sendPlayerCommandMessage(message, p.getName(), s);
 							}
 						}
 					} else {

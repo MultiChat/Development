@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.6.1" #
+version: "1.6.2" #
 ##################
 
 ############################################################
@@ -16,6 +16,16 @@ version: "1.6.1" #
 # |                  Customise Messages                  | #
 # +------------------------------------------------------+ #
 ############################################################
+
+# Console log formats
+console_main_prefix: "&8[&2M&aC&8]&f "
+console_chat_prefix: "&fCHAT &f> "
+console_modchat_prefix: "&3STAFFCHAT &f> &3"
+console_adminchat_prefix: "&5STAFFCHAT &f> &5"
+console_groupchat_prefix": "&2GROUPCHAT &f> &2"
+console_display_prefix: "&fDISPLAY &f> "
+console_socialspy_prefix: "&cSOCIALSPY &f> &c"
+console_helpme_prefix: "&4HELPME &f> &4"
 
 # Prefix to be shown in front of all plugin messages
 prefix: "&8&l[&2&lM&a&lC&8&l]&f "
@@ -155,6 +165,7 @@ command_msg_only_players: "&cOnly players can toggle the chat!"
 command_msg_not_online: "&cSorry this person is not online!"
 command_msg_disabled_target: "&cSorry private messages are disabled on the target player's server!"
 command_msg_disabled_sender: "&cSorry private messages are disabled on this server!"
+command_msg_no_toggle: "&cSorry, message toggles are not allowed on this server!"
 
 command_multichat_help_1: |
  &2&lMulti&a&lChat &b&lHelp
@@ -248,6 +259,7 @@ command_socialspy_only_players: "&cOnly players can toggle socialspy"
 command_stafflist_list: "&a&lOnline Staff"
 command_stafflist_list_item: "&b- %SPECIAL%"
 command_stafflist_list_server: "&a%SPECIAL%"
+command_stafflist_no_staff: "&b&oThere are currently no staff online"
 
 command_usecast_usage: "&aUsage:"
 command_usecast_does_not_exist: "&cSorry, no such cast found: %SPECIAL%"

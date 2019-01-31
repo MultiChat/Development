@@ -28,29 +28,46 @@ public class StaffListCommand extends Command {
 	public void execute(CommandSender sender, String[] args) {
 
 		String server;
+		boolean staff = false;
+		boolean onServer = false;
 
 		MessageManager.sendMessage(sender, "command_stafflist_list");
 
 		for (Iterator<String> localIterator1 = ProxyServer.getInstance().getServers().keySet().iterator(); localIterator1.hasNext();) {
 
 			server = (String)localIterator1.next();
-			MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", server);
 
-			for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
+			if (!ProxyServer.getInstance().getServerInfo(server).getPlayers().isEmpty()) {
+				
+				onServer = false;
 
-				if ((onlineplayer2.hasPermission("multichat.staff"))) {
+				for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
 
-					if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
+					if ((onlineplayer2.hasPermission("multichat.staff"))) {
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-							BungeeComm.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
+						if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
+
+							if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+								BungeeComm.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
+							}
+
+							staff = true;
+							
+							if (!onServer) {
+								MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", server);
+								onServer = true;
+							}
+							
+							MessageManager.sendSpecialMessage(sender, "command_stafflist_list_item", onlineplayer2.getDisplayName());
+
 						}
-
-						MessageManager.sendSpecialMessage(sender, "command_stafflist_list_item", onlineplayer2.getDisplayName());
-
 					}
 				}
+
 			}
 		}
+		
+		if (!staff) MessageManager.sendMessage(sender, "command_stafflist_no_staff");
+		
 	}
 }

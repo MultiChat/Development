@@ -13,6 +13,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
@@ -102,7 +103,7 @@ public class GCCommand extends Command {
 				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
 				return;
 			}
-			
+
 			if (ChatControl.handleSpam(potentialPlayer, message, "group_chats")) {
 				return;
 			}
@@ -139,8 +140,10 @@ public class GCCommand extends Command {
 
 		}
 
-		String groupName = groupInfo.getName();
+		//String groupName = groupInfo.getName();
 
-		System.out.println("\033[32m[MultiChat] /gc {" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
+		//System.out.println("\033[32m[MultiChat] /gc {" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
+		//ConsoleManager.logGroupChat("{" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
+		ConsoleManager.logGroupChat(message);
 	}
 }

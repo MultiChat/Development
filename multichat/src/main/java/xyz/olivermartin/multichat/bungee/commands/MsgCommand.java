@@ -12,10 +12,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
@@ -56,7 +58,18 @@ public class MsgCommand extends Command implements TabExecutor {
 						toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
 
 						if (toggleresult == true) {
-							MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+
+							Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+
+							if (config.contains("toggle_pm") ? config.getBoolean("toggle_pm") == false : false) {
+
+								toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
+								MessageManager.sendMessage(sender, "command_msg_no_toggle");
+
+							} else {
+								MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+							}
+
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_toggle_off");
 						}
@@ -168,7 +181,8 @@ public class MsgCommand extends Command implements TabExecutor {
 
 							MultiChat.lastmsg.put(target.getUniqueId(), ((ProxiedPlayer)sender).getUniqueId());
 
-							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
+							ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
+							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_disabled_target");
@@ -190,45 +204,45 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
+						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
+						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
-							String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
-							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+						String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
+						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 
-							finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
-							ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+						finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
+						ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 
-							finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
-							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+						finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
+						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-								if ((onlineplayer.hasPermission("multichat.staff.spy"))
-										&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-										&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
-										&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
+							if ((onlineplayer.hasPermission("multichat.staff.spy"))
+									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+									&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
+									&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
-									onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-								}
-
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 							}
 
-							if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
-								MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
-							}
+						}
 
-							MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
+						if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+							MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
+						}
 
-							if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-								MultiChat.lastmsg.remove(new UUID(0L, 0L));
-							}
+						MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
 
-							MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+						if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
+							MultiChat.lastmsg.remove(new UUID(0L, 0L));
+						}
+
+						MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
 
 					} else {
 						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
-					
+
 					// End of console target stuff
 
 				} else {

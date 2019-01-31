@@ -104,16 +104,16 @@ public class ChatStream {
 				}
 			}
 		}
-		
+
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
-		ProxyServer.getInstance().getConsole().sendMessage(buildFormatConsole(sender,format,message));
+		sendToConsole(sender,format,message);
 
 	}
 
 	public void sendMessage(String message) {
-		
+
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
@@ -125,12 +125,13 @@ public class ChatStream {
 				}
 			}
 		}
-		
+
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
-		
-		//TODO
-		System.out.println("\033[33m[MultiChat][CHAT]" + message);
+
+		//TODO <<-- I think this is now done
+		//System.out.println("\033[33m[MultiChat][CHAT]" + message);
+		ConsoleManager.logDisplayMessage(message);
 
 	}
 
@@ -146,6 +147,7 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
 			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
 			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
 		}
 
 		newFormat = newFormat.replace("%DISPLAYNAMET%", receiver.getDisplayName());
@@ -156,10 +158,12 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
 			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
 			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+			newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 		}
 
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
+
 
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
 			newFormat = newFormat.replace("%MODE%", "Local");
@@ -190,7 +194,7 @@ public class ChatStream {
 
 	}
 
-	public BaseComponent[] buildFormat(String name, String displayName, String server, ProxiedPlayer receiver, String format, String message) {
+	public BaseComponent[] buildFormat(String name, String displayName, String server, String world, ProxiedPlayer receiver, String format, String message) {
 
 		String newFormat = format;
 
@@ -204,10 +208,14 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
 			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
 			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+			newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 		}
 
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
+
+		newFormat = newFormat.replace("%WORLD%", world);
+
 
 		newFormat = newFormat.replace("%MODE%", "Global");
 		newFormat = newFormat.replace("%M%", "G");
@@ -223,7 +231,7 @@ public class ChatStream {
 
 	}
 
-	public BaseComponent[] buildFormatConsole(ProxiedPlayer sender, String format, String message) {
+	public void sendToConsole(ProxiedPlayer sender, String format, String message) {
 
 		String newFormat = format;
 
@@ -235,12 +243,14 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
 			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
 			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
 		}
 
 		newFormat = newFormat.replace("%DISPLAYNAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
+		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
 			newFormat = newFormat.replace("%MODE%", "Local");
@@ -254,24 +264,26 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		BaseComponent[] toSend;
+		//BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
 
 			newFormat = newFormat.replace("%MESSAGE%", message);
-			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
+			ConsoleManager.logChat(newFormat);
+			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 		} else {
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
-			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
+			ConsoleManager.logBasicChat(newFormat, message);
+			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
 		}
 
-		return toSend;
+		//return toSend;
 
 	}
 
-	public BaseComponent[] buildFormatConsole(String name, String displayName, String server, String format, String message) {
+	public void sendToConsole(String name, String displayName, String server, String world, String format, String message) {
 
 		String newFormat = format;
 
@@ -281,18 +293,21 @@ public class ChatStream {
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
+		newFormat = newFormat.replace("%WORLD%", world);
+		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
 		newFormat = newFormat.replace("%MODE%", "Global");
 		newFormat = newFormat.replace("%M%", "G");
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		BaseComponent[] toSend;
+		//BaseComponent[] toSend;
 
 		newFormat = newFormat.replace("%MESSAGE%", message);
-		toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
-		return toSend;
+		ConsoleManager.logChat(newFormat);
+
+		//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 	}
 }

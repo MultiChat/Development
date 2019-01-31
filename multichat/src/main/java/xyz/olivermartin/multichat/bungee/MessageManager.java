@@ -23,6 +23,18 @@ public class MessageManager {
 	static {
 
 		defaultMessages = new HashMap<String,String>();
+		
+		// *** CONSOLE LOGS *** //
+		
+		defaultMessages.put("console_main_prefix", "&8[&2M&aC&8]&f ");
+		defaultMessages.put("console_chat_prefix", "&fCHAT &f> ");
+		defaultMessages.put("console_modchat_prefix", "&3STAFFCHAT &f> &3");
+		defaultMessages.put("console_adminchat_prefix", "&5STAFFCHAT &f> &5");
+		defaultMessages.put("console_groupchat_prefix", "&2GROUPCHAT &f> &2");
+		defaultMessages.put("console_display_prefix", "&fDISPLAY &f> ");
+		defaultMessages.put("console_socialspy_prefix", "&cSOCIALSPY &f> &c");
+		defaultMessages.put("console_helpme_prefix", "&4HELPME &f> &4");
+		
 
 		// *** PREFIX *** //
 
@@ -164,6 +176,7 @@ public class MessageManager {
 		defaultMessages.put("command_msg_not_online", "&cSorry this person is not online!");
 		defaultMessages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
 		defaultMessages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
+		defaultMessages.put("command_msg_no_toggle", "&cSorry, message toggles are not allowed on this server!");
 
 		// TODO Somehow combine all these into one message but provide a special method like "displayMessagePage()" in this
 		// message manager which automatically decides how many lines to show for the page specified to the message manager.
@@ -239,7 +252,7 @@ public class MessageManager {
 				+ "&c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.");
 		defaultMessages.put("command_multichatbypass_enabled", "&aMultiChat BYPASS Enabled");
 		defaultMessages.put("command_multichatbypass_disabled", "&bMultiChat BYPASS Disabled");
-		
+
 		defaultMessages.put("command_execute_usage", "&2Usage: /mce [-s <server-regex>] [-p <player-regex>] <command>\n"
 				+ "&a&oThis command allows you to execute a command over all your spigot servers (&lwhich have at least 1 player online!&a&o)\n"
 				+ "By default the command will be executed by console, you can instead make players execute the command using the -p flag\n"
@@ -260,6 +273,7 @@ public class MessageManager {
 		defaultMessages.put("command_stafflist_list", "&a&lOnline Staff");
 		defaultMessages.put("command_stafflist_list_item", "&b- %SPECIAL%");
 		defaultMessages.put("command_stafflist_list_server", "&a%SPECIAL%");
+		defaultMessages.put("command_stafflist_no_staff", "&b&oThere are currently no staff online");
 
 		defaultMessages.put("command_usecast_usage", "&aUsage:");
 		defaultMessages.put("command_usecast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
@@ -342,9 +356,9 @@ public class MessageManager {
 		defaultMessages.put("mute_usage", "&cUsage: /mute <player> (Also used to unmute players)");
 		defaultMessages.put("mute_player_not_found", "&cPlayer cannot be muted as they are not online");
 		defaultMessages.put("mute_bypass", "&cYou cannot mute this player");
-		
+
 		// *** IGNORE *** //
-		
+
 		defaultMessages.put("ignore_sender", "&cYou cannot message this person");
 		defaultMessages.put("ignore_target", "&c[%SPECIAL% sent a message, but you ignore them]");
 		defaultMessages.put("ignore_ignored", "&bYou will no longer see chat messages from %SPECIAL%");
@@ -354,11 +368,15 @@ public class MessageManager {
 		defaultMessages.put("ignore_bypass", "&cYou cannot ignore this player");
 		defaultMessages.put("ignore_only_players", "&cOnly players can use this command");
 		defaultMessages.put("ignore_cannot_ignore_yourself", "&cYou cannot ignore yourself!");
-		
+
 		// *** ANTI-SPAM *** //
-		
+
 		defaultMessages.put("anti_spam_cooldown", "&cANTI-SPAM: Your messages have been blocked. You cannot chat for another %SPECIAL% seconds.");
 
+	}
+
+	public static String getPrefix() {
+		return prefix;
 	}
 
 	public static String getMessage(String id) {

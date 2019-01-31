@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -158,6 +159,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", this);
@@ -223,6 +225,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
 
 		sendPluginChannelMessage("multichat:nick", Bukkit.getPlayer(playername).getUniqueId(), nickname);
+		sendPluginChannelMessage("multichat:world", Bukkit.getPlayer(playername).getUniqueId(), Bukkit.getPlayer(playername).getWorld().getName());
 
 		if (vault) {
 
@@ -363,6 +366,13 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 			}
 
 		}.runTaskLater(this, 10L);
+
+	}
+
+	@EventHandler
+	public void onWorldChange(final PlayerChangedWorldEvent event) {
+
+		sendPluginChannelMessage("multichat:world", event.getPlayer().getUniqueId(), event.getPlayer().getWorld().getName());
 
 	}
 

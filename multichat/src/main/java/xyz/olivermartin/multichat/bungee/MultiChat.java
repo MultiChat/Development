@@ -38,11 +38,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.6.1";
+	public static final String LATEST_VERSION = "1.6.2";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.6.1",
 			"1.6",
 			"1.5.2",
 			"1.5.1",
@@ -231,6 +232,7 @@ public class MultiChat extends Plugin implements Listener {
 		ConfigDir = getDataFolder();
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] Creating plugin directory!");
+			//ConsoleManager.log("Creating plugin directory...");
 			getDataFolder().mkdirs();
 		}
 
@@ -256,12 +258,12 @@ public class MultiChat extends Plugin implements Listener {
 				getLogger().info("[!!!] [WARNING] THANK YOU");
 
 			} else if (!configversion.equals(LATEST_VERSION)) {
-				
+
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILE IS NOT THE LATEST VERSION");
 				getLogger().info("[!!!] [WARNING] MULTICHAT 1.6.1 HAS SOME NEW FEATURES NOT IN YOUR 1.6 FILE");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILE (config.yml) AND DELETE FROM THE MULTICHAT FOLDER TO ACCESS THE NEW FEATURES");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
-				
+
 			}
 
 			// Register listeners
@@ -273,6 +275,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:prefix");
 			getProxy().registerChannel("multichat:suffix");
 			getProxy().registerChannel("multichat:nick");
+			getProxy().registerChannel("multichat:world");
 			getProxy().registerChannel("multichat:action");
 			getProxy().registerChannel("multichat:paction");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
@@ -281,6 +284,7 @@ public class MultiChat extends Plugin implements Listener {
 			registerCommands(configYML, chatcontrolYML);
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
+			//ConsoleManager.log("Config Version: " + configversion);
 
 			// Run start-up routines
 			Startup();

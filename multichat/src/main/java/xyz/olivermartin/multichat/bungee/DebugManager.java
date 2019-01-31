@@ -17,7 +17,8 @@ public class DebugManager {
 	}
 
 	public static void log(String message) {
-		if (debug) System.out.println("[MultiChat] [DEBUG] " + message);
+		if (debug) ConsoleManager.log("[DEBUG] " + message);
+		//if (debug) System.out.println("[MultiChat] [DEBUG] " + message);
 	}
 
 }

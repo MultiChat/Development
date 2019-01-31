@@ -43,6 +43,10 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
+		
+		messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
+		messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
+		
 		return messageFormat;
 
 	}
@@ -69,6 +73,10 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		messageFormat = messageFormat.replace("%SERVERT%", "CONSOLE");
+		
+		messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
+		messageFormat = messageFormat.replace("%WORLDT%", "CONSOLE");
+		
 		return messageFormat;
 
 	}
@@ -95,6 +103,10 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", "CONSOLE");
 		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
+		
+		messageFormat = messageFormat.replace("%WORLD%", "CONSOLE");
+		messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
+		
 		return messageFormat;
 
 	}
