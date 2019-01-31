@@ -61,14 +61,14 @@ public class BungeeComm implements Listener {
 		server.sendData("multichat:comm", stream.toByteArray());
 
 	}
-	
+
 	public static void sendCommandMessage(String command, ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
 
 		try {
-			
+
 			// Command
 			out.writeUTF(command);
 
@@ -79,14 +79,14 @@ public class BungeeComm implements Listener {
 		server.sendData("multichat:action", stream.toByteArray());
 
 	}
-	
+
 	public static void sendPlayerCommandMessage(String command, String playerRegex, ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
 
 		try {
-			
+
 			// Command
 			out.writeUTF(playerRegex);
 			out.writeUTF(command);
@@ -102,7 +102,7 @@ public class BungeeComm implements Listener {
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:nick")) ) {
+		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
 			return;
 		}
 
@@ -247,6 +247,41 @@ public class BungeeComm implements Listener {
 
 						opm.get().suffix = suffix;
 						PlayerMetaManager.getInstance().updateDisplayName(uuid);
+
+					}
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		if (ev.getTag().equals("multichat:world")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				UUID uuid = UUID.fromString(in.readUTF());
+				String world = in.readUTF();
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+				if (player == null) return;
+
+				synchronized (player) {
+
+					/*
+					 * Update the world stored somewhere
+					 */
+
+					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
+
+					if (opm.isPresent()) {
+
+						opm.get().world = world;
 
 					}
 

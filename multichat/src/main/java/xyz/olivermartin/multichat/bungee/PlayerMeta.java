@@ -9,6 +9,7 @@ public class PlayerMeta {
 	public String nick;
 	public String prefix;
 	public String suffix;
+	public String world;
 
 	public PlayerMeta(UUID uuid, String name) {
 		this.uuid = uuid;
@@ -16,6 +17,7 @@ public class PlayerMeta {
 		nick = name;
 		prefix = "";
 		suffix = "";
+		world = "";
 	}
 	
 	public String getDisplayName(String format) {

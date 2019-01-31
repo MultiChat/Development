@@ -104,7 +104,7 @@ public class ChatStream {
 				}
 			}
 		}
-		
+
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
@@ -113,7 +113,7 @@ public class ChatStream {
 	}
 
 	public void sendMessage(String message) {
-		
+
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
@@ -125,10 +125,10 @@ public class ChatStream {
 				}
 			}
 		}
-		
+
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
-		
+
 		//TODO
 		System.out.println("\033[33m[MultiChat][CHAT]" + message);
 
@@ -161,6 +161,9 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
+		newFormat = newFormat.replace("%WORLD%", opm.get().world);
+		newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
+
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
@@ -190,7 +193,7 @@ public class ChatStream {
 
 	}
 
-	public BaseComponent[] buildFormat(String name, String displayName, String server, ProxiedPlayer receiver, String format, String message) {
+	public BaseComponent[] buildFormat(String name, String displayName, String server, String world, ProxiedPlayer receiver, String format, String message) {
 
 		String newFormat = format;
 
@@ -208,6 +211,9 @@ public class ChatStream {
 
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
+
+		newFormat = newFormat.replace("%WORLD%", world);
+		newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 
 		newFormat = newFormat.replace("%MODE%", "Global");
 		newFormat = newFormat.replace("%M%", "G");
@@ -241,6 +247,8 @@ public class ChatStream {
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
+		newFormat = newFormat.replace("%WORLD%", opm.get().world);
+		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
 			newFormat = newFormat.replace("%MODE%", "Local");
@@ -271,7 +279,7 @@ public class ChatStream {
 
 	}
 
-	public BaseComponent[] buildFormatConsole(String name, String displayName, String server, String format, String message) {
+	public BaseComponent[] buildFormatConsole(String name, String displayName, String server, String world, String format, String message) {
 
 		String newFormat = format;
 
@@ -281,6 +289,8 @@ public class ChatStream {
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
+		newFormat = newFormat.replace("%WORLD%", world);
+		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
 		newFormat = newFormat.replace("%MODE%", "Global");
 		newFormat = newFormat.replace("%M%", "G");

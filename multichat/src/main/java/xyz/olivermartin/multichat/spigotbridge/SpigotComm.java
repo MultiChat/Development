@@ -158,6 +158,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", this);
@@ -223,6 +224,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
 
 		sendPluginChannelMessage("multichat:nick", Bukkit.getPlayer(playername).getUniqueId(), nickname);
+		sendPluginChannelMessage("multichat:world", Bukkit.getPlayer(playername).getUniqueId(), Bukkit.getPlayer(playername).getWorld().getName());
 
 		if (vault) {
 
