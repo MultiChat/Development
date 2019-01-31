@@ -147,6 +147,7 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
 			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
 			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
 		}
 
 		newFormat = newFormat.replace("%DISPLAYNAMET%", receiver.getDisplayName());
@@ -157,13 +158,12 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
 			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
 			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+			newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 		}
 
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
-		newFormat = newFormat.replace("%WORLD%", opm.get().world);
-		newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
 			newFormat = newFormat.replace("%MODE%", "Local");
@@ -208,13 +208,14 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIXT%", opmt.get().prefix);
 			newFormat = newFormat.replace("%SUFFIXT%", opmt.get().suffix);
 			newFormat = newFormat.replace("%NICKT%", opmt.get().nick);
+			newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
 		}
 
 		newFormat = newFormat.replace("%SERVER%", server);
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
 		newFormat = newFormat.replace("%WORLD%", world);
-		newFormat = newFormat.replace("%WORLDT%", opmt.get().world);
+
 
 		newFormat = newFormat.replace("%MODE%", "Global");
 		newFormat = newFormat.replace("%M%", "G");
@@ -242,13 +243,13 @@ public class ChatStream {
 			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
 			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
 			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
 		}
 
 		newFormat = newFormat.replace("%DISPLAYNAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%NAMET%", "CONSOLE");
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
-		newFormat = newFormat.replace("%WORLD%", opm.get().world);
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
 		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
