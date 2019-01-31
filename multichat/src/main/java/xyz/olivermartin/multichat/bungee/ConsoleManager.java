@@ -57,7 +57,7 @@ public class ConsoleManager {
 	
 	public static void logSocialSpy(String p1, String p2, String message) {
 		
-		logToConsole(MessageManager.getMessage("console_socialspy_prefix") + "{" + p1 + " -> " + p2 + "}  " + message);
+		logToConsole(MessageManager.getMessage("console_socialspy_prefix") + "(" + p1 + " -> " + p2 + ")  " + message);
 		
 	}
 

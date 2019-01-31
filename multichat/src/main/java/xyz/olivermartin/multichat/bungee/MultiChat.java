@@ -283,7 +283,7 @@ public class MultiChat extends Plugin implements Listener {
 			registerCommands(configYML, chatcontrolYML);
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
-			ConsoleManager.log("Config Version: " + configversion);
+			//ConsoleManager.log("Config Version: " + configversion);
 
 			// Run start-up routines
 			Startup();
