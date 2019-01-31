@@ -60,6 +60,9 @@ pm: true
 
 no_pm: []
 
+# Allow players to toggle PMs by just typing /msg <playername>
+toggle_pm: true
+
 ##############
 # PM FORMATS #
 ##############

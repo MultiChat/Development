@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
@@ -56,7 +57,18 @@ public class MsgCommand extends Command implements TabExecutor {
 						toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
 
 						if (toggleresult == true) {
-							MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+							
+							Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+						
+							if (config.contains("toggle_pm") ? config.getBoolean("toggle_pm") == false : false) {
+								
+								toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
+								MessageManager.sendMessage(sender, "command_msg_no_toggle");
+								
+							} else {
+								MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+							}
+							
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_toggle_off");
 						}

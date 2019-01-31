@@ -164,7 +164,8 @@ public class MessageManager {
 		defaultMessages.put("command_msg_not_online", "&cSorry this person is not online!");
 		defaultMessages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
 		defaultMessages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
-
+		defaultMessages.put("command_msg_no_toggle", "&cSorry, message toggles are not allowed on this server!");
+		
 		// TODO Somehow combine all these into one message but provide a special method like "displayMessagePage()" in this
 		// message manager which automatically decides how many lines to show for the page specified to the message manager.
 		defaultMessages.put("command_multichat_help_1",

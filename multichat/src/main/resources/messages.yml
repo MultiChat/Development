@@ -155,6 +155,7 @@ command_msg_only_players: "&cOnly players can toggle the chat!"
 command_msg_not_online: "&cSorry this person is not online!"
 command_msg_disabled_target: "&cSorry private messages are disabled on the target player's server!"
 command_msg_disabled_sender: "&cSorry private messages are disabled on this server!"
+command_msg_no_toggle: "&cSorry, message toggles are not allowed on this server!"
 
 command_multichat_help_1: |
  &2&lMulti&a&lChat &b&lHelp
