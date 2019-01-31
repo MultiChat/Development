@@ -248,6 +248,7 @@ command_socialspy_only_players: "&cOnly players can toggle socialspy"
 command_stafflist_list: "&a&lOnline Staff"
 command_stafflist_list_item: "&b- %SPECIAL%"
 command_stafflist_list_server: "&a%SPECIAL%"
+command_stafflist_no_staff: "&b&oThere are currently no staff online"
 
 command_usecast_usage: "&aUsage:"
 command_usecast_does_not_exist: "&cSorry, no such cast found: %SPECIAL%"

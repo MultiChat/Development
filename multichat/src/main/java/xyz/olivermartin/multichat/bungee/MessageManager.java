@@ -239,7 +239,7 @@ public class MessageManager {
 				+ "&c&oThis command causes your chat messages to bypass MultiChat and be handled directly by spigot.");
 		defaultMessages.put("command_multichatbypass_enabled", "&aMultiChat BYPASS Enabled");
 		defaultMessages.put("command_multichatbypass_disabled", "&bMultiChat BYPASS Disabled");
-		
+
 		defaultMessages.put("command_execute_usage", "&2Usage: /mce [-s <server-regex>] [-p <player-regex>] <command>\n"
 				+ "&a&oThis command allows you to execute a command over all your spigot servers (&lwhich have at least 1 player online!&a&o)\n"
 				+ "By default the command will be executed by console, you can instead make players execute the command using the -p flag\n"
@@ -260,6 +260,7 @@ public class MessageManager {
 		defaultMessages.put("command_stafflist_list", "&a&lOnline Staff");
 		defaultMessages.put("command_stafflist_list_item", "&b- %SPECIAL%");
 		defaultMessages.put("command_stafflist_list_server", "&a%SPECIAL%");
+		defaultMessages.put("command_stafflist_no_staff", "&b&oThere are currently no staff online");
 
 		defaultMessages.put("command_usecast_usage", "&aUsage:");
 		defaultMessages.put("command_usecast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
@@ -342,9 +343,9 @@ public class MessageManager {
 		defaultMessages.put("mute_usage", "&cUsage: /mute <player> (Also used to unmute players)");
 		defaultMessages.put("mute_player_not_found", "&cPlayer cannot be muted as they are not online");
 		defaultMessages.put("mute_bypass", "&cYou cannot mute this player");
-		
+
 		// *** IGNORE *** //
-		
+
 		defaultMessages.put("ignore_sender", "&cYou cannot message this person");
 		defaultMessages.put("ignore_target", "&c[%SPECIAL% sent a message, but you ignore them]");
 		defaultMessages.put("ignore_ignored", "&bYou will no longer see chat messages from %SPECIAL%");
@@ -354,9 +355,9 @@ public class MessageManager {
 		defaultMessages.put("ignore_bypass", "&cYou cannot ignore this player");
 		defaultMessages.put("ignore_only_players", "&cOnly players can use this command");
 		defaultMessages.put("ignore_cannot_ignore_yourself", "&cYou cannot ignore yourself!");
-		
+
 		// *** ANTI-SPAM *** //
-		
+
 		defaultMessages.put("anti_spam_cooldown", "&cANTI-SPAM: Your messages have been blocked. You cannot chat for another %SPECIAL% seconds.");
 
 	}
