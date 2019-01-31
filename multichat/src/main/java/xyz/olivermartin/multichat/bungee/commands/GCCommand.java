@@ -143,6 +143,7 @@ public class GCCommand extends Command {
 		String groupName = groupInfo.getName();
 
 		//System.out.println("\033[32m[MultiChat] /gc {" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
-		ConsoleManager.logGroupChat("{" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
+		//ConsoleManager.logGroupChat("{" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
+		ConsoleManager.logGroupChat(message);
 	}
 }
