@@ -131,7 +131,7 @@ public class ChatStream {
 
 		//TODO <<-- I think this is now done
 		//System.out.println("\033[33m[MultiChat][CHAT]" + message);
-		ConsoleManager.logChat(message);
+		ConsoleManager.logChat("(CAST) " + message);
 
 	}
 
