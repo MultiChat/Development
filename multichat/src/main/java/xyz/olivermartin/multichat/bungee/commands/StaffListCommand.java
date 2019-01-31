@@ -29,6 +29,7 @@ public class StaffListCommand extends Command {
 
 		String server;
 		boolean staff = false;
+		boolean onServer = false;
 
 		MessageManager.sendMessage(sender, "command_stafflist_list");
 
@@ -37,8 +38,8 @@ public class StaffListCommand extends Command {
 			server = (String)localIterator1.next();
 
 			if (!ProxyServer.getInstance().getServerInfo(server).getPlayers().isEmpty()) {
-
-				MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", server);
+				
+				onServer = false;
 
 				for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
 
@@ -51,6 +52,12 @@ public class StaffListCommand extends Command {
 							}
 
 							staff = true;
+							
+							if (!onServer) {
+								MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", server);
+								onServer = true;
+							}
+							
 							MessageManager.sendSpecialMessage(sender, "command_stafflist_list_item", onlineplayer2.getDisplayName());
 
 						}
