@@ -11,7 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class ConsoleManager {
 	
 	public static void log(String message) {
-		logToConsole(MessageManager.getMessage(message));
+		logToConsole(message);
 	}
 	
 	public static void logDisplayMessage(String message) {
