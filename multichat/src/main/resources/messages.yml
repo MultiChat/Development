@@ -17,6 +17,16 @@ version: "1.6.2" #
 # +------------------------------------------------------+ #
 ############################################################
 
+# Console log formats
+console_main_prefix: "&8[&2M&aC&8]&f "
+console_chat_prefix: "&fCHAT &f> "
+console_modchat_prefix: "&3STAFFCHAT &f> &3"
+console_adminchat_prefix: "&5STAFFCHAT &f> &5"
+console_groupchat_prefix": "&2GROUPCHAT &f> &2"
+console_display_prefix: "&fDISPLAY &f> "
+console_socialspy_prefix: "&cSOCIALSPY &f> &c"
+console_helpme_prefix: "&4HELPME &f> &4"
+
 # Prefix to be shown in front of all plugin messages
 prefix: "&8&l[&2&lM&a&lC&8&l]&f "
 

@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 
 /**
@@ -61,7 +62,7 @@ public class HelpMeCommand extends Command {
 				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
 				return false;
 			}
-			
+
 			if (ChatControl.handleSpam(potentialPlayer, message, "helpme")) {
 				return false;
 			}
@@ -81,7 +82,8 @@ public class HelpMeCommand extends Command {
 			}
 		}
 
-		System.out.println("\033[31m[MultiChat][HELPME] " + message);
+		//System.out.println("\033[31m[MultiChat][HELPME] " + message);
+		ConsoleManager.logHelpMe(message);
 
 		return true;
 

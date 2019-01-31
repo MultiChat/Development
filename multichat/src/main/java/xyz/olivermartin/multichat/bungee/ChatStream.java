@@ -108,7 +108,7 @@ public class ChatStream {
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
-		ProxyServer.getInstance().getConsole().sendMessage(buildFormatConsole(sender,format,message));
+		sendToConsole(sender,format,message);
 
 	}
 
@@ -129,8 +129,9 @@ public class ChatStream {
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
 
-		//TODO
-		System.out.println("\033[33m[MultiChat][CHAT]" + message);
+		//TODO <<-- I think this is now done
+		//System.out.println("\033[33m[MultiChat][CHAT]" + message);
+		ConsoleManager.logChat(message);
 
 	}
 
@@ -229,7 +230,7 @@ public class ChatStream {
 
 	}
 
-	public BaseComponent[] buildFormatConsole(ProxiedPlayer sender, String format, String message) {
+	public void sendToConsole(ProxiedPlayer sender, String format, String message) {
 
 		String newFormat = format;
 
@@ -262,24 +263,26 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		BaseComponent[] toSend;
+		//BaseComponent[] toSend;
 
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
 
 			newFormat = newFormat.replace("%MESSAGE%", message);
-			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
+			ConsoleManager.logChat(newFormat);
+			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 		} else {
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
-			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
+			ConsoleManager.logBasicChat(newFormat, message);
+			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
 		}
 
-		return toSend;
+		//return toSend;
 
 	}
 
-	public BaseComponent[] buildFormatConsole(String name, String displayName, String server, String world, String format, String message) {
+	public void sendToConsole(String name, String displayName, String server, String world, String format, String message) {
 
 		String newFormat = format;
 
@@ -297,12 +300,13 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		BaseComponent[] toSend;
+		//BaseComponent[] toSend;
 
 		newFormat = newFormat.replace("%MESSAGE%", message);
-		toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
-		return toSend;
+		ConsoleManager.logChat(newFormat);
+
+		//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 	}
 }

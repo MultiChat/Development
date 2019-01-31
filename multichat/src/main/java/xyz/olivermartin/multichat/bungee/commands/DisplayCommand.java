@@ -7,6 +7,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
@@ -55,6 +56,7 @@ public class DisplayCommand extends Command {
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("display", message));
 
-		System.out.println("\033[33m[MultiChat][Display] " + message);
+		//System.out.println("\033[33m[MultiChat][Display] " + message);
+		ConsoleManager.logDisplayMessage(message);
 	}
 }

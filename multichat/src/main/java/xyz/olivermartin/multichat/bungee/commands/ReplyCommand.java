@@ -12,6 +12,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -115,7 +116,8 @@ public class ReplyCommand extends Command {
 
 							MultiChat.lastmsg.put(target.getUniqueId(), ((ProxiedPlayer)sender).getUniqueId());
 
-							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
+							ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
+							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_disabled_target");

@@ -23,6 +23,18 @@ public class MessageManager {
 	static {
 
 		defaultMessages = new HashMap<String,String>();
+		
+		// *** CONSOLE LOGS *** //
+		
+		defaultMessages.put("console_main_prefix", "&8[&2M&aC&8]&f ");
+		defaultMessages.put("console_chat_prefix", "&fCHAT &f> ");
+		defaultMessages.put("console_modchat_prefix", "&3STAFFCHAT &f> &3");
+		defaultMessages.put("console_adminchat_prefix", "&5STAFFCHAT &f> &5");
+		defaultMessages.put("console_groupchat_prefix", "&2GROUPCHAT &f> &2");
+		defaultMessages.put("console_display_prefix", "&fDISPLAY &f> ");
+		defaultMessages.put("console_socialspy_prefix", "&cSOCIALSPY &f> &c");
+		defaultMessages.put("console_helpme_prefix", "&4HELPME &f> &4");
+		
 
 		// *** PREFIX *** //
 
@@ -165,7 +177,7 @@ public class MessageManager {
 		defaultMessages.put("command_msg_disabled_target", "&cSorry private messages are disabled on the target player's server!");
 		defaultMessages.put("command_msg_disabled_sender", "&cSorry private messages are disabled on this server!");
 		defaultMessages.put("command_msg_no_toggle", "&cSorry, message toggles are not allowed on this server!");
-		
+
 		// TODO Somehow combine all these into one message but provide a special method like "displayMessagePage()" in this
 		// message manager which automatically decides how many lines to show for the page specified to the message manager.
 		defaultMessages.put("command_multichat_help_1",
@@ -361,6 +373,10 @@ public class MessageManager {
 
 		defaultMessages.put("anti_spam_cooldown", "&cANTI-SPAM: Your messages have been blocked. You cannot chat for another %SPECIAL% seconds.");
 
+	}
+
+	public static String getPrefix() {
+		return prefix;
 	}
 
 	public static String getMessage(String id) {

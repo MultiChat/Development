@@ -299,8 +299,10 @@ public class Events implements Listener {
 							}
 
 							MultiChat.lastmsg.put(target.getUniqueId(), player.getUniqueId());
+							
+							ConsoleManager.logSocialSpy(player.getName(), target.getName(), event.getMessage());
 
-							System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
+							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
 
 						} else {
 							MessageManager.sendMessage(player, "command_msg_disabled_target");
@@ -458,15 +460,16 @@ public class Events implements Listener {
 		if (!MultiChat.viewedchats.containsKey(uuid)) {
 
 			MultiChat.viewedchats.put(uuid, null);
-			System.out.println("[MultiChat] Registered player " + player.getName());
-
+			//System.out.println("[MultiChat] Registered player " + player.getName());
+			ConsoleManager.log("Registered player " + player.getName());
+			
 		}
 
 		if (!MultiChat.globalplayers.containsKey(uuid)) {
 
 			MultiChat.globalplayers.put(uuid, Boolean.valueOf(true));
-			System.out.println("[MultiChat] Created new global chat entry for " + player.getName());
-
+			//System.out.println("[MultiChat] Created new global chat entry for " + player.getName());
+			ConsoleManager.log("Created new global chat entry for " + player.getName());
 		}
 
 		if (UUIDNameManager.existsUUID(uuid)) {
@@ -475,7 +478,8 @@ public class Events implements Listener {
 
 		UUIDNameManager.addNew(uuid, player.getName());
 
-		System.out.println("[MultiChat] Refresed UUID-Name lookup: " + uuid.toString());
+		//System.out.println("[MultiChat] Refresed UUID-Name lookup: " + uuid.toString());
+		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		///
 		ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
@@ -554,7 +558,8 @@ public class Events implements Listener {
 
 		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
 
-		System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
+		//System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
+		ConsoleManager.log("Un-Registered player " + player.getName());
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
