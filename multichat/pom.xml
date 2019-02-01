@@ -4,7 +4,7 @@
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.6.2</version>
+	<version>1.7-alpha-1</version>
 
 	<repositories>
 
