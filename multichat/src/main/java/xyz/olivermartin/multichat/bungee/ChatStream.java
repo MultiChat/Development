@@ -85,23 +85,32 @@ public class ChatStream {
 	public void sendMessage(ProxiedPlayer sender, String message) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-					//TODO hiding & showing streams
-					if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
-							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-							(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
-							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-							(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
 
-						if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-							receiver.sendMessage(buildFormat(sender,receiver,format,message));
-						} else {
-							ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+			if (receiver != null) {
+
+				synchronized (receiver) {
+
+					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
+						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
+							//TODO hiding & showing streams
+							if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
+									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+									(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
+									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+									(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
+
+								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+									receiver.sendMessage(buildFormat(sender,receiver,format,message));
+								} else {
+									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+								}
+
+							}
 						}
-
 					}
+
 				}
+
 			}
 		}
 
