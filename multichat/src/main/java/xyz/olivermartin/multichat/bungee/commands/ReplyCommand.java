@@ -39,11 +39,6 @@ public class ReplyCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
-			
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			Optional<String> crm;
@@ -192,11 +187,6 @@ public class ReplyCommand extends Command {
 
 			// New console reply
 
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
-			
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ChatManipulation chatfix = new ChatManipulation();

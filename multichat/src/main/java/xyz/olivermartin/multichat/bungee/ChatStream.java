@@ -138,8 +138,6 @@ public class ChatStream {
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
 
-		//TODO <<-- I think this is now done
-		//System.out.println("\033[33m[MultiChat][CHAT]" + message);
 		ConsoleManager.logDisplayMessage(message);
 
 	}
@@ -273,22 +271,17 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		//BaseComponent[] toSend;
-
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
 
 			newFormat = newFormat.replace("%MESSAGE%", message);
 			ConsoleManager.logChat(newFormat);
-			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 		} else {
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
 			ConsoleManager.logBasicChat(newFormat, message);
-			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
-		}
 
-		//return toSend;
+		}
 
 	}
 
@@ -310,13 +303,9 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		//BaseComponent[] toSend;
-
 		newFormat = newFormat.replace("%MESSAGE%", message);
 
 		ConsoleManager.logChat(newFormat);
-
-		//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 	}
 }

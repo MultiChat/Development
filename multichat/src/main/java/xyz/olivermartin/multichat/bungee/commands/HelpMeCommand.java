@@ -37,11 +37,6 @@ public class HelpMeCommand extends Command {
 
 			} else { 
 
-				/*String message = "";
-				for (String arg : args) {
-					message = message + arg + " ";
-				}*/
-
 				String message = MultiChatUtil.getMessageFromArgs(args);
 
 				if ( sendMessage(sender.getName() + ": " + message, sender.getName()) ) {
@@ -85,7 +80,6 @@ public class HelpMeCommand extends Command {
 			}
 		}
 
-		//System.out.println("\033[31m[MultiChat][HELPME] " + message);
 		ConsoleManager.logHelpMe(message);
 
 		return true;

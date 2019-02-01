@@ -112,36 +112,9 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:comm")) {
 
+			// TODO Remove - legacy
 			return;
 
-			//			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
-			//			DataInputStream in = new DataInputStream(stream);
-			//
-			//			try {
-			//
-			//				String playerDisplayName = in.readUTF();
-			//				String playerName = in.readUTF();
-			//				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
-			//
-			//				if (player == null) return;
-			//
-			//				synchronized (player) {
-			//
-			//					/*
-			//					 * TODO Add option to NOT set the bungee display name
-			//					 * (While maintaining the fetching prefixes and correct display of them)
-			//					 * (Useful for older servers where char limit in place for display names)
-			//					 */
-			//
-			//					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true && player != null) {
-			//						player.setDisplayName(playerDisplayName.replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-			//					}
-			//
-			//				}
-			//
-			//			} catch (IOException e) {
-			//				e.printStackTrace();
-			//			}
 		}
 
 		if (ev.getTag().equals("multichat:nick")) {

@@ -39,16 +39,6 @@ public class UseCastCommand extends Command {
 
 		if (CastControl.existsCast(args[0])) {
 
-			/*boolean starter = false;
-			String message = "";
-			for (String part : args) {
-				if (!starter) {
-					starter = true;
-				} else {
-					message = message + part + " ";
-				}
-			}*/
-
 			String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 			CastControl.sendCast(args[0],message,MultiChat.globalChat);

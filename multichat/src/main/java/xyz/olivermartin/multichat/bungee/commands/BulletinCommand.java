@@ -93,17 +93,6 @@ public class BulletinCommand extends Command {
 
 			if (args[0].toLowerCase().equals("add")) {
 
-				/*int counter = 0;
-				String message = "";
-
-				for (String arg : args) {
-					if (!(counter == 1)) {
-						counter++;
-					} else {
-						message = message + arg + " ";
-					}
-				}*/
-
 				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 				Bulletins.addBulletin(message);

@@ -46,11 +46,6 @@ public class MCCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
-
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ProxiedPlayer player = (ProxiedPlayer) sender;
@@ -60,11 +55,6 @@ public class MCCommand extends Command {
 			chatman = null;
 
 		} else {
-
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
 
 			String message = MultiChatUtil.getMessageFromArgs(args);
 

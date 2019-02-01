@@ -100,16 +100,6 @@ public class MsgCommand extends Command implements TabExecutor {
 
 				// >1 arg and the sender is a PLAYER
 
-				/*boolean starter = false;
-				String message = "";
-				for (String arg : args) {
-					if (!starter) {
-						starter = true;
-					} else {
-						message = message + arg + " ";
-					}
-				}*/
-
 				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 				Optional<String> crm;
@@ -191,7 +181,6 @@ public class MsgCommand extends Command implements TabExecutor {
 							MultiChat.lastmsg.put(target.getUniqueId(), ((ProxiedPlayer)sender).getUniqueId());
 
 							ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
-							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
 
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_disabled_target");
@@ -263,16 +252,6 @@ public class MsgCommand extends Command implements TabExecutor {
 			} else {
 
 				// >1 arg and the sender is the CONSOLE
-
-				/*boolean starter = false;
-				String message = "";
-				for (String arg : args) {
-					if (!starter) {
-						starter = true;
-					} else {
-						message = message + arg + " ";
-					}
-				}*/
 
 				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 

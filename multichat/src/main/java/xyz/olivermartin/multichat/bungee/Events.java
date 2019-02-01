@@ -333,16 +333,6 @@ public class Events implements Listener {
 					if (playerSender.hasPermission("multichat.cast." + parts[0].substring(1).toLowerCase())
 							|| playerSender.hasPermission("multichat.cast.admin")) {
 
-						/*boolean starter = false;
-						String message = "";
-						for (String part : parts) {
-							if (!starter) {
-								starter = true;
-							} else {
-								message = message + part + " ";
-							}
-						}*/
-
 						String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
 						CastControl.sendCast(parts[0].substring(1),message,ChatStream.getStream(playerSender.getUniqueId()));
@@ -352,16 +342,6 @@ public class Events implements Listener {
 					}
 
 				} else {
-
-					/*boolean starter = false;
-					String message = "";
-					for (String part : parts) {
-						if (!starter) {
-							starter = true;
-						} else {
-							message = message + part + " ";
-						}
-					}*/
 
 					String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
@@ -464,7 +444,6 @@ public class Events implements Listener {
 		if (!MultiChat.viewedchats.containsKey(uuid)) {
 
 			MultiChat.viewedchats.put(uuid, null);
-			//System.out.println("[MultiChat] Registered player " + player.getName());
 			ConsoleManager.log("Registered player " + player.getName());
 
 		}
@@ -472,7 +451,6 @@ public class Events implements Listener {
 		if (!MultiChat.globalplayers.containsKey(uuid)) {
 
 			MultiChat.globalplayers.put(uuid, Boolean.valueOf(true));
-			//System.out.println("[MultiChat] Created new global chat entry for " + player.getName());
 			ConsoleManager.log("Created new global chat entry for " + player.getName());
 		}
 
@@ -482,14 +460,12 @@ public class Events implements Listener {
 
 		UUIDNameManager.addNew(uuid, player.getName());
 
-		//System.out.println("[MultiChat] Refresed UUID-Name lookup: " + uuid.toString());
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		///
 		ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
 		///
 
-		//if ( MultiChat.jmconfigman.config.getBoolean("showjoin") == true ) {
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
 
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
@@ -562,7 +538,6 @@ public class Events implements Listener {
 
 		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
 
-		//System.out.println("[MultiChat] Un-Registered player " + event.getPlayer().getName());
 		ConsoleManager.log("Un-Registered player " + player.getName());
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {

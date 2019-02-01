@@ -86,43 +86,6 @@ public class ConfigHandler {
 			}
 		}
 
-		// OLD WAY BELOW:
-
-		//		try {
-		//
-		//			InputStream in = getClass().getClassLoader().getResourceAsStream("config.yml");
-		//			Throwable localThrowable3 = null;
-		//
-		//			try {
-		//
-		//				Files.copy(in, new File(MultiChat.ConfigDir, "config.yml").toPath(), new CopyOption[0]);
-		//
-		//			} catch (Throwable localThrowable1) {
-		//
-		//				localThrowable3 = localThrowable1;throw localThrowable1;
-		//
-		//			} finally {
-		//
-		//				if (in != null) {
-		//
-		//					if (localThrowable3 != null) {
-		//
-		//						try	{
-		//							in.close();
-		//						} catch (Throwable localThrowable2) {
-		//							localThrowable3.addSuppressed(localThrowable2);
-		//						}
-		//
-		//					} else {
-		//						in.close();
-		//					}
-		//
-		//				}
-		//			}
-		//
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 	private void loadConfig() {

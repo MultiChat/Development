@@ -36,12 +36,6 @@ public class DisplayCommand extends Command {
 
 		} else {
 
-			/*String message = "";
-
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
-			
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			displayMessage(message);
@@ -49,17 +43,16 @@ public class DisplayCommand extends Command {
 	}
 
 	public static void displayMessage(String message) {
-		
+
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 		}
-		
+
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("display", message));
 
-		//System.out.println("\033[33m[MultiChat][Display] " + message);
 		ConsoleManager.logDisplayMessage(message);
 	}
 }

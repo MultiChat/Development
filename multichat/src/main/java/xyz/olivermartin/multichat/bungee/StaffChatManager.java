@@ -63,7 +63,6 @@ public class StaffChatManager {
 			}
 		}
 
-		//System.out.println("\033[36m[StaffChat] /mc {" + username + "}  " + original);
 		ConsoleManager.logModChat("(" + username + ") " + original);
 
 	}
@@ -113,7 +112,6 @@ public class StaffChatManager {
 			}
 		}
 
-		//System.out.println("\033[35m[StaffChat] /ac {" + username + "}  " + original);
 		ConsoleManager.logAdminChat("(" + username + ") " + original);
 
 	}

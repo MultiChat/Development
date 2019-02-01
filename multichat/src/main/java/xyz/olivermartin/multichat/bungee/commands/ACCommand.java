@@ -55,11 +55,6 @@ public class ACCommand extends Command {
 
 			DebugManager.log("[ACCommand] Command sender is a player");
 
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
-
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ProxiedPlayer player = (ProxiedPlayer)sender;
@@ -73,11 +68,6 @@ public class ACCommand extends Command {
 		} else {
 
 			DebugManager.log("[ACCommand] Command sender is the console");
-
-			/*String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}*/
 
 			String message = MultiChatUtil.getMessageFromArgs(args);
 

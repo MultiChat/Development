@@ -116,16 +116,6 @@ public class AnnouncementCommand extends Command {
 
 			if (args[0].toLowerCase().equals("add")) {
 
-				/*int counter = 0;
-				String message = "";
-				for (String arg : args) {
-					if (!(counter == 2)) {
-						counter++;
-					} else {
-						message = message + arg + " ";
-					}
-				}*/
-
 				String message = MultiChatUtil.getMessageFromArgs(args, 2);
 
 				if (Announcements.addAnnouncement(args[1].toLowerCase(), message) == true) {
