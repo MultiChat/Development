@@ -21,6 +21,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Message Command
@@ -39,6 +40,8 @@ public class MsgCommand extends Command implements TabExecutor {
 
 		if (args.length < 1) {
 
+			// Show usage (not enough args)
+
 			MessageManager.sendMessage(sender, "command_msg_usage");
 			MessageManager.sendMessage(sender, "command_msg_usage_toggle");
 
@@ -47,6 +50,8 @@ public class MsgCommand extends Command implements TabExecutor {
 			boolean toggleresult;
 
 			if (args.length == 1) {
+
+				// 1 arg --> toggle
 
 				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
 
@@ -93,7 +98,9 @@ public class MsgCommand extends Command implements TabExecutor {
 
 			} else if ((sender instanceof ProxiedPlayer)) {
 
-				boolean starter = false;
+				// >1 arg and the sender is a PLAYER
+
+				/*boolean starter = false;
 				String message = "";
 				for (String arg : args) {
 					if (!starter) {
@@ -101,7 +108,9 @@ public class MsgCommand extends Command implements TabExecutor {
 					} else {
 						message = message + arg + " ";
 					}
-				}
+				}*/
+
+				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 				Optional<String> crm;
 
@@ -253,9 +262,9 @@ public class MsgCommand extends Command implements TabExecutor {
 
 			} else {
 
-				// new console messaging here!
+				// >1 arg and the sender is the CONSOLE
 
-				boolean starter = false;
+				/*boolean starter = false;
 				String message = "";
 				for (String arg : args) {
 					if (!starter) {
@@ -263,7 +272,9 @@ public class MsgCommand extends Command implements TabExecutor {
 					} else {
 						message = message + arg + " ";
 					}
-				}
+				}*/
+
+				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 				ChatManipulation chatfix = new ChatManipulation();
 

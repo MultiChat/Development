@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
 /**
@@ -35,11 +36,13 @@ public class DisplayCommand extends Command {
 
 		} else {
 
-			String message = "";
+			/*String message = "";
 
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+			
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			displayMessage(message);
 		}

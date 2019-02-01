@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * 'Help Me' Command
@@ -36,10 +37,12 @@ public class HelpMeCommand extends Command {
 
 			} else { 
 
-				String message = "";
+				/*String message = "";
 				for (String arg : args) {
 					message = message + arg + " ";
-				}
+				}*/
+
+				String message = MultiChatUtil.getMessageFromArgs(args);
 
 				if ( sendMessage(sender.getName() + ": " + message, sender.getName()) ) {
 					MessageManager.sendMessage(sender, "command_helpme_sent");

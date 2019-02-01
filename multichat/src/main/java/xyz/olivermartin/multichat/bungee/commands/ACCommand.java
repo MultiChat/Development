@@ -6,6 +6,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
@@ -54,10 +55,12 @@ public class ACCommand extends Command {
 
 			DebugManager.log("[ACCommand] Command sender is a player");
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ProxiedPlayer player = (ProxiedPlayer)sender;
 			StaffChatManager chatman = new StaffChatManager();
@@ -71,10 +74,12 @@ public class ACCommand extends Command {
 
 			DebugManager.log("[ACCommand] Command sender is the console");
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			StaffChatManager chatman = new StaffChatManager();
 

@@ -15,6 +15,7 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Reply Command
@@ -38,10 +39,12 @@ public class ReplyCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+			
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			Optional<String> crm;
 
@@ -189,10 +192,12 @@ public class ReplyCommand extends Command {
 
 			// New console reply
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+			
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ChatManipulation chatfix = new ChatManipulation();
 

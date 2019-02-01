@@ -5,6 +5,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
@@ -45,10 +46,12 @@ public class MCCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			ProxiedPlayer player = (ProxiedPlayer) sender;
 
@@ -58,10 +61,12 @@ public class MCCommand extends Command {
 
 		} else {
 
-			String message = "";
+			/*String message = "";
 			for (String arg : args) {
 				message = message + arg + " ";
-			}
+			}*/
+
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			StaffChatManager chatman = new StaffChatManager();
 			chatman.sendModMessage("CONSOLE", "CONSOLE", "#", message);

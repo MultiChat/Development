@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Cast Command
@@ -100,7 +101,7 @@ public class CastCommand extends Command {
 
 			if (args[0].toLowerCase().equals("add")) {
 
-				int counter = 0;
+				/*int counter = 0;
 				String message = "";
 
 				for (String arg : args) {
@@ -109,7 +110,9 @@ public class CastCommand extends Command {
 					} else {
 						message = message + arg + " ";
 					}
-				}
+				}*/
+
+				String message = MultiChatUtil.getMessageFromArgs(args, 2);
 
 				if (!CastControl.existsCast(args[1])) {
 

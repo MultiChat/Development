@@ -7,6 +7,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Use Cast Command
@@ -38,7 +39,7 @@ public class UseCastCommand extends Command {
 
 		if (CastControl.existsCast(args[0])) {
 
-			boolean starter = false;
+			/*boolean starter = false;
 			String message = "";
 			for (String part : args) {
 				if (!starter) {
@@ -46,7 +47,9 @@ public class UseCastCommand extends Command {
 				} else {
 					message = message + part + " ";
 				}
-			}
+			}*/
+
+			String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 			CastControl.sendCast(args[0],message,MultiChat.globalChat);
 

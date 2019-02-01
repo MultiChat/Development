@@ -41,7 +41,7 @@ public class Events implements Listener {
 	private static List<UUID> ACToggle = new ArrayList<UUID>();
 	private static List<UUID> GCToggle = new ArrayList<UUID>();
 	public static Map<UUID, UUID> PMToggle = new HashMap<UUID, UUID>();
-	
+
 	public static Set<UUID> hiddenStaff = new HashSet<UUID>();
 
 	public static boolean toggleMC(UUID uuid) {
@@ -230,7 +230,7 @@ public class Events implements Listener {
 					MessageManager.sendMessage(player, "mute_cannot_send_message");
 					return;
 				}
-				
+
 				if (ChatControl.handleSpam(player, message, "private_messages")) {
 					return;
 				}
@@ -260,7 +260,7 @@ public class Events implements Listener {
 								ChatControl.sendIgnoreNotifications(target, player, "private_messages");
 								return;
 							}
-							
+
 							String messageOutFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 							String messageInFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 							String messageSpyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
@@ -299,7 +299,7 @@ public class Events implements Listener {
 							}
 
 							MultiChat.lastmsg.put(target.getUniqueId(), player.getUniqueId());
-							
+
 							ConsoleManager.logSocialSpy(player.getName(), target.getName(), event.getMessage());
 
 							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
@@ -333,7 +333,7 @@ public class Events implements Listener {
 					if (playerSender.hasPermission("multichat.cast." + parts[0].substring(1).toLowerCase())
 							|| playerSender.hasPermission("multichat.cast.admin")) {
 
-						boolean starter = false;
+						/*boolean starter = false;
 						String message = "";
 						for (String part : parts) {
 							if (!starter) {
@@ -341,7 +341,9 @@ public class Events implements Listener {
 							} else {
 								message = message + part + " ";
 							}
-						}
+						}*/
+
+						String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
 						CastControl.sendCast(parts[0].substring(1),message,ChatStream.getStream(playerSender.getUniqueId()));
 
@@ -351,7 +353,7 @@ public class Events implements Listener {
 
 				} else {
 
-					boolean starter = false;
+					/*boolean starter = false;
 					String message = "";
 					for (String part : parts) {
 						if (!starter) {
@@ -359,7 +361,9 @@ public class Events implements Listener {
 						} else {
 							message = message + part + " ";
 						}
-					}
+					}*/
+
+					String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
 					CastControl.sendCast(parts[0].substring(1),message,MultiChat.globalChat);
 
@@ -388,9 +392,9 @@ public class Events implements Listener {
 							event.setCancelled(true);
 							return;
 						}
-						
+
 						DebugManager.log(player.getName() + "- about to check for spam");
-						
+
 						if (ChatControl.handleSpam(player, message, "global_chat")) {
 							DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
 							event.setCancelled(true);
@@ -409,7 +413,7 @@ public class Events implements Listener {
 						}
 
 						MultiChat.globalChat.sendMessage(player, message);
-						
+
 						if (hiddenStaff.contains(player.getUniqueId())) {
 							hiddenStaff.remove(player.getUniqueId());
 						}
@@ -462,7 +466,7 @@ public class Events implements Listener {
 			MultiChat.viewedchats.put(uuid, null);
 			//System.out.println("[MultiChat] Registered player " + player.getName());
 			ConsoleManager.log("Registered player " + player.getName());
-			
+
 		}
 
 		if (!MultiChat.globalplayers.containsKey(uuid)) {
@@ -503,7 +507,7 @@ public class Events implements Listener {
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {
-					
+
 					hiddenStaff.add(player.getUniqueId());
 
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
@@ -520,7 +524,7 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = event.getPlayer().getUniqueId();
-		
+
 		if (hiddenStaff.contains(uuid)) {
 			hiddenStaff.remove(uuid);
 		}
@@ -538,13 +542,13 @@ public class Events implements Listener {
 		if (GCToggle.contains(uuid)) {
 			GCToggle.remove(uuid);
 		}
-		
+
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-		
+
 		if (config.getBoolean("session_ignore")) {
 			ChatControl.unignoreAll(uuid);
 		}
-		
+
 		// Reset their spam data on logout (nothing is stored persistantly)
 		ChatControl.spamPardonPlayer(uuid);
 
