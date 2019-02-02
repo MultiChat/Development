@@ -178,12 +178,13 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	private boolean setupChat() {
 
 		if (getServer().getPluginManager().getPlugin("Vault") == null) {
-
 			return false;
-
 		}
 
 		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+		
+		if (rsp == null) return false;
+		
 		chat = rsp.getProvider();
 		return chat != null;
 
