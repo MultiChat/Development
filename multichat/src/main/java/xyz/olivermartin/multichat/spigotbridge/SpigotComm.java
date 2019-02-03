@@ -183,7 +183,10 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
 		
-		if (rsp == null) return false;
+		if (rsp == null) {
+			System.out.println("[MultiChat] [BRIDGE] [ERROR] Vault was found, but will not work properly until you install a compatible permissions plugin!");
+			return false;
+		}
 		
 		chat = rsp.getProvider();
 		return chat != null;
