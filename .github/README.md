@@ -10,3 +10,7 @@ MultiChat is an advanced chat management system for Spigot/Bungeecord with over 
 # Documentation
 
 [Click Here](https://github.com/MultiChat/Development/wiki) for the official wiki. This contains installation instructions as well as the full list of permission nodes.
+
+# Support
+
+Need support? Use the [GitHub Issues](https://github.com/MultiChat/Development/issues) tracking feature, or visit our [Discord](https://discord.gg/PVreERC)!
