@@ -394,7 +394,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					if (colour) {
 						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", message));
 					} else {
-						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", "") + message);
+						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", "")) + message;
 					}
 
 					for (Player p : players) {
