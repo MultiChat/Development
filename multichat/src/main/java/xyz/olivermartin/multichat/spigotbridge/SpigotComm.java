@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -367,12 +367,39 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 				}
 
 				synchronized (bukkitPlayer) {
-					
-					String message = in.readUTF();
-					
-					Set<Player> players = new HashSet<Player>(Bukkit.getOnlinePlayers());
 
-					Bukkit.getPluginManager().callEvent(new AsyncPlayerChatEvent(true, bukkitPlayer, message, players));
+					String format = in.readUTF();
+					String message = in.readUTF();
+
+					boolean colour = in.readBoolean();
+
+					String playerString = in.readUTF();
+
+					Set<String> playerNames = new HashSet<String>(Arrays.asList(playerString.split(" ")));
+					Set<Player> players = new HashSet<Player>(Bukkit.getOnlinePlayers());
+					Iterator<Player> it = players.iterator();
+
+					while(it.hasNext()) {
+						if (!playerNames.contains(it.next().getName())) {
+							it.remove();
+						}
+					}
+
+					AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(false, bukkitPlayer, message, players);
+					//TODO event.setFormat(format);
+
+					Bukkit.getPluginManager().callEvent(event);
+
+					String toSend;
+					if (colour) {
+						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", message));
+					} else {
+						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", "") + message);
+					}
+
+					for (Player p : players) {
+						p.sendMessage(toSend);
+					}
 
 				}
 

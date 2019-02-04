@@ -2,9 +2,11 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -84,6 +86,8 @@ public class ChatStream {
 
 	public void sendMessage(ProxiedPlayer sender, String message) {
 
+		Set<String> players = new HashSet<String>();
+
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
 			if (receiver != null) {
@@ -103,7 +107,7 @@ public class ChatStream {
 									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
 										receiver.sendMessage(buildFormat(sender,receiver,format,message));
 									} else {
-										BungeeComm.sendChatMessage(sender.getName(), message, receiver.getServer().getInfo());
+										players.add(receiver.getName());
 									}
 								} else {
 									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
@@ -118,6 +122,16 @@ public class ChatStream {
 
 			}
 		}
+
+		String newFormat = buildSpigotFormat(sender,format,message);
+		BungeeComm.sendChatMessage(
+				sender.getName(),
+				newFormat,
+				message, 
+				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
+				players,
+				sender.getServer().getInfo()
+				);
 
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
@@ -144,6 +158,40 @@ public class ChatStream {
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
 
 		ConsoleManager.logDisplayMessage(message);
+
+	}
+
+	public String buildSpigotFormat(ProxiedPlayer sender, String format, String message) {
+
+		String newFormat = format;
+
+		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		newFormat = newFormat.replace("%NAME%", sender.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
+		if (opm.isPresent()) {
+			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
+			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
+			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
+		}
+
+		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
+
+
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+			newFormat = newFormat.replace("%MODE%", "Local");
+			newFormat = newFormat.replace("%M%", "L");
+		}
+
+		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+			newFormat = newFormat.replace("%MODE%", "Global");
+			newFormat = newFormat.replace("%M%", "G");
+		}
+
+		newFormat = newFormat + "%MESSAGE%";
+
+		return newFormat;
 
 	}
 

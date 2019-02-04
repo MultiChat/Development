@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -99,22 +100,40 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendChatMessage(String playerName, String message, ServerInfo server) {
+	public static void sendChatMessage(String playerName, String format, String message, boolean colour, Set<String> players, ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
+		String playerString = "";
+		
+		for (String p : players) {
+			if (playerString.equals("")) {
+				playerString = playerString + p;
+			} else {
+				playerString = playerString + " " + p;
+			}
+		}
 
 		try {
 			// Players name
 			out.writeUTF(playerName);
-			// Message
+			// Format part
+			out.writeUTF(format);
+			// message part
 			out.writeUTF(message);
+			// color permissions?
+			out.writeBoolean(colour);
+			// player set
+			out.writeUTF(playerString);
+
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 		server.sendData("multichat:chat", stream.toByteArray());
+		
+		DebugManager.log("Sent message on multichat:chat channel!");
 
 	}
 
