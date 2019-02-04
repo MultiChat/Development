@@ -99,6 +99,25 @@ public class BungeeComm implements Listener {
 
 	}
 
+	public static void sendChatMessage(String playerName, String message, ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			// Players name
+			out.writeUTF(playerName);
+			// Message
+			out.writeUTF(message);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:chat", stream.toByteArray());
+
+	}
+
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
@@ -235,7 +254,7 @@ public class BungeeComm implements Listener {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
-			
+
 			DebugManager.log("[multichat:world] Got an incoming channel message!");
 
 			try {
@@ -245,7 +264,7 @@ public class BungeeComm implements Listener {
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) return;
-				
+
 				DebugManager.log("[multichat:world] Player is online!");
 
 				synchronized (player) {
@@ -257,11 +276,11 @@ public class BungeeComm implements Listener {
 					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
 
 					if (opm.isPresent()) {
-						
+
 						DebugManager.log("[multichat:world] Got their meta data correctly");
 
 						opm.get().world = world;
-						
+
 						DebugManager.log("[multichat:world] Set their world to: " + world);
 
 					}

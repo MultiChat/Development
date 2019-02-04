@@ -100,13 +100,18 @@ public class ChatStream {
 									(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
 
 								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-									receiver.sendMessage(buildFormat(sender,receiver,format,message));
+									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+										receiver.sendMessage(buildFormat(sender,receiver,format,message));
+									} else {
+										BungeeComm.sendChatMessage(sender.getName(), message, receiver.getServer().getInfo());
+									}
 								} else {
 									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 								}
 
 							}
 						}
+
 					}
 
 				}

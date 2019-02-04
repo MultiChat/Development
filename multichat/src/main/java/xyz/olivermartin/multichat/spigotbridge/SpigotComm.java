@@ -10,7 +10,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -162,6 +166,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", this);
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", this);
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:paction", this);
 
@@ -182,12 +187,12 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		}
 
 		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-		
+
 		if (rsp == null) {
 			System.out.println("[MultiChat] [BRIDGE] [ERROR] Vault was found, but will not work properly until you install a compatible permissions plugin!");
 			return false;
 		}
-		
+
 		chat = rsp.getProvider();
 		return chat != null;
 
@@ -336,6 +341,38 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					if (p.getName().matches(playerRegex)) {
 						getServer().dispatchCommand(p, command);
 					}
+
+				}
+
+			} catch (IOException e) {
+
+				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				e.printStackTrace();
+
+			}
+		} else if (channel.equals("multichat:chat")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				String playername = in.readUTF();
+				Player bukkitPlayer;
+
+				bukkitPlayer = Bukkit.getPlayer(playername);
+
+				if (bukkitPlayer == null) {
+					return;
+				}
+
+				synchronized (bukkitPlayer) {
+					
+					String message = in.readUTF();
+					
+					Set<Player> players = new HashSet<Player>(Bukkit.getOnlinePlayers());
+
+					Bukkit.getPluginManager().callEvent(new AsyncPlayerChatEvent(true, bukkitPlayer, message, players));
 
 				}
 
