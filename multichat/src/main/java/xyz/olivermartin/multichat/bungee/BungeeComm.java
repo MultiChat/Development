@@ -62,6 +62,9 @@ public class BungeeComm implements Listener {
 			} else {
 				out.writeUTF("F");
 			}
+			
+			// Send the global format
+			out.writeUTF(MultiChat.globalChat.getFormat());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -172,6 +175,9 @@ public class BungeeComm implements Listener {
 
 				UUID uuid = UUID.fromString(in.readUTF());
 				String message = in.readUTF();
+				String format = in.readUTF();
+				
+				DebugManager.log("Got format for message: " + format);
 				
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 

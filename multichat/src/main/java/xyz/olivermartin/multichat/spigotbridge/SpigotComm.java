@@ -60,6 +60,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	private static boolean setDisplayNameLastVal = false;
 	private static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
 	private static boolean globalChatServer = false;
+	private static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -229,6 +230,23 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, channel, stream.toByteArray());
 
 	}
+	
+	public void sendPluginChatChannelMessage(String channel, UUID uuid, String message, String format) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			out.writeUTF(uuid.toString());
+			out.writeUTF(message);
+			out.writeUTF(format);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, channel, stream.toByteArray());
+
+	}
 
 	private void updatePlayerMeta(String playername, boolean setDisplayName, String displayNameFormat) {
 
@@ -311,6 +329,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					}
 
 					globalChatServer = globalChat;
+					
+					globalChatFormat = in.readUTF();
 
 				}
 
@@ -395,7 +415,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 						}
 					}
 
-					AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(false, bukkitPlayer, message, players);
+					AsyncPlayerChatEvent event = new InducedAsyncPlayerChatEvent(false, bukkitPlayer, message, players);
 					//TODO event.setFormat(format);
 
 					Bukkit.getPluginManager().callEvent(event);
@@ -453,14 +473,51 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		sendPluginChannelMessage("multichat:world", event.getPlayer().getUniqueId(), event.getPlayer().getWorld().getName());
 
 	}
-	
+
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onChat(final AsyncPlayerChatEvent event) {
+
+		System.out.println("1" + event.getMessage());
 		
+		if (event instanceof InducedAsyncPlayerChatEvent) {
+			System.out.println("AAnnddd uncancelled it!");
+			event.setCancelled(false);
+			return;
+		}
+
+		if (event.isCancelled()) return;
+
+		System.out.println("2" + event.getMessage());
+
 		if (globalChatServer) {
-			sendPluginChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage());
+			//sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
 			event.setCancelled(true);
 		}
+
+	}
+	
+	@EventHandler(priority=EventPriority.MONITOR)
+	public void onChat3(final AsyncPlayerChatEvent event) {
+	
+		if (globalChatServer && !(event instanceof InducedAsyncPlayerChatEvent)) {
+			//String chatMessage = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
+			sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
+		}
+
+	}
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onChat2(final AsyncPlayerChatEvent event) {
+
+		if (event.isCancelled()) return;
+
+		if (event instanceof InducedAsyncPlayerChatEvent) {
+			System.out.println("Cancelled it...");
+			event.setCancelled(true);
+			return;
+		}
+		
+		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
 
 	}
 
