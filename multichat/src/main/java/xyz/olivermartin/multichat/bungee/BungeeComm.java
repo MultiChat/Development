@@ -54,6 +54,14 @@ public class BungeeComm implements Listener {
 			} else {
 				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
 			}
+			
+			// Is this server a global chat server?
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
+					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName())) {
+				out.writeUTF("T");
+			} else {
+				out.writeUTF("F");
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -140,7 +148,7 @@ public class BungeeComm implements Listener {
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
+		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
 			return;
 		}
 
@@ -151,6 +159,36 @@ public class BungeeComm implements Listener {
 		if (ev.getTag().equals("multichat:comm")) {
 
 			// TODO Remove - legacy
+			return;
+
+		}
+		
+		if (ev.getTag().equals("multichat:chat")) {
+			
+			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
+			DataInputStream in = new DataInputStream(stream);
+			
+			try {
+
+				UUID uuid = UUID.fromString(in.readUTF());
+				String message = in.readUTF();
+				
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+				if (player == null) return;
+
+				synchronized (player) {
+					
+					// TODO This will handle chat messages sent from the local servers
+					MultiChat.globalChat.sendMessage(player, message);
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			
 			return;
 
 		}

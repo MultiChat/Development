@@ -25,6 +25,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -58,6 +59,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	private static boolean setDisplayNameLastVal = false;
 	private static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
+	private static boolean globalChatServer = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -161,6 +163,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		}
 
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:chat");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
@@ -279,6 +282,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 			try {
 
 				boolean setDisplayName = false;
+				boolean globalChat = false;
 				String displayNameFormat = "";
 				String playername = in.readUTF();
 				Player bukkitPlayer;
@@ -301,6 +305,12 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					displayNameFormatLastVal = displayNameFormat;
 
 					updatePlayerMeta(playername, setDisplayName, displayNameFormat);
+
+					if (in.readUTF().equals("T")) {
+						globalChat = true;
+					}
+
+					globalChatServer = globalChat;
 
 				}
 
@@ -441,6 +451,16 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	public void onWorldChange(final PlayerChangedWorldEvent event) {
 
 		sendPluginChannelMessage("multichat:world", event.getPlayer().getUniqueId(), event.getPlayer().getWorld().getName());
+
+	}
+	
+	@EventHandler(priority=EventPriority.HIGHEST)
+	public void onChat(final AsyncPlayerChatEvent event) {
+		
+		if (globalChatServer) {
+			sendPluginChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage());
+			event.setCancelled(true);
+		}
 
 	}
 

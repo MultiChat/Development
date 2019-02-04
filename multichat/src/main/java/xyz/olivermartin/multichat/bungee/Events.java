@@ -387,12 +387,14 @@ public class Events implements Listener {
 
 						if (crm.isPresent()) {
 							message = crm.get();
+							event.setMessage(message);
 						} else {
 							event.setCancelled(true);
 							return;
 						}
 
-						MultiChat.globalChat.sendMessage(player, message);
+						//TODO Removing this should now let the message pass through to spigot
+						//MultiChat.globalChat.sendMessage(player, message);
 
 						if (hiddenStaff.contains(player.getUniqueId())) {
 							hiddenStaff.remove(player.getUniqueId());
@@ -402,7 +404,8 @@ public class Events implements Listener {
 						MessageManager.sendMessage(player, "freezechat_frozen");
 					}
 
-					event.setCancelled(true);
+					// TODO Removing this should now let the message pass through to spigot
+					// event.setCancelled(true);
 
 				}
 			}
