@@ -488,6 +488,8 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 		if (globalChatServer) {
+			// Lets send Bungee the latest info!
+			updatePlayerMeta(event.getPlayer().getName(), setDisplayNameLastVal, displayNameFormatLastVal);
 			//sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
 			event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
 			sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
