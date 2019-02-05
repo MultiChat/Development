@@ -36,6 +36,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.plugin.messaging.PluginMessageRecipient;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.milkbowl.vault.chat.Chat;
 
 /**
@@ -49,6 +50,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 	public static Chat chat = null;
 	public static boolean vault;
+	public static boolean papi;
 
 	public static File configDir;
 
@@ -178,10 +180,16 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
 
 		vault = setupChat();
+		papi = setupPAPI();
 
 		if (vault) {
-			System.out.println("MultiChat has successfully connected to vault!");
+			System.out.println("MultiChat has successfully connected to Vault!");
 		}
+
+		if (papi) {
+			System.out.println("MultiChat has successfully connected to PlaceholderAPI!");
+		}
+
 	}
 
 	private boolean setupChat() {
@@ -199,6 +207,20 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 		chat = rsp.getProvider();
 		return chat != null;
+
+	}
+
+	private boolean setupPAPI() {
+
+		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+
+			return false;
+
+		} else {
+
+			return true;
+
+		}
 
 	}
 
@@ -510,7 +532,15 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		}
 
 		// IF WE ARE MANAGING GLOBAL CHAT THEN SET THE FORMAT!
-		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%")));
+		String format;
+
+		if (papi) {
+			format = PlaceholderAPI.setPlaceholders(event.getPlayer(), globalChatFormat);
+		} else {
+			format = globalChatFormat;
+		}
+
+		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format.replaceAll("%", "%%")));
 		//if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
 
 	}

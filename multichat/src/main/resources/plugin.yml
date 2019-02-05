@@ -2,7 +2,7 @@ name: MultiChatBridge
 version: 1.7
 author: Revilo410
 main: xyz.olivermartin.multichat.spigotbridge.SpigotComm
-softdepend: [Vault]
+softdepend: [Vault,PlaceholderAPI]
 api-version: 1.13
 commands:
    nick:
