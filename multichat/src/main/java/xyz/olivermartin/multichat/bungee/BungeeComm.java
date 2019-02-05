@@ -177,6 +177,8 @@ public class BungeeComm implements Listener {
 				String message = in.readUTF();
 				String format = in.readUTF();
 				
+				format = format.replace("%%","%");
+				
 				DebugManager.log("Got format for message: " + format);
 				
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
@@ -186,7 +188,7 @@ public class BungeeComm implements Listener {
 				synchronized (player) {
 					
 					// TODO This will handle chat messages sent from the local servers
-					MultiChat.globalChat.sendMessage(player, message);
+					MultiChat.globalChat.sendMessage(player, message, format);
 
 				}
 

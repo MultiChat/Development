@@ -230,7 +230,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 		((PluginMessageRecipient)getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(this, channel, stream.toByteArray());
 
 	}
-	
+
 	public void sendPluginChatChannelMessage(String channel, UUID uuid, String message, String format) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -329,7 +329,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 					}
 
 					globalChatServer = globalChat;
-					
+
 					globalChatFormat = in.readUTF();
 
 				}
@@ -478,7 +478,7 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	public void onChat(final AsyncPlayerChatEvent event) {
 
 		System.out.println("1" + event.getMessage());
-		
+
 		if (event instanceof InducedAsyncPlayerChatEvent) {
 			System.out.println("AAnnddd uncancelled it!");
 			event.setCancelled(false);
@@ -491,21 +491,21 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 
 		if (globalChatServer) {
 			//sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
-			event.setCancelled(true);
+			event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
 		}
 
 	}
-	
+
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onChat3(final AsyncPlayerChatEvent event) {
-	
+
 		if (globalChatServer && !(event instanceof InducedAsyncPlayerChatEvent)) {
 			//String chatMessage = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
 			sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
 		}
 
 	}
-	
+
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onChat2(final AsyncPlayerChatEvent event) {
 
@@ -516,8 +516,9 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 			event.setCancelled(true);
 			return;
 		}
-		
-		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
+
+		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%")));
+		//if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
 
 	}
 
