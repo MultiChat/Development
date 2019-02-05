@@ -477,30 +477,19 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onChat(final AsyncPlayerChatEvent event) {
 
-		System.out.println("1" + event.getMessage());
-
+		// IF ITS A MULTICHAT MESSAGE THEN ITS TIME TO UNCANCEL IT! (This is so plugins like DiscordSRV can grab it)
 		if (event instanceof InducedAsyncPlayerChatEvent) {
-			System.out.println("AAnnddd uncancelled it!");
 			event.setCancelled(false);
 			return;
 		}
 
+		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
 		if (event.isCancelled()) return;
 
-		System.out.println("2" + event.getMessage());
-
+		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 		if (globalChatServer) {
 			//sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
 			event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
-		}
-
-	}
-
-	@EventHandler(priority=EventPriority.MONITOR)
-	public void onChat3(final AsyncPlayerChatEvent event) {
-
-		if (globalChatServer && !(event instanceof InducedAsyncPlayerChatEvent)) {
-			//String chatMessage = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
 			sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
 		}
 
@@ -509,14 +498,16 @@ public class SpigotComm extends JavaPlugin implements PluginMessageListener, Lis
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onChat2(final AsyncPlayerChatEvent event) {
 
+		// IF ITS ALREADY CANCELLED THEN WE CAN IGNORE IT!
 		if (event.isCancelled()) return;
 
 		if (event instanceof InducedAsyncPlayerChatEvent) {
-			System.out.println("Cancelled it...");
+			// IF IT IS A MULTICHAT MESSAGE THEN CANCEL IT AND RETURN!
 			event.setCancelled(true);
 			return;
 		}
 
+		// IF WE ARE MANAGING GLOBAL CHAT THEN SET THE FORMAT!
 		if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%")));
 		//if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
 
