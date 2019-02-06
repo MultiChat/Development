@@ -26,6 +26,7 @@ import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
@@ -39,6 +40,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
 
 /**
  * MultiChatSponge - MAIN CLASS
@@ -50,10 +52,12 @@ import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
 @Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7")
 public final class MultiChatSponge implements CommandExecutor {
 
+	public static SimpleMutableMessageChannel multichatChannel;
+
 	ChannelRegistrar channelRegistrar;
 
 	RawDataChannel commChannel;
-	RawDataChannel chatChannel;
+	static RawDataChannel chatChannel;
 
 	RawDataChannel actionChannel;
 	RawDataChannel playerActionChannel;
@@ -65,8 +69,12 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
+
 	public static boolean setDisplayNameLastVal = false;
 	public static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
+
+	public static boolean globalChatServer = false;
+	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -143,7 +151,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
 
 		this.commChannel = commChannel;
-		this.chatChannel = chatChannel;
+		MultiChatSponge.chatChannel = chatChannel;
 
 		this.actionChannel = actionChannel;
 		this.playerActionChannel = playerActionChannel;
@@ -152,6 +160,10 @@ public final class MultiChatSponge implements CommandExecutor {
 		MultiChatSponge.suffixChannel = suffixChannel;
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
+
+		// Register listeners
+
+		Sponge.getEventManager().registerListeners(this, new SpongeChatListener());
 
 		// Register commands
 
@@ -166,6 +178,9 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 
+		// Register message channel
+
+		multichatChannel = new SimpleMutableMessageChannel();
 	}
 
 	@SuppressWarnings("serial")
@@ -198,6 +213,12 @@ public final class MultiChatSponge implements CommandExecutor {
 			e.printStackTrace();
 			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 		}
+
+	}
+
+	public static void sendChatToBungee(Player player, String message, String format) {
+
+		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format));
 
 	}
 
