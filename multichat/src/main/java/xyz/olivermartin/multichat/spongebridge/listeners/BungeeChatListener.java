@@ -28,7 +28,7 @@ public class BungeeChatListener implements RawDataListener {
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
 
-		Optional<Player> player = Sponge.getServer().getPlayer(data.getUTF(0));
+		Optional<Player> player = Sponge.getServer().getPlayer(data.readUTF());
 
 		try {
 

@@ -29,7 +29,7 @@ public class MetaListener implements RawDataListener {
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
-		Optional<Player> player = Sponge.getServer().getPlayer(data.getUTF(0));
+		Optional<Player> player = Sponge.getServer().getPlayer(data.readUTF());
 
 		try {
 
@@ -43,11 +43,11 @@ public class MetaListener implements RawDataListener {
 					return;
 				}
 
-				if (data.getUTF(0).equals("T")) {
+				if (data.readUTF().equals("T")) {
 					setDisplayName = true;
 				}
 
-				displayNameFormat = data.getUTF(0);
+				displayNameFormat = data.readUTF();
 
 				MultiChatSponge.setDisplayNameLastVal = setDisplayName;
 				MultiChatSponge.displayNameFormatLastVal = displayNameFormat;
