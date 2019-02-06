@@ -44,7 +44,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
  *
  */
 @Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.7")
-public final class SpongeComm implements CommandExecutor {
+public final class MultiChatSponge implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
 	RawDataChannel channel;
@@ -126,10 +126,10 @@ public final class SpongeComm implements CommandExecutor {
 		this.channel = channel;
 		this.actionChannel = actionChannel;
 		this.playerActionChannel = playerActionChannel;
-		SpongeComm.prefixChannel = prefixChannel;
-		SpongeComm.suffixChannel = suffixChannel;
-		SpongeComm.nickChannel = nickChannel;
-		SpongeComm.worldChannel = worldChannel;
+		MultiChatSponge.prefixChannel = prefixChannel;
+		MultiChatSponge.suffixChannel = suffixChannel;
+		MultiChatSponge.nickChannel = nickChannel;
+		MultiChatSponge.worldChannel = worldChannel;
 
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))

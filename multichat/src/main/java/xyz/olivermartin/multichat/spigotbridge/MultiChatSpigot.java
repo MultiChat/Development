@@ -46,7 +46,7 @@ import net.milkbowl.vault.chat.Chat;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class SpigotComm extends JavaPlugin implements PluginMessageListener, Listener {
+public class MultiChatSpigot extends JavaPlugin implements PluginMessageListener, Listener {
 
 	public static Chat chat = null;
 	public static boolean vault;

@@ -46,10 +46,10 @@ public class MetaListener implements RawDataListener {
 
 				displayNameFormat = data.getUTF(0);
 
-				SpongeComm.setDisplayNameLastVal = setDisplayName;
-				SpongeComm.displayNameFormatLastVal = displayNameFormat;
+				MultiChatSponge.setDisplayNameLastVal = setDisplayName;
+				MultiChatSponge.displayNameFormatLastVal = displayNameFormat;
 
-				SpongeComm.updatePlayerMeta(p.getName(), setDisplayName, displayNameFormat);
+				MultiChatSponge.updatePlayerMeta(p.getName(), setDisplayName, displayNameFormat);
 
 			}
 
