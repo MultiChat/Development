@@ -15,9 +15,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
-import xyz.olivermartin.multichat.spigotbridge.listeners.CommandListener;
 import xyz.olivermartin.multichat.spigotbridge.listeners.LoginListener;
 import xyz.olivermartin.multichat.spigotbridge.listeners.MultiChatPluginMessageListener;
 import xyz.olivermartin.multichat.spigotbridge.listeners.WorldListener;
@@ -32,7 +32,7 @@ import xyz.olivermartin.multichat.spigotbridge.listeners.WorldListener;
 public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 	public static final String pluginName = "MultiChatSpigot";
-	public static final String logPrefix = "[MultiChatSpigot] ";
+	public static final String logPrefix = ""; // Legacy
 
 	private static Chat chat = null;
 	private static boolean vault;
@@ -185,7 +185,11 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new ChatListenerLowest(), this);
 		getServer().getPluginManager().registerEvents(new WorldListener(), this);
 		getServer().getPluginManager().registerEvents(new LoginListener(), this);
-		getServer().getPluginManager().registerEvents(new CommandListener(), this);
+
+		// Register commands
+
+		this.getCommand("nick").setExecutor(CommandHandler.getInstance());
+		this.getCommand("realname").setExecutor(CommandHandler.getInstance());
 
 		// Manage dependencies
 

@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spigotbridge.listeners;
+package xyz.olivermartin.multichat.spigotbridge.commands;
 
 import java.util.Optional;
 import java.util.Set;
@@ -7,18 +7,34 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.NameManager;
 
-public class CommandListener implements Listener {
+public class CommandHandler implements CommandExecutor {
 
 	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
+
+	private static CommandHandler instance;
+
+	public static CommandHandler getInstance() {
+		return instance;
+	}
+
+	static {
+		instance = new CommandHandler();
+	}
+
+	/* --- END STATIC --- */
+
+	private CommandHandler() {
+		/* Empty */
+	}
 
 	@EventHandler
 	public boolean onCommand(CommandSender commandSender, Command cmd, String label, String[] args) {
