@@ -35,25 +35,34 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
 
 /**
- * SPONGE COMM - The MAIN class for MultiChatSpongeBridge
+ * MultiChatSponge - MAIN CLASS
  * <p>Allows MultiChat to fetch data from Sponge and powers /nick etc.</p>
  * 
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.7")
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7")
 public final class MultiChatSponge implements CommandExecutor {
 
 	ChannelRegistrar channelRegistrar;
-	RawDataChannel channel;
+
+	RawDataChannel commChannel;
+	RawDataChannel chatChannel;
+
 	RawDataChannel actionChannel;
 	RawDataChannel playerActionChannel;
+
 	static RawDataChannel prefixChannel;
 	static RawDataChannel suffixChannel;
 	static RawDataChannel nickChannel;
 	static RawDataChannel worldChannel;
+
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
 	public static boolean setDisplayNameLastVal = false;
@@ -112,24 +121,39 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		}
 
+		// Register channels
+
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
-		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
+
+		ChannelBinding.RawDataChannel commChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
+		ChannelBinding.RawDataChannel chatChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:chat");
+
 		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
 		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:paction");
+
 		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
-		channel.addListener(Platform.Type.SERVER, new MetaListener(channel));
+
+		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
+		chatChannel.addListener(Platform.Type.SERVER, new BungeeChatListener(chatChannel));
+
 		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
-		this.channel = channel;
+
+		this.commChannel = commChannel;
+		this.chatChannel = chatChannel;
+
 		this.actionChannel = actionChannel;
 		this.playerActionChannel = playerActionChannel;
+
 		MultiChatSponge.prefixChannel = prefixChannel;
 		MultiChatSponge.suffixChannel = suffixChannel;
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
+
+		// Register commands
 
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
@@ -148,7 +172,8 @@ public final class MultiChatSponge implements CommandExecutor {
 	@Listener
 	public void onServerStop(GameStoppingServerEvent event) {
 
-		Sponge.getChannelRegistrar().unbindChannel(channel);
+		Sponge.getChannelRegistrar().unbindChannel(commChannel);
+		Sponge.getChannelRegistrar().unbindChannel(chatChannel);
 		Sponge.getChannelRegistrar().unbindChannel(actionChannel);
 		Sponge.getChannelRegistrar().unbindChannel(prefixChannel);
 		Sponge.getChannelRegistrar().unbindChannel(suffixChannel);

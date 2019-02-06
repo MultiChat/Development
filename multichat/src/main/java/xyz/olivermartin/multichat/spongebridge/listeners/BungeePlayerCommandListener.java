@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spongebridge;
+package xyz.olivermartin.multichat.spongebridge.listeners;
 
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;

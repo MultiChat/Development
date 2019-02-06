@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spongebridge;
+package xyz.olivermartin.multichat.spongebridge.listeners;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -7,6 +7,9 @@ import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
+
+import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
+
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
