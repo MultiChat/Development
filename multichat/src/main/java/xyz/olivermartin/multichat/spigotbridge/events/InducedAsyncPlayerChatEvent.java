@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spigotbridge;
+package xyz.olivermartin.multichat.spigotbridge.events;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-name: MultiChatBridge
+name: MultiChatSpigot
 version: 1.7
 author: Revilo410
 main: xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot
@@ -8,10 +8,10 @@ commands:
    nick:
       description: Gives a player a nickname
       usage: /nick [player] <nickname / off>
-      permission: multichatbridge.nick.self
-      permission-message: You do not have permission (multichatbridge.nick.self / multichatbridge.nick.others)
+      permission: multichatspigot.nick.self
+      permission-message: You do not have permission (multichatspigot.nick.self / multichatspigot.nick.others)
    realname:
       description: Gets the real name of a player from a nickname
       usage: /realname <nickname>
-      permission: multichatbridge.realname
-      permission-message: You do not have permission (multichatbridge.realname)
+      permission: multichatspigot.realname
+      permission-message: You do not have permission (multichatspigot.realname)
