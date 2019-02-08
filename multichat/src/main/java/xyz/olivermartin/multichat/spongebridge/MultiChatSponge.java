@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.spongepowered.api.Platform;
@@ -78,12 +79,8 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static boolean globalChatServer = false;
 	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
-	private static boolean papi;
-	public static PlaceholderService papiService;
+	public static Optional<PlaceholderService> papi;
 
-	public static boolean hookedPAPI() {
-		return papi;
-	}
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -193,17 +190,11 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		// Dependencies
 
-		papi = setupPAPI();
-
-	}
-
-	private boolean setupPAPI() {
-
-		if (Sponge.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-			return false;
-		} else {
-			papiService = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
-			return true;
+		try {
+			papi = Sponge.getServiceManager().provide(PlaceholderService.class);
+			System.out.println("Connected to PlaceholderAPI!");
+		} catch (NoClassDefFoundError e) {
+			papi = Optional.empty();
 		}
 
 	}

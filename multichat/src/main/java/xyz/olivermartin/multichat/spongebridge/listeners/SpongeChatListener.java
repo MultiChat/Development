@@ -27,8 +27,19 @@ public class SpongeChatListener {
 				event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
 
 				String format;
-				if (MultiChatSponge.hookedPAPI()) {
-					format = MultiChatSponge.papiService.replaceSourcePlaceholders(MultiChatSponge.globalChatFormat, event.getSource()).toPlain();
+				if (MultiChatSponge.papi.isPresent()) {
+					format = MultiChatSponge.papi.get().replaceSourcePlaceholders(MultiChatSponge.globalChatFormat, event.getSource()).toPlain();
+
+					// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
+					format = format.replace("{NAME}", "%NAME%");
+					format = format.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
+					format = format.replace("{PREFIX}", "%PREFIX%");
+					format = format.replace("{SUFFIX}", "%SUFFIX%");
+					format = format.replace("{NICK}", "%NICK%");
+					format = format.replace("{SERVER}", "%SERVER%");
+					format = format.replace("{WORLD}", "%WORLD%");
+					format = format.replace("{MODE}", "%MODE%");
+
 				} else {
 					format = MultiChatSponge.globalChatFormat;
 				}
