@@ -24,6 +24,7 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.network.ChannelBinding;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
@@ -31,6 +32,7 @@ import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 
+import me.rojo8399.placeholderapi.PlaceholderService;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -49,7 +51,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7")
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge implements CommandExecutor {
 
 	public static SimpleMutableMessageChannel multichatChannel;
@@ -75,6 +77,13 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	public static boolean globalChatServer = false;
 	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
+
+	private static boolean papi;
+	public static PlaceholderService papiService;
+
+	public static boolean hookedPAPI() {
+		return papi;
+	}
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -181,6 +190,22 @@ public final class MultiChatSponge implements CommandExecutor {
 		// Register message channel
 
 		multichatChannel = new SimpleMutableMessageChannel();
+
+		// Dependencies
+
+		papi = setupPAPI();
+
+	}
+
+	private boolean setupPAPI() {
+
+		if (Sponge.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+			return false;
+		} else {
+			papiService = Sponge.getServiceManager().provideUnchecked(PlaceholderService.class);
+			return true;
+		}
+
 	}
 
 	@SuppressWarnings("serial")

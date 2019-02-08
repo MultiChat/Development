@@ -25,9 +25,17 @@ public class SpongeChatListener {
 				// Lets send Bungee the latest info!
 				MultiChatSponge.updatePlayerMeta(player.getName(), MultiChatSponge.setDisplayNameLastVal, MultiChatSponge.displayNameFormatLastVal);
 				event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
+
+				String format;
+				if (MultiChatSponge.hookedPAPI()) {
+					format = MultiChatSponge.papiService.replaceSourcePlaceholders(MultiChatSponge.globalChatFormat, event.getSource()).toPlain();
+				} else {
+					format = MultiChatSponge.globalChatFormat;
+				}
+
 				// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
 				// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
-				MultiChatSponge.sendChatToBungee(player, event.getRawMessage().toPlain(), MultiChatSponge.globalChatFormat.replaceAll("%", "%%"));
+				MultiChatSponge.sendChatToBungee(player, event.getRawMessage().toPlain(), format.replaceAll("%", "%%"));
 			}
 
 		}
