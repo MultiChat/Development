@@ -83,7 +83,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 			} catch (IOException e) {
 
-				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
 			}
@@ -99,7 +99,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 			} catch (IOException e) {
 
-				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
 			}
@@ -123,7 +123,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 			} catch (IOException e) {
 
-				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
 			}
@@ -182,7 +182,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 			} catch (IOException e) {
 
-				System.out.println("[MultiChat] [BRIDGE] Failed to contact bungeecord");
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
 			}

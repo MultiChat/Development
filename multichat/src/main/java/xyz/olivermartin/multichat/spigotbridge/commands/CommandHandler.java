@@ -66,22 +66,22 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
-				if (NameManager.getInstance().containsColorCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+				if (NameManager.getInstance().containsColorCodes(args[0]) && !(sender.hasPermission("multichatspigot.nick.color") || sender.hasPermission("multichatspigot.nick.colour"))) {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
 					return true;
 				}
 
-				if (NameManager.getInstance().containsFormatCodes(args[0]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+				if (NameManager.getInstance().containsFormatCodes(args[0]) && !(sender.hasPermission("multichatspigot.nick.format"))) {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
 					return true;
 				}
 
-				if (!simpleNickname.matcher(args[0]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+				if (!simpleNickname.matcher(args[0]).matches() && !(sender.hasPermission("multichatspigot.nick.special"))) {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
 					return true;
 				}
 
-				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > 20 && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
 					return true;
@@ -106,7 +106,7 @@ public class CommandHandler implements CommandExecutor {
 			}
 
 			if (target != sender) {
-				if (!sender.hasPermission("multichatbridge.nick.others")) {
+				if (!sender.hasPermission("multichatspigot.nick.others")) {
 					sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to nickname other players!");
 					return true;
 				}
@@ -121,22 +121,22 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 
-			if (NameManager.getInstance().containsColorCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.color") || sender.hasPermission("multichatbridge.nick.colour"))) {
+			if (NameManager.getInstance().containsColorCodes(args[1]) && !(sender.hasPermission("multichatspigot.nick.color") || sender.hasPermission("multichatspigot.nick.colour"))) {
 				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with color codes!");
 				return true;
 			}
 
-			if (NameManager.getInstance().containsFormatCodes(args[1]) && !(sender.hasPermission("multichatbridge.nick.format"))) {
+			if (NameManager.getInstance().containsFormatCodes(args[1]) && !(sender.hasPermission("multichatspigot.nick.format"))) {
 				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with format codes!");
 				return true;
 			}
 
-			if (!simpleNickname.matcher(args[1]).matches() && !(sender.hasPermission("multichatbridge.nick.special"))) {
+			if (!simpleNickname.matcher(args[1]).matches() && !(sender.hasPermission("multichatspigot.nick.special"))) {
 				sender.sendMessage(ChatColor.DARK_RED + "You do not have permission to use nicknames with special characters!");
 				return true;
 			}
 
-			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatbridge.nick.anylength")) {
+			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
 				return true;
@@ -183,7 +183,7 @@ public class CommandHandler implements CommandExecutor {
 
 				return true;
 
-			} else if (sender.hasPermission("multichatbridge.realname.partial")) {
+			} else if (sender.hasPermission("multichatspigot.realname.partial")) {
 
 				Optional<Set<UUID>> matches = NameManager.getInstance().getPartialNicknameMatches(args[0]);
 
@@ -196,7 +196,7 @@ public class CommandHandler implements CommandExecutor {
 
 					for (UUID uuid : matches.get()) {
 
-						if (limit > 0 || sender.hasPermission("multichatbridge.realname.nolimit")) {
+						if (limit > 0 || sender.hasPermission("multichatspigot.realname.nolimit")) {
 							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
 							limit--;
 						} else {

@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -259,7 +260,7 @@ public class NameManager implements Listener {
 		}
 
 		online.add(uuid);
-		System.out.println("[MultiChat] [BRIDGE] [+] " + username + " has joined this server.");
+		Bukkit.getLogger().info("[+] " + username + " has joined this server.");
 
 	}
 
@@ -301,7 +302,7 @@ public class NameManager implements Listener {
 	public void unregisterPlayer(Player player) {
 
 		online.remove(player.getUniqueId());
-		System.out.println("[MultiChat] [BRIDGE] [-] " + player.getName() + " has left this server.");
+		Bukkit.getLogger().info("[-] " + player.getName() + " has left this server.");
 
 	}
 
@@ -449,11 +450,11 @@ public class NameManager implements Listener {
 			out.writeObject(mapNameFormatted);
 
 			out.close();
-			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully saved!");
+			Bukkit.getLogger().info("The nicknames file was successfully saved!");
 
 		} catch (IOException e) {
 
-			System.out.println("[MultiChat] [BRIDGE] An error has occured writing the nicknames file!");
+			Bukkit.getLogger().info("An error has occured writing the nicknames file!");
 			e.printStackTrace();
 
 		}
@@ -519,11 +520,11 @@ public class NameManager implements Listener {
 
 			in.close();
 
-			System.out.println("[MultiChat] [BRIDGE] The nicknames file was successfully loaded!");
+			Bukkit.getLogger().info("The nicknames file was successfully loaded!");
 
 		} catch (IOException|ClassNotFoundException e) {
 
-			System.out.println("[MultiChat] [BRIDGE] An error has occured reading the nicknames file!");
+			Bukkit.getLogger().info("An error has occured reading the nicknames file!");
 			e.printStackTrace();
 
 		}
