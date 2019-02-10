@@ -1,0 +1,42 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                   MultiChatSpigot                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+#   DON'T EDIT   #
+version: "1.7"   #
+##################
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       General                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should this server use a different format for the global chat than the one assigned in the Proxy Plugins folder?
+# ( Useful if you want to use local placeholders that may only be present on one server )
+override_global_format: false
+
+# The format to use for the global chat if the setting above is set to true
+# 
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %SERVER% = The server of the sender
+# %WORLD% = The world of the sender
+# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
+#
+# Will display as [FORMAT] [MESSAGE]
+override_global_format_format: "&f%DISPLAYNAME%&f: "
+
+# If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
+# This means that if a plugin such as Towny manages the chat format locally, then this will be used.
+# MultiChat will still send the message to all the other servers, but using the externally defined format.
+override_all_multichat_formatting: false
