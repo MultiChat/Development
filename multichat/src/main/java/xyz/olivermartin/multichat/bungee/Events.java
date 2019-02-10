@@ -243,8 +243,6 @@ public class Events implements Listener {
 					return;
 				}
 
-				ChatManipulation chatfix = new ChatManipulation();
-
 				if (ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId())) != null) {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId()));
@@ -261,48 +259,7 @@ public class Events implements Listener {
 								return;
 							}
 
-							String messageOutFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-							String messageInFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-							String messageSpyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
-
-							String finalmessage = chatfix.replaceMsgVars(messageOutFormat, message, player, target);
-							player.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							finalmessage = chatfix.replaceMsgVars(messageInFormat, message, player, target);
-							target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							finalmessage = chatfix.replaceMsgVars(messageSpyFormat, event.getMessage(), player, target);
-
-							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-								if ((onlineplayer.hasPermission("multichat.staff.spy"))
-										&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-										&& (onlineplayer.getUniqueId() != player.getUniqueId())
-										&& (onlineplayer.getUniqueId() != target.getUniqueId())
-										&& (!(player.hasPermission("multichat.staff.spy.bypass")
-												|| target.hasPermission("multichat.staff.spy.bypass")))) {
-
-									onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-								}
-
-							}
-
-							if (MultiChat.lastmsg.containsKey(player.getUniqueId())) {
-								MultiChat.lastmsg.remove(player.getUniqueId());
-							}
-
-							MultiChat.lastmsg.put(player.getUniqueId(), target.getUniqueId());
-
-							if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-								MultiChat.lastmsg.remove(target.getUniqueId());
-							}
-
-							MultiChat.lastmsg.put(target.getUniqueId(), player.getUniqueId());
-
-							ConsoleManager.logSocialSpy(player.getName(), target.getName(), event.getMessage());
-
-							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + player.getName() + " -> " + target.getName() + "}  " + event.getMessage());
+							PrivateMessageManager.getInstance().sendMessage(message, player, target);
 
 						} else {
 							MessageManager.sendMessage(player, "command_msg_disabled_target");
@@ -316,7 +273,6 @@ public class Events implements Listener {
 					MessageManager.sendMessage(player, "command_msg_not_online");
 				}
 
-				chatfix = null;
 			}
 		}
 
