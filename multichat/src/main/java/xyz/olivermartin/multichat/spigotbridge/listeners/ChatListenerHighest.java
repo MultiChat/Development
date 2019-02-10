@@ -29,7 +29,18 @@ public class ChatListenerHighest implements Listener {
 			// Lets send Bungee the latest info!
 			MetaManager.getInstance().updatePlayerMeta(event.getPlayer().getName(), MultiChatSpigot.setDisplayNameLastVal, MultiChatSpigot.displayNameFormatLastVal);
 			event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
-			SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
+			if (!MultiChatSpigot.overrideAllMultiChatFormats) {
+				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat());
+			} else {
+				// Lets try and apply the other plugins formats correctly...
+				// THIS IS DONE ON A BEST EFFORT BASIS!
+				String format = event.getFormat();
+				format = format.replace("%1$s", event.getPlayer().getDisplayName());
+				format = format.replace("%2$s", "");
+				format = format.replaceFirst("\\$s", event.getPlayer().getDisplayName());
+				format = format.replaceFirst("\\$s", "");
+				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), format);
+			}
 		}
 
 	}
