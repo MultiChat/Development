@@ -15,3 +15,8 @@ commands:
       usage: /realname <nickname>
       permission: multichatspigot.realname
       permission-message: You do not have permission (multichatspigot.realname)
+   multichatspigot:
+      description: MultiChatSpigot reload command
+      usage: /multichatspigot reload
+      permission: multichatspigot.reload
+      permission-message: You do not have permission (multichatspigot.reload)

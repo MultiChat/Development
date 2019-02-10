@@ -202,6 +202,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 		this.getCommand("nick").setExecutor(CommandHandler.getInstance());
 		this.getCommand("realname").setExecutor(CommandHandler.getInstance());
+		this.getCommand("multichatspigot").setExecutor(CommandHandler.getInstance());
 
 		// Manage dependencies
 

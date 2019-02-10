@@ -9,12 +9,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.NameManager;
+import xyz.olivermartin.multichat.spigotbridge.SpigotConfigManager;
 
 public class CommandHandler implements CommandExecutor {
 
@@ -38,6 +40,38 @@ public class CommandHandler implements CommandExecutor {
 
 	@EventHandler
 	public boolean onCommand(CommandSender commandSender, Command cmd, String label, String[] args) {
+
+		if (cmd.getName().equalsIgnoreCase("multichatspigot")) {
+
+			// Show usage
+			if (args.length != 1) {
+				return false;
+			}
+
+			if (args[0].equalsIgnoreCase("reload")) {
+
+				if (commandSender.hasPermission("multichatspigot.reload")) {
+
+					SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").startupConfig();
+					Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
+
+					MultiChatSpigot.overrideGlobalFormat = config.getBoolean("override_global_format");
+					MultiChatSpigot.overrideGlobalFormatFormat = config.getString("override_global_format_format");
+					MultiChatSpigot.overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
+
+					return true;
+
+				} else {
+					commandSender.sendMessage(ChatColor.DARK_RED + "You do not have permission to reload the plugin");
+					return true;
+				}
+
+			} else {
+				// Show usage
+				return false;
+			}
+
+		}
 
 		if (cmd.getName().equalsIgnoreCase("nick")) {
 
