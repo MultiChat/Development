@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.bukkit.configuration.Configuration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,6 +62,10 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static boolean globalChatServer = false;
 	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
+	public static boolean overrideGlobalFormat = false;
+	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
+	public static boolean overrideAllMultiChatFormats = false;
+
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
 
@@ -74,6 +79,13 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
+
+		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
+		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
+
+		overrideGlobalFormat = config.getBoolean("override_global_format");
+		overrideGlobalFormatFormat = config.getString("override_global_format_format");
+		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
 
 		File f = new File(configDir, nameDataFile);
 

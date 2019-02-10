@@ -69,7 +69,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static List<UUID> allspy = new ArrayList<UUID>();
 	public static List<UUID> socialspy = new ArrayList<UUID>();
 
-	public static File ConfigDir;
+	public static File configDir;
 	public static String configversion;
 
 	public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
@@ -230,16 +230,16 @@ public class MultiChat extends Plugin implements Listener {
 
 		instance = this;
 
-		ConfigDir = getDataFolder();
+		configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] Creating plugin directory!");
 			getDataFolder().mkdirs();
 		}
 
-		ConfigManager.getInstance().registerHandler("config.yml", ConfigDir);
-		ConfigManager.getInstance().registerHandler("joinmessages.yml", ConfigDir);
-		ConfigManager.getInstance().registerHandler("messages.yml", ConfigDir);
-		ConfigManager.getInstance().registerHandler("chatcontrol.yml", ConfigDir);
+		ConfigManager.getInstance().registerHandler("config.yml", configDir);
+		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDir);
+		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
+		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
@@ -427,7 +427,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveAnnouncements() {
 
 		try {
-			File file = new File(ConfigDir, "Announcements.dat");
+			File file = new File(configDir, "Announcements.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(Announcements.getAnnouncementList());
@@ -442,7 +442,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveBulletins() {
 
 		try	{
-			File file = new File(ConfigDir, "Bulletins.dat");
+			File file = new File(configDir, "Bulletins.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeBoolean(Bulletins.isEnabled());
@@ -459,7 +459,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveChatInfo() {
 
 		try {
-			File file = new File(ConfigDir, "StaffChatInfo.dat");
+			File file = new File(configDir, "StaffChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(modchatpreferences);
@@ -470,7 +470,7 @@ public class MultiChat extends Plugin implements Listener {
 		}
 
 		try {
-			File file = new File(ConfigDir, "AdminChatInfo.dat");
+			File file = new File(configDir, "AdminChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(adminchatpreferences);
@@ -485,7 +485,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveGroupChatInfo() {
 
 		try {
-			File file = new File(ConfigDir, "GroupChatInfo.dat");
+			File file = new File(configDir, "GroupChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(groupchats);
@@ -500,7 +500,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveCasts() {
 
 		try {
-			File file = new File(ConfigDir, "Casts.dat");
+			File file = new File(configDir, "Casts.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(CastControl.castList);
@@ -515,7 +515,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveGroupSpyInfo() {
 
 		try {
-			File file = new File(ConfigDir, "GroupSpyInfo.dat");
+			File file = new File(configDir, "GroupSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(allspy);
@@ -530,7 +530,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveSocialSpyInfo() {
 
 		try {
-			File file = new File(ConfigDir, "SocialSpyInfo.dat");
+			File file = new File(configDir, "SocialSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(socialspy);
@@ -545,7 +545,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveGlobalChatInfo() {
 
 		try {
-			File file = new File(ConfigDir, "GlobalChatInfo.dat");
+			File file = new File(configDir, "GlobalChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(globalplayers);
@@ -560,7 +560,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static void saveMute() {
 
 		try {
-			File file = new File(ConfigDir, "Mute.dat");
+			File file = new File(configDir, "Mute.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(ChatControl.getMutedPlayers());
@@ -579,7 +579,7 @@ public class MultiChat extends Plugin implements Listener {
 		if (config.getBoolean("session_ignore")) return;
 
 		try {
-			File file = new File(ConfigDir, "Ignore.dat");
+			File file = new File(configDir, "Ignore.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(ChatControl.getIgnoreMap());
@@ -597,7 +597,7 @@ public class MultiChat extends Plugin implements Listener {
 		HashMap<UUID, TChatInfo> result = null;
 
 		try {
-			File file = new File(ConfigDir, "StaffChatInfo.dat");
+			File file = new File(configDir, "StaffChatInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID, TChatInfo>)in.readObject();
@@ -619,7 +619,7 @@ public class MultiChat extends Plugin implements Listener {
 		int timeBetween = 0;
 
 		try {
-			File file = new File(ConfigDir, "Bulletins.dat");
+			File file = new File(configDir, "Bulletins.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			enabled = in.readBoolean();
@@ -643,7 +643,7 @@ public class MultiChat extends Plugin implements Listener {
 		HashMap<String, String> result = null;
 
 		try {
-			File file = new File(ConfigDir, "Announcements.dat");
+			File file = new File(configDir, "Announcements.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, String>)in.readObject();
@@ -663,7 +663,7 @@ public class MultiChat extends Plugin implements Listener {
 		HashMap<UUID, TChatInfo> result = null;
 
 		try {
-			File file = new File(ConfigDir, "AdminChatInfo.dat");
+			File file = new File(configDir, "AdminChatInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID, TChatInfo>)in.readObject();
@@ -683,7 +683,7 @@ public class MultiChat extends Plugin implements Listener {
 		HashMap<String, String> result = null;
 
 		try	{
-			File file = new File(ConfigDir, "Casts.dat");
+			File file = new File(configDir, "Casts.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, String>)in.readObject();
@@ -703,7 +703,7 @@ public class MultiChat extends Plugin implements Listener {
 		HashMap<String, TGroupChatInfo> result = null;
 
 		try {
-			File file = new File(ConfigDir, "GroupChatInfo.dat");
+			File file = new File(configDir, "GroupChatInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<String, TGroupChatInfo>)in.readObject();
@@ -723,7 +723,7 @@ public class MultiChat extends Plugin implements Listener {
 		List<UUID> result = null;
 
 		try {
-			File file = new File(ConfigDir, "GroupSpyInfo.dat");
+			File file = new File(configDir, "GroupSpyInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (List<UUID>)in.readObject();
@@ -743,7 +743,7 @@ public class MultiChat extends Plugin implements Listener {
 		List<UUID> result = null;
 
 		try {
-			File file = new File(ConfigDir, "SocialSpyInfo.dat");
+			File file = new File(configDir, "SocialSpyInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (List<UUID>)in.readObject();
@@ -763,7 +763,7 @@ public class MultiChat extends Plugin implements Listener {
 		Map<UUID, Boolean> result = null;
 
 		try {
-			File file = new File(ConfigDir, "GlobalChatInfo.dat");
+			File file = new File(configDir, "GlobalChatInfo.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (Map<UUID, Boolean>)in.readObject();
@@ -783,7 +783,7 @@ public class MultiChat extends Plugin implements Listener {
 		Set<UUID> result = null;
 
 		try {
-			File file = new File(ConfigDir, "Mute.dat");
+			File file = new File(configDir, "Mute.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (Set<UUID>)in.readObject();
@@ -807,7 +807,7 @@ public class MultiChat extends Plugin implements Listener {
 		Map<UUID, Set<UUID>> result = null;
 
 		try {
-			File file = new File(ConfigDir, "Ignore.dat");
+			File file = new File(configDir, "Ignore.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (Map<UUID, Set<UUID>>)in.readObject();
@@ -825,8 +825,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		System.out.println("[MultiChat] Starting load routine for data files");
 
-		File f = new File(ConfigDir, "StaffChatInfo.dat");
-		File f2 = new File(ConfigDir, "AdminChatInfo.dat");
+		File f = new File(configDir, "StaffChatInfo.dat");
+		File f2 = new File(configDir, "AdminChatInfo.dat");
 
 		if ((f.exists()) && (!f.isDirectory()) && (f2.exists()) && (!f2.isDirectory())) {
 
@@ -843,7 +843,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f3 = new File(ConfigDir, "GroupChatInfo.dat");
+		File f3 = new File(configDir, "GroupChatInfo.dat");
 
 		if ((f3.exists()) && (!f3.isDirectory())) {
 
@@ -859,7 +859,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f4 = new File(ConfigDir, "GroupSpyInfo.dat");
+		File f4 = new File(configDir, "GroupSpyInfo.dat");
 
 		if ((f4.exists()) && (!f4.isDirectory())) {
 
@@ -875,7 +875,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f5 = new File(ConfigDir, "GlobalChatInfo.dat");
+		File f5 = new File(configDir, "GlobalChatInfo.dat");
 
 		if ((f5.exists()) && (!f5.isDirectory())) {
 
@@ -891,7 +891,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f6 = new File(ConfigDir, "SocialSpyInfo.dat");
+		File f6 = new File(configDir, "SocialSpyInfo.dat");
 
 		if ((f6.exists()) && (!f6.isDirectory())) {
 
@@ -907,7 +907,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f7 = new File(ConfigDir, "Announcements.dat");
+		File f7 = new File(configDir, "Announcements.dat");
 
 		if ((f7.exists()) && (!f7.isDirectory())) {
 
@@ -923,7 +923,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f8 = new File(ConfigDir, "Bulletins.dat");
+		File f8 = new File(configDir, "Bulletins.dat");
 
 		if ((f8.exists()) && (!f8.isDirectory())) {
 
@@ -939,7 +939,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f9 = new File(ConfigDir, "Casts.dat");
+		File f9 = new File(configDir, "Casts.dat");
 
 		if ((f9.exists()) && (!f9.isDirectory())) {
 
@@ -955,7 +955,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f10 = new File(ConfigDir, "Mute.dat");
+		File f10 = new File(configDir, "Mute.dat");
 
 		if ((f10.exists()) && (!f10.isDirectory())) {
 
@@ -971,7 +971,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		}
 
-		File f11 = new File(ConfigDir, "Ignore.dat");
+		File f11 = new File(configDir, "Ignore.dat");
 
 		if ((f11.exists()) && (!f11.isDirectory())) {
 
