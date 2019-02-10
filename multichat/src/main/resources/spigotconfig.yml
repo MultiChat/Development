@@ -37,6 +37,6 @@ override_global_format: false
 override_global_format_format: "&f%DISPLAYNAME%&f: "
 
 # If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
-# This means that if a plugin such as Towny manages the chat format locally, then this will be used.
-# MultiChat will still send the message to all the other servers, but using the externally defined format.
+# This means that if a plugin such as Towny manages the chat format locally, then this will be used instead.
+# MultiChat will still send the message to all the other servers.
 override_all_multichat_formatting: false

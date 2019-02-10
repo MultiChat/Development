@@ -24,17 +24,31 @@ public class ChatListenerLowest implements Listener {
 			return;
 		}
 
-		// IF WE ARE MANAGING GLOBAL CHAT THEN SET THE FORMAT!
+		// If we aren't setting the format then we can leave now!
+		if (MultiChatSpigot.overrideAllMultiChatFormats) return;
+
+		// Lets start to set the format...
 		String format;
 
-		if (MultiChatSpigot.hookedPAPI()) {
-			format = PlaceholderAPI.setPlaceholders(event.getPlayer(), MultiChatSpigot.globalChatFormat);
-		} else {
+		if (!MultiChatSpigot.overrideGlobalFormat) {
+
+			// If we aren't overriding then use the main global format
 			format = MultiChatSpigot.globalChatFormat;
+
+		} else {
+
+			// Otherwise use the locally defined one in the config file
+			format = MultiChatSpigot.overrideGlobalFormatFormat;
+
 		}
 
+		// If we are hooked with PAPI then use their placeholders!
+		if (MultiChatSpigot.hookedPAPI()) {
+			format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+		}
+
+		// If we are a global chat server, then we want to set the format!
 		if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format.replaceAll("%", "%%")));
-		//if (globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', globalChatFormat.replaceAll("%", "%%").replace("%%DISPLAYNAME%%","%s")) + "%s");
 
 	}
 
