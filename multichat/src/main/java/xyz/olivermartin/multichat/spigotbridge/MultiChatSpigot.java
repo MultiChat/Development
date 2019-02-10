@@ -65,6 +65,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static boolean overrideGlobalFormat = false;
 	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
 	public static boolean overrideAllMultiChatFormats = false;
+	public static boolean broadcastEditedRecipients = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -86,6 +87,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		overrideGlobalFormat = config.getBoolean("override_global_format");
 		overrideGlobalFormatFormat = config.getString("override_global_format_format");
 		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
+		broadcastEditedRecipients = config.getBoolean("broadcast_edited_recipients");
 
 		File f = new File(configDir, nameDataFile);
 

@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -54,7 +53,7 @@ public class BungeeComm implements Listener {
 			} else {
 				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
 			}
-			
+
 			// Is this server a global chat server?
 			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
 					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName())) {
@@ -62,7 +61,7 @@ public class BungeeComm implements Listener {
 			} else {
 				out.writeUTF("F");
 			}
-			
+
 			// Send the global format
 			out.writeUTF(MultiChat.globalChat.getFormat());
 
@@ -111,19 +110,11 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendChatMessage(String playerName, String format, String message, boolean colour, Set<String> players, ServerInfo server) {
+	public static void sendChatMessage(String playerName, String format, String message, boolean colour, String playerString, ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
-		String playerString = "";
-		
-		for (String p : players) {
-			if (playerString.equals("")) {
-				playerString = playerString + p;
-			} else {
-				playerString = playerString + " " + p;
-			}
-		}
+
 
 		try {
 			// Players name
@@ -143,7 +134,7 @@ public class BungeeComm implements Listener {
 		}
 
 		server.sendData("multichat:chat", stream.toByteArray());
-		
+
 		DebugManager.log("Sent message on multichat:chat channel!");
 
 	}
@@ -165,30 +156,32 @@ public class BungeeComm implements Listener {
 			return;
 
 		}
-		
+
 		if (ev.getTag().equals("multichat:chat")) {
-			
+
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
-			
+
 			try {
 
 				UUID uuid = UUID.fromString(in.readUTF());
 				String message = in.readUTF();
 				String format = in.readUTF();
-				
+				boolean local = in.readBoolean();
+				String players = in.readUTF();
+
 				format = format.replace("%%","%");
-				
+
 				DebugManager.log("Got format for message: " + format);
-				
+
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) return;
 
 				synchronized (player) {
-					
+
 					// TODO This will handle chat messages sent from the local servers
-					MultiChat.globalChat.sendMessage(player, message, format);
+					MultiChat.globalChat.sendMessage(player, message, format, local, players);
 
 				}
 
@@ -196,7 +189,7 @@ public class BungeeComm implements Listener {
 				e.printStackTrace();
 			}
 
-			
+
 			return;
 
 		}

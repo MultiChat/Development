@@ -42,3 +42,8 @@ override_global_format_format: "&f%DISPLAYNAME%&f: "
 # 
 # NOTE: THIS IS DONE ON A BEST EFFORT BASIS! (MultiChat is a chat formatting plugin so is designed to format the chat!)
 override_all_multichat_formatting: false
+
+# This setting controls if MultiChat should still broadcast messages globally if a plugin has edited the recipients of the message.
+# Some plugins (i.e. Towny) change the recipients of a message in order to implement different chat channels.
+# If you set the setting below to true, then MultiChat might broadcast messages globally that were supposed to only be seen by a small set of players.
+broadcast_edited_recipients: false

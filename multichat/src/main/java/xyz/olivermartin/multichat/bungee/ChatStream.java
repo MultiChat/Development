@@ -83,8 +83,8 @@ public class ChatStream {
 	public String getFormat() {
 		return this.format;
 	}
-	
-	public void sendMessage(ProxiedPlayer sender, String message, String format) {
+
+	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
 
 		Set<String> players = new HashSet<String>();
 
@@ -105,7 +105,7 @@ public class ChatStream {
 
 								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
 									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-										receiver.sendMessage(buildFormat(sender,receiver,format,message));
+										if (!local) receiver.sendMessage(buildFormat(sender,receiver,format,message));
 									} else {
 										players.add(receiver.getName());
 									}
@@ -123,75 +123,30 @@ public class ChatStream {
 			}
 		}
 
-		String newFormat = buildSpigotFormat(sender,format,message);
-		BungeeComm.sendChatMessage(
-				sender.getName(),
-				newFormat,
-				message, 
-				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
-				players,
-				sender.getServer().getInfo()
-				);
+		String playerString = "";
 
-		// Trigger PostGlobalChatEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
-
-		sendToConsole(sender,format,message);
-
-	}
-
-	// TODO Unused now?? (Doesnt have received format from spigot)
-	public void sendMessage(ProxiedPlayer sender, String message) {
-
-		Set<String> players = new HashSet<String>();
-
-		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-
-			if (receiver != null) {
-
-				synchronized (receiver) {
-
-					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-							//TODO hiding & showing streams
-							if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
-									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
-									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
-
-								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-										receiver.sendMessage(buildFormat(sender,receiver,format,message));
-									} else {
-										players.add(receiver.getName());
-									}
-								} else {
-									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
-								}
-
-							}
-						}
-
-					}
-
-				}
-
+		for (String p : players) {
+			if (playerString.equals("")) {
+				playerString = playerString + p;
+			} else {
+				playerString = playerString + " " + p;
 			}
 		}
 
+		if (local) playerString = playerList;
+
 		String newFormat = buildSpigotFormat(sender,format,message);
 		BungeeComm.sendChatMessage(
 				sender.getName(),
 				newFormat,
 				message, 
 				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
-				players,
+				playerString,
 				sender.getServer().getInfo()
 				);
 
 		// Trigger PostGlobalChatEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
+		if (!local) ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
 		sendToConsole(sender,format,message);
 

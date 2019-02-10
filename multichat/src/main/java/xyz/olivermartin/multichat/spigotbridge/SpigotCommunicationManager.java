@@ -42,7 +42,7 @@ public class SpigotCommunicationManager {
 
 	}
 
-	public void sendPluginChatChannelMessage(String channel, UUID uuid, String message, String format) {
+	public void sendPluginChatChannelMessage(String channel, UUID uuid, String message, String format, boolean local, String players) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
@@ -51,6 +51,8 @@ public class SpigotCommunicationManager {
 			out.writeUTF(uuid.toString());
 			out.writeUTF(message);
 			out.writeUTF(format);
+			out.writeBoolean(local);
+			out.writeUTF(players);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
