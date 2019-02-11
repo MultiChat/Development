@@ -407,9 +407,9 @@ public class Events implements Listener {
 
 		}
 
-		if (!MultiChat.globalplayers.containsKey(uuid)) {
+		if (!ChatModeManager.getInstance().existsPlayer(uuid)) {
 
-			MultiChat.globalplayers.put(uuid, Boolean.valueOf(true));
+			ChatModeManager.getInstance().registerPlayer(uuid, true);
 			ConsoleManager.log("Created new global chat entry for " + player.getName());
 		}
 

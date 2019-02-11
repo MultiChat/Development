@@ -3,8 +3,8 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
  * Global Command
@@ -25,8 +25,7 @@ public class GlobalCommand extends Command {
 
 		if ((sender instanceof ProxiedPlayer)) {
 
-			MultiChat.globalplayers.remove(((ProxiedPlayer)sender).getUniqueId());
-			MultiChat.globalplayers.put(((ProxiedPlayer)sender).getUniqueId(), Boolean.valueOf(true));
+			ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
 
 			MessageManager.sendMessage(sender, "command_global_enabled_1");
 			MessageManager.sendMessage(sender, "command_global_enabled_2");

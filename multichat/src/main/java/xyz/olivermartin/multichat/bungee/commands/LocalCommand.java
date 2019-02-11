@@ -3,8 +3,8 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 
 /**
  * Local Chat Command
@@ -25,8 +25,7 @@ public class LocalCommand extends Command {
 
 		if ((sender instanceof ProxiedPlayer)) {
 
-			MultiChat.globalplayers.remove(((ProxiedPlayer)sender).getUniqueId());
-			MultiChat.globalplayers.put(((ProxiedPlayer)sender).getUniqueId(), Boolean.valueOf(false));
+			ChatModeManager.getInstance().setLocal(((ProxiedPlayer)sender).getUniqueId());
 
 			MessageManager.sendMessage(sender, "command_local_enabled_1");
 			MessageManager.sendMessage(sender, "command_local_enabled_2");

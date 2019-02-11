@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee;
 
+import java.util.Collection;
+
 public class MultiChatUtil {
 
 	/**
@@ -47,6 +49,22 @@ public class MultiChatUtil {
 	public static String getMessageFromArgs(String[] args) {
 
 		return getMessageFromArgs(args, 0, args.length - 1);
+
+	}
+
+	public static String getStringFromCollection(Collection<String> collection) {
+
+		String result = "";
+
+		for (String item : collection) {
+			if (result.equals("")) {
+				result = result + item;
+			} else {
+				result = result + " " + item;
+			}
+		}
+
+		return result;
 
 	}
 

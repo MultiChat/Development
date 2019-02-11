@@ -97,11 +97,11 @@ public class ChatStream {
 					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 							//TODO hiding & showing streams
-							if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
+							if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
 									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
-									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
+									(!ChatModeManager.getInstance().isGlobal(receiver.getUniqueId())
+											&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+									(ChatModeManager.getInstance().isGlobal(sender.getUniqueId()) && ChatModeManager.getInstance().isGlobal(receiver.getUniqueId()))) {
 
 								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
 									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
@@ -123,17 +123,12 @@ public class ChatStream {
 			}
 		}
 
-		String playerString = "";
-
-		for (String p : players) {
-			if (playerString.equals("")) {
-				playerString = playerString + p;
-			} else {
-				playerString = playerString + " " + p;
-			}
+		String playerString;
+		if (local) {
+			playerString = playerList;
+		} else {
+			playerString = MultiChatUtil.getStringFromCollection(players);
 		}
-
-		if (local) playerString = playerList;
 
 		String newFormat = buildSpigotFormat(sender,format,message);
 		BungeeComm.sendChatMessage(
@@ -191,12 +186,12 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}
@@ -237,12 +232,12 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}
@@ -324,12 +319,12 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}

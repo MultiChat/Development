@@ -72,8 +72,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static File configDir;
 	public static String configversion;
 
-	public static Map<UUID, Boolean> globalplayers = new HashMap<UUID, Boolean>();
-
 	public static boolean frozen;
 
 	public static ChatStream globalChat;
@@ -548,7 +546,7 @@ public class MultiChat extends Plugin implements Listener {
 			File file = new File(configDir, "GlobalChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(globalplayers);
+			out.writeObject(ChatModeManager.getInstance().getData());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the global chat info file!");
@@ -879,7 +877,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f5.exists()) && (!f5.isDirectory())) {
 
-			globalplayers = loadGlobalChatInfo();
+			ChatModeManager.getInstance().loadData(loadGlobalChatInfo());
 
 		} else {
 
