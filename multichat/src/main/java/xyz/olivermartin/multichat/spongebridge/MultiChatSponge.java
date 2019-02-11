@@ -93,7 +93,8 @@ public final class MultiChatSponge implements CommandExecutor {
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 
-		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("spongeconfig.yml").getConfig();
+		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
+		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
 		overrideGlobalFormat = config.getNode("override_global_format").getBoolean();
 		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
 

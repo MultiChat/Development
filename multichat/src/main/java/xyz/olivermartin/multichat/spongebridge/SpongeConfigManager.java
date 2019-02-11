@@ -1,7 +1,6 @@
 package xyz.olivermartin.multichat.spongebridge;
 
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -42,9 +41,9 @@ public class SpongeConfigManager {
 	 * @param fileName filename i.e. config.yml
 	 * @param configPath THE PATH WITHOUT THE FILE NAME
 	 */
-	public void registerHandler(String fileName, File configPath) {
+	public void registerHandler(String fileName) {
 
-		handlerMap.put(fileName, new SpongeConfigHandler(configPath, fileName));
+		handlerMap.put(fileName, new SpongeConfigHandler(fileName));
 
 	}
 

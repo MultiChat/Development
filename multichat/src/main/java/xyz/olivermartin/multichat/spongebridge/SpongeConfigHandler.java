@@ -23,13 +23,13 @@ public class SpongeConfigHandler {
 	// The config file
 	private ConfigurationNode config;
 	// Path of config file
-	private File configPath;
+	//private File configPath;
 	// Name of config file
 	private String fileName;
 
-	public SpongeConfigHandler(File configPath, String fileName) {
+	public SpongeConfigHandler(String fileName) {
 
-		this.configPath = configPath;
+		//this.configPath = configPath;
 		this.config = null;
 		this.fileName = fileName;
 		this.startupConfig();
@@ -45,7 +45,7 @@ public class SpongeConfigHandler {
 
 		try {
 
-			File file = new File(configPath, fileName);
+			File file = new File(fileName);
 
 			if (!file.exists()) {
 
@@ -74,7 +74,7 @@ public class SpongeConfigHandler {
 
 		// Copy to desired location
 		try {
-			Files.copy(inputStream, new File(configPath, fileName).toPath(), new CopyOption[0]);
+			Files.copy(inputStream, new File(fileName).toPath(), new CopyOption[0]);
 		} catch (IOException e) {
 			System.out.println("[ERROR] Could not create new " + fileName + " file...");
 			e.printStackTrace();
@@ -91,7 +91,7 @@ public class SpongeConfigHandler {
 	private void loadConfig() {
 
 		ConfigurationLoader<ConfigurationNode> loader =
-				YAMLConfigurationLoader.builder().setFile(new File(configPath, fileName)).build();
+				YAMLConfigurationLoader.builder().setFile(new File(fileName)).build();
 
 		try {
 			this.config = loader.load();

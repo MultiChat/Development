@@ -27,8 +27,21 @@ public class SpongeChatListener {
 				event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
 
 				String format;
+
+				if (!MultiChatSponge.overrideGlobalFormat) {
+
+					// If we aren't overriding then use the main global format
+					format = MultiChatSponge.globalChatFormat;
+
+				} else {
+
+					// Otherwise use the locally defined one in the config file
+					format = MultiChatSponge.overrideGlobalFormatFormat;
+
+				}
+
 				if (MultiChatSponge.papi.isPresent()) {
-					format = MultiChatSponge.papi.get().replaceSourcePlaceholders(MultiChatSponge.globalChatFormat, event.getSource()).toPlain();
+					format = MultiChatSponge.papi.get().replaceSourcePlaceholders(format, event.getSource()).toPlain();
 
 					// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
 					format = format.replace("{NAME}", "%NAME%");
@@ -40,8 +53,6 @@ public class SpongeChatListener {
 					format = format.replace("{WORLD}", "%WORLD%");
 					format = format.replace("{MODE}", "%MODE%");
 
-				} else {
-					format = MultiChatSponge.globalChatFormat;
 				}
 
 				// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
