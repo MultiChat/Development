@@ -79,6 +79,9 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static boolean globalChatServer = false;
 	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
+	public static boolean overrideGlobalFormat = false;
+	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
+
 	public static Optional<PlaceholderService> papi;
 
 
@@ -89,6 +92,10 @@ public final class MultiChatSponge implements CommandExecutor {
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
+
+		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("spongeconfig.yml").getConfig();
+		overrideGlobalFormat = config.getNode("override_global_format").getBoolean();
+		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
 
 		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
 		ConfigurationNode rootNode;
@@ -232,9 +239,9 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	}
 
-	public static void sendChatToBungee(Player player, String message, String format) {
+	public static void sendChatToBungee(Player player, String message, String format, boolean local, String players) {
 
-		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format));
+		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format).writeBoolean(local).writeUTF(players));
 
 	}
 

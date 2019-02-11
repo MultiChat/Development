@@ -46,7 +46,7 @@ public class SpongeChatListener {
 
 				// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
 				// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
-				MultiChatSponge.sendChatToBungee(player, event.getRawMessage().toPlain(), format.replaceAll("%", "%%"));
+				MultiChatSponge.sendChatToBungee(player, event.getRawMessage().toPlain(), format.replaceAll("%", "%%"), false, "");
 			}
 
 		}
