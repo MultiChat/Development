@@ -139,6 +139,28 @@ public class BungeeComm implements Listener {
 
 	}
 
+	public static void sendPlayerChannelMessage(String playerName, String channel, ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+
+		try {
+			// Players name
+			out.writeUTF(playerName);
+			// Channel part
+			out.writeUTF(channel);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:channel", stream.toByteArray());
+
+		DebugManager.log("Sent message on multichat:channel channel!");
+
+	}
+
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 

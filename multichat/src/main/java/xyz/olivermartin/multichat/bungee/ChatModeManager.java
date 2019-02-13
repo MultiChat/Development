@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+
 public class ChatModeManager {
 
 	private static ChatModeManager instance;
@@ -31,7 +34,10 @@ public class ChatModeManager {
 		// TODO
 		Channel.setChannel(uuid, Channel.getLocalChannel());
 
-		// TODO Send plugin channel message to local servers
+		// TODO
+		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+		if (player == null) return;
+		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), player.getServer().getInfo());
 
 	}
 
@@ -42,7 +48,10 @@ public class ChatModeManager {
 		// TODO
 		Channel.setChannel(uuid, Channel.getGlobalChannel());
 
-		// TODO Send plugin channel message to local servers
+		// TODO
+		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+		if (player == null) return;
+		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), player.getServer().getInfo());
 
 	}
 

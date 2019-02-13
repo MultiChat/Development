@@ -43,6 +43,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.PlayerChannelListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
 
 /**
@@ -69,6 +70,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	static RawDataChannel suffixChannel;
 	static RawDataChannel nickChannel;
 	static RawDataChannel worldChannel;
+	static RawDataChannel channelChannel;
 
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
@@ -157,9 +159,11 @@ public final class MultiChatSponge implements CommandExecutor {
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
+		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:channel");
 
 		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
 		chatChannel.addListener(Platform.Type.SERVER, new BungeeChatListener(chatChannel));
+		channelChannel.addListener(Platform.Type.SERVER, new PlayerChannelListener());
 
 		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
@@ -174,6 +178,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		MultiChatSponge.suffixChannel = suffixChannel;
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
+		MultiChatSponge.channelChannel = channelChannel;
 
 		// Register listeners
 
@@ -218,6 +223,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		Sponge.getChannelRegistrar().unbindChannel(suffixChannel);
 		Sponge.getChannelRegistrar().unbindChannel(nickChannel);
 		Sponge.getChannelRegistrar().unbindChannel(worldChannel);
+		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
 
 		ConfigurationNode rootNode;
 

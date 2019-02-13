@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
@@ -20,6 +21,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
@@ -349,6 +351,9 @@ public class Events implements Listener {
 							return;
 						}
 
+						// Let server know players channel preference
+						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), player.getServer().getInfo());
+
 						//TODO Removing this should now let the message pass through to spigot
 						//MultiChat.globalChat.sendMessage(player, message);
 
@@ -420,6 +425,8 @@ public class Events implements Listener {
 		} else {
 			Channel.setChannel(player.getUniqueId(), Channel.getLocalChannel());
 		}
+
+		BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), event.getPlayer().getServer().getInfo());
 
 		if (UUIDNameManager.existsUUID(uuid)) {
 			UUIDNameManager.removeUUID(uuid);
@@ -528,4 +535,24 @@ public class Events implements Listener {
 			}
 		}
 	}
+
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onServerSwitch(ServerSwitchEvent event) {
+		// Tell the new server the player's channel preference
+		ProxyServer.getInstance().getScheduler().schedule(MultiChat.getInstance(), new Runnable() {
+
+			public void run() {
+
+				try {
+					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), event.getPlayer().getServer().getInfo());
+				}
+
+				catch (NullPointerException ex) { /* EMPTY */ }
+			}
+
+		}, 500L, TimeUnit.MILLISECONDS);
+
+	}
+
 }

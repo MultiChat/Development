@@ -27,7 +27,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 
-// NAME IDEAS: Backchat, Totalk, Talkative, Portalk, Netalk, Revtalkr, Chatplex, Talky, Photalk
 
 /**
  * The MAIN MultiChat Class
@@ -268,6 +267,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:action");
 			getProxy().registerChannel("multichat:paction");
 			getProxy().registerChannel("multichat:chat");
+			getProxy().registerChannel("multichat:channel");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register commands
