@@ -28,6 +28,9 @@ public class ChatModeManager {
 
 		globalPlayers.put(uuid, false);
 
+		// TODO
+		Channel.setChannel(uuid, Channel.getLocalChannel());
+
 		// TODO Send plugin channel message to local servers
 
 	}
@@ -35,6 +38,9 @@ public class ChatModeManager {
 	public void setGlobal(UUID uuid) {
 
 		globalPlayers.put(uuid, true);
+
+		// TODO
+		Channel.setChannel(uuid, Channel.getGlobalChannel());
 
 		// TODO Send plugin channel message to local servers
 

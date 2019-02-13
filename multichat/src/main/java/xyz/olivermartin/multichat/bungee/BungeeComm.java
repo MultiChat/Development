@@ -63,7 +63,7 @@ public class BungeeComm implements Listener {
 			}
 
 			// Send the global format
-			out.writeUTF(MultiChat.globalChat.getFormat());
+			out.writeUTF(Channel.getGlobalChannel().getFormat());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -181,7 +181,7 @@ public class BungeeComm implements Listener {
 				synchronized (player) {
 
 					// TODO This will handle chat messages sent from the local servers
-					MultiChat.globalChat.sendMessage(player, message, format, local, players);
+					Channel.getGlobalChannel().sendMessage(player, message, format, local, players);
 
 				}
 

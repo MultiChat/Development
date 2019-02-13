@@ -74,8 +74,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static boolean frozen;
 
-	public static Channel globalChat;
-
 	private static MultiChat instance;
 
 	public static MultiChat getInstance() {
@@ -281,12 +279,13 @@ public class MultiChat extends Plugin implements Listener {
 			Startup();
 			UUIDNameManager.Startup();
 
-			//TODO REPLACE THIS... Create hard-coded global chat stream
-			globalChat = new Channel("GLOBAL", configYML.getString("globalformat"), false, false);
+			// Set up global chat
+			GlobalChannel channel = Channel.getGlobalChannel();
+			channel.setFormat(configYML.getString("globalformat"));
 
 			// Add all appropriate servers to this hardcoded global chat stream
 			for (String server : configYML.getStringList("no_global")) {
-				globalChat.addServer(server);
+				channel.addServer(server);
 			}
 
 			// Initiate backup routine

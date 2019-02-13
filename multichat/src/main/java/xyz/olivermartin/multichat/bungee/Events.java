@@ -301,7 +301,7 @@ public class Events implements Listener {
 
 					String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-					CastControl.sendCast(parts[0].substring(1),message,MultiChat.globalChat);
+					CastControl.sendCast(parts[0].substring(1), message, Channel.getGlobalChannel());
 
 					event.setCancelled(true);
 
@@ -411,6 +411,14 @@ public class Events implements Listener {
 
 			ChatModeManager.getInstance().registerPlayer(uuid, true);
 			ConsoleManager.log("Created new global chat entry for " + player.getName());
+
+		}
+
+		// Set player to appropriate channels
+		if (ChatModeManager.getInstance().isGlobal(uuid)) {
+			Channel.setChannel(player.getUniqueId(), Channel.getGlobalChannel());
+		} else {
+			Channel.setChannel(player.getUniqueId(), Channel.getLocalChannel());
 		}
 
 		if (UUIDNameManager.existsUUID(uuid)) {
@@ -420,10 +428,6 @@ public class Events implements Listener {
 		UUIDNameManager.addNew(uuid, player.getName());
 
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
-
-		///
-		Channel.setChannel(player.getUniqueId(), MultiChat.globalChat);
-		///
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
 

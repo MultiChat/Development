@@ -26,16 +26,25 @@ import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
  */
 public class Channel {
 
-	boolean whitelistMembers;
-	protected List<UUID> members;
+	private static GlobalChannel global;
+	private static LocalChannel local;
 
-	boolean whitelistServers;
-	protected List<String> servers;
+	static {
 
-	protected String name;
-	protected String format;
+		global = new GlobalChannel("&f%DISPLAYNAME%&f: ");
+		local = new LocalChannel();
 
-	public static Map<UUID,Channel> playerChannels = new HashMap<UUID,Channel>();
+	}
+
+	public static GlobalChannel getGlobalChannel() {
+		return global;
+	}
+
+	public static LocalChannel getLocalChannel() {
+		return local;
+	}
+
+	public static Map<UUID,Channel> playerChannels = new HashMap<UUID, Channel>();
 
 	public static void setChannel (UUID uuid, Channel channel) {
 		Channel.playerChannels.put(uuid, channel);
@@ -50,6 +59,15 @@ public class Channel {
 	}
 
 	/* END STATIC */
+
+	boolean whitelistMembers;
+	protected List<UUID> members;
+
+	boolean whitelistServers;
+	protected List<String> servers;
+
+	protected String name;
+	protected String format;
 
 	public Channel(String name, String format, boolean whitelistServers, boolean whitelistMembers) {
 
@@ -66,8 +84,20 @@ public class Channel {
 		if (!servers.contains(server)) servers.add(server);
 	}
 
+	public void setServers(List<String> servers) {
+		this.servers = servers;
+	}
+
+	public void clearServers() {
+		this.servers = new ArrayList<String>();
+	}
+
 	public void addMember(UUID member) {
 		if (!members.contains(member)) members.add(member);
+	}
+
+	public void setMembers(List<UUID> members) {
+		this.members = members;
 	}
 
 	public String getName() {
@@ -76,6 +106,10 @@ public class Channel {
 
 	public String getFormat() {
 		return this.format;
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
 	}
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
