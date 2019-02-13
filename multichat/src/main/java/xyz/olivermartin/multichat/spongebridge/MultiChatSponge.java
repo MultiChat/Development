@@ -45,6 +45,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandList
 import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.PlayerChannelListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
 
 /**
  * MultiChatSponge - MAIN CLASS
@@ -85,6 +86,8 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
 
 	public static Optional<PlaceholderService> papi;
+
+	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 
 
 	@Inject
@@ -183,6 +186,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		// Register listeners
 
 		Sponge.getEventManager().registerListeners(this, new SpongeChatListener());
+		Sponge.getEventManager().registerListeners(this, new SpongeLoginListener());
 
 		// Register commands
 

@@ -7,10 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -38,6 +40,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	private static Chat chat = null;
 	private static boolean vault;
 	private static boolean papi;
+
+	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();

@@ -651,6 +651,9 @@ public class NameManager implements Listener {
 	public void onLogin(PlayerLoginEvent event) {
 
 		registerPlayer(event.getPlayer());
+		if (!MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
+			MultiChatSpigot.playerChannels.put(event.getPlayer(), "global");
+		}
 
 	}
 
@@ -658,6 +661,7 @@ public class NameManager implements Listener {
 	public void onLogout(PlayerQuitEvent event) {
 
 		unregisterPlayer(event.getPlayer());
+		MultiChatSpigot.playerChannels.remove(event.getPlayer());
 
 	}
 

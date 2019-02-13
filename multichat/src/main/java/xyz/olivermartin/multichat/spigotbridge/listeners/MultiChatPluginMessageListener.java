@@ -186,6 +186,35 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 				e.printStackTrace();
 
 			}
+		} else if (channel.equals("multichat:channel")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				String playername = in.readUTF();
+				Player bukkitPlayer;
+
+				bukkitPlayer = Bukkit.getPlayer(playername);
+
+				if (bukkitPlayer == null) {
+					return;
+				}
+
+				synchronized (bukkitPlayer) {
+
+					String channelName = in.readUTF();
+					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
+
+				}
+
+			} catch (IOException e) {
+
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
+				e.printStackTrace();
+
+			}
 		}
 	}
 
