@@ -35,21 +35,23 @@ public class Channel {
 	protected String name;
 	protected String format;
 
-	public static Map<UUID,Channel> currentStreams = new HashMap<UUID,Channel>();
+	public static Map<UUID,Channel> playerChannels = new HashMap<UUID,Channel>();
 
-	public static void setStream (UUID uuid,Channel stream) {
-		Channel.currentStreams.put(uuid,stream);
+	public static void setChannel (UUID uuid, Channel channel) {
+		Channel.playerChannels.put(uuid, channel);
 	}
 
-	public static Channel getStream (UUID uuid) {
-		return Channel.currentStreams.get(uuid);
+	public static Channel getChannel (UUID uuid) {
+		return Channel.playerChannels.get(uuid);
 	}
 
 	public static void removePlayer (UUID uuid) {
-		Channel.currentStreams.remove(uuid);
+		Channel.playerChannels.remove(uuid);
 	}
 
-	public Channel(String name,  String format, boolean whitelistServers, boolean whitelistMembers) {
+	/* END STATIC */
+
+	public Channel(String name, String format, boolean whitelistServers, boolean whitelistMembers) {
 
 		this.name = name;
 		this.whitelistServers = whitelistServers;
@@ -61,19 +63,11 @@ public class Channel {
 	}
 
 	public void addServer(String server) {
-
-		if (!servers.contains(server)) {
-			servers.add(server);
-		}
-
+		if (!servers.contains(server)) servers.add(server);
 	}
 
 	public void addMember(UUID member) {
-
-		if (!members.contains(member)) {
-			members.add(member);
-		}
-
+		if (!members.contains(member)) members.add(member);
 	}
 
 	public String getName() {
@@ -96,7 +90,7 @@ public class Channel {
 
 					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-							//TODO hiding & showing streams
+							//TODO hiding & showing channels
 							if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
 									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
 									(!ChatModeManager.getInstance().isGlobal(receiver.getUniqueId())
