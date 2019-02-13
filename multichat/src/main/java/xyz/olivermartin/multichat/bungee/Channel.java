@@ -18,13 +18,13 @@ import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 
 /**
- * Chat Stream
- * <p>A class to represent a chat stream and control the messages sent etc.</p>
+ * Channel
+ * <p>A class to represent a chat channel and control the messages sent etc.</p>
  * 
  * @author Oliver Martin (Revilo410)
  *
  */
-public class ChatStream {
+public class Channel {
 
 	boolean whitelistMembers;
 	protected List<UUID> members;
@@ -35,21 +35,21 @@ public class ChatStream {
 	protected String name;
 	protected String format;
 
-	public static Map<UUID,ChatStream> currentStreams = new HashMap<UUID,ChatStream>();
+	public static Map<UUID,Channel> currentStreams = new HashMap<UUID,Channel>();
 
-	public static void setStream (UUID uuid,ChatStream stream) {
-		ChatStream.currentStreams.put(uuid,stream);
+	public static void setStream (UUID uuid,Channel stream) {
+		Channel.currentStreams.put(uuid,stream);
 	}
 
-	public static ChatStream getStream (UUID uuid) {
-		return ChatStream.currentStreams.get(uuid);
+	public static Channel getStream (UUID uuid) {
+		return Channel.currentStreams.get(uuid);
 	}
 
 	public static void removePlayer (UUID uuid) {
-		ChatStream.currentStreams.remove(uuid);
+		Channel.currentStreams.remove(uuid);
 	}
 
-	public ChatStream(String name,  String format, boolean whitelistServers, boolean whitelistMembers) {
+	public Channel(String name,  String format, boolean whitelistServers, boolean whitelistMembers) {
 
 		this.name = name;
 		this.whitelistServers = whitelistServers;

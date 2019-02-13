@@ -291,7 +291,7 @@ public class Events implements Listener {
 
 						String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-						CastControl.sendCast(parts[0].substring(1),message,ChatStream.getStream(playerSender.getUniqueId()));
+						CastControl.sendCast(parts[0].substring(1),message,Channel.getStream(playerSender.getUniqueId()));
 
 						event.setCancelled(true);
 
@@ -422,7 +422,7 @@ public class Events implements Listener {
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		///
-		ChatStream.setStream(player.getUniqueId(), MultiChat.globalChat);
+		Channel.setStream(player.getUniqueId(), MultiChat.globalChat);
 		///
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
@@ -488,7 +488,7 @@ public class Events implements Listener {
 		ChatControl.spamPardonPlayer(uuid);
 
 		///
-		ChatStream.removePlayer(player.getUniqueId());
+		Channel.removePlayer(player.getUniqueId());
 		///
 
 		if (MultiChat.viewedchats.containsKey(uuid)) {

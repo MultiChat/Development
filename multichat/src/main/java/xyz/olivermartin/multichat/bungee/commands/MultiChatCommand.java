@@ -5,7 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatStream;
+import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
@@ -113,7 +113,7 @@ public class MultiChatCommand extends Command {
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 
-					MultiChat.globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), false, false);
+					MultiChat.globalChat = new Channel("GLOBAL", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), false, false);
 					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
 						MultiChat.globalChat.addServer(server);
 					}
