@@ -13,7 +13,7 @@ version: "1.7"   #
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                       General                        | #
+# |                        Global                        | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -49,3 +49,26 @@ override_all_multichat_formatting: false
 # Additionally, this is only done on a best effort basis. If you are the only player on a server, then your message will likely still be broadcast globally.
 # EVEN IF IT WAS SUPPOSED TO BE AN "ADMIN ONLY" message etc... We recommend for this kind of communication that you use the MultiChat staff chats!
 broadcast_edited_recipients: false
+
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Local                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should MultiChat set the format of the local chat? (Leaving this at false lets other plugins handle the chat)
+set_local_format: false
+
+# The local chat format to set if MultiChat is to manage the format
+# 
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %WORLD% = The world of the sender
+#
+# Will display as [FORMAT] [MESSAGE]
+local_chat_format: "&7&lLOCAL &f> &f%DISPLAYNAME%&f: "

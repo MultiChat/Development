@@ -25,6 +25,15 @@ public class ChatListenerHighest implements Listener {
 
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
 		if (event.isCancelled()) return;
+		
+		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
+			
+			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local")) {
+				// If its a local chat message then we dont need to do anything else!
+				return;
+			}
+			
+		}
 
 		boolean local = false;
 		String playerList = "";

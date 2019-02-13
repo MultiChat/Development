@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.spigotbridge.listeners;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,6 +9,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
+import xyz.olivermartin.multichat.spigotbridge.SpigotPlaceholderManager;
 import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class ChatListenerLowest implements Listener {
@@ -24,21 +26,48 @@ public class ChatListenerLowest implements Listener {
 			return;
 		}
 
-		// If we aren't setting the format then we can leave now!
-		if (MultiChatSpigot.overrideAllMultiChatFormats) return;
-
-		// Lets start to set the format...
 		String format;
+		Player p = event.getPlayer();
+		String channel;
 
-		if (!MultiChatSpigot.overrideGlobalFormat) {
+		if (MultiChatSpigot.playerChannels.containsKey(p)) {
+			channel = MultiChatSpigot.playerChannels.get(p);
+		} else {
+			channel = "global";
+		}
 
-			// If we aren't overriding then use the main global format
-			format = MultiChatSpigot.globalChatFormat;
+
+		if (channel.equals("local")) {
+
+			// Local chat
+
+			if (MultiChatSpigot.setLocalFormat) {
+
+				format = MultiChatSpigot.localChatFormat;
+				format = SpigotPlaceholderManager.replaceLocalChatPlaceholders(p, format);
+
+			} else {
+				return;
+			}
 
 		} else {
 
-			// Otherwise use the locally defined one in the config file
-			format = MultiChatSpigot.overrideGlobalFormatFormat;
+			// Global chat
+
+			// If we aren't setting the format then we can leave now!
+			if (MultiChatSpigot.overrideAllMultiChatFormats) return;
+
+			if (!MultiChatSpigot.overrideGlobalFormat) {
+
+				// If we aren't overriding then use the main global format
+				format = MultiChatSpigot.globalChatFormat;
+
+			} else {
+
+				// Otherwise use the locally defined one in the config file
+				format = MultiChatSpigot.overrideGlobalFormatFormat;
+
+			}
 
 		}
 
