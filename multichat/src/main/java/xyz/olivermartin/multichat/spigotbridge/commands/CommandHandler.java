@@ -59,6 +59,9 @@ public class CommandHandler implements CommandExecutor {
 					MultiChatSpigot.overrideGlobalFormatFormat = config.getString("override_global_format_format");
 					MultiChatSpigot.overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
 					MultiChatSpigot.broadcastEditedRecipients = config.getBoolean("broadcast_edited_recipients");
+					MultiChatSpigot.setLocalFormat = config.getBoolean("set_local_format");
+					MultiChatSpigot.localChatFormat = config.getString("local_chat_format");
+					MultiChatSpigot.forceMultiChatFormat = config.getBoolean("force_multichat_format");
 
 					return true;
 

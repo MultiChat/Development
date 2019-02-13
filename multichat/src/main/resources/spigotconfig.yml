@@ -50,6 +50,9 @@ override_all_multichat_formatting: false
 # EVEN IF IT WAS SUPPOSED TO BE AN "ADMIN ONLY" message etc... We recommend for this kind of communication that you use the MultiChat staff chats!
 broadcast_edited_recipients: false
 
+# Setting this to true will try to override any stubborn plugins messing around with the chat format
+force_multichat_format: false
+
 
 ############################################################
 # +------------------------------------------------------+ #

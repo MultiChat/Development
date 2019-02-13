@@ -72,6 +72,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static boolean broadcastEditedRecipients = false;
 	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 	public static boolean setLocalFormat = false;
+	public static boolean forceMultiChatFormat = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -96,6 +97,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		broadcastEditedRecipients = config.getBoolean("broadcast_edited_recipients");
 		setLocalFormat = config.getBoolean("set_local_format");
 		localChatFormat = config.getString("local_chat_format");
+		forceMultiChatFormat = config.getBoolean("force_multichat_format");
 
 		File f = new File(configDir, nameDataFile);
 
