@@ -46,4 +46,6 @@ override_all_multichat_formatting: false
 # This setting controls if MultiChat should still broadcast messages globally if a plugin has edited the recipients of the message.
 # Some plugins (i.e. Towny) change the recipients of a message in order to implement different chat channels.
 # If you set the setting below to true, then MultiChat might broadcast messages globally that were supposed to only be seen by a small set of players.
+# Additionally, this is only done on a best effort basis. If you are the only player on a server, then your message will likely still be broadcast globally.
+# EVEN IF IT WAS SUPPOSED TO BE AN "ADMIN ONLY" message etc... We recommend for this kind of communication that you use the MultiChat staff chats!
 broadcast_edited_recipients: false
