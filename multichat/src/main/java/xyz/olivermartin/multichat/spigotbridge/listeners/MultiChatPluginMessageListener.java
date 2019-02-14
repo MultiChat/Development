@@ -41,6 +41,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 		/* Empty */
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] bytes) {
 
@@ -216,8 +217,6 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
 					boolean whitelistMembers = oin.readBoolean();
 					List<UUID> channelMembers = (List<UUID>) oin.readObject();
-
-
 
 					PseudoChannel channelObject = new PseudoChannel(channelName, channelMembers, whitelistMembers);
 					MultiChatSpigot.channelObjects.put(channelName, channelObject);
