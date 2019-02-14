@@ -102,7 +102,7 @@ public class MessageManager {
 		defaultMessages.put("command_gc_only_players_speak", "&cOnly players can speak in group chats");
 
 		defaultMessages.put("command_global_enabled_1", "&3GLOBAL CHAT ENABLED");
-		defaultMessages.put("command_global_enabled_2", "&bYou will see messages from players on all servers!");
+		defaultMessages.put("command_global_enabled_2", "&bYour messages will go to all servers!");
 		defaultMessages.put("command_global_only_players", "&cOnly players can change their chat state");
 
 		defaultMessages.put("command_group_selected", "&aYour /gc messages will now go to group: %SPECIAL%");
@@ -155,7 +155,7 @@ public class MessageManager {
 		defaultMessages.put("command_helpme_format", "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%");
 
 		defaultMessages.put("command_local_enabled_1", "&3LOCAL CHAT ENABLED");
-		defaultMessages.put("command_local_enabled_2", "&bYou will only see messages from players on the same server!");
+		defaultMessages.put("command_local_enabled_2", "&bYour messages will only go to this server!");
 		defaultMessages.put("command_local_only_players", "&cOnly players can change their chat state");
 
 		defaultMessages.put("command_mcc_usage", "&aUsage: /mcc <chatcolorcode> <namecolorcode>");
