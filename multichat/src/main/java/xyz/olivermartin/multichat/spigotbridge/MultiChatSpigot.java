@@ -22,6 +22,7 @@ import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
+import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerMonitor;
 import xyz.olivermartin.multichat.spigotbridge.listeners.LoginListener;
 import xyz.olivermartin.multichat.spigotbridge.listeners.MultiChatPluginMessageListener;
 import xyz.olivermartin.multichat.spigotbridge.listeners.WorldListener;
@@ -213,6 +214,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(NameManager.getInstance(), this);
 		getServer().getPluginManager().registerEvents(new ChatListenerHighest(), this);
 		getServer().getPluginManager().registerEvents(new ChatListenerLowest(), this);
+		getServer().getPluginManager().registerEvents(new ChatListenerMonitor(), this);
 		getServer().getPluginManager().registerEvents(new WorldListener(), this);
 		getServer().getPluginManager().registerEvents(new LoginListener(), this);
 

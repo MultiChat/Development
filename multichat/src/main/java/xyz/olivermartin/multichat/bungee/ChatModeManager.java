@@ -59,8 +59,6 @@ public class ChatModeManager {
 
 		globalPlayers.put(uuid, global);
 
-		// TODO Send plugin channel message to local servers
-
 	}
 
 	public boolean existsPlayer(UUID uuid) {
