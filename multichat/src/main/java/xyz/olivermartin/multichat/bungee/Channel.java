@@ -114,7 +114,7 @@ public class Channel {
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
 
-		Set<String> players = new HashSet<String>();
+		//TODO Set<String> players = new HashSet<String>();
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
@@ -135,7 +135,7 @@ public class Channel {
 									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
 										if (!local) receiver.sendMessage(buildFormat(sender,receiver,format,message));
 									} else {
-										players.add(receiver.getName());
+										//TODO players.add(receiver.getName());
 									}
 								} else {
 									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
@@ -151,7 +151,7 @@ public class Channel {
 			}
 		}
 
-		String playerString;
+		/*String playerString;
 		if (local) {
 			playerString = playerList;
 		} else {
@@ -166,7 +166,7 @@ public class Channel {
 				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
 				playerString,
 				sender.getServer().getInfo()
-				);
+				);*/
 
 		// Trigger PostGlobalChatEvent
 		if (!local) ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));

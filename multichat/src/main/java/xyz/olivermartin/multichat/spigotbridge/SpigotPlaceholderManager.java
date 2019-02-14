@@ -6,7 +6,7 @@ import net.milkbowl.vault.chat.Chat;
 
 public class SpigotPlaceholderManager {
 
-	public static String buildLocalChatFormat(Player player, String format) {
+	public static String buildChatFormat(Player player, String format) {
 
 		format = format.replace("%NAME%", player.getName());
 		format = format.replace("%DISPLAYNAME%", "%1$s"); // This might work?

@@ -44,7 +44,7 @@ public class ChatListenerLowest implements Listener {
 			if (MultiChatSpigot.setLocalFormat) {
 
 				format = MultiChatSpigot.localChatFormat;
-				format = SpigotPlaceholderManager.buildLocalChatFormat(p, format);
+				format = SpigotPlaceholderManager.buildChatFormat(p, format);
 
 			} else {
 				return;
@@ -71,14 +71,20 @@ public class ChatListenerLowest implements Listener {
 
 		}
 
+		// Build chat format
+		format = SpigotPlaceholderManager.buildChatFormat(p, format);
+
 		// If we are hooked with PAPI then use their placeholders!
 		if (MultiChatSpigot.hookedPAPI()) {
 			format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
 		}
 
-		// If we are a global chat server, then we want to set the format!
-		if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format.replaceAll("%", "%%")));
-
+		if (channel.equals("local")) {
+			// If we are a global chat server, then we want to set the format!
+			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
+		} else {
+			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
+		}
 	}
 
 }

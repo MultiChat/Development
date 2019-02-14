@@ -12,6 +12,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.SpigotCommunicationManager;
+import xyz.olivermartin.multichat.spigotbridge.SpigotPlaceholderManager;
 import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class ChatListenerHighest implements Listener {
@@ -53,12 +54,15 @@ public class ChatListenerHighest implements Listener {
 
 			}
 
+			// Build chat format
+			format = SpigotPlaceholderManager.buildChatFormat(event.getPlayer(), format);
+
 			// If we are hooked with PAPI then use their placeholders!
 			if (MultiChatSpigot.hookedPAPI()) {
 				format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
 			}
 			// If we are a global chat server, then we want to set the format!
-			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format.replaceAll("%", "%%")));
+			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 
 		}
 
@@ -81,9 +85,12 @@ public class ChatListenerHighest implements Listener {
 		if (MultiChatSpigot.globalChatServer) {
 			// Lets send Bungee the latest info!
 			MetaManager.getInstance().updatePlayerMeta(event.getPlayer().getName(), MultiChatSpigot.setDisplayNameLastVal, MultiChatSpigot.displayNameFormatLastVal);
-			event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
+			//TODO event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
 			if (!MultiChatSpigot.overrideAllMultiChatFormats) {
-				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), event.getFormat(), local, playerList);
+				String toSendFormat;
+				toSendFormat = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
+				toSendFormat = toSendFormat.replace("%2$s", "");
+				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), toSendFormat, local, playerList);
 			} else {
 				// Lets try and apply the other plugins formats correctly...
 				// THIS IS DONE ON A BEST EFFORT BASIS!
