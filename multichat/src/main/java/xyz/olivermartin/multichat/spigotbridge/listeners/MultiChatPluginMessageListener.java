@@ -3,10 +3,14 @@ package xyz.olivermartin.multichat.spigotbridge.listeners;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -16,6 +20,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
+import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
 import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class MultiChatPluginMessageListener implements PluginMessageListener {
@@ -189,11 +194,14 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 		} else if (channel.equals("multichat:channel")) {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
-			DataInputStream in = new DataInputStream(stream);
+			//DataInputStream in = new DataInputStream(stream);
 
 			try {
 
-				String playername = in.readUTF();
+				ObjectInputStream oin = new ObjectInputStream(stream);
+
+
+				String playername = oin.readUTF();
 				Player bukkitPlayer;
 
 				bukkitPlayer = Bukkit.getPlayer(playername);
@@ -204,8 +212,15 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 				synchronized (bukkitPlayer) {
 
-					String channelName = in.readUTF();
+					String channelName = oin.readUTF();
 					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
+					boolean whitelistMembers = oin.readBoolean();
+					List<UUID> channelMembers = (List<UUID>) oin.readObject();
+
+
+
+					PseudoChannel channelObject = new PseudoChannel(channelName, channelMembers, whitelistMembers);
+					MultiChatSpigot.channelObjects.put(channelName, channelObject);
 
 				}
 
@@ -214,8 +229,33 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
+			} catch (ClassNotFoundException e) {
+
+				Bukkit.getLogger().info("Could not read list of uuids from channel message");
+				e.printStackTrace();
+			}
+		} else if (channel.equals("multichat:ignore")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			//DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				ObjectInputStream oin = new ObjectInputStream(stream);
+
+				MultiChatSpigot.ignoreMap = (Map<UUID, Set<UUID>>) oin.readObject();
+
+			} catch (IOException e) {
+
+				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
+				e.printStackTrace();
+
+			} catch (ClassNotFoundException e) {
+
+				Bukkit.getLogger().info("Could not read list of uuids from channel message");
+				e.printStackTrace();
 			}
 		}
-	}
+	} 
 
 }

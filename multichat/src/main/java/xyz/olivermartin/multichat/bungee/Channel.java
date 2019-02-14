@@ -77,6 +77,14 @@ public class Channel {
 		this.whitelistMembers = whitelistMembers;
 
 	}
+	
+	public List<UUID> getMembers() {
+		return this.members;
+	}
+	
+	public boolean isWhitelistMembers() {
+		return this.whitelistMembers;
+	}
 
 	public void addServer(String server) {
 		if (!servers.contains(server)) servers.add(server);

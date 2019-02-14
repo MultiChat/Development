@@ -112,7 +112,7 @@ public class BungeeComm implements Listener {
 	}
 
 	public static void sendChatMessage(String playerName, String format, String message, boolean colour, String playerString, ServerInfo server) {
-
+		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
 
@@ -139,9 +139,28 @@ public class BungeeComm implements Listener {
 		DebugManager.log("Sent message on multichat:chat channel!");
 
 	}
+	
+	public static void sendIgnoreMap(ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		//DataOutputStream out = new DataOutputStream(stream);
+		try {
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+		
+			oout.writeObject(ChatControl.getIgnoreMap());
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:ignore", stream.toByteArray());
+
+	}
 
 	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server) {
 
+		sendIgnoreMap(server);
+		
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		//DataOutputStream out = new DataOutputStream(stream);
 		try {
@@ -151,8 +170,9 @@ public class BungeeComm implements Listener {
 			oout.writeUTF(playerName);
 			// Channel part
 			oout.writeUTF(channel);
+			oout.writeBoolean(channelObject.isWhitelistMembers());
+			oout.writeObject(channelObject.getMembers());
 			
-			oout.writeObject(channelObject);
 			
 			
 

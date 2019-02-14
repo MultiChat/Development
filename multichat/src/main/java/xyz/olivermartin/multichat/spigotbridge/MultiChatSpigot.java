@@ -9,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.Configuration;
@@ -42,6 +43,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	private static boolean papi;
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
+	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
+	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();
@@ -201,6 +204,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:paction", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:channel", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", MultiChatPluginMessageListener.getInstance());
 
 		// Register listeners
 

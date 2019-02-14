@@ -426,7 +426,7 @@ public class Events implements Listener {
 			Channel.setChannel(player.getUniqueId(), Channel.getLocalChannel());
 		}
 
-		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
+		//BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
 
 		if (UUIDNameManager.existsUUID(uuid)) {
 			UUIDNameManager.removeUUID(uuid);
