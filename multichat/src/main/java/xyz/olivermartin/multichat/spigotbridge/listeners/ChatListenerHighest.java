@@ -18,18 +18,11 @@ import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
 import xyz.olivermartin.multichat.spigotbridge.SpigotCommunicationManager;
 import xyz.olivermartin.multichat.spigotbridge.SpigotPlaceholderManager;
-import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class ChatListenerHighest implements Listener {
 
 	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onChat(final AsyncPlayerChatEvent event) {
-
-		// IF ITS A MULTICHAT MESSAGE THEN ITS TIME TO UNCANCEL IT! (This is so plugins like DiscordSRV can grab it)
-		if (event instanceof InducedAsyncPlayerChatEvent) {
-			event.setCancelled(false);
-			return;
-		}
 
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
 		if (event.isCancelled()) return;

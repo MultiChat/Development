@@ -10,7 +10,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.SpigotPlaceholderManager;
-import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class ChatListenerLowest implements Listener {
 
@@ -19,12 +18,6 @@ public class ChatListenerLowest implements Listener {
 
 		// IF ITS ALREADY CANCELLED THEN WE CAN IGNORE IT!
 		if (event.isCancelled()) return;
-
-		if (event instanceof InducedAsyncPlayerChatEvent) {
-			// IF IT IS A MULTICHAT MESSAGE THEN CANCEL IT AND RETURN!
-			event.setCancelled(true);
-			return;
-		}
 
 		String format;
 		Player p = event.getPlayer();

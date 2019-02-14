@@ -4,24 +4,18 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
-import xyz.olivermartin.multichat.spigotbridge.events.InducedAsyncPlayerChatEvent;
 
 public class MultiChatPluginMessageListener implements PluginMessageListener {
 
@@ -135,7 +129,10 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 			}
 		} else if (channel.equals("multichat:chat")) {
 
-			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			// Legacy handling of chat messages from bungee
+			// TODO Repurpose this to let casts be sent locally
+
+			/*ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			DataInputStream in = new DataInputStream(stream);
 
 			try {
@@ -191,7 +188,8 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
-			}
+			}*/
+
 		} else if (channel.equals("multichat:channel")) {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
