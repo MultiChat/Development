@@ -44,7 +44,7 @@ public class ChatListenerLowest implements Listener {
 			if (MultiChatSpigot.setLocalFormat) {
 
 				format = MultiChatSpigot.localChatFormat;
-				format = SpigotPlaceholderManager.buildChatFormat(p, format);
+				//format = SpigotPlaceholderManager.buildChatFormat(p, format);
 
 			} else {
 				return;
