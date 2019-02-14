@@ -655,6 +655,10 @@ public class NameManager implements Listener {
 			MultiChatSpigot.playerChannels.put(event.getPlayer(), "global");
 		}
 
+		if (!MultiChatSpigot.colourMap.containsKey(event.getPlayer().getUniqueId())) {
+			MultiChatSpigot.colourMap.put(event.getPlayer().getUniqueId(), false);
+		}
+
 	}
 
 	@EventHandler
@@ -662,6 +666,7 @@ public class NameManager implements Listener {
 
 		unregisterPlayer(event.getPlayer());
 		MultiChatSpigot.playerChannels.remove(event.getPlayer());
+		MultiChatSpigot.colourMap.remove(event.getPlayer().getUniqueId());
 
 	}
 

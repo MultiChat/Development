@@ -45,6 +45,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();

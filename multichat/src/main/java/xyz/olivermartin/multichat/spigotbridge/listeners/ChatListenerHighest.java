@@ -26,6 +26,17 @@ public class ChatListenerHighest implements Listener {
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
 		if (event.isCancelled()) return;
 
+		// Deal with coloured chat
+		if (MultiChatSpigot.colourMap.containsKey(event.getPlayer().getUniqueId())) {
+
+			boolean colour = MultiChatSpigot.colourMap.get(event.getPlayer().getUniqueId());
+
+			if (colour) {
+				event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
+			}
+
+		}
+
 		// Deal with ignores and channel members
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
 

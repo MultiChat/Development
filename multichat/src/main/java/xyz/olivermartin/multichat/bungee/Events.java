@@ -352,7 +352,7 @@ public class Events implements Listener {
 						}
 
 						// Let server know players channel preference
-						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
+						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
 						//TODO Removing this should now let the message pass through to spigot
 						//MultiChat.globalChat.sendMessage(player, message);
@@ -545,7 +545,7 @@ public class Events implements Listener {
 			public void run() {
 
 				try {
-					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo());
+					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")|| event.getPlayer().hasPermission("multichat.chat.color")));
 				}
 
 				catch (NullPointerException ex) { /* EMPTY */ }

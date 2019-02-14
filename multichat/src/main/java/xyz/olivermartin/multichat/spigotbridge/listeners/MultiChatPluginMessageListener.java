@@ -213,6 +213,10 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 					String channelName = oin.readUTF();
 					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
+					
+					boolean colour = oin.readBoolean();
+					MultiChatSpigot.colourMap.put(bukkitPlayer.getUniqueId(), colour);
+					
 					boolean whitelistMembers = oin.readBoolean();
 					List<UUID> channelMembers = (List<UUID>) oin.readObject();
 
