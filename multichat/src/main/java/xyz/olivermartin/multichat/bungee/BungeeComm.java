@@ -214,8 +214,6 @@ public class BungeeComm implements Listener {
 				UUID uuid = UUID.fromString(in.readUTF());
 				String message = in.readUTF();
 				String format = in.readUTF();
-				boolean local = in.readBoolean();
-				String players = in.readUTF();
 
 				format = format.replace("%%","%");
 
@@ -228,7 +226,7 @@ public class BungeeComm implements Listener {
 				synchronized (player) {
 
 					// TODO This will handle chat messages sent from the local servers
-					Channel.getGlobalChannel().sendMessage(player, message, format, local, players);
+					Channel.getGlobalChannel().sendMessage(player, message, format);
 
 				}
 

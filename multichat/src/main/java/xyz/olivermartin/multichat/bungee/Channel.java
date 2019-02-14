@@ -77,11 +77,11 @@ public class Channel {
 		this.whitelistMembers = whitelistMembers;
 
 	}
-	
+
 	public List<UUID> getMembers() {
 		return this.members;
 	}
-	
+
 	public boolean isWhitelistMembers() {
 		return this.whitelistMembers;
 	}
@@ -118,7 +118,7 @@ public class Channel {
 		this.format = format;
 	}
 
-	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
+	public void sendMessage(ProxiedPlayer sender, String message, String format) {
 
 		// Set<String> players = new HashSet<String>();
 
@@ -139,7 +139,7 @@ public class Channel {
 
 							if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
 								if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-									if (!local) receiver.sendMessage(buildFormat(sender,receiver,format,message));
+									receiver.sendMessage(buildFormat(sender,receiver,format,message));
 								} else {
 									// players.add(receiver.getName());
 								}
@@ -175,7 +175,7 @@ public class Channel {
 				);*/
 
 		// Trigger PostGlobalChatEvent
-		if (!local) ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
 
 		sendToConsole(sender,format,message);
 

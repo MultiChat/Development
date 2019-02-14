@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -119,21 +118,6 @@ public class ChatListenerHighest implements Listener {
 
 		}
 
-		boolean local = false;
-		String playerList = "";
-
-		// If a plugin has edited the number of participants for the message then we dont want to broadcast it to everyone
-		if ( (!MultiChatSpigot.broadcastEditedRecipients) && (event.getRecipients().size() != Bukkit.getServer().getOnlinePlayers().size()) ) {
-			local = true;
-			for (Player p : event.getRecipients()) {
-				if (playerList.equals("")) {
-					playerList = playerList + p.getName();
-				} else {
-					playerList = playerList + " " + p.getName();
-				}
-			}
-		}
-
 		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 		if (MultiChatSpigot.globalChatServer) {
 			// Lets send Bungee the latest info!
@@ -143,7 +127,7 @@ public class ChatListenerHighest implements Listener {
 				String toSendFormat;
 				toSendFormat = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());
 				toSendFormat = toSendFormat.replace("%2$s", "");
-				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), toSendFormat, local, playerList);
+				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), toSendFormat);
 			} else {
 				// Lets try and apply the other plugins formats correctly...
 				// THIS IS DONE ON A BEST EFFORT BASIS!
@@ -152,7 +136,7 @@ public class ChatListenerHighest implements Listener {
 				format = format.replace("%2$s", "");
 				format = format.replaceFirst("\\$s", event.getPlayer().getDisplayName());
 				format = format.replaceFirst("\\$s", "");
-				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), format, local, playerList);
+				SpigotCommunicationManager.getInstance().sendPluginChatChannelMessage("multichat:chat", event.getPlayer().getUniqueId(), event.getMessage(), format);
 			}
 		}
 

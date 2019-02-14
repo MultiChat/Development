@@ -8,14 +8,20 @@ public class LocalChannel extends Channel {
 		super("local", "", false, false);
 	}
 
+	/**
+	 * This has no purpose as local chat for players is handled by the local servers
+	 */
 	@Override
-	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
+	public void sendMessage(ProxiedPlayer sender, String message, String format) {
 		/* EMPTY */
 	}
 
 	@Override
 	public void sendMessage(String message) {
 		/* EMPTY */
+		
+		// TODO Use this to relay CASTS to local chat!
+		
 	}
 
 }
