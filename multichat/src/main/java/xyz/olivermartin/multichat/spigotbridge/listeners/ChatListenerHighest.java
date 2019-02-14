@@ -61,6 +61,15 @@ public class ChatListenerHighest implements Listener {
 			if (MultiChatSpigot.hookedPAPI()) {
 				format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
 			}
+			
+			format = format.replace("%1$s", "!!!1!!!");
+			format = format.replace("%2$s", "!!!2!!!");
+
+			format = format.replace("%", "%%");
+
+			format = format.replace("!!!1!!!", "%1$s");
+			format = format.replace("!!!2!!!", "%2$s");
+			
 			// If we are a global chat server, then we want to set the format!
 			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 
