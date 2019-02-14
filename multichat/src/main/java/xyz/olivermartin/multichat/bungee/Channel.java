@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -181,7 +182,7 @@ public class Channel {
 
 	}
 
-	public void sendMessage(String message) {
+	public void sendMessage(String message, CommandSender sender) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {

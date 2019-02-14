@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
@@ -129,66 +130,22 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 			}
 		} else if (channel.equals("multichat:chat")) {
 
-			// Legacy handling of chat messages from bungee
-			// TODO Repurpose this to let casts be sent locally
+			// Handles cast messages sent from bungee which need to go to local chat stream
 
-			/*ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
+			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			DataInputStream in = new DataInputStream(stream);
 
 			try {
 
-				String playername = in.readUTF();
-				Player bukkitPlayer;
-
-				bukkitPlayer = Bukkit.getPlayer(playername);
-
-				if (bukkitPlayer == null) {
-					return;
-				}
-
-				synchronized (bukkitPlayer) {
-
-					String format = in.readUTF();
-					String message = in.readUTF();
-
-					boolean colour = in.readBoolean();
-
-					String playerString = in.readUTF();
-
-					Set<String> playerNames = new HashSet<String>(Arrays.asList(playerString.split(" ")));
-					Set<Player> players = new HashSet<Player>(Bukkit.getOnlinePlayers());
-					Iterator<Player> it = players.iterator();
-
-					while(it.hasNext()) {
-						if (!playerNames.contains(it.next().getName())) {
-							it.remove();
-						}
-					}
-
-					AsyncPlayerChatEvent event = new InducedAsyncPlayerChatEvent(false, bukkitPlayer, message, players);
-					//TODO event.setFormat(format);
-
-					Bukkit.getPluginManager().callEvent(event);
-
-					String toSend;
-					if (colour) {
-						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", message));
-					} else {
-						toSend = ChatColor.translateAlternateColorCodes('&', format.replace("%MESSAGE%", "")) + message;
-					}
-
-					for (Player p : players) {
-						p.sendMessage(toSend);
-					}
-
-				}
+				String message = in.readUTF();
+				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', message));
 
 			} catch (IOException e) {
 
 				Bukkit.getLogger().info("Error with connection to Bungeecord! Is the server lagging?");
 				e.printStackTrace();
 
-			}*/
+			}
 
 		} else if (channel.equals("multichat:channel")) {
 
@@ -213,10 +170,10 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 					String channelName = oin.readUTF();
 					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
-					
+
 					boolean colour = oin.readBoolean();
 					MultiChatSpigot.colourMap.put(bukkitPlayer.getUniqueId(), colour);
-					
+
 					boolean whitelistMembers = oin.readBoolean();
 					List<UUID> channelMembers = (List<UUID>) oin.readObject();
 

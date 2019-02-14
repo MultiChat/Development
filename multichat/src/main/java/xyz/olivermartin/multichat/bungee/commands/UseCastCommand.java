@@ -41,7 +41,7 @@ public class UseCastCommand extends Command {
 
 			String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
-			CastControl.sendCast(args[0], message, Channel.getGlobalChannel());
+			CastControl.sendCast(args[0], message, Channel.getGlobalChannel(), sender);
 
 		} else {
 

@@ -293,7 +293,7 @@ public class Events implements Listener {
 
 						String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-						CastControl.sendCast(parts[0].substring(1),message,Channel.getChannel(playerSender.getUniqueId()));
+						CastControl.sendCast(parts[0].substring(1),message,Channel.getChannel(playerSender.getUniqueId()), playerSender);
 
 						event.setCancelled(true);
 
@@ -303,7 +303,7 @@ public class Events implements Listener {
 
 					String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-					CastControl.sendCast(parts[0].substring(1), message, Channel.getGlobalChannel());
+					CastControl.sendCast(parts[0].substring(1), message, Channel.getGlobalChannel(), ProxyServer.getInstance().getConsole());
 
 					event.setCancelled(true);
 

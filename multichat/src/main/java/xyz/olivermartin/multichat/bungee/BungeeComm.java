@@ -111,23 +111,17 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendChatMessage(String playerName, String format, String message, boolean colour, String playerString, ServerInfo server) {
-		
+	public static void sendChatMessage(String message, ServerInfo server) {
+
+		// This has been repurposed to send casts to local chat streams!
+
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
 
 
 		try {
-			// Players name
-			out.writeUTF(playerName);
-			// Format part
-			out.writeUTF(format);
 			// message part
 			out.writeUTF(message);
-			// color permissions?
-			out.writeBoolean(colour);
-			// player set
-			out.writeUTF(playerString);
 
 
 		} catch (IOException e) {
@@ -136,19 +130,17 @@ public class BungeeComm implements Listener {
 
 		server.sendData("multichat:chat", stream.toByteArray());
 
-		DebugManager.log("Sent message on multichat:chat channel!");
-
 	}
-	
+
 	public static void sendIgnoreMap(ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		//DataOutputStream out = new DataOutputStream(stream);
 		try {
 			ObjectOutputStream oout = new ObjectOutputStream(stream);
-		
+
 			oout.writeObject(ChatControl.getIgnoreMap());
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -160,12 +152,12 @@ public class BungeeComm implements Listener {
 	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour) {
 
 		sendIgnoreMap(server);
-		
+
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		//DataOutputStream out = new DataOutputStream(stream);
 		try {
 			ObjectOutputStream oout = new ObjectOutputStream(stream);
-		
+
 			// Players name
 			oout.writeUTF(playerName);
 			// Channel part
@@ -173,9 +165,9 @@ public class BungeeComm implements Listener {
 			oout.writeBoolean(colour);
 			oout.writeBoolean(channelObject.isWhitelistMembers());
 			oout.writeObject(channelObject.getMembers());
-			
-			
-			
+
+
+
 
 		} catch (IOException e) {
 			e.printStackTrace();

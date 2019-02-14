@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.bungee;
 
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class LocalChannel extends Channel {
@@ -17,10 +18,13 @@ public class LocalChannel extends Channel {
 	}
 
 	@Override
-	public void sendMessage(String message) {
+	public void sendMessage(String message, CommandSender sender) {
 		/* EMPTY */
 		
-		// TODO Use this to relay CASTS to local chat!
+		// Use this to relay CASTS to local chat!
+		if (sender instanceof ProxiedPlayer) {
+			BungeeComm.sendMessage(message, ((ProxiedPlayer)sender).getServer().getInfo());
+		}
 		
 	}
 
