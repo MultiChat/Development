@@ -94,7 +94,7 @@ public class ChatListenerHighest implements Listener {
 		if (MultiChatSpigot.globalChatServer) {
 			// Lets send Bungee the latest info!
 			MetaManager.getInstance().updatePlayerMeta(event.getPlayer().getName(), MultiChatSpigot.setDisplayNameLastVal, MultiChatSpigot.displayNameFormatLastVal);
-			//TODO event.setCancelled(true); //This is needed to stop the double message, but interferes with plugins like FactionsOne which for some reason use HIGHEST priority
+			// event.setCancelled(true); // Needed to stop double message
 			if (!MultiChatSpigot.overrideAllMultiChatFormats) {
 				String toSendFormat;
 				toSendFormat = event.getFormat().replace("%1$s", event.getPlayer().getDisplayName());

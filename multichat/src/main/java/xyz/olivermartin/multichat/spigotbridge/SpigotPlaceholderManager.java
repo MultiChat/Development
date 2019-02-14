@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.spigotbridge;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import net.milkbowl.vault.chat.Chat;
@@ -17,6 +18,7 @@ public class SpigotPlaceholderManager {
 		}
 		format = format.replace("%NICK%", NameManager.getInstance().getCurrentName(player.getUniqueId()));
 		format = format.replace("%WORLD%", player.getWorld().getName());
+		format = format.replace("%SERVER%", Bukkit.getServerName());
 
 		return format + "%2$s";
 

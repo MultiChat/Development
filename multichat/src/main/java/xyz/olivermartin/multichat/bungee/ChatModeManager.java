@@ -37,7 +37,7 @@ public class ChatModeManager {
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
-		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), player.getServer().getInfo());
+		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo());
 
 	}
 
@@ -51,7 +51,7 @@ public class ChatModeManager {
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
-		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), player.getServer().getInfo());
+		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo());
 
 	}
 

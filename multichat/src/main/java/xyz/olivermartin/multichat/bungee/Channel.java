@@ -2,11 +2,9 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
@@ -114,7 +112,7 @@ public class Channel {
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format, boolean local, String playerList) {
 
-		//TODO Set<String> players = new HashSet<String>();
+		// Set<String> players = new HashSet<String>();
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
@@ -125,23 +123,23 @@ public class Channel {
 					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
 						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 							//TODO hiding & showing channels
-							if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
+							/*if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
 									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
 									(!ChatModeManager.getInstance().isGlobal(receiver.getUniqueId())
 											&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(ChatModeManager.getInstance().isGlobal(sender.getUniqueId()) && ChatModeManager.getInstance().isGlobal(receiver.getUniqueId()))) {
+									(ChatModeManager.getInstance().isGlobal(sender.getUniqueId()) && ChatModeManager.getInstance().isGlobal(receiver.getUniqueId()))) {*/
 
-								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-										if (!local) receiver.sendMessage(buildFormat(sender,receiver,format,message));
-									} else {
-										//TODO players.add(receiver.getName());
-									}
+							if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+								if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+									if (!local) receiver.sendMessage(buildFormat(sender,receiver,format,message));
 								} else {
-									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+									// players.add(receiver.getName());
 								}
-
+							} else {
+								ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 							}
+
+							//}
 						}
 
 					}
@@ -200,7 +198,7 @@ public class Channel {
 
 		String newFormat = format;
 
-		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		/*newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		newFormat = newFormat.replace("%NAME%", sender.getName());
 
 		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
@@ -222,7 +220,7 @@ public class Channel {
 		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}
+		}*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -234,7 +232,7 @@ public class Channel {
 
 		String newFormat = format;
 
-		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		/*newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		newFormat = newFormat.replace("%NAME%", sender.getName());
 
 		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
@@ -268,7 +266,7 @@ public class Channel {
 		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}
+		}*/
 
 		newFormat = newFormat + "%MESSAGE%";
 

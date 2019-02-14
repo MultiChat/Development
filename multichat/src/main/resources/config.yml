@@ -155,7 +155,6 @@ no_global: []
 # %NICK% = The nickname of the sender
 # %SERVER% = The server of the sender
 # %WORLD% = The world of the sender
-# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 
 # Global Chat Format
 # Will display as [FORMAT] [MESSAGE]

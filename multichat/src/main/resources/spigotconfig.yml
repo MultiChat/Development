@@ -31,7 +31,6 @@ override_global_format: false
 # %NICK% = The nickname of the sender
 # %SERVER% = The server of the sender
 # %WORLD% = The world of the sender
-# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 #
 # Will display as [FORMAT] [MESSAGE]
 override_global_format_format: "&f%DISPLAYNAME%&f: "
@@ -72,6 +71,7 @@ set_local_format: false
 # %SUFFIX% = The suffix of the sender
 # %NICK% = The nickname of the sender
 # %WORLD% = The world of the sender
+# %SERVER% = The server of the sender
 #
 # Will display as [FORMAT] [MESSAGE]
 local_chat_format: "&7&lLOCAL &f> &f%DISPLAYNAME%&f: "

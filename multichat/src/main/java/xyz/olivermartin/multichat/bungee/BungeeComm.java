@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -139,17 +140,21 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendPlayerChannelMessage(String playerName, String channel, ServerInfo server) {
+	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(stream);
-
-
+		//DataOutputStream out = new DataOutputStream(stream);
 		try {
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+		
 			// Players name
-			out.writeUTF(playerName);
+			oout.writeUTF(playerName);
 			// Channel part
-			out.writeUTF(channel);
+			oout.writeUTF(channel);
+			
+			oout.writeObject(channelObject);
+			
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();

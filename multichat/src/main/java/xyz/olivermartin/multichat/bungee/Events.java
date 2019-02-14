@@ -352,7 +352,7 @@ public class Events implements Listener {
 						}
 
 						// Let server know players channel preference
-						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), player.getServer().getInfo());
+						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
 
 						//TODO Removing this should now let the message pass through to spigot
 						//MultiChat.globalChat.sendMessage(player, message);
@@ -426,7 +426,7 @@ public class Events implements Listener {
 			Channel.setChannel(player.getUniqueId(), Channel.getLocalChannel());
 		}
 
-		BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), event.getPlayer().getServer().getInfo());
+		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
 
 		if (UUIDNameManager.existsUUID(uuid)) {
 			UUIDNameManager.removeUUID(uuid);
@@ -545,7 +545,7 @@ public class Events implements Listener {
 			public void run() {
 
 				try {
-					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), event.getPlayer().getServer().getInfo());
+					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo());
 				}
 
 				catch (NullPointerException ex) { /* EMPTY */ }
