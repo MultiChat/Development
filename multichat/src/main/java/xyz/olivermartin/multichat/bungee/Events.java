@@ -354,8 +354,7 @@ public class Events implements Listener {
 						// Let server know players channel preference
 						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
-						//TODO Removing this should now let the message pass through to spigot
-						//MultiChat.globalChat.sendMessage(player, message);
+						// Message passes through to spigot here
 
 						if (hiddenStaff.contains(player.getUniqueId())) {
 							hiddenStaff.remove(player.getUniqueId());
@@ -364,9 +363,6 @@ public class Events implements Listener {
 					} else {
 						MessageManager.sendMessage(player, "freezechat_frozen");
 					}
-
-					// TODO Removing this should now let the message pass through to spigot
-					// event.setCancelled(true);
 
 				}
 			}

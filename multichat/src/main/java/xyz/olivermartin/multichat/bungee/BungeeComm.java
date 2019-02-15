@@ -218,7 +218,6 @@ public class BungeeComm implements Listener {
 
 				synchronized (player) {
 
-					// TODO This will handle chat messages sent from the local servers
 					Channel.getGlobalChannel().sendMessage(player, message, format);
 
 				}
