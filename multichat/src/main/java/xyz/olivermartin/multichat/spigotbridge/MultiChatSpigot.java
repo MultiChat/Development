@@ -74,7 +74,6 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static boolean overrideGlobalFormat = false;
 	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
 	public static boolean overrideAllMultiChatFormats = false;
-	public static boolean broadcastEditedRecipients = false;
 	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 	public static boolean setLocalFormat = false;
 	public static boolean forceMultiChatFormat = false;
@@ -99,7 +98,6 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		overrideGlobalFormat = config.getBoolean("override_global_format");
 		overrideGlobalFormatFormat = config.getString("override_global_format_format");
 		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
-		broadcastEditedRecipients = config.getBoolean("broadcast_edited_recipients");
 		setLocalFormat = config.getBoolean("set_local_format");
 		localChatFormat = config.getString("local_chat_format");
 		forceMultiChatFormat = config.getBoolean("force_multichat_format");
