@@ -126,7 +126,7 @@ public class SpongeChatListener {
 				format = format.replace("{MODE}", "%MODE%");
 
 			}
-
+			
 			Text toSend;
 
 			// Deal with coloured chat
@@ -137,11 +137,13 @@ public class SpongeChatListener {
 				if (colour) {
 					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + message);
 				} else {
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.builder(message).color(TextColors.NONE).build());
+					Text t = TextSerializers.FORMATTING_CODE.deserialize(format);
+					toSend = t.concat(Text.of(t.getColor(), message));
 				}
 
 			} else {
-				toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.builder(message).color(TextColors.NONE).build());
+				Text t = TextSerializers.FORMATTING_CODE.deserialize(format);
+				toSend = t.concat(Text.of(t.getColor(), message));
 			}
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
