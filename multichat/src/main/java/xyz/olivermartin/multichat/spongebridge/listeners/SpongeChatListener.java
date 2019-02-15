@@ -12,6 +12,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
@@ -125,7 +126,7 @@ public class SpongeChatListener {
 				format = format.replace("{MODE}", "%MODE%");
 
 			}
-			
+
 			Text toSend;
 
 			// Deal with coloured chat
@@ -136,11 +137,11 @@ public class SpongeChatListener {
 				if (colour) {
 					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + message);
 				} else {
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.of(message));
+					toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.builder(message).color(TextColors.NONE).build());
 				}
 
 			} else {
-				toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.of(message));
+				toSend = TextSerializers.FORMATTING_CODE.deserialize(format).concat(Text.builder(message).color(TextColors.NONE).build());
 			}
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
