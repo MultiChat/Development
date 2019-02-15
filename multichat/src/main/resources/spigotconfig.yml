@@ -33,7 +33,7 @@ override_global_format: false
 # %WORLD% = The world of the sender
 #
 # Will display as [FORMAT] [MESSAGE]
-override_global_format_format: "&f%DISPLAYNAME%&f: "
+override_global_format_format: "&5[&dG&5]&f%DISPLAYNAME%&f: "
 
 # If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
 # This means that if a plugin such as Towny manages the chat format locally, then this will be used instead.
@@ -53,7 +53,7 @@ force_multichat_format: false
 ############################################################
 
 # Should MultiChat set the format of the local chat? (Leaving this at false lets other plugins handle the chat)
-set_local_format: false
+set_local_format: true
 
 # The local chat format to set if MultiChat is to manage the format
 # 
@@ -67,4 +67,4 @@ set_local_format: false
 # %SERVER% = The server of the sender
 #
 # Will display as [FORMAT] [MESSAGE]
-local_chat_format: "&7&lLOCAL &f> &f%DISPLAYNAME%&f: "
+local_chat_format: "&3[&bL&3]&7&o%NAME%&f: "

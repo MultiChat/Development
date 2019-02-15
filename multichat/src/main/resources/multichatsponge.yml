@@ -37,7 +37,7 @@ override_global_format: false
 # %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 #
 # Will display as [FORMAT] [MESSAGE]
-override_global_format_format: "&f%DISPLAYNAME%&f: "
+override_global_format_format: "&5[&dG&5]&f%DISPLAYNAME%&f: "
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -57,4 +57,4 @@ override_global_format_format: "&f%DISPLAYNAME%&f: "
 # %SERVER% = The server of the sender
 #
 # Will display as [FORMAT] [MESSAGE]
-local_chat_format: "&7&lLOCAL &f> &f%DISPLAYNAME%&f: "
+local_chat_format: "&3[&bL&3]&7&o%NAME%&f: "

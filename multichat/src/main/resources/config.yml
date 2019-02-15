@@ -159,7 +159,7 @@ no_global: []
 # Global Chat Format
 # Will display as [FORMAT] [MESSAGE]
 
-globalformat: "&f%DISPLAYNAME%&f: "
+globalformat: "&2[&aG&2]&f%DISPLAYNAME%&f: "
 
 ############################################################
 # +------------------------------------------------------+ #
