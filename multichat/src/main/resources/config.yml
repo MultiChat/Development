@@ -131,6 +131,9 @@ socialspycommand:
 # Must be "local" or "global", if anything else is specified then will default to "global"
 default_channel: "global"
 
+# Force players into default channel when they join the server?
+force_channel_on_join: false
+
 # The /channel command has the following aliases (other than /channel)
 channelcommand:
 - ch

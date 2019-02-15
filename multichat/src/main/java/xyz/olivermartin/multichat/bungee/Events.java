@@ -422,6 +422,18 @@ public class Events implements Listener {
 			//ConsoleManager.log("Created new global chat entry for " + player.getName());
 
 		}
+		
+		if (MultiChat.forceChannelOnJoin) {
+			
+			boolean globalMode;
+			if (!MultiChat.defaultChannel.equalsIgnoreCase("local")) {
+				globalMode = true;
+			} else {
+				globalMode = false;
+			}
+			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
+			
+		}
 
 		// Set player to appropriate channels
 		if (ChatModeManager.getInstance().isGlobal(uuid)) {

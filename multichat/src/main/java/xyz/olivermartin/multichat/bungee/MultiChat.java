@@ -74,6 +74,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean frozen;
 	
 	public static String defaultChannel = "";
+	public static boolean forceChannelOnJoin = false;
 
 	private static MultiChat instance;
 
@@ -284,6 +285,7 @@ public class MultiChat extends Plugin implements Listener {
 			
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");
+			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
 
 			// Set up global chat
 			GlobalChannel channel = Channel.getGlobalChannel();
