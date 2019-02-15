@@ -112,6 +112,9 @@ public class MultiChatCommand extends Command {
 					ChatControl.reload();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
+					
+					// Set default channel
+					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
 
 					Channel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
 					Channel.getGlobalChannel().clearServers();
