@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
@@ -102,7 +103,7 @@ public class ChannelCommand extends Command {
 
 						Channel local = Channel.getLocalChannel();
 						if (!local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							local.addMember(((ProxiedPlayer)sender).getUniqueId());
+							local.removeMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
 						} else {
 							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
@@ -112,7 +113,7 @@ public class ChannelCommand extends Command {
 
 						Channel global = Channel.getGlobalChannel();
 						if (!global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							global.addMember(((ProxiedPlayer)sender).getUniqueId());
+							global.removeMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
 						} else {
 							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
@@ -127,6 +128,8 @@ public class ChannelCommand extends Command {
 					showHelp(sender);
 					break;
 				}
+
+				BungeeComm.sendPlayerChannelMessage(sender.getName(), Channel.getChannel(((ProxiedPlayer)sender).getUniqueId()).getName(), Channel.getChannel(((ProxiedPlayer)sender).getUniqueId()), ((ProxiedPlayer)sender).getServer().getInfo(), (sender.hasPermission("multichat.chat.colour")||sender.hasPermission("multichat.chat.color")));
 
 			}
 
