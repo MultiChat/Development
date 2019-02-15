@@ -37,6 +37,13 @@ public class ChatModeManager {
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
+
+		Channel local = Channel.getLocalChannel();
+		if (!local.isMember(uuid)) {
+			local.removeMember(uuid);
+			MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
+		}
+
 		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
 	}
@@ -51,6 +58,13 @@ public class ChatModeManager {
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
+
+		Channel global = Channel.getGlobalChannel();
+		if (!global.isMember(uuid)) {
+			global.removeMember(uuid);
+			MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
+		}
+
 		BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
 	}
