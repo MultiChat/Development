@@ -96,8 +96,6 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
-	public static boolean notifyIgnore = false;
-	public static String notifyIgnoreMessage = "&c[%SPECIAL% sent a message, but you ignore them]";
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 

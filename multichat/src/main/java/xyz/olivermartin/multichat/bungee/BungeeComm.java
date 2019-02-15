@@ -138,13 +138,8 @@ public class BungeeComm implements Listener {
 		//DataOutputStream out = new DataOutputStream(stream);
 		try {
 			ObjectOutputStream oout = new ObjectOutputStream(stream);
-			
-			Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
-			oout.writeBoolean(config.getBoolean("notify_ignore"));
-			oout.writeUTF(MessageManager.getMessage("ignore_target"));
 			oout.writeObject(ChatControl.getIgnoreMap());
-			
 
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -35,8 +35,6 @@ public class SpongeIgnoreListener implements RawDataListener {
 		try {
 			ObjectInputStream oin = new ObjectInputStream(stream);
 
-			MultiChatSponge.notifyIgnore = oin.readBoolean();
-			MultiChatSponge.notifyIgnoreMessage = oin.readUTF();
 			MultiChatSponge.ignoreMap = (Map<UUID, Set<UUID>>) oin.readObject();
 
 		} catch (IOException e1) {
