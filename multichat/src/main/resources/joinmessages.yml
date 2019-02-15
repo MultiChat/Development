@@ -47,3 +47,13 @@ networkquit: "&e%NAME% left the network"
 silentquit: "&b&o%NAME% &b&oleft the network silently"
 
 ##############################################################
+
+# Should a welcome message be displayed the first time a player joins the network?
+
+welcome: true
+
+# Define the welcome message here
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+
+welcome_message: "&dEveryone welcome %NAME% to the network for the first time!"

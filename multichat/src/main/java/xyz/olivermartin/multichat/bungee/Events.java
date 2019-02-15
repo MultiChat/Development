@@ -374,6 +374,7 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
+		boolean firstJoin = false;
 
 		if (player.hasPermission("multichat.staff.mod")) {
 
@@ -417,6 +418,7 @@ public class Events implements Listener {
 				globalMode = false;
 			}
 			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
+			firstJoin = true;
 			//ConsoleManager.log("Created new global chat entry for " + player.getName());
 
 		}
@@ -442,16 +444,21 @@ public class Events implements Listener {
 
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
+			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
 
 			ChatManipulation chatman = new ChatManipulation();
 
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
+			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
 
+					if (firstJoin && ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome")) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
+					}
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {
