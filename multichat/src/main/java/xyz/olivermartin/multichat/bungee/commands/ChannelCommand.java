@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
@@ -129,7 +130,10 @@ public class ChannelCommand extends Command {
 					break;
 				}
 
-				BungeeComm.sendPlayerChannelMessage(sender.getName(), Channel.getChannel(((ProxiedPlayer)sender).getUniqueId()).getName(), Channel.getChannel(((ProxiedPlayer)sender).getUniqueId()), ((ProxiedPlayer)sender).getServer().getInfo(), (sender.hasPermission("multichat.chat.colour")||sender.hasPermission("multichat.chat.color")));
+				// Update local channel info
+				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+					BungeeComm.sendPlayerChannelMessage(p.getName(), Channel.getChannel(p.getUniqueId()).getName(), Channel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")));
+				}
 
 			}
 
