@@ -71,6 +71,11 @@ public class ChannelCommand extends Command {
 						return;
 					}
 					if (operand.equals("local")) {
+						
+						if (!ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
+							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
+							return;
+						}
 
 						Channel local = Channel.getLocalChannel();
 						if (local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
@@ -81,6 +86,11 @@ public class ChannelCommand extends Command {
 						}
 
 					} else if (operand.equals("global")) {
+						
+						if (ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
+							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
+							return;
+						}
 
 						Channel global = Channel.getGlobalChannel();
 						if (global.isMember(((ProxiedPlayer)sender).getUniqueId())) {

@@ -97,6 +97,7 @@ public class MessageManager {
 		defaultMessages.put("command_channel_switch_no_permission", "&cYou are unable to switch channels");
 		defaultMessages.put("command_channel_hide_no_permission", "&cYou are unable to hide channels");
 		defaultMessages.put("command_channel_show_no_permission", "&cYou are unable to show channels");
+		defaultMessages.put("command_channel_cannot_hide", "&cYou cannot hide your currently selected channel");
 
 		defaultMessages.put("command_clearchat_self", "&bYour chat has been cleared");
 		defaultMessages.put("command_clearchat_server", "&bServer chat has been cleared");

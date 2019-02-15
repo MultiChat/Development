@@ -86,6 +86,7 @@ command_channel_only_players: "&cSorry, only players can use chat channel comman
 command_channel_switch_no_permission: "&cYou are unable to switch channels"
 command_channel_hide_no_permission: "&cYou are unable to hide channels"
 command_channel_show_no_permission: "&cYou are unable to show channels"
+command_channel_cannot_hide: "&cYou cannot hide your currently selected channel"
 
 command_clearchat_self: "&bYour chat has been cleared"
 command_clearchat_server: "&bServer chat has been cleared"
