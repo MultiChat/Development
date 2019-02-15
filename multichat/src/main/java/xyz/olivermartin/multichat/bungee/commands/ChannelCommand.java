@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
@@ -57,6 +58,66 @@ public class ChannelCommand extends Command {
 					} else if (operand.equals("global")) {
 						ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
 						MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
+					} else {
+						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
+					}
+					break;
+
+				case "hide":
+					if (!sender.hasPermission("multichat.chat.channel.hide")) {
+						MessageManager.sendMessage(sender, "command_channel_hide_no_permission");
+						return;
+					}
+					if (operand.equals("local")) {
+
+						Channel local = Channel.getLocalChannel();
+						if (local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
+							local.addMember(((ProxiedPlayer)sender).getUniqueId());
+							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
+						} else {
+							MessageManager.sendSpecialMessage(sender, "command_channel_already_hide", operand.toUpperCase());
+						}
+
+					} else if (operand.equals("global")) {
+
+						Channel global = Channel.getGlobalChannel();
+						if (global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
+							global.addMember(((ProxiedPlayer)sender).getUniqueId());
+							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
+						} else {
+							MessageManager.sendSpecialMessage(sender, "command_channel_already_hide", operand.toUpperCase());
+						}
+
+					} else {
+						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
+					}
+					break;
+
+				case "show":
+					if (!sender.hasPermission("multichat.chat.channel.show")) {
+						MessageManager.sendMessage(sender, "command_channel_show_no_permission");
+						return;
+					}
+					if (operand.equals("local")) {
+
+						Channel local = Channel.getLocalChannel();
+						if (!local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
+							local.addMember(((ProxiedPlayer)sender).getUniqueId());
+							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
+						} else {
+							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
+						}
+
+					} else if (operand.equals("global")) {
+
+						Channel global = Channel.getGlobalChannel();
+						if (!global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
+							global.addMember(((ProxiedPlayer)sender).getUniqueId());
+							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
+						} else {
+							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
+						}
+
 					} else {
 						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
 					}

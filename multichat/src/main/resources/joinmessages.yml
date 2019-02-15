@@ -56,4 +56,4 @@ welcome: true
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
 
-welcome_message: "&dEveryone welcome %NAME% to the network for the first time!"
+welcome_message: "&dWelcome %NAME% to the network for the first time!"

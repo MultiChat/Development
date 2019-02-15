@@ -84,11 +84,19 @@ public class MessageManager {
 		defaultMessages.put("command_channel_help",
 				"&3&lChannel Command Help\n"
 						+ "&bSwitch channel\n"
-						+ "&f&o/channel switch <channel>");
+						+ "&f&o/channel switch <channel>\n"
+						+ "&bShow/Hide channel\n"
+						+ "&f&o/channel show/hide <channel>");
 		defaultMessages.put("command_channel_switch", "&bSwitched to channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_hide", "&bYou have hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_show", "&bYou have un-hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_already_hide", "&bYou have already hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_already_show", "&bYou have already un-hidden channel: &f&o%SPECIAL%");
 		defaultMessages.put("command_channel_does_not_exist", "&cSorry, that channel does not exist");
 		defaultMessages.put("command_channel_only_players", "&cSorry, only players can use chat channel commands");
 		defaultMessages.put("command_channel_switch_no_permission", "&cYou are unable to switch channels");
+		defaultMessages.put("command_channel_hide_no_permission", "&cYou are unable to hide channels");
+		defaultMessages.put("command_channel_show_no_permission", "&cYou are unable to show channels");
 
 		defaultMessages.put("command_clearchat_self", "&bYour chat has been cleared");
 		defaultMessages.put("command_clearchat_server", "&bServer chat has been cleared");

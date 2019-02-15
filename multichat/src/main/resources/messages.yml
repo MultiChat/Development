@@ -74,10 +74,18 @@ command_channel_help: |
  &3&lChannel Command Help
  &bSwitch channel
  &f&o/channel switch <channel>
+ &bShow/Hide channel
+ &f&o/channel show/hide <channel>
 command_channel_switch: "&bSwitched to channel: &f&o%SPECIAL%"
+command_channel_hide: "&bYou have hidden channel: &f&o%SPECIAL%"
+command_channel_show: "&bYou have un-hidden channel: &f&o%SPECIAL%"
+command_channel_already_hide: "&bYou have already hidden channel: &f&o%SPECIAL%"
+command_channel_already_show: "&bYou have already un-hidden channel: &f&o%SPECIAL%"
 command_channel_does_not_exist: "&cSorry, that channel does not exist"
 command_channel_only_players: "&cSorry, only players can use chat channel commands"
 command_channel_switch_no_permission: "&cYou are unable to switch channels"
+command_channel_hide_no_permission: "&cYou are unable to hide channels"
+command_channel_show_no_permission: "&cYou are unable to show channels"
 
 command_clearchat_self: "&bYour chat has been cleared"
 command_clearchat_server: "&bServer chat has been cleared"

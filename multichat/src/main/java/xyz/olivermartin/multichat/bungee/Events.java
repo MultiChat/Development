@@ -519,6 +519,14 @@ public class Events implements Listener {
 
 		ConsoleManager.log("Un-Registered player " + player.getName());
 
+		if (!Channel.getGlobalChannel().isMember(player.getUniqueId())) {
+			Channel.getGlobalChannel().removeMember(uuid);
+		}
+
+		if (!Channel.getLocalChannel().isMember(player.getUniqueId())) {
+			Channel.getLocalChannel().removeMember(uuid);
+		}
+
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");

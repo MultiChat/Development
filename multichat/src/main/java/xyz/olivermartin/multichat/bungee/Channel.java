@@ -79,6 +79,18 @@ public class Channel {
 
 	}
 
+	public boolean isMember(UUID player) {
+		if (this.whitelistMembers) {
+			return this.members.contains(player);
+		} else {
+			return !this.members.contains(player);
+		}
+	}
+	
+	public void removeMember(UUID player) {
+		this.members.remove(player);
+	}
+
 	public List<UUID> getMembers() {
 		return this.members;
 	}
