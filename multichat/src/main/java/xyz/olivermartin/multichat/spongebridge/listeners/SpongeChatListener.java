@@ -32,6 +32,8 @@ public class SpongeChatListener {
 			Set<Player> onlinePlayers = new HashSet<Player>(Sponge.getServer().getOnlinePlayers());
 			Iterator<Player> it = onlinePlayers.iterator();
 
+			Set<Player> ignoreNotifyList = new HashSet<Player>();
+
 			// Deal with ignores and channel members
 			if (MultiChatSponge.playerChannels.containsKey(player)) {
 
@@ -57,6 +59,7 @@ public class SpongeChatListener {
 								if (ignoredPlayers.contains(player.getUniqueId())) {
 
 									it.remove();
+									ignoreNotifyList.add(p);
 
 								}
 
@@ -125,7 +128,7 @@ public class SpongeChatListener {
 				format = format.replace("{MODE}", "%MODE%");
 
 			}
-			
+
 			Text toSend;
 
 			// Deal with coloured chat
@@ -149,6 +152,13 @@ public class SpongeChatListener {
 				event.setCancelled(true);
 
 				// DISTRIBUTE THE MESSAGE TO THE RIGHT PLAYERS LOCALLY
+
+				// Notify players if they are not seeing a message due to ignore
+				if (MultiChatSponge.notifyIgnore) {
+					for (Player pl : ignoreNotifyList) {
+						pl.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(MultiChatSponge.notifyIgnoreMessage.replace("%SPECIAL%", player.getName())));
+					}
+				}
 
 				synchronized (MultiChatSponge.multichatChannel) {
 
