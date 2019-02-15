@@ -127,6 +127,10 @@ socialspycommand:
 # +------------------------------------------------------+ #
 ############################################################
 
+# The default chat channel that players will be assigned when they first join
+# Must be "local" or "global", if anything else is specified then will default to "global"
+default_channel: "global"
+
 # The /channel command has the following aliases (other than /channel)
 channelcommand:
 - ch

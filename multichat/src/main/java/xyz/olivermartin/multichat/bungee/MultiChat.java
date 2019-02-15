@@ -72,6 +72,8 @@ public class MultiChat extends Plugin implements Listener {
 	public static String configversion;
 
 	public static boolean frozen;
+	
+	public static String defaultChannel = "";
 
 	private static MultiChat instance;
 
@@ -279,6 +281,9 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
+			
+			// Set default channel
+			defaultChannel = configYML.getString("default_channel");
 
 			// Set up global chat
 			GlobalChannel channel = Channel.getGlobalChannel();
