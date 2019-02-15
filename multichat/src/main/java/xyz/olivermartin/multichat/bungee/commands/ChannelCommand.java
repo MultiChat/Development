@@ -47,6 +47,10 @@ public class ChannelCommand extends Command {
 				switch (subCommand) {
 
 				case "switch":
+					if (!sender.hasPermission("multichat.chat.channel.switch")) {
+						MessageManager.sendMessage(sender, "command_channel_switch_no_permission");
+						return;
+					}
 					if (operand.equals("local")) {
 						ChatModeManager.getInstance().setLocal(((ProxiedPlayer)sender).getUniqueId());
 						MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());

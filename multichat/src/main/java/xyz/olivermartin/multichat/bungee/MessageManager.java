@@ -88,6 +88,7 @@ public class MessageManager {
 		defaultMessages.put("command_channel_switch", "&bSwitched to channel: &f&o%SPECIAL%");
 		defaultMessages.put("command_channel_does_not_exist", "&cSorry, that channel does not exist");
 		defaultMessages.put("command_channel_only_players", "&cSorry, only players can use chat channel commands");
+		defaultMessages.put("command_channel_switch_no_permission", "&cYou are unable to switch channels");
 
 		defaultMessages.put("command_clearchat_self", "&bYour chat has been cleared");
 		defaultMessages.put("command_clearchat_server", "&bServer chat has been cleared");
