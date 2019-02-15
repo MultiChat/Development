@@ -62,7 +62,6 @@ public class ChatListenerHighest implements Listener {
 							if (ignoredPlayers.contains(event.getPlayer().getUniqueId())) {
 
 								it.remove();
-								System.out.println("Removed " + p.getName());
 
 							}
 
@@ -71,7 +70,6 @@ public class ChatListenerHighest implements Listener {
 					} else {
 
 						it.remove();
-						System.out.println("Removed " + p.getName());
 
 					}
 				}

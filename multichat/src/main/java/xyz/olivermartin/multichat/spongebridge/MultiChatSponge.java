@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.spongepowered.api.Platform;
@@ -39,12 +40,14 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.PlayerChannelListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeIgnoreListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
 
 /**
@@ -72,6 +75,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	static RawDataChannel nickChannel;
 	static RawDataChannel worldChannel;
 	static RawDataChannel channelChannel;
+	static RawDataChannel ignoreChannel;
 
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
@@ -81,14 +85,19 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	public static boolean globalChatServer = false;
 	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
+	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 
 	public static boolean overrideGlobalFormat = false;
 	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
 
 	public static Optional<PlaceholderService> papi;
+	
+	public static String serverName = "SPONGE";
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
-
+	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
+	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -102,6 +111,8 @@ public final class MultiChatSponge implements CommandExecutor {
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
 		overrideGlobalFormat = config.getNode("override_global_format").getBoolean();
 		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
+		localChatFormat = config.getNode("local_chat_format").getString();
+		serverName = config.getNode("server_name").getString();
 
 		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
 		ConfigurationNode rootNode;
@@ -163,10 +174,12 @@ public final class MultiChatSponge implements CommandExecutor {
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
 		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:channel");
+		ChannelBinding.RawDataChannel ignoreChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ignore");
 
 		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
 		chatChannel.addListener(Platform.Type.SERVER, new BungeeChatListener(chatChannel));
 		channelChannel.addListener(Platform.Type.SERVER, new PlayerChannelListener());
+		ignoreChannel.addListener(Platform.Type.SERVER, new SpongeIgnoreListener());
 
 		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
@@ -182,6 +195,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
 		MultiChatSponge.channelChannel = channelChannel;
+		MultiChatSponge.ignoreChannel = channelChannel;
 
 		// Register listeners
 
@@ -228,6 +242,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		Sponge.getChannelRegistrar().unbindChannel(nickChannel);
 		Sponge.getChannelRegistrar().unbindChannel(worldChannel);
 		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
+		Sponge.getChannelRegistrar().unbindChannel(ignoreChannel);
 
 		ConfigurationNode rootNode;
 
@@ -250,9 +265,9 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	}
 
-	public static void sendChatToBungee(Player player, String message, String format, boolean local, String players) {
+	public static void sendChatToBungee(Player player, String message, String format) {
 
-		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format).writeBoolean(local).writeUTF(players));
+		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format));
 
 	}
 

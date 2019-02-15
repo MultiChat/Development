@@ -1,23 +1,10 @@
 package xyz.olivermartin.multichat.spongebridge.listeners;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.Set;
-
 import org.spongepowered.api.Platform.Type;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
-
-import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
 
 public class BungeeChatListener implements RawDataListener {
 
@@ -28,7 +15,9 @@ public class BungeeChatListener implements RawDataListener {
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
 
-		Optional<Player> player = Sponge.getServer().getPlayer(data.readUTF());
+		// TODO Legacy, needs to be replaced with cast management
+
+		/*Optional<Player> player = Sponge.getServer().getPlayer(data.readUTF());
 
 		try {
 
@@ -81,7 +70,7 @@ public class BungeeChatListener implements RawDataListener {
 
 			System.err.println("[MultiChat] An error occurred getting player details, is the server lagging?");
 
-		}
+		}*/
 
 	}
 

@@ -11,9 +11,12 @@
 version: "1.7"   #
 ##################
 
+# Specify the name of this server here for the %SERVER% placeholder
+server_name: "SPONGE"
+
 ############################################################
 # +------------------------------------------------------+ #
-# |                       General                        | #
+# |                        Global                        | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -35,3 +38,23 @@ override_global_format: false
 #
 # Will display as [FORMAT] [MESSAGE]
 override_global_format_format: "&f%DISPLAYNAME%&f: "
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Local                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# The local chat format for this server
+# 
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %WORLD% = The world of the sender
+# %SERVER% = The server of the sender
+#
+# Will display as [FORMAT] [MESSAGE]
+local_chat_format: "&7&lLOCAL &f> &f%DISPLAYNAME%&f: "
