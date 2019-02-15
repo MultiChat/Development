@@ -352,6 +352,7 @@ public class MultiChat extends Plugin implements Listener {
 		if (configYML.getBoolean("global")) {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getChannel());
 		}
 
 		// Register staff list command /staff
@@ -404,6 +405,7 @@ public class MultiChat extends Plugin implements Listener {
 		if (configYML.getBoolean("global")) {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocal());
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getGlobal());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getChannel());
 		}
 
 		// Unregister staff list command /staff

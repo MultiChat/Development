@@ -6,6 +6,7 @@ import xyz.olivermartin.multichat.bungee.commands.ACCommand;
 import xyz.olivermartin.multichat.bungee.commands.AnnouncementCommand;
 import xyz.olivermartin.multichat.bungee.commands.BulletinCommand;
 import xyz.olivermartin.multichat.bungee.commands.CastCommand;
+import xyz.olivermartin.multichat.bungee.commands.ChannelCommand;
 import xyz.olivermartin.multichat.bungee.commands.ClearChatCommand;
 import xyz.olivermartin.multichat.bungee.commands.DisplayCommand;
 import xyz.olivermartin.multichat.bungee.commands.FreezeChatCommand;
@@ -37,6 +38,7 @@ public class CommandManager {
 		announcement = new AnnouncementCommand();
 		bulletin = new BulletinCommand();
 		cast = new CastCommand();
+		channel = new ChannelCommand();
 		clearchat = new ClearChatCommand();
 		display = new DisplayCommand();
 		freezechat = new FreezeChatCommand();
@@ -66,6 +68,7 @@ public class CommandManager {
 	private static Command announcement;
 	private static Command bulletin;
 	private static Command cast;
+	private static Command channel;
 	private static Command clearchat;
 	private static Command display;
 	private static Command freezechat;
@@ -161,6 +164,20 @@ public class CommandManager {
 	public static void setCast(Command cast) {
 		CommandManager.cast = cast;
 	}
+
+	/**
+	 * @return the channel
+	 */
+	public static Command getChannel() {
+		return channel;
+	}
+	/**
+	 * @param cast the cast to set
+	 */
+	public static void setChannel(Command channel) {
+		CommandManager.channel = channel;
+	}
+
 	/**
 	 * @return the clearchat
 	 */
@@ -411,6 +428,7 @@ public class CommandManager {
 		announcement = new AnnouncementCommand();
 		bulletin = new BulletinCommand();
 		cast = new CastCommand();
+		channel = new ChannelCommand();
 		clearchat = new ClearChatCommand();
 		display = new DisplayCommand();
 		freezechat = new FreezeChatCommand();

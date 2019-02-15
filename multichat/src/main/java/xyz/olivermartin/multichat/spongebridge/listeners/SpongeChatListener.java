@@ -172,10 +172,8 @@ public class SpongeChatListener {
 						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
 						MultiChatSponge.sendChatToBungee(player, message, format.replaceAll("%", "%%"));
 
-
 					}
 				}
-
 
 			}
 

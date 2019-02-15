@@ -23,9 +23,9 @@ public class MessageManager {
 	static {
 
 		defaultMessages = new HashMap<String,String>();
-		
+
 		// *** CONSOLE LOGS *** //
-		
+
 		defaultMessages.put("console_main_prefix", "&8[&2M&aC&8]&f ");
 		defaultMessages.put("console_chat_prefix", "&fCHAT &f> ");
 		defaultMessages.put("console_modchat_prefix", "&3STAFFCHAT &f> &3");
@@ -34,7 +34,7 @@ public class MessageManager {
 		defaultMessages.put("console_display_prefix", "&fDISPLAY &f> ");
 		defaultMessages.put("console_socialspy_prefix", "&cSOCIALSPY &f> &c");
 		defaultMessages.put("console_helpme_prefix", "&4HELPME &f> &4");
-		
+
 
 		// *** PREFIX *** //
 
@@ -80,6 +80,14 @@ public class MessageManager {
 		defaultMessages.put("command_cast_does_not_exist", "&cSorry, no such cast found: %SPECIAL%");
 		defaultMessages.put("command_cast_added", "&aAdded cast: %SPECIAL%");
 		defaultMessages.put("command_cast_added_error", "&cSorry, cast already exists: %SPECIAL%");
+
+		defaultMessages.put("command_channel_help",
+				"&3&lChannel Command Help\n"
+						+ "&bSwitch channel\n"
+						+ "&f&o/channel switch <channel>");
+		defaultMessages.put("command_channel_switch", "&bSwitched to channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_does_not_exist", "&cSorry, that channel does not exist");
+		defaultMessages.put("command_channel_only_players", "&cSorry, only players can use chat channel commands");
 
 		defaultMessages.put("command_clearchat_self", "&bYour chat has been cleared");
 		defaultMessages.put("command_clearchat_server", "&bServer chat has been cleared");

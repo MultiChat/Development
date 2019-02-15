@@ -70,6 +70,14 @@ command_cast_does_not_exist: "&cSorry, no such cast found: %SPECIAL%"
 command_cast_added: "&aAdded cast: %SPECIAL%"
 command_cast_added_error: "&cSorry, cast already exists: %SPECIAL%"
 
+command_channel_help: |
+ &3&lChannel Command Help
+ &bSwitch channel
+ &f&o/channel switch <channel>
+command_channel_switch: "&bSwitched to channel: &f&o%SPECIAL%"
+command_channel_does_not_exist: "&cSorry, that channel does not exist"
+command_channel_only_players: "&cSorry, only players can use chat channel commands"
+
 command_clearchat_self: "&bYour chat has been cleared"
 command_clearchat_server: "&bServer chat has been cleared"
 command_clearchat_global: "&bGlobal chat has been cleared"
