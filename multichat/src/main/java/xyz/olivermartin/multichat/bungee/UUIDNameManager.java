@@ -36,7 +36,7 @@ public class UUIDNameManager {
 	public static void saveUUIDS() {
 
 		try {
-			File file = new File(MultiChat.ConfigDir, "MultiChatUUIDName.dat");
+			File file = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(uuidname);
@@ -54,7 +54,7 @@ public class UUIDNameManager {
 		HashMap<UUID, String> result = null;
 
 		try {
-			File file = new File(MultiChat.ConfigDir, "MultiChatUUIDName.dat");
+			File file = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID,String>)in.readObject();
@@ -70,7 +70,7 @@ public class UUIDNameManager {
 
 	public static void Startup() {
 
-		File f = new File(MultiChat.ConfigDir, "MultiChatUUIDName.dat");
+		File f = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
 
 		if ((f.exists()) && (!f.isDirectory())) {
 			uuidname.putAll(loadUUIDS());

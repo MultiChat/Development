@@ -3,18 +3,16 @@ package xyz.olivermartin.multichat.bungee.commands;
 import java.util.Optional;
 import java.util.UUID;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
 
 /**
  * Reply Command
@@ -38,10 +36,7 @@ public class ReplyCommand extends Command {
 
 		} else if ((sender instanceof ProxiedPlayer)) {
 
-			String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			Optional<String> crm;
 
@@ -62,8 +57,6 @@ public class ReplyCommand extends Command {
 				return;
 			}
 
-			ChatManipulation chatfix = new ChatManipulation();
-
 			if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
 
 				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId())) != null) {
@@ -79,45 +72,7 @@ public class ReplyCommand extends Command {
 								return;
 							}
 
-							String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-							String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-							String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
-
-							String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, (ProxiedPlayer)sender, target);
-							sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							finalmessage = chatfix.replaceMsgVars(messageinformat, message, (ProxiedPlayer)sender, target);
-							target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							finalmessage = chatfix.replaceMsgVars(messagespyformat, message, (ProxiedPlayer)sender, target);
-
-							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-								if ((onlineplayer.hasPermission("multichat.staff.spy"))
-										&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-										&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
-										&& (onlineplayer.getUniqueId() != target.getUniqueId())) {
-
-									onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-								}
-
-							}
-
-							if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
-								MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
-							}
-
-							MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId());
-
-							if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-								MultiChat.lastmsg.remove(target.getUniqueId());
-							}
-
-							MultiChat.lastmsg.put(target.getUniqueId(), ((ProxiedPlayer)sender).getUniqueId());
-
-							ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
-							//System.out.println("\033[31m[MultiChat] SOCIALSPY {" + sender.getName() + " -> " + target.getName() + "}  " + message);
+							PrivateMessageManager.getInstance().sendMessage(message, (ProxiedPlayer)sender, target);
 
 						} else {
 							MessageManager.sendMessage(sender, "command_msg_disabled_target");
@@ -133,41 +88,7 @@ public class ReplyCommand extends Command {
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
-
-						String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
-						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-						finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
-						ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-						finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
-
-						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-							if ((onlineplayer.hasPermission("multichat.staff.spy"))
-									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-									&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())) {
-
-								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							}
-
-						}
-
-						if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
-							MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
-						}
-
-						MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
-
-						if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-							MultiChat.lastmsg.remove(new UUID(0L, 0L));
-						}
-
-						MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+						PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer)sender);
 
 					} else {
 						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
@@ -183,18 +104,11 @@ public class ReplyCommand extends Command {
 				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 			}
 
-			chatfix = null;
-
 		} else {
 
 			// New console reply
 
-			String message = "";
-			for (String arg : args) {
-				message = message + arg + " ";
-			}
-
-			ChatManipulation chatfix = new ChatManipulation();
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
 
@@ -204,41 +118,7 @@ public class ReplyCommand extends Command {
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 
-						String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-						String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-						String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
-
-						String finalmessage = chatfix.replaceMsgConsoleSenderVars(messageoutformat, message, target);
-						sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-						finalmessage = chatfix.replaceMsgConsoleSenderVars(messageinformat, message, target);
-						target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-						finalmessage = chatfix.replaceMsgConsoleSenderVars(messagespyformat, message, target);
-
-						for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-							if ((onlineplayer.hasPermission("multichat.staff.spy"))
-									&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-									&& (onlineplayer.getUniqueId() != target.getUniqueId())) {
-
-								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-
-							}
-
-						}
-
-						if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
-							MultiChat.lastmsg.remove(new UUID(0L,0L));
-						}
-
-						MultiChat.lastmsg.put(new UUID(0L,0L), target.getUniqueId());
-
-						if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-							MultiChat.lastmsg.remove(target.getUniqueId());
-						}
-
-						MultiChat.lastmsg.put(target.getUniqueId(), new UUID(0L,0L));
+						PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
 
 					} else {
 						MessageManager.sendMessage(sender, "command_msg_disabled_target");
@@ -251,8 +131,6 @@ public class ReplyCommand extends Command {
 			} else {
 				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
 			}
-
-			chatfix = null;
 
 			// End new console stuff
 

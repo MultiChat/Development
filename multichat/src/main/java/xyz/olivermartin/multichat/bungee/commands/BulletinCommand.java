@@ -8,6 +8,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Bulletins;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Bulletin Command
@@ -92,16 +93,7 @@ public class BulletinCommand extends Command {
 
 			if (args[0].toLowerCase().equals("add")) {
 
-				int counter = 0;
-				String message = "";
-
-				for (String arg : args) {
-					if (!(counter == 1)) {
-						counter++;
-					} else {
-						message = message + arg + " ";
-					}
-				}
+				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
 				Bulletins.addBulletin(message);
 				MessageManager.sendMessage(sender, "command_bulletin_added");

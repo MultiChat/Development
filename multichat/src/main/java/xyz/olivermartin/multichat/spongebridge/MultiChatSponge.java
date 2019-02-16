@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.spongepowered.api.Platform;
@@ -24,40 +26,78 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.network.ChannelBinding;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
+import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
 
+import me.rojo8399.placeholderapi.PlaceholderService;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.MetaListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.PlayerChannelListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeChatListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeIgnoreListener;
+import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
 
 /**
- * SPONGE COMM - The MAIN class for MultiChatSpongeBridge
+ * MultiChatSponge - MAIN CLASS
  * <p>Allows MultiChat to fetch data from Sponge and powers /nick etc.</p>
  * 
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChat Sponge", version = "1.6.2")
-public final class SpongeComm implements CommandExecutor {
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+public final class MultiChatSponge implements CommandExecutor {
+
+	public static SimpleMutableMessageChannel multichatChannel;
 
 	ChannelRegistrar channelRegistrar;
-	RawDataChannel channel;
+
+	RawDataChannel commChannel;
+	static RawDataChannel chatChannel;
+
 	RawDataChannel actionChannel;
 	RawDataChannel playerActionChannel;
+
 	static RawDataChannel prefixChannel;
 	static RawDataChannel suffixChannel;
 	static RawDataChannel nickChannel;
 	static RawDataChannel worldChannel;
+	static RawDataChannel channelChannel;
+	static RawDataChannel ignoreChannel;
+
 	public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
+
 	public static boolean setDisplayNameLastVal = false;
 	public static String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
+
+	public static boolean globalChatServer = false;
+	public static String globalChatFormat = "&f%DISPLAYNAME%&f: ";
+	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
+
+	public static boolean overrideGlobalFormat = false;
+	public static String overrideGlobalFormatFormat = "&f%DISPLAYNAME%&f: ";
+
+	public static Optional<PlaceholderService> papi;
+	
+	public static String serverName = "SPONGE";
+
+	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
+	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
+	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -66,6 +106,13 @@ public final class SpongeComm implements CommandExecutor {
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
+
+		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
+		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
+		overrideGlobalFormat = config.getNode("override_global_format").getBoolean();
+		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
+		localChatFormat = config.getNode("local_chat_format").getString();
+		serverName = config.getNode("server_name").getString();
 
 		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
 		ConfigurationNode rootNode;
@@ -112,24 +159,50 @@ public final class SpongeComm implements CommandExecutor {
 
 		}
 
+		// Register channels
+
 		channelRegistrar = Sponge.getGame().getChannelRegistrar();
-		ChannelBinding.RawDataChannel channel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
+
+		ChannelBinding.RawDataChannel commChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
+		ChannelBinding.RawDataChannel chatChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:chat");
+
 		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
 		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:paction");
+
 		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
-		channel.addListener(Platform.Type.SERVER, new MetaListener(channel));
+		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:channel");
+		ChannelBinding.RawDataChannel ignoreChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ignore");
+
+		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
+		chatChannel.addListener(Platform.Type.SERVER, new BungeeChatListener(chatChannel));
+		channelChannel.addListener(Platform.Type.SERVER, new PlayerChannelListener());
+		ignoreChannel.addListener(Platform.Type.SERVER, new SpongeIgnoreListener());
+
 		actionChannel.addListener(Platform.Type.SERVER, new BungeeCommandListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new BungeePlayerCommandListener());
-		this.channel = channel;
+
+		this.commChannel = commChannel;
+		MultiChatSponge.chatChannel = chatChannel;
+
 		this.actionChannel = actionChannel;
 		this.playerActionChannel = playerActionChannel;
-		SpongeComm.prefixChannel = prefixChannel;
-		SpongeComm.suffixChannel = suffixChannel;
-		SpongeComm.nickChannel = nickChannel;
-		SpongeComm.worldChannel = worldChannel;
+
+		MultiChatSponge.prefixChannel = prefixChannel;
+		MultiChatSponge.suffixChannel = suffixChannel;
+		MultiChatSponge.nickChannel = nickChannel;
+		MultiChatSponge.worldChannel = worldChannel;
+		MultiChatSponge.channelChannel = channelChannel;
+		MultiChatSponge.ignoreChannel = channelChannel;
+
+		// Register listeners
+
+		Sponge.getEventManager().registerListeners(this, new SpongeChatListener());
+		Sponge.getEventManager().registerListeners(this, new SpongeLoginListener());
+
+		// Register commands
 
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
@@ -142,18 +215,34 @@ public final class SpongeComm implements CommandExecutor {
 
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 
+		// Register message channel
+
+		multichatChannel = new SimpleMutableMessageChannel();
+
+		// Dependencies
+
+		try {
+			papi = Sponge.getServiceManager().provide(PlaceholderService.class);
+			System.out.println("Connected to PlaceholderAPI!");
+		} catch (NoClassDefFoundError e) {
+			papi = Optional.empty();
+		}
+
 	}
 
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStop(GameStoppingServerEvent event) {
 
-		Sponge.getChannelRegistrar().unbindChannel(channel);
+		Sponge.getChannelRegistrar().unbindChannel(commChannel);
+		Sponge.getChannelRegistrar().unbindChannel(chatChannel);
 		Sponge.getChannelRegistrar().unbindChannel(actionChannel);
 		Sponge.getChannelRegistrar().unbindChannel(prefixChannel);
 		Sponge.getChannelRegistrar().unbindChannel(suffixChannel);
 		Sponge.getChannelRegistrar().unbindChannel(nickChannel);
 		Sponge.getChannelRegistrar().unbindChannel(worldChannel);
+		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
+		Sponge.getChannelRegistrar().unbindChannel(ignoreChannel);
 
 		ConfigurationNode rootNode;
 
@@ -173,6 +262,12 @@ public final class SpongeComm implements CommandExecutor {
 			e.printStackTrace();
 			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 		}
+
+	}
+
+	public static void sendChatToBungee(Player player, String message, String format) {
+
+		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format));
 
 	}
 

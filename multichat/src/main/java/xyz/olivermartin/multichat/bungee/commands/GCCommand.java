@@ -17,6 +17,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
 /**
  * Group Chat Messaging Command
@@ -65,10 +66,7 @@ public class GCCommand extends Command {
 
 					TGroupChatInfo groupInfo = (TGroupChatInfo) MultiChat.groupchats.get(groupName);
 
-					String message = "";
-					for (String arg : args) {
-						message = message + arg + " ";
-					}
+					String message = MultiChatUtil.getMessageFromArgs(args);
 
 					String playerName = sender.getName();
 
@@ -140,10 +138,6 @@ public class GCCommand extends Command {
 
 		}
 
-		//String groupName = groupInfo.getName();
-
-		//System.out.println("\033[32m[MultiChat] /gc {" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
-		//ConsoleManager.logGroupChat("{" + groupName.toUpperCase() + "} {" + playerName + "}  " + message);
 		ConsoleManager.logGroupChat(message);
 	}
 }

@@ -31,13 +31,7 @@ public class ConfigManager {
 
 	private Map<String,ConfigHandler> handlerMap;
 
-	// NEW AREA //
-
 	private ConfigManager() {
-
-		// OLD V
-		// config = null;
-		// OLD ^
 
 		handlerMap = new HashMap<String,ConfigHandler>();
 
@@ -74,99 +68,4 @@ public class ConfigManager {
 
 	}
 
-	// OLD AREA //
-
-	//
-	//
-	//	private Configuration config;
-	//
-	//	public Configuration getConfig() {
-	//		return config;
-	//	}
-	//
-	//	public String getString(String path) {
-	//		return config.getString(path);
-	//	}
-	//
-	//	public Boolean getBoolean(String path) {
-	//		return config.getBoolean(path);
-	//	}
-	//
-	//	public Integer getInt(String path) {
-	//		return config.getInt(path);
-	//	}
-	//
-	//	public List<String> getStringList(String path) {
-	//		return config.getStringList(path);
-	//	}
-	//
-	//	public void startupConfig() {
-	//
-	//		try {
-	//
-	//			File file = new File(MultiChat.ConfigDir, "config.yml");
-	//
-	//			if (!file.exists()) {
-	//
-	//				System.out.println("[MultiChat] Config.yml not found, creating!");
-	//
-	//				saveDefaultConfig();
-	//				loadConfig();
-	//
-	//			} else {
-	//				System.out.println("[MultiChat] Config.yml already exists, loading!");
-	//				loadConfig();
-	//			}
-	//
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//
-	//	private void saveDefaultConfig() {
-	//
-	//		try {
-	//
-	//			InputStream in = getClass().getClassLoader().getResourceAsStream("config.yml");Throwable localThrowable3 = null;
-	//
-	//			try {
-	//
-	//				Files.copy(in, new File(MultiChat.ConfigDir, "config.yml").toPath(), new CopyOption[0]);
-	//
-	//			} catch (Throwable localThrowable1) {
-	//
-	//				localThrowable3 = localThrowable1;throw localThrowable1;
-	//
-	//			} finally {
-	//
-	//				if (in != null) {
-	//
-	//					if (localThrowable3 != null) {
-	//
-	//						try	{
-	//							in.close();
-	//						} catch (Throwable localThrowable2) {
-	//							localThrowable3.addSuppressed(localThrowable2);
-	//						}
-	//
-	//					} else {
-	//						in.close();
-	//					}
-	//
-	//				}
-	//			}
-	//
-	//		} catch (IOException e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
-	//
-	//	private void loadConfig() {
-	//
-	//		try {
-	//			this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(MultiChat.ConfigDir, "config.yml"));
-	//		} catch (IOException e) {
-	//			e.printStackTrace();
-	//		}
-	//	}
 }

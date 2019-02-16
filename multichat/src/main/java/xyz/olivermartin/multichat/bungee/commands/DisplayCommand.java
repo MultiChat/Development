@@ -9,6 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
 /**
@@ -35,28 +36,23 @@ public class DisplayCommand extends Command {
 
 		} else {
 
-			String message = "";
-
-			for (String arg : args) {
-				message = message + arg + " ";
-			}
+			String message = MultiChatUtil.getMessageFromArgs(args);
 
 			displayMessage(message);
 		}
 	}
 
 	public static void displayMessage(String message) {
-		
+
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 		}
-		
+
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("display", message));
 
-		//System.out.println("\033[33m[MultiChat][Display] " + message);
 		ConsoleManager.logDisplayMessage(message);
 	}
 }

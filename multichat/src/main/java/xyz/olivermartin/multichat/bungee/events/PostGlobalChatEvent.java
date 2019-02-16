@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Cancellable;
 import net.md_5.bungee.api.plugin.Event;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.PlayerMeta;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 
@@ -178,11 +178,15 @@ public class PostGlobalChatEvent extends Event implements Cancellable {
 	 * Returns "Global" if the player is in global mode and seeing chat from everyone
 	 */
 	public String getSenderChatMode() {
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+
+		boolean global = ChatModeManager.getInstance().isGlobal(sender.getUniqueId());
+
+		if (!global) {
 			return "Local";
 		} else {
 			return "Global";
 		}
+
 	}
 
 	/**
@@ -190,11 +194,15 @@ public class PostGlobalChatEvent extends Event implements Cancellable {
 	 * Returns "G" if the player is in global mode and seeing chat from everyone
 	 */
 	public String getSenderShortChatMode() {
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+
+		boolean global = ChatModeManager.getInstance().isGlobal(sender.getUniqueId());
+
+		if (!global) {
 			return "L";
 		} else {
 			return "G";
 		}
+
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +55,17 @@ public class BungeeComm implements Listener {
 				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
 			}
 
+			// Is this server a global chat server?
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
+					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName())) {
+				out.writeUTF("T");
+			} else {
+				out.writeUTF("F");
+			}
+
+			// Send the global format
+			out.writeUTF(Channel.getGlobalChannel().getFormat());
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -99,10 +111,78 @@ public class BungeeComm implements Listener {
 
 	}
 
+	public static void sendChatMessage(String message, ServerInfo server) {
+
+		// This has been repurposed to send casts to local chat streams!
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+
+		try {
+			// message part
+			out.writeUTF(message);
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:chat", stream.toByteArray());
+
+	}
+
+	public static void sendIgnoreMap(ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		//DataOutputStream out = new DataOutputStream(stream);
+		try {
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+
+			oout.writeObject(ChatControl.getIgnoreMap());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:ignore", stream.toByteArray());
+
+	}
+
+	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour) {
+
+		sendIgnoreMap(server);
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		//DataOutputStream out = new DataOutputStream(stream);
+		try {
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+
+			// Players name
+			oout.writeUTF(playerName);
+			// Channel part
+			oout.writeUTF(channel);
+			oout.writeBoolean(colour);
+			oout.writeBoolean(channelObject.isWhitelistMembers());
+			oout.writeObject(channelObject.getMembers());
+
+
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData("multichat:channel", stream.toByteArray());
+
+		DebugManager.log("Sent message on multichat:channel channel!");
+
+	}
+
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
+		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
 			return;
 		}
 
@@ -112,36 +192,43 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:comm")) {
 
+			// TODO Remove - legacy
 			return;
 
-			//			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
-			//			DataInputStream in = new DataInputStream(stream);
-			//
-			//			try {
-			//
-			//				String playerDisplayName = in.readUTF();
-			//				String playerName = in.readUTF();
-			//				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerName);
-			//
-			//				if (player == null) return;
-			//
-			//				synchronized (player) {
-			//
-			//					/*
-			//					 * TODO Add option to NOT set the bungee display name
-			//					 * (While maintaining the fetching prefixes and correct display of them)
-			//					 * (Useful for older servers where char limit in place for display names)
-			//					 */
-			//
-			//					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true && player != null) {
-			//						player.setDisplayName(playerDisplayName.replaceAll("&(?=[a-f,0-9,k-o,r])", "§"));
-			//					}
-			//
-			//				}
-			//
-			//			} catch (IOException e) {
-			//				e.printStackTrace();
-			//			}
+		}
+
+		if (ev.getTag().equals("multichat:chat")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				UUID uuid = UUID.fromString(in.readUTF());
+				String message = in.readUTF();
+				String format = in.readUTF();
+
+				format = format.replace("%%","%");
+
+				DebugManager.log("Got format for message: " + format);
+
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+				if (player == null) return;
+
+				synchronized (player) {
+
+					Channel.getGlobalChannel().sendMessage(player, message, format);
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+
+			return;
+
 		}
 
 		if (ev.getTag().equals("multichat:nick")) {
@@ -262,7 +349,7 @@ public class BungeeComm implements Listener {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
-			
+
 			DebugManager.log("[multichat:world] Got an incoming channel message!");
 
 			try {
@@ -272,7 +359,7 @@ public class BungeeComm implements Listener {
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) return;
-				
+
 				DebugManager.log("[multichat:world] Player is online!");
 
 				synchronized (player) {
@@ -284,11 +371,11 @@ public class BungeeComm implements Listener {
 					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
 
 					if (opm.isPresent()) {
-						
+
 						DebugManager.log("[multichat:world] Got their meta data correctly");
 
 						opm.get().world = world;
-						
+
 						DebugManager.log("[multichat:world] Set their world to: " + world);
 
 					}

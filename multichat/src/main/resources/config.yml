@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.6.2" #
+version: "1.7"   #
 ##################
 
 # 1. General
@@ -123,6 +123,23 @@ socialspycommand:
 
 ############################################################
 # +------------------------------------------------------+ #
+# |                    Chat Channels                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+# The default chat channel that players will be assigned when they first join
+# Must be "local" or "global", if anything else is specified then will default to "global"
+default_channel: "global"
+
+# Force players into default channel when they join the server?
+force_channel_on_join: false
+
+# The /channel command has the following aliases (other than /channel)
+channelcommand:
+- ch
+
+############################################################
+# +------------------------------------------------------+ #
 # |                     Global Chat                      | #
 # +------------------------------------------------------+ #
 ############################################################
@@ -155,12 +172,11 @@ no_global: []
 # %NICK% = The nickname of the sender
 # %SERVER% = The server of the sender
 # %WORLD% = The world of the sender
-# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 
 # Global Chat Format
 # Will display as [FORMAT] [MESSAGE]
 
-globalformat: "&f%DISPLAYNAME%&f: "
+globalformat: "&2[&aG&2] &f%DISPLAYNAME%&f: "
 
 ############################################################
 # +------------------------------------------------------+ #

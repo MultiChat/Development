@@ -23,9 +23,9 @@ public class MessageManager {
 	static {
 
 		defaultMessages = new HashMap<String,String>();
-		
+
 		// *** CONSOLE LOGS *** //
-		
+
 		defaultMessages.put("console_main_prefix", "&8[&2M&aC&8]&f ");
 		defaultMessages.put("console_chat_prefix", "&fCHAT &f> ");
 		defaultMessages.put("console_modchat_prefix", "&3STAFFCHAT &f> &3");
@@ -34,7 +34,7 @@ public class MessageManager {
 		defaultMessages.put("console_display_prefix", "&fDISPLAY &f> ");
 		defaultMessages.put("console_socialspy_prefix", "&cSOCIALSPY &f> &c");
 		defaultMessages.put("console_helpme_prefix", "&4HELPME &f> &4");
-		
+
 
 		// *** PREFIX *** //
 
@@ -81,6 +81,24 @@ public class MessageManager {
 		defaultMessages.put("command_cast_added", "&aAdded cast: %SPECIAL%");
 		defaultMessages.put("command_cast_added_error", "&cSorry, cast already exists: %SPECIAL%");
 
+		defaultMessages.put("command_channel_help",
+				"&3&lChannel Command Help\n"
+						+ "&bSwitch channel\n"
+						+ "&f&o/channel switch <channel>\n"
+						+ "&bShow/Hide channel\n"
+						+ "&f&o/channel show/hide <channel>");
+		defaultMessages.put("command_channel_switch", "&bSwitched to channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_hide", "&bYou have hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_show", "&bYou have un-hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_already_hide", "&bYou have already hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_already_show", "&bYou have already un-hidden channel: &f&o%SPECIAL%");
+		defaultMessages.put("command_channel_does_not_exist", "&cSorry, that channel does not exist");
+		defaultMessages.put("command_channel_only_players", "&cSorry, only players can use chat channel commands");
+		defaultMessages.put("command_channel_switch_no_permission", "&cYou are unable to switch channels");
+		defaultMessages.put("command_channel_hide_no_permission", "&cYou are unable to hide channels");
+		defaultMessages.put("command_channel_show_no_permission", "&cYou are unable to show channels");
+		defaultMessages.put("command_channel_cannot_hide", "&cYou cannot hide your currently selected channel");
+
 		defaultMessages.put("command_clearchat_self", "&bYour chat has been cleared");
 		defaultMessages.put("command_clearchat_server", "&bServer chat has been cleared");
 		defaultMessages.put("command_clearchat_global", "&bGlobal chat has been cleared");
@@ -102,7 +120,7 @@ public class MessageManager {
 		defaultMessages.put("command_gc_only_players_speak", "&cOnly players can speak in group chats");
 
 		defaultMessages.put("command_global_enabled_1", "&3GLOBAL CHAT ENABLED");
-		defaultMessages.put("command_global_enabled_2", "&bYou will see messages from players on all servers!");
+		defaultMessages.put("command_global_enabled_2", "&bYour messages will go to all servers!");
 		defaultMessages.put("command_global_only_players", "&cOnly players can change their chat state");
 
 		defaultMessages.put("command_group_selected", "&aYour /gc messages will now go to group: %SPECIAL%");
@@ -155,7 +173,7 @@ public class MessageManager {
 		defaultMessages.put("command_helpme_format", "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%");
 
 		defaultMessages.put("command_local_enabled_1", "&3LOCAL CHAT ENABLED");
-		defaultMessages.put("command_local_enabled_2", "&bYou will only see messages from players on the same server!");
+		defaultMessages.put("command_local_enabled_2", "&bYour messages will only go to this server!");
 		defaultMessages.put("command_local_only_players", "&cOnly players can change their chat state");
 
 		defaultMessages.put("command_mcc_usage", "&aUsage: /mcc <chatcolorcode> <namecolorcode>");

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -49,20 +50,20 @@ public class ConfigHandler {
 
 			if (!file.exists()) {
 
-				System.out.println("[MultiChat] Config file " + fileName + " not found... Creating new one.");
+				ProxyServer.getInstance().getLogger().info("Config file " + fileName + " not found... Creating new one.");
 				saveDefaultConfig();
 
 				loadConfig();
 
 			} else {
 
-				System.out.println("[MultiChat] Loading " + fileName + "...");
+				ProxyServer.getInstance().getLogger().info("Loading " + fileName + "...");
 				loadConfig();
 
 			}
 
 		} catch (Exception e) {
-			System.out.println("[MultiChat] [ERROR] Could not load  " + fileName);
+			ProxyServer.getInstance().getLogger().info("[ERROR] Could not load  " + fileName);
 			e.printStackTrace();
 		}
 	}
@@ -76,7 +77,7 @@ public class ConfigHandler {
 		try {
 			Files.copy(inputStream, new File(configPath, fileName).toPath(), new CopyOption[0]);
 		} catch (IOException e) {
-			System.err.println("[MultiChat] [ERROR] Could not create new " + fileName + " file...");
+			ProxyServer.getInstance().getLogger().info("[ERROR] Could not create new " + fileName + " file...");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -86,43 +87,6 @@ public class ConfigHandler {
 			}
 		}
 
-		// OLD WAY BELOW:
-
-		//		try {
-		//
-		//			InputStream in = getClass().getClassLoader().getResourceAsStream("config.yml");
-		//			Throwable localThrowable3 = null;
-		//
-		//			try {
-		//
-		//				Files.copy(in, new File(MultiChat.ConfigDir, "config.yml").toPath(), new CopyOption[0]);
-		//
-		//			} catch (Throwable localThrowable1) {
-		//
-		//				localThrowable3 = localThrowable1;throw localThrowable1;
-		//
-		//			} finally {
-		//
-		//				if (in != null) {
-		//
-		//					if (localThrowable3 != null) {
-		//
-		//						try	{
-		//							in.close();
-		//						} catch (Throwable localThrowable2) {
-		//							localThrowable3.addSuppressed(localThrowable2);
-		//						}
-		//
-		//					} else {
-		//						in.close();
-		//					}
-		//
-		//				}
-		//			}
-		//
-		//		} catch (IOException e) {
-		//			e.printStackTrace();
-		//		}
 	}
 
 	private void loadConfig() {
@@ -133,7 +97,7 @@ public class ConfigHandler {
 
 		} catch (IOException e) {
 
-			System.err.println("[MultiChat] [ERROR] Could not load config.yml file...");
+			ProxyServer.getInstance().getLogger().info("[ERROR] Could not load " + fileName + " file...");
 			e.printStackTrace();
 
 		}

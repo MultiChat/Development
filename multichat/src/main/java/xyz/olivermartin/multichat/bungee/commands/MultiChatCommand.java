@@ -4,8 +4,8 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatStream;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
@@ -113,9 +113,15 @@ public class MultiChatCommand extends Command {
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 
-					MultiChat.globalChat = new ChatStream("GLOBAL", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), false, false);
+					// Set default channel
+					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
+					MultiChat.forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
+
+					Channel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
+					Channel.getGlobalChannel().clearServers();
+
 					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
-						MultiChat.globalChat.addServer(server);
+						Channel.getGlobalChannel().addServer(server);
 					}
 
 					MessageManager.sendMessage(sender, "command_multichat_reload_completed");

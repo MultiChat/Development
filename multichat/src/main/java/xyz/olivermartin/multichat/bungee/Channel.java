@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,13 +17,47 @@ import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 
 /**
- * Chat Stream
- * <p>A class to represent a chat stream and control the messages sent etc.</p>
+ * Channel
+ * <p>A class to represent a chat channel and control the messages sent etc.</p>
  * 
  * @author Oliver Martin (Revilo410)
  *
  */
-public class ChatStream {
+public class Channel {
+
+	private static GlobalChannel global;
+	private static LocalChannel local;
+
+	static {
+
+		global = new GlobalChannel("&f%DISPLAYNAME%&f: ");
+		local = new LocalChannel();
+
+	}
+
+	public static GlobalChannel getGlobalChannel() {
+		return global;
+	}
+
+	public static LocalChannel getLocalChannel() {
+		return local;
+	}
+
+	public static Map<UUID,Channel> playerChannels = new HashMap<UUID, Channel>();
+
+	public static void setChannel (UUID uuid, Channel channel) {
+		Channel.playerChannels.put(uuid, channel);
+	}
+
+	public static Channel getChannel (UUID uuid) {
+		return Channel.playerChannels.get(uuid);
+	}
+
+	public static void removePlayer (UUID uuid) {
+		Channel.playerChannels.remove(uuid);
+	}
+
+	/* END STATIC */
 
 	boolean whitelistMembers;
 	protected List<UUID> members;
@@ -33,21 +68,7 @@ public class ChatStream {
 	protected String name;
 	protected String format;
 
-	public static Map<UUID,ChatStream> currentStreams = new HashMap<UUID,ChatStream>();
-
-	public static void setStream (UUID uuid,ChatStream stream) {
-		ChatStream.currentStreams.put(uuid,stream);
-	}
-
-	public static ChatStream getStream (UUID uuid) {
-		return ChatStream.currentStreams.get(uuid);
-	}
-
-	public static void removePlayer (UUID uuid) {
-		ChatStream.currentStreams.remove(uuid);
-	}
-
-	public ChatStream(String name,  String format, boolean whitelistServers, boolean whitelistMembers) {
+	public Channel(String name, String format, boolean whitelistServers, boolean whitelistMembers) {
 
 		this.name = name;
 		this.whitelistServers = whitelistServers;
@@ -58,20 +79,44 @@ public class ChatStream {
 
 	}
 
-	public void addServer(String server) {
-
-		if (!servers.contains(server)) {
-			servers.add(server);
+	public boolean isMember(UUID player) {
+		if (this.whitelistMembers) {
+			return this.members.contains(player);
+		} else {
+			return !this.members.contains(player);
 		}
+	}
+	
+	public void removeMember(UUID player) {
+		this.members.remove(player);
+	}
 
+	public List<UUID> getMembers() {
+		return this.members;
+	}
+
+	public boolean isWhitelistMembers() {
+		return this.whitelistMembers;
+	}
+
+	public void addServer(String server) {
+		if (!servers.contains(server)) servers.add(server);
+	}
+
+	public void setServers(List<String> servers) {
+		this.servers = servers;
+	}
+
+	public void clearServers() {
+		this.servers = new ArrayList<String>();
 	}
 
 	public void addMember(UUID member) {
+		if (!members.contains(member)) members.add(member);
+	}
 
-		if (!members.contains(member)) {
-			members.add(member);
-		}
-
+	public void setMembers(List<UUID> members) {
+		this.members = members;
 	}
 
 	public String getName() {
@@ -82,28 +127,65 @@ public class ChatStream {
 		return this.format;
 	}
 
-	public void sendMessage(ProxiedPlayer sender, String message) {
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	public void sendMessage(ProxiedPlayer sender, String message, String format) {
+
+		// Set<String> players = new HashSet<String>();
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-					//TODO hiding & showing streams
-					if ( (MultiChat.globalplayers.get(sender.getUniqueId()) == false
-							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-							(MultiChat.globalplayers.get(receiver.getUniqueId()) == false
-							&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-							(MultiChat.globalplayers.get(sender.getUniqueId()).equals(true) && MultiChat.globalplayers.get(receiver.getUniqueId()))) {
 
-						if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-							receiver.sendMessage(buildFormat(sender,receiver,format,message));
-						} else {
-							ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+			if (receiver != null) {
+
+				synchronized (receiver) {
+
+					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
+						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
+							//TODO hiding & showing channels
+							/*if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
+									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+									(!ChatModeManager.getInstance().isGlobal(receiver.getUniqueId())
+											&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
+									(ChatModeManager.getInstance().isGlobal(sender.getUniqueId()) && ChatModeManager.getInstance().isGlobal(receiver.getUniqueId()))) {*/
+
+							if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+								if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+									receiver.sendMessage(buildFormat(sender,receiver,format,message));
+								} else {
+									// players.add(receiver.getName());
+								}
+							} else {
+								ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+							}
+
+							//}
 						}
 
 					}
+
 				}
+
 			}
 		}
+
+		/*String playerString;
+		if (local) {
+			playerString = playerList;
+		} else {
+			playerString = MultiChatUtil.getStringFromCollection(players);
+		}
+
+		String newFormat = buildSpigotFormat(sender,format,message);
+		BungeeComm.sendChatMessage(
+				sender.getName(),
+				newFormat,
+				message, 
+				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
+				playerString,
+				sender.getServer().getInfo()
+				);*/
 
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
@@ -112,7 +194,7 @@ public class ChatStream {
 
 	}
 
-	public void sendMessage(String message) {
+	public void sendMessage(String message, CommandSender sender) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
@@ -129,9 +211,41 @@ public class ChatStream {
 		// Trigger PostBroadcastEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
 
-		//TODO <<-- I think this is now done
-		//System.out.println("\033[33m[MultiChat][CHAT]" + message);
 		ConsoleManager.logDisplayMessage(message);
+
+	}
+
+	public String buildSpigotFormat(ProxiedPlayer sender, String format, String message) {
+
+		String newFormat = format;
+
+		/*newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		newFormat = newFormat.replace("%NAME%", sender.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
+		if (opm.isPresent()) {
+			newFormat = newFormat.replace("%PREFIX%", opm.get().prefix);
+			newFormat = newFormat.replace("%SUFFIX%", opm.get().suffix);
+			newFormat = newFormat.replace("%NICK%", opm.get().nick);
+			newFormat = newFormat.replace("%WORLD%", opm.get().world);
+		}
+
+		newFormat = newFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
+
+
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
+			newFormat = newFormat.replace("%MODE%", "Local");
+			newFormat = newFormat.replace("%M%", "L");
+		}
+
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
+			newFormat = newFormat.replace("%MODE%", "Global");
+			newFormat = newFormat.replace("%M%", "G");
+		}*/
+
+		newFormat = newFormat + "%MESSAGE%";
+
+		return newFormat;
 
 	}
 
@@ -139,7 +253,7 @@ public class ChatStream {
 
 		String newFormat = format;
 
-		newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
+		/*newFormat = newFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		newFormat = newFormat.replace("%NAME%", sender.getName());
 
 		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(sender.getUniqueId());
@@ -165,15 +279,15 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVERT%", receiver.getServer().getInfo().getName());
 
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}
+		}*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -252,34 +366,29 @@ public class ChatStream {
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(false)) {
+		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
 
-		if (MultiChat.globalplayers.get(sender.getUniqueId()).equals(true)) {
+		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
 		}
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		//BaseComponent[] toSend;
-
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
 
 			newFormat = newFormat.replace("%MESSAGE%", message);
 			ConsoleManager.logChat(newFormat);
-			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 		} else {
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
 			ConsoleManager.logBasicChat(newFormat, message);
-			//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat) + message);
-		}
 
-		//return toSend;
+		}
 
 	}
 
@@ -301,13 +410,9 @@ public class ChatStream {
 
 		newFormat = newFormat + "%MESSAGE%";
 
-		//BaseComponent[] toSend;
-
 		newFormat = newFormat.replace("%MESSAGE%", message);
 
 		ConsoleManager.logChat(newFormat);
-
-		//toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', "&6[MultiChat][CHAT] " + newFormat));
 
 	}
 }
