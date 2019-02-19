@@ -35,6 +35,23 @@ public class ChatListenerHighest implements Listener {
 
 		}
 
+		synchronized (MultiChatSpigot.placeholderMap) {
+			for (String key : MultiChatSpigot.placeholderMap.keySet()) {
+				
+				String value = MultiChatSpigot.placeholderMap.get(key);
+				value = SpigotPlaceholderManager.buildMultiChatPlaceholder(event.getPlayer(), value);
+				
+				// If we are hooked with PAPI then use their placeholders!
+				if (MultiChatSpigot.hookedPAPI()) {
+					value = PlaceholderAPI.setPlaceholders(event.getPlayer(), value);
+				}
+				
+				if (event.getFormat().contains(key)) {
+					event.setFormat(event.getFormat().replace(key, value));
+				}
+			}
+		}
+
 		// Deal with ignores and channel members
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
 
