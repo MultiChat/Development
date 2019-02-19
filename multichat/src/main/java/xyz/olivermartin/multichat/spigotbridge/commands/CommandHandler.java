@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
@@ -61,6 +62,16 @@ public class CommandHandler implements CommandExecutor {
 					MultiChatSpigot.setLocalFormat = config.getBoolean("set_local_format");
 					MultiChatSpigot.localChatFormat = config.getString("local_chat_format");
 					MultiChatSpigot.forceMultiChatFormat = config.getBoolean("force_multichat_format");
+					
+					MultiChatSpigot.placeholderMap.clear();
+					ConfigurationSection placeholders = config.getConfigurationSection("multichat_placeholders");
+					if (placeholders != null) {
+						
+						for (String placeholder : placeholders.getKeys(false)) {
+							MultiChatSpigot.placeholderMap.put("{multichat_" + placeholder + "}", placeholders.getString(placeholder));
+						}
+						
+					}
 					
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
 

@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -47,6 +48,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
+	
+	public static Map<String, String> placeholderMap = new HashMap<String, String>();
 
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();
@@ -101,6 +104,16 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		setLocalFormat = config.getBoolean("set_local_format");
 		localChatFormat = config.getString("local_chat_format");
 		forceMultiChatFormat = config.getBoolean("force_multichat_format");
+		
+		placeholderMap.clear();
+		ConfigurationSection placeholders = config.getConfigurationSection("multichat_placeholders");
+		if (placeholders != null) {
+			
+			for (String placeholder : placeholders.getKeys(false)) {
+				placeholderMap.put("{multichat_" + placeholder + "}", placeholders.getString(placeholder));
+			}
+			
+		}
 
 		File f = new File(configDir, nameDataFile);
 
