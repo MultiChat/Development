@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.7";
+	public static final String LATEST_VERSION = "1.7.1";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.7",
 			"1.6.2",
 			"1.6.1",
 			"1.6",
