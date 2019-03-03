@@ -34,19 +34,19 @@ showquit: true
 
 # Message de connexion sur le réseaux de serveur
 
-serverjoin: "%DYSPLAYNAME% &evient de se connecter"
+serverjoin: "%NAME% &evient de se connecter"
 
 # Message de connexion silencieuse sur le réseaux de serveur
 
-silentjoin: "%DISPLAYNAME% &b&os'est connecté silencieusement"
+silentjoin: "%NAME% &b&os'est connecté silencieusement"
 
 # Message de déconexion du réseau sur le réseaux de serveur
 
-networkquit: "%DISPLAYNAME% &es'est déconnecté"
+networkquit: "%NAME% &es'est déconnecté"
 
 # Message de déconnexion silencieuse sur le réseaux de serveur
 
-silentquit: "%DISPLAYNAME% &b&os'est déconnecté silencieusement"
+silentquit: "%NAME% &b&os'est déconnecté silencieusement"
 
 ##############################################################
 
