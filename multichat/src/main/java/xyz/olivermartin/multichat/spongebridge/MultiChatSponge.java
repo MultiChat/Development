@@ -195,7 +195,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
 		MultiChatSponge.channelChannel = channelChannel;
-		MultiChatSponge.ignoreChannel = channelChannel;
+		MultiChatSponge.ignoreChannel = ignoreChannel;
 
 		// Register listeners
 
