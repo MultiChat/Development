@@ -236,7 +236,7 @@ public class MultiChat extends Plugin implements Listener {
 		}
 		
 		String translationsDir = configDir.toString() + "\\translations";
-		if (new File(translationsDir).exists()) {
+		if (!new File(translationsDir).exists()) {
 			System.out.println("[MultiChat] Creating translations directory!");
 			new File(translationsDir).mkdirs();
 		}
