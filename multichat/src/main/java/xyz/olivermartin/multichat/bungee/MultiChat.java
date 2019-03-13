@@ -234,14 +234,20 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Creating plugin directory!");
 			getDataFolder().mkdirs();
 		}
+		
+		String translationsDir = configDir.toString() + "\\translations";
+		if (new File(translationsDir).exists()) {
+			System.out.println("[MultiChat] Creating translations directory!");
+			new File(translationsDir).mkdirs();
+		}
 
 		ConfigManager.getInstance().registerHandler("config.yml", configDir);
 		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDir);
 		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
 		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
 
-		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(configDir.toString() + "\\translations"));
-		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(configDir.toString() + "\\translations"));
+		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
