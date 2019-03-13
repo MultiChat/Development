@@ -198,6 +198,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:chat")) {
+			
+			DebugManager.log("{multichat:chat} Got a plugin message");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -205,24 +207,30 @@ public class BungeeComm implements Listener {
 			try {
 
 				UUID uuid = UUID.fromString(in.readUTF());
+				DebugManager.log("{multichat:chat} UUID = " + uuid);
 				String message = in.readUTF();
+				DebugManager.log("{multichat:chat} Message = " + message);
 				String format = in.readUTF();
 
 				format = format.replace("%%","%");
 
-				DebugManager.log("Got format for message: " + format);
+				DebugManager.log("{multichat:chat} Format = " + format);
 
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) return;
+				
+				DebugManager.log("{multichat:chat} Got player successfully! Name = " + player.getName());
 
 				synchronized (player) {
 
+					DebugManager.log("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
 					Channel.getGlobalChannel().sendMessage(player, message, format);
 
 				}
 
 			} catch (IOException e) {
+				DebugManager.log("{multichat:chat} ERROR READING PLUGIN MESSAGE");
 				e.printStackTrace();
 			}
 

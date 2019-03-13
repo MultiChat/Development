@@ -1,0 +1,65 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+# Ne pas éditer  #
+version: "1.7.1" #
+##################
+
+# French Translation by Nogapra - Thank you!
+# To use this file, rename to 'joinmessages.yml'
+
+##############################################################
+#  +------------------------------------------------------+  #
+#  |                    Join Messages                     |  #
+#  +------------------------------------------------------+  #
+##############################################################
+
+# Les messages de connexion au réseau de serveur doivent-ils être affichés ?
+# Paramétrage disponible : true ou false
+
+showjoin: true
+
+# Les messages à la déconexion du réseau de serveur doivent-ils être affichés?
+# Paramétrage disponible : true ou false
+
+showquit: true
+
+##############################################################
+
+# Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
+# %NAME% = le nom du joueur
+
+# Message de connexion sur le réseaux de serveur
+
+serverjoin: "%NAME% &evient de se connecter"
+
+# Message de connexion silencieuse sur le réseaux de serveur
+
+silentjoin: "%NAME% &b&os'est connecté silencieusement"
+
+# Message de déconexion du réseau sur le réseaux de serveur
+
+networkquit: "%NAME% &es'est déconnecté"
+
+# Message de déconnexion silencieuse sur le réseaux de serveur
+
+silentquit: "%NAME% &b&os'est déconnecté silencieusement"
+
+##############################################################
+
+# Un message de bienvenue doit-il être affiché la première fois qu'un joueur rejoint le réseau ?
+# Paramétrage disponible : true ou false
+
+welcome: true
+
+# Définissez le message de bienvenue ci-dessous
+# Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
+# %NAME% = Le nom du joueur
+
+welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveur!"

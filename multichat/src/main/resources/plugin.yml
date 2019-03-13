@@ -1,5 +1,5 @@
 name: MultiChatSpigot
-version: 1.7
+version: 1.7.1
 author: Revilo410
 main: xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot
 softdepend: [Vault,PlaceholderAPI]
@@ -15,6 +15,11 @@ commands:
       usage: /realname <nickname>
       permission: multichatspigot.realname
       permission-message: You do not have permission (multichatspigot.realname)
+   username:
+      description: Searches for a user with the specified name
+      usage: /username <query>
+      permission: multichatspigot.username
+      permission-message: You do not have permission (multichatspigot.username)
    multichatspigot:
       description: MultiChatSpigot reload command
       usage: /multichatspigot reload

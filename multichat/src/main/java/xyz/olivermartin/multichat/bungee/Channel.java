@@ -132,6 +132,11 @@ public class Channel {
 	}
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format) {
+		
+		DebugManager.log("CHANNEL #" + getName() + ": Got a message for the channel");
+		DebugManager.log("CHANNEL #" + getName() + ": SENDER = " + sender.getName());
+		DebugManager.log("CHANNEL #" + getName() + ": MESSAGE = " + message);
+		DebugManager.log("CHANNEL #" + getName() + ": FORMAT = " + format);
 
 		// Set<String> players = new HashSet<String>();
 

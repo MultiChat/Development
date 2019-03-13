@@ -211,6 +211,28 @@ public class NameManager implements Listener {
 		return Optional.of(getCurrentName(uuid));
 
 	}
+	
+	/**
+	 * Gets a player's formatted name from their username
+	 * 
+	 * @param name The player's username
+	 * @return An optional value which may contain their name, as long as their username can be found
+	 */
+	public Optional<String> getFormattedNameFromName(String username) {
+
+		username = username.toLowerCase();
+
+		Optional<UUID> oUUID = getUUIDFromName(username);
+
+		if (!oUUID.isPresent()) {
+			return Optional.empty();
+		}
+
+		UUID uuid = oUUID.get();
+
+		return Optional.of(getName(uuid));
+
+	}
 
 	/**
 	 * Register a player as online
@@ -391,6 +413,51 @@ public class NameManager implements Listener {
 
 			if (nick.matches(nickname)) {
 				uuidSet.add(mapNickUUID.get(nick));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		return Optional.empty();
+
+	}
+	
+	/**
+	 * Return the UUIDs of players who have names containing characters provided in the name argument
+	 * @param name The characters of the name to check
+	 * @return An optional which might contain a players UUID if a partial match was found
+	 */
+	public Optional<Set<UUID>> getPartialNameMatches(String name) {
+
+		Set<String> nameSet = mapNameUUID.keySet();
+		name = stripAllFormattingCodes(name.toLowerCase());
+		Set<UUID> uuidSet = new HashSet<UUID>();
+
+		for (String n : nameSet) {
+
+			if (n.startsWith(name)) {
+				uuidSet.add(mapNameUUID.get(n));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String n : nameSet) {
+
+			if (n.contains(name)) {
+				uuidSet.add(mapNameUUID.get(n));
+			}
+
+		}
+
+		if (!uuidSet.isEmpty()) return Optional.of(uuidSet);
+
+		for (String n : nameSet) {
+
+			if (n.matches(name)) {
+				uuidSet.add(mapNameUUID.get(n));
 			}
 
 		}

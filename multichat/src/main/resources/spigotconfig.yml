@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.7"   #
+version: "1.7.1" #
 ##################
 
 ############################################################
@@ -68,3 +68,18 @@ set_local_format: true
 #
 # Will display as [FORMAT] [MESSAGE]
 local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                MultiChat Placeholders                | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This setting lets you use multichat variables in other plugins!
+# For example, if you use essentials chat for your local chat, but wanted to use a multichat nickname.
+# You can specify the {multichat_nickname} placeholder as defined below. MultiChat will parse it as usual.
+# Essentials doesn't support placeholder API by default, but you can still use PAPI placeholders by making one below!
+# {multichat_papi_displayname} will be replaced using the example below and parsed by multichat.
+multichat_placeholders:
+  nickname: "%NICK%"
+  papi_displayname: "%player_displayname%"

@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.7";
+	public static final String LATEST_VERSION = "1.7.1";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.7",
 			"1.6.2",
 			"1.6.1",
 			"1.6",
@@ -72,7 +73,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static String configversion;
 
 	public static boolean frozen;
-	
+
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
@@ -233,11 +234,20 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Creating plugin directory!");
 			getDataFolder().mkdirs();
 		}
+		
+		String translationsDir = configDir.toString() + "\\translations";
+		if (!new File(translationsDir).exists()) {
+			System.out.println("[MultiChat] Creating translations directory!");
+			new File(translationsDir).mkdirs();
+		}
 
 		ConfigManager.getInstance().registerHandler("config.yml", configDir);
 		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDir);
 		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
 		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
+
+		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
@@ -282,7 +292,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
-			
+
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");
 			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
