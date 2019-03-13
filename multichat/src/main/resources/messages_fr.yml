@@ -1,0 +1,370 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+#   DON'T EDIT   #
+version: "1.7.1" #
+##################
+
+# French Translation by Nogapra - Thank you!
+# To use this file, rename to 'messages.yml'
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Customise Messages                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Format des logs console
+console_main_prefix: "&8[&2M&aC&8]&f "
+console_chat_prefix: "&fCHAT &f> "
+console_modchat_prefix: "&3STAFFCHAT &f> &3"
+console_adminchat_prefix: "&5STAFFCHAT &f> &5"
+console_groupchat_prefix": "&2GROUPCHAT &f> &2"
+console_display_prefix: "&fDISPLAY &f> "
+console_socialspy_prefix: "&cSOCIALSPY &f> &c"
+console_helpme_prefix: "&4HELPME &f> &4"
+
+# Prefix qui serra visible devant tout les message du plugin
+prefix: "&8&l[&2&lM&a&lC&8&l]&f "
+
+# Plugin messages
+command_acc_usage: "&aUtilisation: /acc <chatcolorcode> <namecolorcode>"
+command_acc_only_players: "&cSeul les joueurs peuvent changé la couleur du chat!"
+command_acc_updated: "&aLes couleurs du canal de discusion admin ont été mise à jour!"
+command_acc_invalid: "&cCode couleur invalid: Vous devez utiliser des lettres a-f ou des chiffres 0-9"
+command_acc_invalid_usage: "&cUtilisation: /acc <chatcolorcode> <namecolorcode>"
+
+command_ac_toggle_on: "&dLe canal de discussion admin est activé!"
+command_ac_toggle_off: "&cLe canal de discussion admin est désactivé!"
+command_ac_only_players: "&cSeul les joueur peuvent activé ce chat!"
+
+command_announcement_list: "&aListe des annonces disponnible:"
+command_announcement_list_item: "&b -> %SPECIAL%"
+command_announcement_does_not_exist: "&cDésolé , aucune annonce %SPECIAL% n'a été trouvé!"
+command_announcement_removed: "&aSuppression de l'annonce: %SPECIAL%"
+command_announcement_stopped: "&aStoppe la dissfusion de l'annonce: %SPECIAL%"
+command_announcement_stopped_error: "&cDésolé, il n'est pas possible de stopper la diffusion de l'annonce: %SPECIAL%"
+command_announcement_started: "&aCommence de la diffusion de l'annonce: %SPECIAL%"
+command_announcement_started_error: "&cDésolé, il n'est pas possible de débuter la diffusion de l'annonce: %SPECIAL%"
+command_announcement_added: "&aAjout de l'annonce: %SPECIAL%"
+command_announcement_added_error: "&cDésolé, l'annonce %SPECIAL% existe déjà!"
+command_announcement_usage: "&aUtilisation:"
+
+command_bulletin_stopped: "&bArrêt des bulletins"
+command_bulletin_list: "&aListe des bulletin avec index:"
+command_bulletin_list_item: "&b -> %SPECIAL%"
+command_bulletin_removed: "&bSuppresion du bulletin"
+command_bulletin_started: "&bCommence la diffusion des bulletins"
+command_bulletin_added: "&bAjout du bulletin"
+command_bulletin_invalid_usage: "&cUtilisation de la commande invalid!"
+command_bulletin_usage: "&aUtilisation:"
+
+command_cast_usage: "&aUtilisation:"
+command_cast_list: "&aListe des casts disponible:"
+command_cast_list_item: "&b -> %SPECIAL%"
+command_cast_removed: "&aSuppression du cast: %SPECIAL%"
+command_cast_does_not_exist: "&cDésolé, aucun cast %SPECIAL% n'a été trouvé"
+command_cast_added: "&aAjout du cast: %SPECIAL%"
+command_cast_added_error: "&cDésolé, le cast %SPECIAL% existe déjà"
+
+command_channel_help: |
+ &3&lAide des command pour les salon de discussion
+ &bPermutter de salon de discussion
+ &f&o/channel switch <salon de discussion>
+ &bAfficher/cacher le salon de discussion
+ &f&o/channel show/hide <nom du salon de discussion>
+command_channel_switch: "&bDiscuter dans le salon de discussion: &f&o%SPECIAL%"
+command_channel_hide: "&bVous avez caché le salon de discussion: &f&o%SPECIAL%"
+command_channel_show: "&bVous avez affiché le salon de discussion: &f&o%SPECIAL%"
+command_channel_already_hide: "&bLe salon de discussion &f&o%SPECIAL% est déjà caché"
+command_channel_already_show: "&bLe salon de discussion &f&o%SPECIAL% est déjà affiché"
+command_channel_does_not_exist: "&cDésolé, ce salon de discussion n'existe pas"
+command_channel_only_players: "&cDésolé, seul les joueurs peuvent utiliser les commandes de salon de discussion"
+command_channel_switch_no_permission: "&cVous ne pouvez pas changer de salon de discussion"
+command_channel_hide_no_permission: "&cVous ne pouvez pas caché de salon de discussion"
+command_channel_show_no_permission: "&cVous ne pouvez pas affiché de salon de discussion"
+command_channel_cannot_hide: "&cVous ne pouvez pas caché le salon de discussion acteullement utilisé"
+
+command_clearchat_self: "&ble contenu de votre chat a été effacé"
+command_clearchat_server: "&bLe contenu du chat du server a été éffacé"
+command_clearchat_global: "&bLe contenu du chat général a été éffacé"
+command_clearchat_all: "&bLe contenu de tout les chats ont été éffacés"
+command_clearchat_no_permission: "&cVous n'avez pas la permission d'effacer le contenu du chat: %SPECIAL%"
+command_clearchat_usage: "&cUtilisation: /clearchat [self/server/global/all]"
+
+command_display_desc: "&3Affiché un message sur l'ensemble des serveur du réseau"
+command_display_usage: "&bUtilisation /display <message>"
+
+command_freezechat_thawed: "&b&lLe défilement du chat a été &3&ldébloqué &b&lpar &a&l%SPECIAL%"
+command_freezechat_frozen: "&b&lLe défilement du chat a été &3&lfigée &b&lpar &a&l%SPECIAL%"
+
+command_gc_toggle_on: "&aLe chat de groupe a été activé!"
+command_gc_toggle_off: "&cLe chat de groupe a été désactivé!"
+command_gc_only_players_toggle: "&cSeul un joueur peut activé les groupe de discussion!"
+command_gc_no_longer_exists: "&cDésolé votre groupe de discussion sélectionné n'existe plus, s'il vous plaît sélectionnez un autre groupe avec la commande /group <nom du groupe>"
+command_gc_no_chat_selected: "&cS'il vous plaît sélectionner le groupe de discussion dans lequel vous souhaitez envoyer vos messages en utilisant la commande /group <nom du groupe>"
+command_gc_only_players_speak: "&cSeule les joueurs peuvent parler dans un groupe de discussion."
+
+command_global_enabled_1: "&3LE CHAT GLOBAL EST ACTIVE"
+command_global_enabled_2: "&bVotre message sont destinés à tout les serveurs du réseau!"
+command_global_only_players: "&cSeules les joueurs peuvent changer les états du chat"
+
+command_group_selected: "&aVos /gc messages sont maintenant destiné pour le groupe de conversation: %SPECIAL%"
+command_group_not_a_member: "&cDésolé vous n'êtes pas un membre du groupe de discussion: %SPECIAL%"
+command_group_does_not_exist: "&cDésolé le groupe de discussion %SPECIAL% que vous suivez n'existe pas"
+command_group_only_players_select: "&cSeul les joueurs peuvent séléctionner un groupe de discussion"
+command_group_incorrect_usage: "&cUtilisation de commande incorrecte, utilser /group pour voir la liste des commandes!"
+command_group_member_list: "&a&lMembre faisant parti du groupe de discussion: %SPECIAL%"
+command_group_member_list_item: "&b- %SPECIAL%"
+command_group_member_list_item_admin: "&b- &b&o%SPECIAL%"
+command_group_spy_all_disabled_1: "&cl'espionnage du groupe de discussion Global a été désactivé"
+command_group_spy_all_disabled_2: "&cPour tout les groupes de discusion ou vous avez activé les fonctions d'espionnage le resterons jusqu'à leur désactivation!"
+command_group_spy_all_disabled_3: "&cDésactivé les fonctions d'espionnages pour un groupe de discussion individuel avec la commande /group spy <nom du groupe de discussion>"
+command_group_spy_all_enabled: "&aFonctionnalité d'espionnage de groupe global activé pour tout les groupes de discussion!"
+command_group_spy_no_permission: "&cDésolé cette commande n'existe pas, utiliser la commande /group pour voir les possibilité"
+command_group_spy_off: "&cVous n'espionnez plus le groupe de discussion: %SPECIAL%"
+command_group_spy_on: "&aVous espionnez le groupe de discussion: %SPECIAL%"
+command_group_spy_already_a_member: "&cVous êtes déjà un membre de ce groupe de discussion, vous ne pouvez donc pas l'espionner!"
+command_group_spy_does_not_exist: "&cDésolé ce groupe de discussion n'existe pas!"
+command_group_created: "&aVous avez crée, rejoint et sélectionner le groupe de discussion %SPECIAL% avec succès"
+command_group_already_exists: "&cDésolé le groupe de discussion %SPECIAL% existe déjà"
+command_group_max_length: "&cDésolé le nom du groupe de discussion ne peut dépasser les 20 caractères!"
+command_group_create_no_permission: "&cDésolé vous n'avez pas la permission de créer un nouveau groupe de discussion"
+command_group_joined: "&aVous avez rejoit et sélectionné le groupe de discussion %SPECIAL% avec succès"
+command_group_formal_not_owner: "&cDésolé cette commande ne peut être utilisé que par le propriétaire du groupe de discussion"
+command_group_formal_already_formal: "&cDésolé le groupe de discussion %SPECIAL% est un groupe de dicussion privé"
+command_group_formal_not_admin: "&cDésolé cette commande ne peut être utilisé que par admins/propriétaire du groupe de discussion"
+command_group_max_length_password: "&Désolé, ni le nom du groupe de discussion, ni son mot de passe ne doivent dépasser 20 caractères"
+command_group_transfer_not_member: "&cCe joueur n'est pas un membre du groupe de discussion!"
+command_group_transfer_not_owner: "&cDésolé vous n'êtes pas le propriétaire du groupe de discussion!"
+command_group_transfer_not_informal: "&cCette commande ne peut être utilisé que sur les groupes de discussion privée!"
+command_group_player_not_online: "&cCe joueur n'est pas connecté!"
+command_group_formal_only_admin: "&cVous ne pouvez pas démissionner de l'administration de ce groupe de discussion car vous en êtes le seul membre!"
+command_group_formal_cannot_demote: "&cVous ne pouvez pas dégrader un autre admin du groupe de discussion!"
+command_group_not_formal: "&cCette commande ne peut être utilisé que sur les groupes de discussion privé!"
+command_group_banned: "&cVous avez été banni du groupe de discussion: %SPECIAL%"
+command_group_unbanned: "&aVous avez été débanni du groupe de discussion: %SPECIAL%"
+command_group_cannot_ban_admin: "&cVous ne pouvez pas bannir un administrateur du groupe de discussion de son groupe!"
+command_group_color_invalid: "&cLe code couleur spécifié est invalide: vous devez utiliser des lettres de a-f ou des chiffres de 0-9"
+command_group_color_usage: "&cUtilisation: /group color /colour <nom du groupe de discussion> <code couleur pour le texte> <code couleur pour le nom>"
+command_group_only_players: "&cSeul les joueurs peuvent utiliser les groupe de discussion"
+
+command_grouplist_list: "&a&lListe des groupes de discussion:"
+command_grouplist_list_item: "&b- %SPECIAL%"
+
+command_helpme_desc: "&4Requête d'aide pour un membre du staff!"
+command_helpme_usage: "&cUtilisation: /HelpMe <Message>"
+command_helpme_sent: "&cVotre requête pour avoir de l'aide à bien été envoyé à tous les membres du staff connectés :)"
+command_helpme_only_players: "&4Seul les joueurs peuvent formuler une requête d'aide!"
+command_helpme_format: "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%"
+
+command_local_enabled_1: "&3LOCAL CHAT ENABLED"
+command_local_enabled_2: "&bVotre message est destiné à ce serveur!"
+command_local_only_players: "&cSeul les joueur peuvent changer l'état de leur chat"
+
+command_mcc_usage: "&aUtilisation: /mcc <Code couleur chat> <Code couleur du nom>"
+command_mcc_only_players: "&cSeul les joueurs peuvent changer la couleur du chat!"
+command_mcc_updated: "&aLA couleur du Mod-Chat a été mise à jour!"
+command_mcc_invalid: "&c Code couleur invalide: vous devez utiliser des lettre de a-f ou des chiffre de 0-9"
+command_mcc_invalid_usage: "&cUtilisation: /mcc <Code couleur chat> <Code couleur du nom>"
+
+command_mc_toggle_on: "&bLe canal de discussion de modération est activé!"
+command_mc_toggle_off: "&cLe canal de discussion de modération est désactivé!"
+command_mc_only_players: "&cSeul des joueurs peuvent activé le chat!"
+
+command_msg_usage: "&bUtilisation: /msg <joueur> [message]"
+command_msg_usage_toggle: "&bUtilisé /msg <nom du joueur> sans message activera le canal de discusion privé vers ce joueur"
+command_msg_toggle_on: "&eLe chat privé est activé! [You -> %SPECIAL%] (Utilisé la même commande pour le désactivé)"
+command_msg_toggle_off: "&cLe chat privé est désactivé!"
+command_msg_only_players: "&cSeul les joueurs peuvent activé le chat!"
+command_msg_not_online: "&cDésolé cette personne n'est pas connecté!"
+command_msg_disabled_target: "&cDésolé les messages privés sont désactivés sur le serveur du joueur ciblé!"
+command_msg_disabled_sender: "&cDésolé les messages privés sont désactivés sur ce serveur!"
+command_msg_no_toggle: "&cDésolé, l'activation du canal de discussion privé est désactivé sur ce server!"
+
+command_multichat_help_1: |
+ &2&lMulti&a&lChat &b&lAide
+ &3Afficher la version du plugin
+ &b/multichat
+ &3Recharger la configuration du plugin
+ &b/multichat reload
+ &3Sauvegarde de toutes les données du plugin
+ &b/multichat save
+ &3Affiché un message a tout les joueurs
+ &b/display <message>
+ &3Afficher l'aide des groupes de discussion
+ &b/group
+ &3Envoyer un message dans le canal de discussion modération
+ &b/mc <message>
+ &3Envoyé un message dans le canal de discussion administration
+ &b/ac <message>
+ &3Changer les couleur des canal de discussion modération/&oadministration
+ &b/mcc <chat colour code> <name colour code>
+ &b&o/acc <chat colour code> <name colour code>
+ &3activation du calnal de discusion modérteur/&oadministrateur
+ &b/mc &o(/ac)
+ &3&lTapée &b&l/multichat help <page number> &3&lpour voir plus de commande
+command_multichat_help_2: |
+ &2&lMulti&a&lChat &b&lAide [Page 2]
+ &3Afficher le canal de discussion global (Activé par défaut)
+ &b/global
+ &3Afficher seulement le canal de discussion de votre serveur
+ &b/local
+ &3Voir la liste des membre du staff connecté
+ &b/staff
+ &3Voir la liste de tout les groupe de discussion
+ &b/groups
+ &3Envoyer un message privée à un joueur
+ &b/msg <nom du joueur> [message]
+ &3Répondre au dernier message privé
+ &b/r <message>
+ &3Activation de l'espionnage sur les messages privés
+ &b/socialspy
+ &3Bloqué le défilement du canal de discussion pour stopper l'envoi des messages
+ &b/freezechat
+ &3Effacer le contenu des canaux de discussion pour vous ou pour un group de personne
+ &b/clearchat [self,server,global,all]
+command_multichat_help_3: |
+ &2&lMulti&a&lChat &b&lAide [Page 3]
+ &3Afficher les commandes d'annonce
+ &b/announcement
+ &3Afficher les commandes des bulletins
+ &b/bulletin
+ &3Afficher les commandes de cast
+ &b/cast
+ &3Utiliser un cast spécifique depuis la console
+ &b/usecast <cast> <message>
+ &3Demande d'aide auprès d'un membre du staff
+ &b/helpme <message>
+ &3Renommer un joueur (Ne fonctionne que si MultiChat est installer sur les serveur Spigot / Sponge)
+ &b/nick [player] <nickname/off>
+ &3Trouver le vrai nom du joueur quand il a été renommé (Ne fonctionne que sur les serveur Spigot)
+ &b/realname <nickname>
+ &3Rendre un joueur muet pour l'enpécher de communiquer
+ &b/mute <nom du joueur>
+ &3Ignorer un joueur pour ne plus voir ses messages
+ &b/ignore <nom du joueur>
+command_multichat_save_prepare: "&3Preparation de la sauvegarde des fichier de multichat!"
+command_multichat_save_completed: "&bSauvegarde complète!"
+command_multichat_reload_prepare: "&3Preparation pour le rechargement des configurations de multichat!"
+command_multichat_reload_completed: "&bRechargement complet!"
+
+command_multichatbypass_usage: |
+ &4Utilisation: /mcb
+ &c&oCette commande permet de passer par dessus MultiChat et de communiquer à travers le canal de communication des serveurs spigot.
+command_multichatbypass_enabled: "&aLe BYPASS MultiChat est activé"
+command_multichatbypass_disabled: "&bLe BYPASS MultiChat est désactivé"
+
+command_execute_usage: |
+ &2Utilisation: /mce [-s <server-regex>] [-p <player-regex>] <command>
+ &a&oCette commande vous permet d'exécuter une commande sur tous vos serveurs Spigot (&lqui ont au moins un joueur en ligne!&a&o)
+ Par défaut, la commande sera exécutée par la console, vous pouvez plutôt faire exécuter la commande par les joueurs à l'aide de l'indicateur -p.
+ Par défaut, la commande sera exécutée sur tous les serveurs, vous pouvez limiter les serveurs qui exécuteront la commande avec l'indicateur -s.
+command_execute_sent: "&2La commande a bien été envoyé"
+
+command_reply_usage: "&bUtilisation: /r <message>"
+command_reply_desc: "&bRépondre à la dernière personne qui vous a envoyé un message privé"
+command_reply_no_one_to_reply_to: "&cVous n'avez personne à qui répondre!"
+command_reply_only_players: "&cSeul les joueurs peuvent répondre à un message privé"
+
+command_socialspy_disabled: "&cL'espionnage a été activé"
+command_socialspy_enabled: "&bL'espionnage a été désactivé"
+command_socialspy_usage: "&bUtilisation: /socialspy"
+command_socialspy_desc: "&bPermet d'activé ou de désacivé les fonctionnalité d'espionnage"
+command_socialspy_only_players: "&cSeul les joueurs peuvent activé l'espionnage"
+
+command_stafflist_list: "&a&lMembre du staff connecté"
+command_stafflist_list_item: "&b- %SPECIAL%"
+command_stafflist_list_server: "&a%SPECIAL%"
+command_stafflist_no_staff: "&b&oIl n'y a actuellement aucun membre du staff connecté"
+
+command_usecast_usage: "&aUtilisation:"
+command_usecast_does_not_exist: "&cDésolé, aucun cast %SPECIAL% n'a été trouvé"
+
+groups_toggled_but_no_longer_exists_1: "&cVous avez activé les groupe de discussion mais aucun groupe n'esxiste pour votre sélection!"
+groups_toggled_but_no_longer_exists_2: "&cS'il vous plait sélectionnez le group de dicussion à destination de votre message en utilisant la commande /group <nom du groupe> ou désactiver l'option avec /gc"
+groups_password_protected: "&cDésolé ce groupe de discussion es protégé par un mot de passe: %SPECIAL%"
+groups_password_incorrect: "&cDésolé mot de passe incorrect: %SPECIAL%"
+groups_already_joined: "&cDésolé, vous êtes déjà unu membre du groupe: %SPECIAL%"
+groups_banned: "&cDésolé vous avez été banni du groupe: %SPECIAL%"
+groups_quit: "&aVous avez quitté le groupe de discussion %SPECIAL% avec succès"
+groups_cannot_quit_owner_1: "&cDésolé, vous ne pouvez pas quitté un groupe de discussion que vous aveze crée!: %SPECIAL%"
+groups_cannot_quit_owner_2: "&cS'il vous plait transféré la propriété du groupe avant! Utilisé /group transfer %SPECIAL% <playername>"
+groups_cannot_quit_admin_1: "&cDésolé Vous ne pouvez pas quitter le groupe %SPECIAL% tant que vous serez le seul admin" 
+groups_cannot_quit_admin_2: "&cS'il vous plait un nouvel admin en utilisant /group admin %SPECIAL% <playername>"
+    
+groups_info_joined: " a rejoint le groupe de discsussion!"
+groups_info_quit: " a quitté le groupe de discussion!"
+groups_info_formal: " a converti ce groupe en groupe de discussion privé!"
+groups_info_deleted: " a supprimer ce groupe de discussion!"
+groups_info_goodbye: "Au revoir! Si vous voulez voir les groupe de discussion disponible faites /group"
+groups_info_transfer: " a transférer les droit de propriété du group de discussion à  "
+groups_info_promoted: " a promu admin groupe de discussion le membre suivant: "
+groups_info_step_down: " a démissionné de son poste d'administrateur du groupe de discussion"
+groups_info_kick: " kické du groupe de discussion le joueur suivant: "
+groups_info_ban: " a banni du groupe de discussion le joueur suivant: "
+groups_info_unban: " a débanni du groupe de discussion le joueur suivant: "
+groups_info_colors: "Les couleurs du groupe de discussion ont été changé par "
+
+groups_help_1: |
+ &cUtilisation des commandes des groupes de discussion [Page 1] - GROUPE PUBLIC
+ &2Créer un nouveau groupe
+ &a/group create/make <nom du groupe> [mot de passe]
+ &2Rejoindre un groupe de discussion existant
+ &a/group join <nom du groupe> [mot de passe]
+ &2Quitter un groupe de discussion
+ &a/group leave/quit <nom du groupe>
+ &2Sélectionner le groupe de discussion en destination de vos messages
+ &a/group <nom du groupe>
+ &2Définir la couleur de votre groupe de discussion
+ &a/group color/colour <nom du groupe> <code couleur du chat> <code couleur du nom>
+ &2Transférer les droit de propriété du groupe de discussion
+ &a/group transfer <nom du groupe> <nom du joueur>
+ &2Supprimer un groupe de discussion
+ &a/group delete <nom du groupe>
+ &2Affiché la liste de tout les membre d'un groupe de discussion
+ &a/group list/members <nom du groupe>
+ &2Evoyer un message au groupe de discussion sélectionné
+ &a/gc <message>
+ &cPour voir les commandes des groupe de discussion privé faites /group help 2
+groups_help_2: |
+ &cUtilisation des commandes des groupes de discussion [Page 2] - GROUPE PRIVE
+ &3Par défaut tout les groupe de discusion sont des groupe public
+ &3Si vous êtes propriétaire d'un groupe de discussion, vous avez la possibilité de le convertir en groupe privé
+ &3Les options de configuration des groupe de discussion sont limiter aux seuls administrateur
+ &3Les administrateurs des groupes de discussion seront également en mesure de restreindre l'accès aux joueurs
+ &3Convertir un un groupe de discussion en groupe privé est irréversible
+ &2Convertir votre groupes de discussion public en privé(IRREVERSIBLE)
+ &a/group formal <nom du groupe>
+ &2Ajouté ou supprimer un admin du groupe de discussion privé
+ &a/group admin <nom du groupe> <nom du joueur>
+ &2BAN/UNBAN un joueur de votre groupe de discussion privé
+ &a/group ban <nom du groupe> <nom du joueur>
+ &cPour voir les commandes des groupe de discussion public faites /group help 1
+freezechat_frozen: "&bDésolé le défilement du chat a été &3&lbloqué"
+
+mute_muted: "&cVous avez été Mute par le staff! Vous ne pouvez plus envoyer de messages sur le chat."
+mute_unmuted: "&aVous avez été démute par le staff, vous pouvez envoyer vos messages."
+mute_muted_staff: "&cLe joueur a été mute!"
+mute_unmuted_staff: "&ale joueur a été démute!"
+mute_cannot_send_message: "&cVous êtes actuellement mute vous ne pouvez plus envenyé vos messages!"
+mute_usage: "&cUtilisation: /mute <nom du joueur> (utilisez la même commande pour démute les joueurs)"
+mute_player_not_found: "&cLe joueur ne peut pas être rendu muet car il n'est pas connecté"
+mute_bypass: "&cVous ne pouvez pas rendre muet ce joueur"
+
+ignore_sender: "&cVous ne pouvez pas envoyé de message à ce joueur"
+ignore_target: "&c[%SPECIAL% a envoyé un message, mais il a été ignoré]"
+ignore_ignored: "&bVous ne verrez plus de messages de %SPECIAL%"
+ignore_unignored: "&bVous n'ignorez plus %SPECIAL%"
+ignore_player_not_found: "&cle joueur ne peut pas être ignoré car il n'est pas connecté"
+ignore_usage: "&cUtilisation: /ignore <nom du joueur> (également utiliser pour ne plus ignorer un joueur)"
+ignore_bypass: "&cVous ne pouvez pas ignorer ce joueur"
+ignore_cannot_ignore_yourself: "&cVous ne pouvez pas vous ignorer vous même!"
+
+anti_spam_cooldown: "&cANTI-SPAM: Votre message a été bloqué. Vous ne pouvez pas envoyé de message pendant encore %SPECIAL% seconds."
