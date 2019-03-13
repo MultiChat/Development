@@ -73,7 +73,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static String configversion;
 
 	public static boolean frozen;
-	
+
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
@@ -240,6 +240,11 @@ public class MultiChat extends Plugin implements Listener {
 		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
 		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
 
+		ConfigManager.getInstance().registerHandler("messages.yml", new File(configDir.toString() + "\translations"));
+		ConfigManager.getInstance().registerHandler("joinmessages.yml", new File(configDir.toString() + "\translations"));
+		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(configDir.toString() + "\translations"));
+		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(configDir.toString() + "\translations"));
+
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
@@ -283,7 +288,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
-			
+
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");
 			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
