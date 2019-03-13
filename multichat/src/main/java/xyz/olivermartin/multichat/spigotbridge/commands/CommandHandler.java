@@ -62,17 +62,17 @@ public class CommandHandler implements CommandExecutor {
 					MultiChatSpigot.setLocalFormat = config.getBoolean("set_local_format");
 					MultiChatSpigot.localChatFormat = config.getString("local_chat_format");
 					MultiChatSpigot.forceMultiChatFormat = config.getBoolean("force_multichat_format");
-					
+
 					MultiChatSpigot.placeholderMap.clear();
 					ConfigurationSection placeholders = config.getConfigurationSection("multichat_placeholders");
 					if (placeholders != null) {
-						
+
 						for (String placeholder : placeholders.getKeys(false)) {
 							MultiChatSpigot.placeholderMap.put("{multichat_" + placeholder + "}", placeholders.getString(placeholder));
 						}
-						
+
 					}
-					
+
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
 
 					return true;
@@ -267,6 +267,77 @@ public class CommandHandler implements CommandExecutor {
 			} else {
 
 				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with nickname: " + args[0]);
+				return true;
+
+			}
+
+		} else if (cmd.getName().equalsIgnoreCase("username")) {
+
+			Player sender;
+
+			if (commandSender instanceof Player) {
+				sender = (Player) commandSender;
+			} else {
+				commandSender.sendMessage(ChatColor.DARK_RED + "Only players can use this command!");
+				return true;
+			}
+
+			if (args.length != 1) {
+				// When onCommand() returns false, the help message associated with that command is displayed.
+				return false;
+			}
+
+			if (NameManager.getInstance().existsPlayer(args[0])) {
+
+				Optional<String> player;
+				player = NameManager.getInstance().getFormattedNameFromName(args[0]);
+
+				if (player.isPresent()) {
+
+					sender.sendMessage(ChatColor.GREEN + "User exists with name: '" + player.get() + "'");
+
+				} else {
+
+					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with name: " + args[0]);
+
+				}
+
+				return true;
+
+			} else if (sender.hasPermission("multichatspigot.username.partial")) {
+
+				Optional<Set<UUID>> matches = NameManager.getInstance().getPartialNameMatches(args[0]);
+
+				if (matches.isPresent()) {
+
+					int limit = 10;
+
+					sender.sendMessage(ChatColor.DARK_AQUA + "No one could be found with the exact username: " + args[0]);
+					sender.sendMessage(ChatColor.AQUA + "The following were found as partial matches:");
+
+					for (UUID uuid : matches.get()) {
+
+						if (limit > 0 || sender.hasPermission("multichatspigot.username.nolimit")) {
+							sender.sendMessage(ChatColor.GREEN + "- '" + NameManager.getInstance().getName(uuid) + "'");
+							limit--;
+						} else {
+							sender.sendMessage(ChatColor.DARK_GREEN + "Only the first 10 results have been shown, please try a more specific query!");
+							break;
+						}
+
+					}
+
+				} else {
+
+					sender.sendMessage(ChatColor.DARK_RED + "No one could be found with username: " + args[0]);
+
+				}
+
+				return true;
+
+			} else {
+
+				sender.sendMessage(ChatColor.DARK_RED + "No one could be found with username: " + args[0]);
 				return true;
 
 			}

@@ -48,7 +48,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
-	
+
 	public static Map<String, String> placeholderMap = new HashMap<String, String>();
 
 	public static Optional<Chat> getVaultChat() {
@@ -104,15 +104,15 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		setLocalFormat = config.getBoolean("set_local_format");
 		localChatFormat = config.getString("local_chat_format");
 		forceMultiChatFormat = config.getBoolean("force_multichat_format");
-		
+
 		placeholderMap.clear();
 		ConfigurationSection placeholders = config.getConfigurationSection("multichat_placeholders");
 		if (placeholders != null) {
-			
+
 			for (String placeholder : placeholders.getKeys(false)) {
 				placeholderMap.put("{multichat_" + placeholder + "}", placeholders.getString(placeholder));
 			}
-			
+
 		}
 
 		File f = new File(configDir, nameDataFile);
@@ -233,6 +233,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 		this.getCommand("nick").setExecutor(CommandHandler.getInstance());
 		this.getCommand("realname").setExecutor(CommandHandler.getInstance());
+		this.getCommand("username").setExecutor(CommandHandler.getInstance());
 		this.getCommand("multichatspigot").setExecutor(CommandHandler.getInstance());
 
 		// Manage dependencies
