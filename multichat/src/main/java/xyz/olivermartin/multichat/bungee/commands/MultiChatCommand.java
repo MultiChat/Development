@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.io.File;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -104,6 +106,9 @@ public class MultiChatCommand extends Command {
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("chatcontrol.yml").startupConfig();
+					
+					ConfigManager.getInstance().getHandler("messages_fr.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("joinmessages_fr.yml").startupConfig();
 
 					// Reload, and re-register commands
 					CommandManager.reload();
