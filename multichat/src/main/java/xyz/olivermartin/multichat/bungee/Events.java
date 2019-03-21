@@ -362,6 +362,7 @@ public class Events implements Listener {
 
 					} else {
 						MessageManager.sendMessage(player, "freezechat_frozen");
+						event.setCancelled(true);
 					}
 
 				}
