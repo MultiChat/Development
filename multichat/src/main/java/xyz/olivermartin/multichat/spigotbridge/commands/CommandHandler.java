@@ -138,6 +138,20 @@ public class CommandHandler implements CommandExecutor {
 
 				}
 
+				if (NameManager.getInstance().existsNickname(args[0]) && !sender.hasPermission("multichatspigot.nick.duplicate")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
+					return true;
+
+				}
+
+				if (NameManager.getInstance().existsPlayer(args[0]) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry, a player already exists with this name!");
+					return true;
+
+				}
+
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
 				MetaManager.getInstance().updatePlayerMeta(sender.getName(), MultiChatSpigot.setDisplayNameLastVal, MultiChatSpigot.displayNameFormatLastVal);
 
