@@ -376,8 +376,8 @@ public final class MultiChatSponge implements CommandExecutor {
 		if (nicknames.values().stream()
 				.map(nick -> stripAllFormattingCodes(nick))
 				.anyMatch(nick -> nick.equalsIgnoreCase(strippedNickname))
-				&& !targetNickname.equalsIgnoreCase(strippedNickname)
-				&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
+				&& !targetNickname.equalsIgnoreCase(strippedNickname) ) {
+				//&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
 
 			sender.sendMessage(Text.of("Sorry, a player already has that nickname!"));
 			return CommandResult.success();

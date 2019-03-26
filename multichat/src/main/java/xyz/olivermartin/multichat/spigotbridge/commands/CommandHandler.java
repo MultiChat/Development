@@ -141,7 +141,7 @@ public class CommandHandler implements CommandExecutor {
 				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
 				String targetName = NameManager.getInstance().getName(targetUUID);
 				
-				if (NameManager.getInstance().existsNickname(args[0]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) && !sender.hasPermission("multichatspigot.nick.duplicate")) {
+				if (NameManager.getInstance().existsNickname(args[0]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
 					return true;
@@ -210,14 +210,17 @@ public class CommandHandler implements CommandExecutor {
 
 			}
 			
-			if (NameManager.getInstance().existsNickname(args[1]) && !sender.hasPermission("multichatspigot.nick.duplicate")) {
+			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
+			String targetName = NameManager.getInstance().getName(targetUUID);
+			
+			if (NameManager.getInstance().existsNickname(args[1]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
 				return true;
 
 			}
 
-			if (NameManager.getInstance().existsPlayer(args[1]) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
+			if (NameManager.getInstance().existsPlayer(args[1]) && !targetName.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, a player already exists with this name!");
 				return true;
