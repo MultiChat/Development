@@ -359,16 +359,24 @@ public final class MultiChatSponge implements CommandExecutor {
 		UserStorageService uss = Sponge.getServiceManager().provideUnchecked(UserStorageService.class);
 		Optional<User> lookedUpName = uss.get(strippedNickname);
 
-		// Check if a player name exists already
-		if (lookedUpName.isPresent() && !sender.hasPermission("multichatsponge.nick.impersonate")) {
+		// Check if a player name exists already (but not the name of this player)
+		if (lookedUpName.isPresent() && !strippedNickname.equalsIgnoreCase(target.getName()) && !sender.hasPermission("multichatsponge.nick.impersonate")) {
 			sender.sendMessage(Text.of("Sorry, a player already exists with this name!"));
 			return CommandResult.success();
+		}
+		
+		String targetNickname;
+		if (nicknames.containsKey(targetUUID)) {
+			targetNickname = stripAllFormattingCodes(nicknames.get(targetUUID));
+		} else {
+			targetNickname = target.getName();
 		}
 
 		// Check if a nickname exists already
 		if (nicknames.values().stream()
 				.map(nick -> stripAllFormattingCodes(nick))
 				.anyMatch(nick -> nick.equalsIgnoreCase(strippedNickname))
+				&& !targetNickname.equalsIgnoreCase(strippedNickname)
 				&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
 
 			sender.sendMessage(Text.of("Sorry, a player already has that nickname!"));
