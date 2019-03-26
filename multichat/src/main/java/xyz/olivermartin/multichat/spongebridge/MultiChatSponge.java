@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import org.spongepowered.api.Platform;
@@ -32,8 +30,6 @@ import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.profile.GameProfile;
-import org.spongepowered.api.profile.GameProfileManager;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
@@ -359,25 +355,25 @@ public final class MultiChatSponge implements CommandExecutor {
 		}
 
 		String strippedNickname = stripAllFormattingCodes(nickname);
-		
+
 		UserStorageService uss = Sponge.getServiceManager().provideUnchecked(UserStorageService.class);
 		Optional<User> lookedUpName = uss.get(strippedNickname);
-		
+
 		// Check if a player name exists already
 		if (lookedUpName.isPresent() && !sender.hasPermission("multichatsponge.nick.impersonate")) {
 			sender.sendMessage(Text.of("Sorry, a player already exists with this name!"));
 			return CommandResult.success();
 		}
-		
+
 		// Check if a nickname exists already
 		if (nicknames.values().stream()
 				.map(nick -> stripAllFormattingCodes(nick))
-				.anyMatch(nick -> nick.equalsIgnoreCase(nickname))
+				.anyMatch(nick -> nick.equalsIgnoreCase(strippedNickname))
 				&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
-			
+
 			sender.sendMessage(Text.of("Sorry, a player already has that nickname!"));
 			return CommandResult.success();
-			
+
 		}
 
 		addNickname(targetUUID,nickname);
@@ -394,7 +390,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	private void removeNickname(UUID uuid) {
 		nicknames.remove(uuid);
 	}
-	
+
 	public String stripAllFormattingCodes(String input) {
 
 		char COLOR_CHAR = '&';
@@ -407,5 +403,5 @@ public final class MultiChatSponge implements CommandExecutor {
 		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
 
 	}
-	
+
 }
