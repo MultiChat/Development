@@ -280,6 +280,10 @@ public class ChatControl {
 		}
 
 	}
+	
+	public static String replaceLinks(String message) {
+		return message.replaceAll("((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", "[LINK REMOVED]");
+	}
 
 	public static void spamPardonPlayer(UUID uuid) {
 		spamMap.remove(uuid);
