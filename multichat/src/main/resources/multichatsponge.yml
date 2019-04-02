@@ -67,9 +67,10 @@ local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
 
 # Players will be blocked from using any nicknames on this list!
 # Regular expressions can be used
+# (?i) is the regular expression term to ignore case
 nickname_blacklist:
-- "Notch"
-- "Jeb"
+- "(?i)Notch"
+- "(?i)Jeb"
 #- "[1234567890]+.*" # <-- Example to block any nicknames starting with a number!
 
 # Should a prefix be displayed before nicknames to differentiate them from real names?
