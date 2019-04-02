@@ -25,6 +25,9 @@ public class ChatControl {
 	private static Set<UUID> mutedPlayers;
 	private static Map<UUID, Set<UUID>> ignoreMap;
 	private static Map<UUID, PlayerSpamInfo> spamMap;
+	
+	public static boolean controlLinks = false;
+	public static String linkMessage = "[LINK REMOVED]";
 
 	public static Set<UUID> getMutedPlayers() {
 		return mutedPlayers;
@@ -282,7 +285,8 @@ public class ChatControl {
 	}
 	
 	public static String replaceLinks(String message) {
-		return message.replaceAll("((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", "[LINK REMOVED]");
+		if (!controlLinks) return message;
+		return message.replaceAll("((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", linkMessage);
 	}
 
 	public static void spamPardonPlayer(UUID uuid) {

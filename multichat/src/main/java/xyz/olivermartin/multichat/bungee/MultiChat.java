@@ -293,6 +293,12 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
+			
+			// Set up chat control stuff
+			if (chatcontrolYML.contains("link_control")) {
+				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
+				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+			}
 
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");
