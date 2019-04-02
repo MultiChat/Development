@@ -287,7 +287,7 @@ public class CommandHandler implements CommandExecutor {
 					for (UUID uuid : matches.get()) {
 
 						if (limit > 0 || sender.hasPermission("multichatspigot.realname.nolimit")) {
-							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
+							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid, false) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
 							limit--;
 						} else {
 							sender.sendMessage(ChatColor.DARK_GREEN + "Only the first 10 results have been shown, please try a more specific query!");

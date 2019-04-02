@@ -73,7 +73,7 @@ public class NameManager implements Listener {
 		mapNameFormatted = new HashMap<String,String>();
 
 	}
-
+	
 	/**
 	 * Returns the FORMATTED NICKNAME of a player if they have one set, otherwise returns their username
 	 * 
@@ -81,10 +81,21 @@ public class NameManager implements Listener {
 	 * @return The NICKNAME of the player if it is set, otherwise their username
 	 */
 	public String getCurrentName(UUID uuid) {
+		return getCurrentName(uuid, true);
+	}
+
+	/**
+	 * Returns the FORMATTED NICKNAME of a player if they have one set, otherwise returns their username
+	 * 
+	 * @param uuid The Unique ID of the player to lookup
+	 * @param withPrefix Should the nickname prefix also be returned if it is set?
+	 * @return The NICKNAME of the player if it is set, otherwise their username
+	 */
+	public String getCurrentName(UUID uuid, boolean withPrefix) {
 
 		synchronized (mapUUIDNick) {
 			if (mapUUIDNick.containsKey(uuid)) {
-				if (MultiChatSpigot.showNicknamePrefix) {
+				if (MultiChatSpigot.showNicknamePrefix && withPrefix) {
 					return MultiChatSpigot.nicknamePrefix + mapNickFormatted.get(mapUUIDNick.get(uuid));
 				} else {
 					return mapNickFormatted.get(mapUUIDNick.get(uuid));
