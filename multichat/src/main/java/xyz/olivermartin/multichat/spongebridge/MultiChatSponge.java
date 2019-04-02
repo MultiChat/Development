@@ -2,7 +2,9 @@ package xyz.olivermartin.multichat.spongebridge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -60,7 +62,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.1", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.2", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge implements CommandExecutor {
 
 	public static SimpleMutableMessageChannel multichatChannel;
@@ -96,6 +98,10 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static Optional<PlaceholderService> papi;
 
 	public static String serverName = "SPONGE";
+	
+	public static boolean showNicknamePrefix = false;
+	public static String nicknamePrefix = "~";
+	public static List<String> nicknameBlacklist = new ArrayList<String>();
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
@@ -116,6 +122,12 @@ public final class MultiChatSponge implements CommandExecutor {
 		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
 		localChatFormat = config.getNode("local_chat_format").getString();
 		serverName = config.getNode("server_name").getString();
+		
+		if (!config.getNode("show_nickname_prefix").isVirtual()) {
+			showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean();
+			nicknamePrefix = config.getNode("nickname_prefix").getString();
+			nicknameBlacklist = config.getNode("nickname_blacklist").getList(value -> value.toString());
+		}
 
 		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
 		ConfigurationNode rootNode;
