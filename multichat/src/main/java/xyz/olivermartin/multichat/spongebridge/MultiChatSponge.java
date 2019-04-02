@@ -98,7 +98,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static Optional<PlaceholderService> papi;
 
 	public static String serverName = "SPONGE";
-	
+
 	public static boolean showNicknamePrefix = false;
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
@@ -122,7 +122,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		overrideGlobalFormatFormat = config.getNode("override_global_format_format").getString();
 		localChatFormat = config.getNode("local_chat_format").getString();
 		serverName = config.getNode("server_name").getString();
-		
+
 		if (!config.getNode("show_nickname_prefix").isVirtual()) {
 			showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean();
 			nicknamePrefix = config.getNode("nickname_prefix").getString();
@@ -376,7 +376,7 @@ public final class MultiChatSponge implements CommandExecutor {
 			sender.sendMessage(Text.of("Sorry, a player already exists with this name!"));
 			return CommandResult.success();
 		}
-		
+
 		String targetNickname;
 		if (nicknames.containsKey(targetUUID)) {
 			targetNickname = stripAllFormattingCodes(nicknames.get(targetUUID));
@@ -389,9 +389,21 @@ public final class MultiChatSponge implements CommandExecutor {
 				.map(nick -> stripAllFormattingCodes(nick))
 				.anyMatch(nick -> nick.equalsIgnoreCase(strippedNickname))
 				&& !targetNickname.equalsIgnoreCase(strippedNickname) ) {
-				//&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
+			//&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
 
 			sender.sendMessage(Text.of("Sorry, a player already has that nickname!"));
+			return CommandResult.success();
+
+		}
+
+		boolean blacklisted = false;
+		for (String bl : MultiChatSponge.nicknameBlacklist) {
+			if (strippedNickname.matches(bl)) blacklisted = true;
+		}
+
+		if (blacklisted) {
+
+			sender.sendMessage(Text.of("Sorry, this name is not allowed!"));
 			return CommandResult.success();
 
 		}
