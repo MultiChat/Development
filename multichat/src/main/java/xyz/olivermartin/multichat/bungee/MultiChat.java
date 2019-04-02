@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.7.1";
+	public static final String LATEST_VERSION = "1.7.2";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.7.1",
 			"1.7",
 			"1.6.2",
 			"1.6.1",
@@ -234,8 +235,8 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Creating plugin directory!");
 			getDataFolder().mkdirs();
 		}
-		
-		String translationsDir = configDir.toString() + "\\translations";
+
+		String translationsDir = configDir.toString() + File.separator + "translations";
 		if (!new File(translationsDir).exists()) {
 			System.out.println("[MultiChat] Creating translations directory!");
 			new File(translationsDir).mkdirs();
@@ -292,6 +293,12 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
+			
+			// Set up chat control stuff
+			if (chatcontrolYML.contains("link_control")) {
+				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
+				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+			}
 
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");

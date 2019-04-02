@@ -198,7 +198,7 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:chat")) {
-			
+
 			DebugManager.log("{multichat:chat} Got a plugin message");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
@@ -212,14 +212,19 @@ public class BungeeComm implements Listener {
 				DebugManager.log("{multichat:chat} Message = " + message);
 				String format = in.readUTF();
 
+				DebugManager.log("{multichat:chat} Format (before removal of double chars) = " + format);
+
 				format = format.replace("%%","%");
 
 				DebugManager.log("{multichat:chat} Format = " + format);
 
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
-				if (player == null) return;
-				
+				if (player == null) {
+					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message...");
+					return;
+				}
+
 				DebugManager.log("{multichat:chat} Got player successfully! Name = " + player.getName());
 
 				synchronized (player) {

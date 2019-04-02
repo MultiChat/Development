@@ -350,6 +350,11 @@ public class Events implements Listener {
 							event.setCancelled(true);
 							return;
 						}
+						
+						if (!player.hasPermission("multichat.chat.link")) {
+							message = ChatControl.replaceLinks(message);
+							event.setMessage(message);
+						}
 
 						// Let server know players channel preference
 						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
@@ -362,6 +367,7 @@ public class Events implements Listener {
 
 					} else {
 						MessageManager.sendMessage(player, "freezechat_frozen");
+						event.setCancelled(true);
 					}
 
 				}

@@ -73,6 +73,12 @@ public class CommandHandler implements CommandExecutor {
 
 					}
 
+					if (config.contains("show_nickname_prefix")) {
+						MultiChatSpigot.showNicknamePrefix = config.getBoolean("show_nickname_prefix");
+						MultiChatSpigot.nicknamePrefix = config.getString("nickname_prefix");
+						MultiChatSpigot.nicknameBlacklist = config.getStringList("nickname_blacklist");
+					}
+
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
 
 					return true;
@@ -138,6 +144,35 @@ public class CommandHandler implements CommandExecutor {
 
 				}
 
+				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
+				String targetName = NameManager.getInstance().getName(targetUUID);
+
+				if (NameManager.getInstance().existsNickname(args[0]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
+					return true;
+
+				}
+
+				if (NameManager.getInstance().existsPlayer(args[0]) && !targetName.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry, a player already exists with this name!");
+					return true;
+
+				}
+
+				boolean blacklisted = false;
+				for (String bl : MultiChatSpigot.nicknameBlacklist) {
+					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).matches(bl)) blacklisted = true;
+				}
+
+				if (blacklisted) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
+					return true;
+
+				}
+
 				NameManager.getInstance().setNickname(targetUUID, args[0]);
 				MetaManager.getInstance().updatePlayerMeta(sender.getName(), MultiChatSpigot.setDisplayNameLastVal, MultiChatSpigot.displayNameFormatLastVal);
 
@@ -189,6 +224,35 @@ public class CommandHandler implements CommandExecutor {
 			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
+				return true;
+
+			}
+
+			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
+			String targetName = NameManager.getInstance().getName(targetUUID);
+
+			if (NameManager.getInstance().existsNickname(args[1]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
+
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
+				return true;
+
+			}
+
+			if (NameManager.getInstance().existsPlayer(args[1]) && !targetName.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
+
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry, a player already exists with this name!");
+				return true;
+
+			}
+
+			boolean blacklisted = false;
+			for (String bl : MultiChatSpigot.nicknameBlacklist) {
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).matches(bl)) blacklisted = true;
+			}
+
+			if (blacklisted) {
+
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
 				return true;
 
 			}
@@ -247,7 +311,7 @@ public class CommandHandler implements CommandExecutor {
 					for (UUID uuid : matches.get()) {
 
 						if (limit > 0 || sender.hasPermission("multichatspigot.realname.nolimit")) {
-							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
+							sender.sendMessage(ChatColor.GREEN + "Nickname: '" + NameManager.getInstance().getCurrentName(uuid, false) + "' Belongs to player: '" + NameManager.getInstance().getName(uuid) + "'");
 							limit--;
 						} else {
 							sender.sendMessage(ChatColor.DARK_GREEN + "Only the first 10 results have been shown, please try a more specific query!");
