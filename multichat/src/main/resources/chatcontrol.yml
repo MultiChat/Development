@@ -175,3 +175,16 @@ apply_ignore_to:
 
 ignorecommand:
 - blockchat
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Link / URL Controls                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Should MultiChat control which players can send links to chat?
+# If set to true, then only players with multichat.chat.link will be able to send links
+link_control: false
+
+# Message to replace links in chat with
+link_removal_message: "[LINK REMOVED]"
