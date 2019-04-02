@@ -127,6 +127,9 @@ public final class MultiChatSponge implements CommandExecutor {
 			showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean();
 			nicknamePrefix = config.getNode("nickname_prefix").getString();
 			nicknameBlacklist = config.getNode("nickname_blacklist").getList(value -> value.toString());
+			for (String n : nicknameBlacklist) {
+				System.out.println(n);
+			}
 		}
 
 		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
