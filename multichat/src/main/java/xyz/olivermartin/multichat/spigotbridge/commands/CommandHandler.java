@@ -72,6 +72,12 @@ public class CommandHandler implements CommandExecutor {
 						}
 
 					}
+					
+					if (config.contains("show_nickname_prefix")) {
+						MultiChatSpigot.showNicknamePrefix = config.getBoolean("show_nickname_prefix");
+						MultiChatSpigot.nicknamePrefix = config.getString("nickname_prefix");
+						MultiChatSpigot.nicknameBlacklist = config.getStringList("nickname_blacklist");
+					}
 
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
 

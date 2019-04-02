@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -80,6 +82,10 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 	public static boolean setLocalFormat = false;
 	public static boolean forceMultiChatFormat = false;
+	
+	public static boolean showNicknamePrefix = false;
+	public static String nicknamePrefix = "~";
+	public static List<String> nicknameBlacklist = new ArrayList<String>();
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -113,6 +119,12 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 				placeholderMap.put("{multichat_" + placeholder + "}", placeholders.getString(placeholder));
 			}
 
+		}
+		
+		if (config.contains("show_nickname_prefix")) {
+			showNicknamePrefix = config.getBoolean("show_nickname_prefix");
+			nicknamePrefix = config.getString("nickname_prefix");
+			nicknameBlacklist = config.getStringList("nickname_blacklist");
 		}
 
 		File f = new File(configDir, nameDataFile);
