@@ -23,8 +23,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
-
 /**
  * Player Name Manager
  * <p>Manages players names, uuids and nicknames</p>
@@ -86,8 +84,8 @@ public class NameManager implements Listener {
 
 		synchronized (mapUUIDNick) {
 			if (mapUUIDNick.containsKey(uuid)) {
-				if (MultiChatSponge.showNicknamePrefix) {
-					return MultiChatSponge.nicknamePrefix + mapNickFormatted.get(mapUUIDNick.get(uuid));
+				if (MultiChatSpigot.showNicknamePrefix) {
+					return MultiChatSpigot.nicknamePrefix + mapNickFormatted.get(mapUUIDNick.get(uuid));
 				} else {
 					return mapNickFormatted.get(mapUUIDNick.get(uuid));
 				}
