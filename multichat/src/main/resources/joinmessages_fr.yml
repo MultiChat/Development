@@ -12,7 +12,7 @@ version: "1.7.2" #
 ##################
 
 # French Translation by Nogapra - Thank you!
-# To use this file, rename to 'joinmessages.yml'
+# Pour utiliser ce fichier, renommer en 'joinmessages.yml'
 
 ##############################################################
 #  +------------------------------------------------------+  #
@@ -62,4 +62,4 @@ welcome: true
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = Le nom du joueur
 
-welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveur!"
+welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs!"
