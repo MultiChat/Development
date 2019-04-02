@@ -58,3 +58,22 @@ override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 #
 # Will display as [FORMAT] [MESSAGE]
 local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  MultiChat Nicknames                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Players will be blocked from using any nicknames on this list!
+# Regular expressions can be used
+nickname_blacklist:
+- "Notch"
+- "Jeb"
+#- "[1234567890]+.*" # <-- Example to block any nicknames starting with a number!
+
+# Should a prefix be displayed before nicknames to differentiate them from real names?
+show_nickname_prefix: false
+
+# What should the prefix before nicknames be?
+nickname_prefix: "~"
