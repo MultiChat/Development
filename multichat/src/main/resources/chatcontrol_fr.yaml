@@ -1,0 +1,379 @@
+############################################################
+
+# +------------------------------------------------------+ #
+
+# |                      MultiChat                       | #
+
+# +------------------------------------------------------+ #
+
+############################################################
+
+
+
+# By Revilo410
+
+
+
+##################
+
+#   DON'T EDIT   #
+
+version: "1.7.2" #
+
+##################
+
+
+
+# 1. Chat Control Rules
+
+# 2. Mute and Ignore Settings
+
+
+
+############################################################
+
+# +------------------------------------------------------+ #
+
+# |                  Chat Control Rules                  | #
+
+# +------------------------------------------------------+ #
+
+############################################################
+
+
+
+# These are custom regular expression rules to alter messages sent through the chat.
+
+# The regular expression in "look_for", is replaced by the value in "replace_with".
+
+
+
+# These can be used to filter inappropriate language from chat as well as many other things.
+
+# Some examples are shown below...
+
+
+
+regex_rules:
+
+# Example rule to replace [bold] with the format code %l to make bold text
+
+- look_for: '\[bold\]'
+
+  replace_with: "&l"
+
+# Example rule to replace [italic] with the format code %o to make italic text
+
+- look_for: '\[italic\]'
+
+  replace_with: "&o"
+
+
+
+apply_rules_to:
+
+  global_chat: true
+
+  private_messages: false
+
+  group_chats: false
+
+  staff_chats: false
+
+  display_command: false
+
+  announcements: false
+
+  bulletins: false
+
+  casts: false
+
+  helpme: false
+
+
+
+# These are custom regular expression triggered actions.
+
+# The regular expression in "look_for", triggers the command in "command"
+
+# You can choose to cancel the players chat event by setting "cancel" to true
+
+# Setting "spigot" to true will send the command to the local spigot server the
+
+# player is currently on and execute it there instead of on bungeecord.
+
+
+
+# These can be used to filter inappropriate language from chat as well as many other things.
+
+# Some examples are shown below...
+
+
+
+# You can use %PLAYER% to refer to the player sending the message
+
+
+
+regex_actions:
+
+# Example rule to kick someone who says a specific phrase
+
+- look_for: 'kickmeplzrightnow'
+
+  command: "kick %PLAYER% You asked for it!"
+
+  cancel: false
+
+  spigot: true
+
+
+
+apply_actions_to:
+
+  global_chat: true
+
+  private_messages: false
+
+  group_chats: false
+
+  staff_chats: false
+
+  helpme: false
+
+
+
+############################################################
+
+# +------------------------------------------------------+ #
+
+# |                  Anti-Spam Settings                  | #
+
+# +------------------------------------------------------+ #
+
+############################################################
+
+
+
+# Should MultiChat Anti-Spam be enabled
+
+
+
+anti_spam: true
+
+
+
+#################
+
+# Timer Trigger #
+
+#################
+
+
+
+# If a player sends 4 messages in this many seconds then anti-spam will be triggered
+
+anti_spam_time: 4
+
+
+
+########################
+
+# Same Message Trigger #
+
+########################
+
+
+
+# Sending the same message this many times in a row will also trigger anti-spam
+
+spam_same_message: 4
+
+
+
+#####################
+
+# Anti-Spam Actions #
+
+#####################
+
+
+
+# How many seconds must a player wait before sending a message once they trigger anti-spam?
+
+anti_spam_cooldown: 60
+
+
+
+# Should a command be triggered if anti-spam activates a certain amount of times for the same player?
+
+anti_spam_action: true
+
+
+
+# Should this command be executed on spigot (as opposed to bungeecord)
+
+anti_spam_spigot: true
+
+
+
+# How many times must anti-spam be triggered before sending the command?
+
+anti_spam_trigger: 3
+
+
+
+# What command should be sent? (%PLAYER% is the player who triggered the anti-spam)
+
+anti_spam_command: "kick %PLAYER% Spamming is not allowed"
+
+
+
+# In what types of chat should anti_spam be enforced?
+
+apply_anti_spam_to:
+
+  global_chat: true
+
+  private_messages: true
+
+  group_chats: true
+
+  helpme: true
+
+
+
+############################################################
+
+# +------------------------------------------------------+ #
+
+# |               Mute and Ignore Settings               | #
+
+# +------------------------------------------------------+ #
+
+############################################################
+
+
+
+################
+
+# Mute Command #
+
+################
+
+
+
+# Use MultiChat mute command?
+
+# Set to false if you have another BUNGEECORD plugin which deals with muting
+
+
+
+mute: false
+
+
+
+# In what types of chat should mute be enforced?
+
+
+
+apply_mute_to:
+
+  global_chat: true
+
+  private_messages: false
+
+  group_chats: false
+
+  helpme: false
+
+
+
+# Mute command aliases (in addition to /multichatmute)
+
+
+
+mutecommand:
+
+- mute
+
+- mcmute
+
+
+
+##################
+
+# Ignore Command #
+
+##################
+
+
+
+# MultiChat ignore command to stop seeing messages from specific players
+
+
+
+# Should a notification be sent to players if a player they ignore sent a message?
+
+
+
+notify_ignore: false
+
+
+
+# Session ignore (Should /ignore only last until you log out?)
+
+# WARNING: Enabling sessional ignore will (obviously) delete stored ignore data of offline players
+
+
+
+session_ignore: false
+
+
+
+# In what types of chat should ignore be enforced?
+
+
+
+apply_ignore_to:
+
+  global_chat: true
+
+  private_messages: true
+
+  group_chats: false
+
+
+
+# Ignore command aliases (in addition to /ignore)
+
+
+
+ignorecommand:
+
+- blockchat
+
+
+
+############################################################
+
+# +------------------------------------------------------+ #
+
+# |                  Link / URL Controls                 | #
+
+# +------------------------------------------------------+ #
+
+############################################################
+
+
+
+# Should MultiChat control which players can send links to chat?
+
+# If set to true, then only players with multichat.chat.link will be able to send links
+
+link_control: false
+
+
+
+# Message to replace links in chat with
+
+link_removal_message: "[LINK REMOVED]"
