@@ -30,7 +30,11 @@ public class SpongePlaceholderManager {
 		format = format.replace("%NAME%", player.getName());
 		format = format.replace("%PREFIX%", prefix);
 		format = format.replace("%SUFFIX%", suffix);
-		format = format.replace("%NICK%", nickname);
+		if (MultiChatSponge.showNicknamePrefix) {
+			format = format.replace("%NICK%", MultiChatSponge.nicknamePrefix + nickname);
+		} else {
+			format = format.replace("%NICK%", nickname);
+		}
 		format = format.replace("%WORLD%", player.getWorld().getName());
 		format = format.replace("%SERVER%", MultiChatSponge.serverName);
 		format = format.replace("%SERVER%", MultiChatSponge.serverName);
