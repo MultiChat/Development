@@ -62,7 +62,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.2", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.3", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge implements CommandExecutor {
 
 	public static SimpleMutableMessageChannel multichatChannel;
@@ -115,6 +115,9 @@ public final class MultiChatSponge implements CommandExecutor {
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
+		
+		// DEBUG MODE
+		//DebugManager.setDebug(true);
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();

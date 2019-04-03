@@ -15,6 +15,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
+import xyz.olivermartin.multichat.spongebridge.DebugManager;
 import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
 import xyz.olivermartin.multichat.spongebridge.SpongePlaceholderManager;
 
@@ -87,7 +88,9 @@ public class SpongeChatListener {
 
 				// Local chat
 
+				DebugManager.log("We are in local chat!");
 				format = MultiChatSponge.localChatFormat;
+				DebugManager.log("The chat format is: " + format);
 				//format = SpigotPlaceholderManager.buildChatFormat(p, format);
 
 			} else {
@@ -106,15 +109,27 @@ public class SpongeChatListener {
 
 				}
 
+				DebugManager.log("We are in global chat!");
+				DebugManager.log("The chat format is: " + format);
+
 			}
+
+			DebugManager.log("The chat format contains the § symbol?" + format.contains("§"));
 
 			// Build chat format
 			format = SpongePlaceholderManager.buildChatFormat(player, format);
 
-			if (MultiChatSponge.papi.isPresent()) {
-				format = MultiChatSponge.papi.get().replaceSourcePlaceholders(format, event.getSource()).toPlain();
+			DebugManager.log("THE FORMAT HAS NOW BEEN BUILT BY THE PLACEHOLDER MANAGER");
+			DebugManager.log("We received: " + format);
 
+			if (MultiChatSponge.papi.isPresent()) {
+
+				DebugManager.log("PlaceholderAPI is present");
+
+				
+				format = TextSerializers.FORMATTING_CODE.serialize(MultiChatSponge.papi.get().replaceSourcePlaceholders(format+"#", event.getSource()));
 				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
+				format = format.substring(0,format.length()-1);
 				format = format.replace("{NAME}", "%NAME%");
 				format = format.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
 				format = format.replace("{PREFIX}", "%PREFIX%");
@@ -124,14 +139,21 @@ public class SpongeChatListener {
 				format = format.replace("{WORLD}", "%WORLD%");
 				format = format.replace("{MODE}", "%MODE%");
 
+				DebugManager.log("After PAPI replacements we have: " + format);
+
 			}
 
 			Text toSend;
 
 			// Deal with coloured chat
+			DebugManager.log("Now we are dealing with coloured chat");
 			if (MultiChatSponge.colourMap.containsKey(player.getUniqueId())) {
 
+				DebugManager.log("We have an entry for this player in the colour map!");
+
 				boolean colour = MultiChatSponge.colourMap.get(player.getUniqueId());
+
+				DebugManager.log("Can they use colour codes?: " + colour);
 
 				if (colour) {
 					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + message);
@@ -139,12 +161,28 @@ public class SpongeChatListener {
 					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
 				}
 
+				DebugManager.log("The text has now been formatted by decoding & to the real colour codes!");
+
+				if (DebugManager.isDebug()) {
+					DebugManager.log("Here is exactly how the message is formatted:");
+					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
+				}
+				
+				DebugManager.log("The text in plaintext form is: " + toSend.toString());
+
 			} else {
+				DebugManager.log("We dont have an entry for the player in the colour map, we dont know if they can format or not!");
 				toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
+				if (DebugManager.isDebug()) {
+					DebugManager.log("Here is exactly how the message is formatted:");
+					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
+				}
 			}
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 			if (MultiChatSponge.globalChatServer) {
+				
+				DebugManager.log("This server is linked to the global chat!");
 
 				event.setCancelled(true);
 
@@ -170,7 +208,12 @@ public class SpongeChatListener {
 
 						// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
 						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
-						MultiChatSponge.sendChatToBungee(player, message, format.replaceAll("%", "%%"));
+						DebugManager.log("We need to send the message to bungeecord!");
+						DebugManager.log("Data to send is: ");
+						DebugManager.log("PLAYER:" + player.getName());
+						DebugManager.log("MESSAGE:" + message);
+						DebugManager.log("FORMAT: " + format.replace("%", "%%"));
+						MultiChatSponge.sendChatToBungee(player, message, format.replace("%", "%%"));
 
 					}
 				}

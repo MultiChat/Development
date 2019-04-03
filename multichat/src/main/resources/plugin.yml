@@ -1,5 +1,5 @@
 name: MultiChatSpigot
-version: 1.7.2
+version: 1.7.3
 author: Revilo410
 main: xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot
 softdepend: [Vault,PlaceholderAPI]
