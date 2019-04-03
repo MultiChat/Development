@@ -129,7 +129,7 @@ public class SpongeChatListener {
 				
 				format = TextSerializers.FORMATTING_CODE.serialize(MultiChatSponge.papi.get().replaceSourcePlaceholders(format+"#", event.getSource()));
 				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
-				format = format.substring(0,format.length()-2);
+				format = format.substring(0,format.length()-1);
 				format = format.replace("{NAME}", "%NAME%");
 				format = format.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
 				format = format.replace("{PREFIX}", "%PREFIX%");
