@@ -122,26 +122,6 @@ public class SpongeChatListener {
 			DebugManager.log("THE FORMAT HAS NOW BEEN BUILT BY THE PLACEHOLDER MANAGER");
 			DebugManager.log("We received: " + format);
 
-			if (MultiChatSponge.papi.isPresent()) {
-
-				DebugManager.log("PlaceholderAPI is present");
-
-				format = MultiChatSponge.papi.get().replaceSourcePlaceholders(format, event.getSource()).toPlain();
-
-				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
-				format = format.replace("{NAME}", "%NAME%");
-				format = format.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
-				format = format.replace("{PREFIX}", "%PREFIX%");
-				format = format.replace("{SUFFIX}", "%SUFFIX%");
-				format = format.replace("{NICK}", "%NICK%");
-				format = format.replace("{SERVER}", "%SERVER%");
-				format = format.replace("{WORLD}", "%WORLD%");
-				format = format.replace("{MODE}", "%MODE%");
-
-				DebugManager.log("After PAPI replacements we have: " + format);
-
-			}
-
 			Text toSend;
 
 			// Deal with coloured chat
@@ -162,29 +142,42 @@ public class SpongeChatListener {
 
 				DebugManager.log("The text has now been formatted by decoding & to the real colour codes!");
 
+				if (MultiChatSponge.papi.isPresent()) {
+
+					DebugManager.log("PlaceholderAPI is present");
+
+					toSend = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSend, event.getSource());
+
+				}
+
 				if (DebugManager.isDebug()) {
-					DebugManager.log("The player sending the message will now be sent the message in its current state!");
-					player.sendMessage(toSend);
-					DebugManager.log("We will also send it to console!");
+					DebugManager.log("Here is exactly how the message is formatted:");
 					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
 				}
-				
+
 				DebugManager.log("The text in plaintext form is: " + toSend.toString());
 
 			} else {
 				DebugManager.log("We dont have an entry for the player in the colour map, we dont know if they can format or not!");
 				toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
+
+				if (MultiChatSponge.papi.isPresent()) {
+
+					DebugManager.log("PlaceholderAPI is present");
+
+					toSend = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSend, event.getSource());
+
+				}
+
 				if (DebugManager.isDebug()) {
-					DebugManager.log("The player sending the message will now be sent the message in its current state!");
-					player.sendMessage(toSend);
-					DebugManager.log("We will also send it to console!");
+					DebugManager.log("Here is exactly how the message is formatted:");
 					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
 				}
 			}
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 			if (MultiChatSponge.globalChatServer) {
-				
+
 				DebugManager.log("This server is linked to the global chat!");
 
 				event.setCancelled(true);
