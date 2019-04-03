@@ -19,13 +19,19 @@ public class SpongePlaceholderManager {
 		} else {
 			nickname =  player.getName();
 		}
+		
+		DebugManager.log("PLAYERS NICKNAME / REALNAME IS: " + nickname);
 
 		if (player.getOption("prefix").isPresent()) {
 			prefix = player.getOption("prefix").get();
+			DebugManager.log("LOADED PREFIX: " + prefix);
+			DebugManager.log("PREFIX CONTAINS § SYMBOL? : " + prefix.contains("§"));
 		}
 
 		if (player.getOption("suffix").isPresent()) {
 			suffix = player.getOption("suffix").get();
+			DebugManager.log("LOADED SUFFIX: " + suffix);
+			DebugManager.log("SUFFIX CONTAINS § SYMBOL? : " + suffix.contains("§"));
 		}
 
 		// Replace the displayname placeholder with the displayname format
@@ -39,7 +45,8 @@ public class SpongePlaceholderManager {
 		format = format.replace("%SERVER%", MultiChatSponge.serverName);
 		format = format.replace("%SERVER%", MultiChatSponge.serverName);
 
-
+		DebugManager.log("PLACEHOLDER MANAGER IS RETURNING THIS FORMAT: " + format);
+		
 		return format;
 
 	}

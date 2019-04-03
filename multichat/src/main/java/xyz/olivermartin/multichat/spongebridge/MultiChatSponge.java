@@ -115,6 +115,9 @@ public final class MultiChatSponge implements CommandExecutor {
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
+		
+		// TODO DEBUG MODE
+		DebugManager.setDebug(true);
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
