@@ -122,8 +122,27 @@ public class SpongeChatListener {
 			DebugManager.log("THE FORMAT HAS NOW BEEN BUILT BY THE PLACEHOLDER MANAGER");
 			DebugManager.log("We received: " + format);
 
+			if (MultiChatSponge.papi.isPresent()) {
+
+				DebugManager.log("PlaceholderAPI is present");
+
+				
+				format = TextSerializers.FORMATTING_CODE.serialize(MultiChatSponge.papi.get().replaceSourcePlaceholders(format, event.getSource()));
+				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
+				format = format.replace("{NAME}", "%NAME%");
+				format = format.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
+				format = format.replace("{PREFIX}", "%PREFIX%");
+				format = format.replace("{SUFFIX}", "%SUFFIX%");
+				format = format.replace("{NICK}", "%NICK%");
+				format = format.replace("{SERVER}", "%SERVER%");
+				format = format.replace("{WORLD}", "%WORLD%");
+				format = format.replace("{MODE}", "%MODE%");
+
+				DebugManager.log("After PAPI replacements we have: " + format);
+
+			}
+
 			Text toSend;
-			Text toSendFormat;
 
 			// Deal with coloured chat
 			DebugManager.log("Now we are dealing with coloured chat");
@@ -136,47 +155,23 @@ public class SpongeChatListener {
 				DebugManager.log("Can they use colour codes?: " + colour);
 
 				if (colour) {
-					toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(message);
+					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + message);
 				} else {
-					toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(TextSerializers.FORMATTING_CODE.stripCodes(message));
+					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
 				}
 
 				DebugManager.log("The text has now been formatted by decoding & to the real colour codes!");
-
-				if (MultiChatSponge.papi.isPresent()) {
-
-					DebugManager.log("PlaceholderAPI is present");
-
-					toSendFormat = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSendFormat, event.getSource());
-
-				}
-				
-				toSend = toSendFormat.concat(toSend);
 
 				if (DebugManager.isDebug()) {
 					DebugManager.log("Here is exactly how the message is formatted:");
 					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
 				}
-
+				
 				DebugManager.log("The text in plaintext form is: " + toSend.toString());
 
 			} else {
 				DebugManager.log("We dont have an entry for the player in the colour map, we dont know if they can format or not!");
-				toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
-				toSend = TextSerializers.FORMATTING_CODE.deserialize(TextSerializers.FORMATTING_CODE.stripCodes(message));
-
-				if (MultiChatSponge.papi.isPresent()) {
-
-					DebugManager.log("PlaceholderAPI is present");
-
-					toSendFormat = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSendFormat, event.getSource());
-
-				}
-				
-				toSend = toSendFormat.concat(toSend);
-
+				toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
 				if (DebugManager.isDebug()) {
 					DebugManager.log("Here is exactly how the message is formatted:");
 					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
@@ -185,7 +180,7 @@ public class SpongeChatListener {
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 			if (MultiChatSponge.globalChatServer) {
-
+				
 				DebugManager.log("This server is linked to the global chat!");
 
 				event.setCancelled(true);
