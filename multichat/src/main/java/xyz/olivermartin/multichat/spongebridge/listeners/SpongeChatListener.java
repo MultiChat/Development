@@ -123,6 +123,7 @@ public class SpongeChatListener {
 			DebugManager.log("We received: " + format);
 
 			Text toSend;
+			Text toSendFormat;
 
 			// Deal with coloured chat
 			DebugManager.log("Now we are dealing with coloured chat");
@@ -135,9 +136,11 @@ public class SpongeChatListener {
 				DebugManager.log("Can they use colour codes?: " + colour);
 
 				if (colour) {
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + message);
+					toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
+					toSend = TextSerializers.FORMATTING_CODE.deserialize(message);
 				} else {
-					toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
+					toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
+					toSend = TextSerializers.FORMATTING_CODE.deserialize(TextSerializers.FORMATTING_CODE.stripCodes(message));
 				}
 
 				DebugManager.log("The text has now been formatted by decoding & to the real colour codes!");
@@ -146,9 +149,11 @@ public class SpongeChatListener {
 
 					DebugManager.log("PlaceholderAPI is present");
 
-					toSend = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSend, event.getSource());
+					toSendFormat = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSendFormat, event.getSource());
 
 				}
+				
+				toSend = toSendFormat.concat(toSend);
 
 				if (DebugManager.isDebug()) {
 					DebugManager.log("Here is exactly how the message is formatted:");
@@ -159,15 +164,18 @@ public class SpongeChatListener {
 
 			} else {
 				DebugManager.log("We dont have an entry for the player in the colour map, we dont know if they can format or not!");
-				toSend = TextSerializers.FORMATTING_CODE.deserialize(format + TextSerializers.FORMATTING_CODE.stripCodes(message));
+				toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
+				toSend = TextSerializers.FORMATTING_CODE.deserialize(TextSerializers.FORMATTING_CODE.stripCodes(message));
 
 				if (MultiChatSponge.papi.isPresent()) {
 
 					DebugManager.log("PlaceholderAPI is present");
 
-					toSend = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSend, event.getSource());
+					toSendFormat = MultiChatSponge.papi.get().replaceSourcePlaceholders(toSendFormat, event.getSource());
 
 				}
+				
+				toSend = toSendFormat.concat(toSend);
 
 				if (DebugManager.isDebug()) {
 					DebugManager.log("Here is exactly how the message is formatted:");
