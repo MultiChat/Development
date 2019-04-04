@@ -1,51 +1,69 @@
 package xyz.olivermartin.multichat.spigotbridge.database;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class DatabaseManager {
 
 	private static DatabaseManager instance;
-	
+
 	public static DatabaseManager getInstance() {
 		return instance;
 	}
-	
+
 	static {
 		instance = new DatabaseManager();
 	}
-	
+
 	/* END STATIC */
-	
+
+	private String databasePath = "C:/multichat/db/";
+	private DatabaseMode databaseMode = DatabaseMode.SQLite;
+
+	private Map<String, GenericDatabase> databases;
+
 	private DatabaseManager() {
-		/* EMPTY */
+		databases = new HashMap<String, GenericDatabase>();
 	}
-	
+
 	public static void main(String args[]) {
-		
 		DatabaseManager.getInstance().createDatabase("testing.db");
-		
 	}
-	
+
+	public GenericDatabase createDatabase(String name) {
+		return createDatabase(name, name);
+	}
+
 	/**
 	 * Generic class to create a sqlite database
 	 */
-    public void createDatabase(String fileName) {
- 
-        String url = "jdbc:sqlite:C:/sqlite/db/" + fileName;
- 
-        try (Connection conn = DriverManager.getConnection(url)) {
-            if (conn != null) {
-                DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
-            }
- 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-	
+	public GenericDatabase createDatabase(String databaseName, String fileName) {
+
+		switch (databaseMode) {
+		case SQLite:
+		default:
+			// TODO check doesnt already exist
+			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePath, fileName));
+			return databases.get(databaseName.toLowerCase());
+		}
+
+	}
+
+	public Optional<GenericDatabase> getDatabase(String databaseName) {
+		if (databases.containsKey(databaseName.toLowerCase())) {
+			return Optional.of(databases.get(databaseName.toLowerCase()));
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	public void removeDatabase(String databaseName) {
+		if (databases.containsKey(databaseName.toLowerCase())) {
+			GenericDatabase gdb = databases.get(databaseName.toLowerCase());
+			gdb.disconnectFromDatabase();
+			databases.remove(databaseName.toLowerCase());
+		}
+	}
+
 }
