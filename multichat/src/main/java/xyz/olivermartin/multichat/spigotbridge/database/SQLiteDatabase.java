@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.spigotbridge.database;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -10,8 +11,8 @@ public class SQLiteDatabase extends GenericDatabase {
 	private static final String URL_PREFIX = "jdbc:sqlite:";
 	private Connection conn;
 
-	public SQLiteDatabase(String path, String filename) {
-		super(URL_PREFIX + path + filename);
+	public SQLiteDatabase(File path, String filename) {
+		super(URL_PREFIX + path + File.separator + filename);
 	}
 
 	protected boolean setupDatabase(String url) {
