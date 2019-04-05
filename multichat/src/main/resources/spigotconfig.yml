@@ -103,3 +103,9 @@ show_nickname_prefix: false
 
 # What should the prefix before nicknames be?
 nickname_prefix: "~"
+
+# The maximum length for nicknames
+nickname_length_limit: 20
+
+# Should formatting codes such as "&3" be counted in the length of the nickname?
+nickname_length_limit_formatting: false

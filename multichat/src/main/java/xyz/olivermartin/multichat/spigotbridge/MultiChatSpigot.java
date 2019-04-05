@@ -86,6 +86,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static boolean showNicknamePrefix = false;
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
+	public static int nicknameMaxLength = 20;
+	public static boolean nicknameLengthIncludeFormatting = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -125,6 +127,12 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			showNicknamePrefix = config.getBoolean("show_nickname_prefix");
 			nicknamePrefix = config.getString("nickname_prefix");
 			nicknameBlacklist = config.getStringList("nickname_blacklist");
+			if (config.contains("nickname_length_limit")) {
+				
+				nicknameMaxLength = config.getInt("nickname_length_limit");
+				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
+				
+			}
 		}
 
 		File f = new File(configDir, nameDataFile);
