@@ -279,10 +279,10 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:suffix");
 			getProxy().registerChannel("multichat:nick");
 			getProxy().registerChannel("multichat:world");
-			getProxy().registerChannel("multichat:action");
-			getProxy().registerChannel("multichat:paction");
+			getProxy().registerChannel("multichat:act");
+			getProxy().registerChannel("multichat:pact");
 			getProxy().registerChannel("multichat:chat");
-			getProxy().registerChannel("multichat:channel");
+			getProxy().registerChannel("multichat:ch");
 			getProxy().registerChannel("multichat:ignore");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 

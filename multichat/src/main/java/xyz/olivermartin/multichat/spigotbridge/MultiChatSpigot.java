@@ -234,9 +234,9 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:paction", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:channel", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", MultiChatPluginMessageListener.getInstance());
 
 		// Register listeners

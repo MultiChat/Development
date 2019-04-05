@@ -184,14 +184,14 @@ public final class MultiChatSponge implements CommandExecutor {
 		ChannelBinding.RawDataChannel commChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
 		ChannelBinding.RawDataChannel chatChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:chat");
 
-		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
-		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:paction");
+		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:act");
+		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:pact");
 
 		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
-		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:channel");
+		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ch");
 		ChannelBinding.RawDataChannel ignoreChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ignore");
 
 		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
