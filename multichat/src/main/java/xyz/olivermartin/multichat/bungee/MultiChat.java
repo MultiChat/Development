@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import org.bstats.bungeecord.Metrics;
+
 import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
@@ -230,6 +232,9 @@ public class MultiChat extends Plugin implements Listener {
 	public void onEnable() {
 
 		instance = this;
+		
+		@SuppressWarnings("unused")
+		Metrics metrics = new Metrics(this);
 
 		configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
