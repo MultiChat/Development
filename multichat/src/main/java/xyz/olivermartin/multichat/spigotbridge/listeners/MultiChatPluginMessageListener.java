@@ -88,7 +88,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 				e.printStackTrace();
 
 			}
-		} else if (channel.equals("multichat:action")) {
+		} else if (channel.equals("multichat:act")) {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			DataInputStream in = new DataInputStream(stream);
@@ -104,7 +104,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 				e.printStackTrace();
 
 			}
-		} else if (channel.equals("multichat:paction")) {
+		} else if (channel.equals("multichat:pact")) {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			DataInputStream in = new DataInputStream(stream);
@@ -147,7 +147,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 			}
 
-		} else if (channel.equals("multichat:channel")) {
+		} else if (channel.equals("multichat:ch")) {
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
 			//DataInputStream in = new DataInputStream(stream);

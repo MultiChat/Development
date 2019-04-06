@@ -5,7 +5,7 @@
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.7.3</version>
+	<version>post-1.7.3</version>
 
 	<repositories>
 
@@ -92,6 +92,12 @@
 			<artifactId>bstats-bungeecord</artifactId>
 			<version>1.4</version>
 			<scope>compile</scope>
+    </dependency>
+
+    <dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.27.2.1</version>
 		</dependency>
 
 		<dependency>

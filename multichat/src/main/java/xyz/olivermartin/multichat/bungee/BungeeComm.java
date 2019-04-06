@@ -88,7 +88,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:action", stream.toByteArray());
+		server.sendData("multichat:act", stream.toByteArray());
 
 	}
 
@@ -107,7 +107,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:paction", stream.toByteArray());
+		server.sendData("multichat:pact", stream.toByteArray());
 
 	}
 
@@ -173,9 +173,9 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:channel", stream.toByteArray());
+		server.sendData("multichat:ch", stream.toByteArray());
 
-		DebugManager.log("Sent message on multichat:channel channel!");
+		DebugManager.log("Sent message on multichat:ch channel!");
 
 	}
 
