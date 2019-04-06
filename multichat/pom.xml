@@ -10,6 +10,11 @@
 	<repositories>
 
 		<repository>
+			<id>CodeMC</id>
+			<url>https://repo.codemc.org/repository/maven-public</url>
+		</repository>
+
+		<repository>
 			<id>sponge</id>
 			<url>http://repo.spongepowered.org/maven</url>
 		</repository>
@@ -45,6 +50,31 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<!-- Do not include the <configuration>...</configuration> part if you 
+					are using Sponge! -->
+				<configuration>
+					<relocations>
+						<relocation>
+							<pattern>org.bstats</pattern>
+							<!-- Replace this with your package! -->
+							<shadedPattern>xyz.olivermartin.bungee</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
@@ -56,6 +86,13 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bungeecord</artifactId>
+			<version>1.4</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.spongepowered</groupId>
