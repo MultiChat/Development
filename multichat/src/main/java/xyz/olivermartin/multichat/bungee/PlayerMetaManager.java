@@ -59,9 +59,10 @@ public class PlayerMetaManager {
 
 			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("set_display_name")) {
 
-				DebugManager.log("[PlayerMetaManager] MultiChat is in charge of display names");
-
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("set_display_name")) {
+
+					DebugManager.log("[PlayerMetaManager] MultiChat is in charge of display names");
+
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
 						//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
 
@@ -75,10 +76,17 @@ public class PlayerMetaManager {
 
 						player.setDisplayName(opm.get().getSpigotDisplayname());
 					}
-				}
-			} else {
+				} else {
 
-				DebugManager.log("[PlayerMetaManager] MultiChat is NOT in charge of display names!");
+					DebugManager.log("[PlayerMetaManager] MultiChat is NOT in charge of display names!");
+
+					DebugManager.log("[PlayerMetaManager] Set as: " + opm.get().getSpigotDisplayname());
+
+					player.setDisplayName(opm.get().getSpigotDisplayname());
+
+				}
+
+			} else {
 
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
 					//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
