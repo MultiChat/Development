@@ -357,8 +357,10 @@ public class BungeeComm implements Listener {
 			}
 
 		}
-		
+
 		if (ev.getTag().equals("multichat:dn")) {
+
+			DebugManager.log("[multichat:dn] Got an incoming channel message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -373,9 +375,15 @@ public class BungeeComm implements Listener {
 
 				synchronized (player) {
 
+					DebugManager.log("[multichat:dn] Player exists!");
+
 					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
 
 					if (opm.isPresent()) {
+
+						DebugManager.log("[multichat:dn] Player meta exists!");
+
+						DebugManager.log("[multichat:dn] The displayname received is: " + spigotDisplayName);
 
 						opm.get().spigotDisplayName = spigotDisplayName;
 						PlayerMetaManager.getInstance().updateDisplayName(uuid);
