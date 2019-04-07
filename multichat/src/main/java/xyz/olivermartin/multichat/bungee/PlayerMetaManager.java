@@ -53,16 +53,21 @@ public class PlayerMetaManager {
 			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("set_display_name")) {
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("set_display_name")) {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
-						player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
+						//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
+						player.setDisplayName(opm.get().getSpigotDisplayname());
 					} else {
-						player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
+						//player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
+						player.setDisplayName(opm.get().getSpigotDisplayname());
 					}
 				}
 			} else {
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
-					player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
+					//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
+					// TODO Maybe new option for "fetch_spigot_displayname"?
+					player.setDisplayName(opm.get().getSpigotDisplayname());
 				} else {
-					player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
+					//player.setDisplayName(opm.get().getDisplayName("%PREFIX%%NICK%%SUFFIX%"));
+					player.setDisplayName(opm.get().getSpigotDisplayname());
 				}
 			}
 

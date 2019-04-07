@@ -357,6 +357,38 @@ public class BungeeComm implements Listener {
 			}
 
 		}
+		
+		if (ev.getTag().equals("multichat:dn")) {
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				UUID uuid = UUID.fromString(in.readUTF());
+				String spigotDisplayName = in.readUTF();
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+				if (player == null) return;
+
+				synchronized (player) {
+
+					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
+
+					if (opm.isPresent()) {
+
+						opm.get().spigotDisplayName = spigotDisplayName;
+						PlayerMetaManager.getInstance().updateDisplayName(uuid);
+
+					}
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 
 		if (ev.getTag().equals("multichat:world")) {
 
