@@ -154,7 +154,6 @@ apply_mute_to:
   helpme: false
 
 # Alias de commande MUTE (en plus de/multichatmute)
-
 mutecommand:
 - mute
 - mcmute
