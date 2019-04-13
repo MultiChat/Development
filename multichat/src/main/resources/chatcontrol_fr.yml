@@ -1,0 +1,192 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+# Ne pas éditer  #
+version: "1.7.3" #
+##################
+
+# 1. Chat Control Rules
+# 2. Mute and Ignore Settings
+
+############################################################
+# +------------------------------------------------------+ #
+# |             Règles de Control de Chat                | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Il s’agit de règles d’expression régulière personnalisées pour modifier les messages envoyés via le chat.
+# L'expression à remplacée se trouve sous la valeur "look_for", et la valeur de remplacement se trouve sous le champ "replace_with".
+
+# Ceux-ci peuvent être utilisés pour filtrer le langage inapproprié du chat ainsi que beaucoup d’autres choses.
+# Quelques exemples sont présentés ci-dessous...
+
+regex_rules:
+# Exemple de règle pour remplacer [Bold] par le code de format %l pour faire du texte en gras
+- look_for: '\[bold\]'
+  replace_with: "&l"
+# Exemple de règle pour remplacer [Italic] par le code de format %o pour faire du texte en italique
+- look_for: '\[italic\]'
+  replace_with: "&o"
+
+# Dans quels types de chat les règles de regex doivent t'elle être appliquées ?
+apply_rules_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  staff_chats: false
+  display_command: false
+  announcements: false
+  bulletins: false
+  casts: false
+  helpme: false
+
+# Il s’agit d’actions déclenchées par une expression régulière personnalisée.
+# L’expression régulière dans "look_for", déclenche la commande dans "commande"
+# vous pouvez choisir d’annuler l’événement de chat de joueurs en définissant "annuler" à true.
+# Réglage "Spigot" à true enverra la commande au serveur Spigot local
+# ou le joueur est actuellement et l’exécutera là au lieu du bungeecord serveur.
+
+# Ceux-ci peuvent être utilisés pour filtrer le langage inapproprié du chat ainsi que beaucoup d’autres choses.
+# Quelques exemples sont présentés ci-dessous...
+
+# Vous pouvez utiliser %PLAYER% pour faire référence au joueur qui envoie le message.
+
+regex_actions:
+# Exemple de règle pour kick quelqu’un qui dit une phrase spécifique.
+- look_for: 'kickmeplzrightnow'
+  command: "kick %PLAYER% Vous l'avez demandé !"
+  cancel: false
+  spigot: true
+
+# Dans quels types de chat les action de regex doivent t'elles être appliquées ?
+apply_actions_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  staff_chats: false
+  helpme: false
+  
+  ############################################################
+# +------------------------------------------------------+ #
+# |                Paramètre d'anti-spam                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Permet d'activer l'anti-spam de Multichat
+
+anti_spam: true
+
+##############################
+# Minuterie de déclenchement #
+##############################
+
+# Définie le nombre de seconde autorisant un joueur à envoyer 4 messages avant de déclencher l’anti-spam.
+anti_spam_time: 4
+
+################################################
+# Nombre de message identique de déclenchement #
+################################################
+
+# Definie le nombre de message identique envoyé dans un laps de temps très court pour déclencher l'anti-spam.
+spam_same_message: 4
+
+##########################
+# Actions de l'anti-spam #
+##########################
+
+# Combien de secondes un joueur doit-il attendre avant d’envoyer un message une fois qu’il a déclenché l’anti-spam ?
+anti_spam_cooldown: 60
+
+# Une commande doit-elle être déclenchée si l’anti-spam est activée un certain nombre de fois pour le même joueur ?
+anti_spam_action: true
+
+# Définie si cette commande est exécutée sur Spigot (par opposition à bungeecord).
+anti_spam_spigot: true
+
+# Combien de fois l’anti-spam doit-il être déclenché avant d’envoyer la commande ?
+anti_spam_trigger: 3
+
+# Quelle commande doit être envoyée ? (%PLAYER% est le joueur qui a déclenché l’anti-spam).
+anti_spam_command: "kick %PLAYER% le spam n'est pas autorisé"
+
+# Dans quels types de chat l'anti_spam doit t'il être appliqué ?
+apply_anti_spam_to:
+  global_chat: true
+  private_messages: true
+  group_chats: true
+  helpme: true
+
+############################################################
+# +------------------------------------------------------+ #
+# |           Paramètre de mute et d'ignore              | #
+# +------------------------------------------------------+ #
+############################################################
+
+#################
+# Commande Mute #
+#################
+
+# Utiliser la commande mute de Multichat ?
+# Définissez la valeur sur false si vous avez un autre plugin bungeecord qui traite ce genre de commande.
+
+mute: false
+
+# Dans quels types de chat le mute doit-il être appliqué ?
+
+apply_mute_to:
+  global_chat: true
+  private_messages: false
+  group_chats: false
+  helpme: false
+
+# Alias de commande MUTE (en plus de/multichatmute)
+
+mutecommand:
+- mute
+- mcmute
+
+###################
+# Commande Ignore #
+###################
+
+# Paramètre de commande ignore de pour stopper la visibilité des message d'un joueur spécifique.
+
+# Une notification doit-elle être envoyée aux joueurs si un joueur qu’ils ignorent a envoyé un message ?
+
+notify_ignore: false
+
+# Session ignorer (devrait ignorer les messages que pendant la dernière session de connection ?)
+# AVERTISSEMENT: l’activation de la session ignore (évidemment) supprimera les données ignorées des joueurs hors ligne
+
+session_ignore: false
+
+# Dans quels types de chat la commande /ignore doit t'elle être appliquée ?
+
+apply_ignore_to:
+  global_chat: true
+  private_messages: true
+  group_chats: false
+
+# Alias de commande ignore (en plus de la commande /ignore)
+
+ignorecommand:
+- blockchat
+
+############################################################
+# +------------------------------------------------------+ #
+# |               Contrôle de Liens / URL                | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Le contrôle MultiChat doit-il permettre aux joueurs d’envoyer des liens vers le chat ?
+# Si la valeur est true, alors seuls les joueurs avec la permission  Multichat.chat.Link seront en mesure d’envoyer des liens.
+link_control: false
+
+# Remplacer les liens / URL dans les message par :
+link_removal_message: "[Lien WEB supprimé]"
