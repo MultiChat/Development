@@ -11,6 +11,9 @@
 version: "1.7.3" #
 ##################
 
+# French Translation by Nogapra - Thank you!
+# Pour utiliser ce fichier, renommer en 'chatcontrol.yml'
+
 # 1. Chat Control Rules
 # 2. Mute and Ignore Settings
 
@@ -35,6 +38,7 @@ regex_rules:
   replace_with: "&o"
 
 # Dans quels types de chat les règles de regex doivent t'elle être appliquées ?
+# Paramétrage disponible : true ou false
 apply_rules_to:
   global_chat: true
   private_messages: false
@@ -65,6 +69,7 @@ regex_actions:
   spigot: true
 
 # Dans quels types de chat les action de regex doivent t'elles être appliquées ?
+# Paramétrage disponible : true ou false
 apply_actions_to:
   global_chat: true
   private_messages: false
@@ -79,7 +84,7 @@ apply_actions_to:
 ############################################################
 
 # Permet d'activer l'anti-spam de Multichat
-
+# Paramétrage disponible : true ou false
 anti_spam: true
 
 ##############################
@@ -104,9 +109,11 @@ spam_same_message: 4
 anti_spam_cooldown: 60
 
 # Une commande doit-elle être déclenchée si l’anti-spam est activée un certain nombre de fois pour le même joueur ?
+# Paramétrage disponible : true ou false
 anti_spam_action: true
 
 # Définie si cette commande est exécutée sur Spigot (par opposition à bungeecord).
+# Paramétrage disponible : true ou false
 anti_spam_spigot: true
 
 # Combien de fois l’anti-spam doit-il être déclenché avant d’envoyer la commande ?
@@ -116,6 +123,7 @@ anti_spam_trigger: 3
 anti_spam_command: "kick %PLAYER% le spam n'est pas autorisé"
 
 # Dans quels types de chat l'anti_spam doit t'il être appliqué ?
+# Paramétrage disponible : true ou false
 apply_anti_spam_to:
   global_chat: true
   private_messages: true
@@ -134,11 +142,11 @@ apply_anti_spam_to:
 
 # Utiliser la commande mute de Multichat ?
 # Définissez la valeur sur false si vous avez un autre plugin bungeecord qui traite ce genre de commande.
-
+# Paramétrage disponible : true ou false
 mute: false
 
 # Dans quels types de chat le mute doit-il être appliqué ?
-
+# Paramétrage disponible : true ou false
 apply_mute_to:
   global_chat: true
   private_messages: false
@@ -158,16 +166,16 @@ mutecommand:
 # Paramètre de commande ignore de pour stopper la visibilité des message d'un joueur spécifique.
 
 # Une notification doit-elle être envoyée aux joueurs si un joueur qu’ils ignorent a envoyé un message ?
-
+# Paramétrage disponible : true ou false
 notify_ignore: false
 
 # Session ignorer (devrait ignorer les messages que pendant la dernière session de connection ?)
 # AVERTISSEMENT: l’activation de la session ignore (évidemment) supprimera les données ignorées des joueurs hors ligne
-
+# Paramétrage disponible : true ou false
 session_ignore: false
 
 # Dans quels types de chat la commande /ignore doit t'elle être appliquée ?
-
+# Paramétrage disponible : true ou false
 apply_ignore_to:
   global_chat: true
   private_messages: true
@@ -186,6 +194,7 @@ ignorecommand:
 
 # Le contrôle MultiChat doit-il permettre aux joueurs d’envoyer des liens vers le chat ?
 # Si la valeur est true, alors seuls les joueurs avec la permission  Multichat.chat.Link seront en mesure d’envoyer des liens.
+# Paramétrage disponible : true ou false
 link_control: false
 
 # Remplacer les liens / URL dans les message par :
