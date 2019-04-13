@@ -22,12 +22,10 @@ version: "1.7.3" #
 
 # Les messages de connexion au réseau de serveur doivent-ils être affichés ?
 # Paramétrage disponible : true ou false
-
 showjoin: true
 
 # Les messages à la déconexion du réseau de serveur doivent-ils être affichés ?
 # Paramétrage disponible : true ou false
-
 showquit: true
 
 ##############################################################
@@ -36,31 +34,24 @@ showquit: true
 # %NAME% = le nom du joueur
 
 # Message de connexion sur le réseaux de serveur
-
 serverjoin: "&e%NAME% &es'est connecté au réseau"
 
 # Message de connexion silencieuse sur le réseaux de serveur
-
 silentjoin: "&b&o%NAME% &b&os'est connecté au réseau silencieusement"
 
 # Message de déconnexion du réseau sur le réseaux de serveur
-
 networkquit: "&e%NAME% &es'est déconnecté du réseau"
 
 # Message de déconnexion silencieuse sur le réseaux de serveur
-
 silentquit: "&b&o%NAME% &b&os'est déconnecté du réseau silencieusement"
-
 
 ##############################################################
 
 # Un message de bienvenue doit-il être affiché la première fois qu'un joueur rejoint le réseau ?
 # Paramétrage disponible : true ou false
-
 welcome: true
 
 # Définisser le message de bienvenue ci-dessous
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = Le nom du joueur
-
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs !"
