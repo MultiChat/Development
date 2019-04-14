@@ -17,6 +17,7 @@ version: "1.7.3" #
 # 1. Règles de Control de Chat
 # 2. Paramètres d'anti-spam
 # 3. Paramètres de mute et d'ignore
+# 4. Contrôle de Liens / URL
 
 ############################################################
 # +------------------------------------------------------+ #
