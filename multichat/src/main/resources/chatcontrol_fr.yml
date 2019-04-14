@@ -11,11 +11,12 @@
 version: "1.7.3" #
 ##################
 
-# French Translation by Nogapra - Thank you!
-# Pour utiliser ce fichier, renommer en 'chatcontrol.yml'
+# French Translation by Nogapra - Thank you !
+# Pour utiliser ce fichier, renommer en 'chatcontrol.yml'.
 
-# 1. Chat Control Rules
-# 2. Mute and Ignore Settings
+# 1. Règles de Control de Chat
+# 2. Paramètres d'anti-spam
+# 3. Paramètres de mute et d'ignore
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -77,9 +78,9 @@ apply_actions_to:
   staff_chats: false
   helpme: false
   
-  ############################################################
+############################################################
 # +------------------------------------------------------+ #
-# |                Paramètre d'anti-spam                 | #
+# |                Paramètres d'anti-spam                | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -132,7 +133,7 @@ apply_anti_spam_to:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |           Paramètre de mute et d'ignore              | #
+# |           Paramètres de mute et d'ignore             | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -153,7 +154,7 @@ apply_mute_to:
   group_chats: false
   helpme: false
 
-# Alias de commande MUTE (en plus de/multichatmute)
+# Alias de commande MUTE (en plus de /multichatmute).
 mutecommand:
 - mute
 - mcmute
@@ -169,7 +170,7 @@ mutecommand:
 notify_ignore: false
 
 # Session ignorer (devrait ignorer les messages que pendant la dernière session de connection ?)
-# AVERTISSEMENT: l’activation de la session ignore (évidemment) supprimera les données ignorées des joueurs hors ligne
+# AVERTISSEMENT: l’activation de la session ignore (évidemment) supprimera les données ignorées des joueurs hors-ligne.
 # Paramétrage disponible : true ou false
 session_ignore: false
 
