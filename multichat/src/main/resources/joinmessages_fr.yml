@@ -30,19 +30,19 @@ showquit: true
 
 ##############################################################
 
-# Utilisez les code couleur de minecraft standard '&X' COLOUR/FORMAT CODES
+# Utiliser les codes couleur de minecraft standard '&X' COLOUR/FORMAT CODES.
 # %NAME% = le nom du joueur
 
-# Message de connexion sur le réseaux de serveur
+# Message de connexion sur le réseaux de serveur.
 serverjoin: "&e%NAME% &es'est connecté au réseau"
 
-# Message de connexion silencieuse sur le réseaux de serveur
+# Message de connexion silencieuse sur le réseaux de serveur.
 silentjoin: "&b&o%NAME% &b&os'est connecté au réseau silencieusement"
 
-# Message de déconnexion du réseau sur le réseaux de serveur
+# Message de déconnexion du réseau sur le réseaux de serveur.
 networkquit: "&e%NAME% &es'est déconnecté du réseau"
 
-# Message de déconnexion silencieuse sur le réseaux de serveur
+# Message de déconnexion silencieuse sur le réseaux de serveur.
 silentquit: "&b&o%NAME% &b&os'est déconnecté du réseau silencieusement"
 
 ##############################################################
@@ -52,6 +52,6 @@ silentquit: "&b&o%NAME% &b&os'est déconnecté du réseau silencieusement"
 welcome: true
 
 # Définisser le message de bienvenue ci-dessous
-# Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
+# Utiliser les codes couleur de minecraft Standard '&X' COLOUR/FORMAT CODES.
 # %NAME% = Le nom du joueur
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs !"
