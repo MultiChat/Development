@@ -28,7 +28,7 @@ version: "1.7.3" #
 
 # Définie si ce serveur utilise un format différent pour le chat global que celui attribué
 # dans le dossier plugins du serveur BungeeCoord ?
-# (Utile si vous souhaitez utiliser des Placeholders locaux qui ne peuvent être présents que sur un seul serveur)
+# (Utile si vous souhaitez utiliser des Placeholders locaux qui ne peuvent être présents que sur un seul serveur).
 # Paramètre disponible : true ou false
 override_global_format: false
 
@@ -40,14 +40,14 @@ override_global_format: false
 # %PREFIX% = Le préfixe de l’expéditeur.
 # %SUFFIX% = Le suffixe de l’expéditeur.
 # %NICK% = Le surnom de l’expéditeur.
-# %SERVER% = Le serveur de l’expéditeur
-# %WORLD% = Le monde de l’expéditeur
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
 #
 # S’affichera en tant que [FORMAT] [MESSAGE]
 override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 
 # Si le paramètre ci-dessous est défini sur true, alors quels que soient les paramètres ci-dessus, 
-#MultiChat ne touchera pas le format de chat.
+# MultiChat ne touchera pas le format de chat.
 # Cela signifie que si un plugin tel que Towny gère le format de chat localement, alors ce sera utilisé à la place.
 # MultiChat enverra toujours le message à tous les autres serveurs.
 # 
@@ -77,8 +77,8 @@ set_local_format: true
 # %PREFIX% = Le préfixe de l’expéditeur.
 # %SUFFIX% = Le suffixe de l’expéditeur.
 # %NICK% = Le surnom de l’expéditeur.
-# %SERVER% = Le serveur de l’expéditeur
-# %WORLD% = Le monde de l’expéditeur
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
 #
 # S’affichera en tant que [FORMAT] [MESSAGE]
 local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
@@ -106,7 +106,7 @@ multichat_placeholders:
 ############################################################
 
 # Les joueurs ne pourront se renommer avec un surnom de cette liste !
-# (?i) est le regex pour ignorer le cas
+# (?i) est le regex pour ignorer le cas.
 nickname_blacklist:
 - "(?i)Notch"
 - "(?i)Jeb"
