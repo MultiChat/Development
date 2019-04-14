@@ -1,0 +1,258 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                      MultiChat                       | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+#   DON'T EDIT   #
+version: "1.7.3" #
+##################
+
+# French Translation by Nogapra - Thank you !
+# Pour utiliser ce fichier, renommer en 'config.yml'
+
+# 1. Général
+# 2. Messages privés
+# 3. Cannaux de chat
+# 4. Chat global
+# 5. Chats de groupe
+# 6. Chat de staff
+# 7. Divers
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       Général                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Définie si MultiChat doit chercher les noms d’affichage des joueurs respectifs à utiliser sur les serveur Spigot
+# plutôt que ceux mis sur les serveur bungeecord dans le chat global ?
+# Définissez cette valeur sur true si vous souhaitez utiliser des noms d’affichage définis
+# par des plugins tels que Essentials, Vault, etc.
+# Si vous souhaitez utiliser des noms d’affichage définis par un plugin de serveur bungeecord tel que BungeePerms, 
+# définissez-le sur false.
+# S’IL VOUS PLAÎT NOTER QUE SI CELA EST RÉGLÉ SUR TRUE, CHAT NE FONCTIONNERA QUE SI VOUS AVEZ ÉGALEMENT MIs LE MULTICHAT.JAR
+# DANS LES DOSSIERS PLUGIN DES SERVEURS SPIGOT AINSI QUE DANS LE DOSSIER PLUGINS DU SERVEUR BUNGEECORD !
+# Paramétrage disponible : true ou false
+fetch_spigot_display_names: true
+
+# Définie si MultiChat utilise le nom d’affichage des utilisateurs dans des choses comme le TAB list et/glist ?
+# Paramétrage disponible : true ou false
+set_display_name: true
+
+# Formatage du nom d'affichage.
+# Vous pouvez utiliser : %NAME%, %NICK%, %PREFIX%, %SUFFIX%
+display_name_format: "%PREFIX%%NICK%%SUFFIX%"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Messages privés                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+###########################
+# Module de message privé #
+###########################
+
+# Utiliser la messagerie privée ?
+# Paramétrage disponible : true ou false
+pm: true
+
+# Serveurs à exclure de la messagerie privée.
+# Lister les serveurs comme ceci :
+# no_pm:
+# - Server1
+# - Server2
+# etc.
+no_pm: []
+
+# Permettez aux joueurs de d'activer le canal de message privé en tapant simplement /msg <playername>
+# Paramétrage disponible : true ou false
+toggle_pm: true
+
+##################################
+# Formattage des messages privés #
+##################################
+
+# Utilisez les codes couleur de minecraft standard '&X' COLOUR/FORMAT CODES.
+# %MESSAGE% = Le message envoyé
+# %NAME% = Le nom de l’expéditeur
+# %NAMET% = Le nom du joueur cible
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur
+# %DISPLAYNAMET% = Le nom d'affichage du joueur cible
+# %PREFIX% = Le préfixe de l’expéditeur
+# %PREFIXT% = Le préfixe du joueur cible
+# %SUFFIX% = Le suffixe de l’expéditeur
+# %SUFFIXT% = Le suffixe du joueur cible
+# %NICK% = Le surnom de l’expéditeur
+# %NICKT% = Le surnom du joueur cible
+# %SERVER% = Le serveur de l’expéditeur
+# %SERVERT% = Le serveur du joueur cible
+# %WORLD% = Le monde de l’expéditeur
+# %WORLDT% = Le monde du joueur cible
+
+# formatage d'envoie de message privé.
+pmout: "&6[&cYou &6-> &c%DISPLAYNAMET%&6] &f%MESSAGE%"
+
+# Formatage de réception d'un message privé.
+pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
+
+# Formatage des message en socialspy.
+pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
+
+###################################
+# Alias pour les messages privées #
+###################################
+
+# La commande /msg possède les alias suivants (autres que /msg).
+msgcommand:
+- m
+- message
+- t
+- tell
+- w
+- whisper
+- chat
+- pm
+
+# La commande /r possède les alias suivants (autres que /r).
+rcommand:
+- reply
+- respond
+
+# La commande /socialspy a les alias suivants (autres que /socialspy).
+socialspycommand:
+- spy
+- sspy
+
+############################################################
+# +------------------------------------------------------+ #
+# |                    Cannaux de chat                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Le canal de chat par défaut ou les joueurs seront affectés lors de leur connexion.
+# Doit être "local" ou "global", si quelque chose d’autre est spécifié alors sera par défaut "global".
+default_channel: "global"
+
+# Forcer les joueurs dans le canal par défaut quand ils rejoignent le serveur ?
+# Paramétrage disponible : true ou false
+force_channel_on_join: false
+
+# La commande /Channel possède les alias suivants (autres que /Channel)
+channelcommand:
+- ch
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     Chat global                     | #
+# +------------------------------------------------------+ #
+############################################################
+
+#########################
+# Module de chat global #
+#########################
+
+# Utiliser le chat public global ?
+# Paramétrage disponible : true ou false
+global: true
+
+# Serveurs à exclure du chat global.
+# Lister les serveurs comme ceci :
+# no_global:
+# - Server1
+# - Server2
+# etc.
+no_global: []
+
+##########################
+# Formata du chat global #
+##########################
+
+# Utilisez les codes couleur de minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur
+# %PREFIX% = Le préfixe de l’expéditeur
+# %SUFFIX% = Le suffixe de l’expéditeur
+# %NICK% = Le surnom de l’expéditeur
+# %SERVER% = Le serveur de l’expéditeur
+# %WORLD% = Le monde de l’expéditeur
+
+# Global Chat Format
+# Will display as [FORMAT] [MESSAGE]
+globalformat: "&2[&aG&2] &f%DISPLAYNAME%&f: "
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Chats de groupe                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+#################################
+# Formatage des chats de groupe #
+#################################
+
+# Utilisez les codes couleur de minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur
+# %MESSAGE% = Le message envoyé
+# %CC% = La couleur de chat définie par les joueurs
+# %NC% = La couleur du nom définie par les joueurs
+# %GROUPNAME% = Nom du chat de groupe
+groupchat:
+    format: "%CC%(%NC%%GROUPNAME%%CC%)(%NC%%NAME%%CC%) %MESSAGE%"
+    ccdefault: "a"
+    ncdefault: "f"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                     Chat de staff                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+##############################
+# Formatage du chat de staff #
+##############################
+
+# Utilisez les codes couleur de minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur
+# %SERVER% = Le serveur de l’expéditeur
+# %WORLD% = Le monde de l’expéditeur
+# %MESSAGE% = Le message envoyé
+# %CC% = La couleur de chat définie par les joueurs
+# %NC% = La couleur du nom définie par les joueurs
+modchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "b"
+    ncdefault: "d"
+
+adminchat:
+    format: "%CC%{%NC%%NAME%%CC%} %MESSAGE%"
+    ccdefault: "d"
+    ncdefault: "b"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Divers                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Affectez la valeur false pour désactiver la commande de liste de personnel '/staff'.
+# Paramétrage disponible : true ou false
+staff_list: true
+
+# Alias de commande de contournement MultiChat (autre que /multichatbypass).
+multichatbypasscommand:
+- mcb
+- bypass
+
+# Alias de commande MultiChat Execute (autre que /multichatexecute).
+multichatexecutecommand:
+- mcexecute
+- mce
+- gexecute
+- gexe
+- gcommand
