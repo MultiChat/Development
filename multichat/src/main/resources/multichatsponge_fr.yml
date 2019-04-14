@@ -1,0 +1,89 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                   MultiChatSponge                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+# NE PAS EDITER  #
+version: "1.7.3" #
+##################
+
+# French Translation by Nogapra - Thank you !
+# Pour utiliser ce fichier, renommer en 'multichatsponge.yml'.
+
+# Spécifiez le nom de ce serveur ici pour le placeholder %SERVER%.
+server_name: "SPONGE"
+
+#1. Global
+#2. Local
+#3. Surnom Multichat
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Global                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Définie si ce serveur utilise un format différent pour le chat global que celui attribué
+# dans le dossier plugins du serveur BungeeCoord ?
+# (Utile si vous souhaitez utiliser des Placeholders locaux qui ne peuvent être présents que sur un seul serveur).
+# Paramètre disponible : true ou false
+override_global_format: false
+
+# Format à utiliser pour le chat global si le paramètre ci-dessus est défini sur true.
+# 
+# Utiliser les codes couleur Minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur.
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur.
+# %PREFIX% = Le préfixe de l’expéditeur.
+# %SUFFIX% = Le suffixe de l’expéditeur.
+# %NICK% = Le surnom de l’expéditeur.
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
+#
+# S’affichera en tant que [FORMAT] [MESSAGE]
+override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Local                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Format à utiliser pour le chat local pour ce serveur.
+#
+# Utiliser les codes couleur Minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur.
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur.
+# %PREFIX% = Le préfixe de l’expéditeur.
+# %SUFFIX% = Le suffixe de l’expéditeur.
+# %NICK% = Le surnom de l’expéditeur.
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
+#
+# S’affichera en tant que [FORMAT] [MESSAGE]
+local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  MultiChat Nicknames                 | #
+# +------------------------------------------------------+ #
+############################################################
+
+
+# Les joueurs ne pourront se renommer avec un surnom de cette liste !
+# (?i) est le regex pour ignorer le cas
+nickname_blacklist:
+- "(?i)Notch"
+- "(?i)Jeb"
+#- "[1234567890]+.*" # <-- Exemple pour bloquer les surnoms commençant par un nombre !
+
+# Un préfixe doit-il être affiché avant les surnoms pour les différencier des vrais noms ?
+# Paramètre disponible : true ou false
+show_nickname_prefix: false
+
+# Que doit être affiché avant le surnom ?
+nickname_prefix: "~"
