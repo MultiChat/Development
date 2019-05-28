@@ -18,7 +18,7 @@ public class SpigotPlaceholderManager {
 		}
 		format = format.replace("%NICK%", NameManager.getInstance().getCurrentName(player.getUniqueId()));
 		format = format.replace("%WORLD%", player.getWorld().getName());
-		format = format.replace("%SERVER%", Bukkit.getServerName());
+		format = format.replace("%SERVER%", MultiChatSpigot.serverName);
 
 		return format + "%2$s";
 
@@ -35,7 +35,7 @@ public class SpigotPlaceholderManager {
 		}
 		format = format.replace("%NICK%", NameManager.getInstance().getCurrentName(player.getUniqueId()));
 		format = format.replace("%WORLD%", player.getWorld().getName());
-		format = format.replace("%SERVER%", Bukkit.getServerName());
+		format = format.replace("%SERVER%", MultiChatSpigot.serverName);
 
 		return format;
 		

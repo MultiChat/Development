@@ -55,6 +55,8 @@ public class CommandHandler implements CommandExecutor {
 
 					SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").startupConfig();
 					Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
+					
+					MultiChatSpigot.serverName = config.getString("server_name");
 
 					MultiChatSpigot.overrideGlobalFormat = config.getBoolean("override_global_format");
 					MultiChatSpigot.overrideGlobalFormatFormat = config.getString("override_global_format_format");

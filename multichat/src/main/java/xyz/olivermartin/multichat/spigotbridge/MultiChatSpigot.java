@@ -45,6 +45,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	private static Chat chat = null;
 	private static boolean vault;
 	private static boolean papi;
+	
+	public static String serverName = "SERVER_NAME";
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
@@ -106,6 +108,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
+		serverName = config.getString("server_name");
+		
 		overrideGlobalFormat = config.getBoolean("override_global_format");
 		overrideGlobalFormatFormat = config.getString("override_global_format_format");
 		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
