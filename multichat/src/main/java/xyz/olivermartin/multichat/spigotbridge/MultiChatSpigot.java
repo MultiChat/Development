@@ -45,7 +45,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	private static Chat chat = null;
 	private static boolean vault;
 	private static boolean papi;
-	
+
 	public static String serverName = "SERVER_NAME";
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
@@ -84,7 +84,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 	public static boolean setLocalFormat = false;
 	public static boolean forceMultiChatFormat = false;
-	
+
 	public static boolean showNicknamePrefix = false;
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
@@ -108,8 +108,10 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
-		serverName = config.getString("server_name");
-		
+		if (config.contains("server_name")) {
+			serverName = config.getString("server_name");
+		}
+
 		overrideGlobalFormat = config.getBoolean("override_global_format");
 		overrideGlobalFormatFormat = config.getString("override_global_format_format");
 		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
@@ -126,16 +128,16 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			}
 
 		}
-		
+
 		if (config.contains("show_nickname_prefix")) {
 			showNicknamePrefix = config.getBoolean("show_nickname_prefix");
 			nicknamePrefix = config.getString("nickname_prefix");
 			nicknameBlacklist = config.getStringList("nickname_blacklist");
 			if (config.contains("nickname_length_limit")) {
-				
+
 				nicknameMaxLength = config.getInt("nickname_length_limit");
 				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
-				
+
 			}
 		}
 

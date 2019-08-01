@@ -15,8 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import org.bstats.bungeecord.Metrics;
-
 import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
@@ -233,7 +231,7 @@ public class MultiChat extends Plugin implements Listener {
 	public void onEnable() {
 
 		instance = this;
-		
+
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
 
@@ -301,7 +299,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
-			
+
 			// Set up chat control stuff
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");

@@ -48,31 +48,12 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
-				<!-- Do not include the <configuration>...</configuration> part if you 
-					are using Sponge! -->
-				<configuration>
-					<relocations>
-						<relocation>
-							<pattern>org.bstats</pattern>
-							<!-- Replace this with your package! -->
-							<shadedPattern>xyz.olivermartin.bungee</shadedPattern>
-						</relocation>
-					</relocations>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
+				<version>3.1.0</version> <configuration> <relocations> <relocation> <pattern>org.bstats</pattern> 
+				<shadedPattern>xyz.olivermartin.bungee</shadedPattern> </relocation> </relocations> 
+				</configuration> <executions> <execution> <phase>package</phase> <goals> 
+				<goal>shade</goal> </goals> </execution> </executions> </plugin> -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -87,14 +68,14 @@
 
 	<dependencies>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.bstats</groupId>
 			<artifactId>bstats-bungeecord</artifactId>
 			<version>1.4</version>
 			<scope>compile</scope>
-    </dependency>
+		</dependency> -->
 
-    <dependency>
+		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.27.2.1</version>
