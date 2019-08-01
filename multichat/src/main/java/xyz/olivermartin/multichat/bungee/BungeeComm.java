@@ -88,7 +88,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:action", stream.toByteArray());
+		server.sendData("multichat:act", stream.toByteArray());
 
 	}
 
@@ -107,7 +107,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:paction", stream.toByteArray());
+		server.sendData("multichat:pact", stream.toByteArray());
 
 	}
 
@@ -173,16 +173,16 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:channel", stream.toByteArray());
+		server.sendData("multichat:ch", stream.toByteArray());
 
-		DebugManager.log("Sent message on multichat:channel channel!");
+		DebugManager.log("Sent message on multichat:ch channel!");
 
 	}
 
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
+		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:dn") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick")) ) {
 			return;
 		}
 
@@ -346,6 +346,46 @@ public class BungeeComm implements Listener {
 					if (opm.isPresent()) {
 
 						opm.get().suffix = suffix;
+						PlayerMetaManager.getInstance().updateDisplayName(uuid);
+
+					}
+
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		if (ev.getTag().equals("multichat:dn")) {
+
+			DebugManager.log("[multichat:dn] Got an incoming channel message!");
+
+			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
+			DataInputStream in = new DataInputStream(stream);
+
+			try {
+
+				UUID uuid = UUID.fromString(in.readUTF());
+				String spigotDisplayName = in.readUTF();
+				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
+
+				if (player == null) return;
+
+				synchronized (player) {
+
+					DebugManager.log("[multichat:dn] Player exists!");
+
+					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
+
+					if (opm.isPresent()) {
+
+						DebugManager.log("[multichat:dn] Player meta exists!");
+
+						DebugManager.log("[multichat:dn] The displayname received is: " + spigotDisplayName);
+
+						opm.get().spigotDisplayName = spigotDisplayName;
 						PlayerMetaManager.getInstance().updateDisplayName(uuid);
 
 					}

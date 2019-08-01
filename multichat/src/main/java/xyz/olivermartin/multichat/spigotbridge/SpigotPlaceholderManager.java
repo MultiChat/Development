@@ -1,6 +1,5 @@
 package xyz.olivermartin.multichat.spigotbridge;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import net.milkbowl.vault.chat.Chat;
@@ -18,14 +17,14 @@ public class SpigotPlaceholderManager {
 		}
 		format = format.replace("%NICK%", NameManager.getInstance().getCurrentName(player.getUniqueId()));
 		format = format.replace("%WORLD%", player.getWorld().getName());
-		format = format.replace("%SERVER%", Bukkit.getServerName());
+		format = format.replace("%SERVER%", MultiChatSpigot.serverName);
 
 		return format + "%2$s";
 
 	}
-	
+
 	public static String buildMultiChatPlaceholder(Player player, String format) {
-		
+
 		format = format.replace("%NAME%", player.getName());
 		format = format.replace("%DISPLAYNAME%", "%1$s"); // This might work?
 		if (MultiChatSpigot.hookedVault()) {
@@ -35,10 +34,10 @@ public class SpigotPlaceholderManager {
 		}
 		format = format.replace("%NICK%", NameManager.getInstance().getCurrentName(player.getUniqueId()));
 		format = format.replace("%WORLD%", player.getWorld().getName());
-		format = format.replace("%SERVER%", Bukkit.getServerName());
+		format = format.replace("%SERVER%", MultiChatSpigot.serverName);
 
 		return format;
-		
+
 	}
 
 }

@@ -56,6 +56,10 @@ public class CommandHandler implements CommandExecutor {
 					SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").startupConfig();
 					Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
+					if (config.contains("server_name")) {
+						MultiChatSpigot.serverName = config.getString("server_name");
+					}
+
 					MultiChatSpigot.overrideGlobalFormat = config.getBoolean("override_global_format");
 					MultiChatSpigot.overrideGlobalFormatFormat = config.getString("override_global_format_format");
 					MultiChatSpigot.overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
@@ -77,6 +81,12 @@ public class CommandHandler implements CommandExecutor {
 						MultiChatSpigot.showNicknamePrefix = config.getBoolean("show_nickname_prefix");
 						MultiChatSpigot.nicknamePrefix = config.getString("nickname_prefix");
 						MultiChatSpigot.nicknameBlacklist = config.getStringList("nickname_blacklist");
+						if (config.contains("nickname_length_limit")) {
+
+							MultiChatSpigot.nicknameMaxLength = config.getInt("nickname_length_limit");
+							MultiChatSpigot.nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
+
+						}
 					}
 
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
@@ -137,11 +147,22 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
-				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > 20 && !sender.hasPermission("multichatspigot.nick.anylength")) {
+				if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
+					// Include formatting codes in the nickname length
+					if (args[0].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
-					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
-					return true;
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
+						return true;
 
+					}
+				} else {
+					// Do not include formatting codes in the nickname length
+					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
+						return true;
+
+					}
 				}
 
 				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
@@ -221,11 +242,22 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 
-			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > 20 && !sender.hasPermission("multichatspigot.nick.anylength")) {
+			if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
+				// Include formatting codes in the nickname length
+				if (args[1].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
-				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max 20 characters! (Excluding format codes)");
-				return true;
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
+					return true;
 
+				}
+			} else {
+				// Do not include formatting codes in the nickname length
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
+					return true;
+
+				}
 			}
 
 			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));

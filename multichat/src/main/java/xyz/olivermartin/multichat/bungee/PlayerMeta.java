@@ -7,6 +7,7 @@ public class PlayerMeta {
 	public UUID uuid;
 	public String name;
 	public String nick;
+	public String spigotDisplayName;
 	public String prefix;
 	public String suffix;
 	public String world;
@@ -15,12 +16,17 @@ public class PlayerMeta {
 		this.uuid = uuid;
 		this.name = name;
 		nick = name;
+		spigotDisplayName = nick;
 		prefix = "";
 		suffix = "";
 		world = "";
 	}
 	
-	public String getDisplayName(String format) {
+	public String getSpigotDisplayname() {
+		return this.spigotDisplayName;
+	}
+	
+	/*public String getDisplayName(String format) {
 		
 		String displayName = format;
 		
@@ -34,6 +40,6 @@ public class PlayerMeta {
 		
 		return displayName;
 		
-	}
+	}*/
 
 }

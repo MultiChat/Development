@@ -5,9 +5,14 @@
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.7.3</version>
+	<version>1.7.4</version>
 
 	<repositories>
+
+		<repository>
+			<id>CodeMC</id>
+			<url>https://repo.codemc.org/repository/maven-public</url>
+		</repository>
 
 		<repository>
 			<id>sponge</id>
@@ -43,6 +48,12 @@
 
 	<build>
 		<plugins>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-shade-plugin</artifactId> 
+				<version>3.1.0</version> <configuration> <relocations> <relocation> <pattern>org.bstats</pattern> 
+				<shadedPattern>xyz.olivermartin.bungee</shadedPattern> </relocation> </relocations> 
+				</configuration> <executions> <execution> <phase>package</phase> <goals> 
+				<goal>shade</goal> </goals> </execution> </executions> </plugin> -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -57,6 +68,19 @@
 
 	<dependencies>
 
+		<!-- <dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bungeecord</artifactId>
+			<version>1.4</version>
+			<scope>compile</scope>
+		</dependency> -->
+
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.27.2.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.spongepowered</groupId>
 			<artifactId>spongeapi</artifactId>
@@ -67,7 +91,7 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.13-SNAPSHOT</version>
+			<version>1.14-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
@@ -75,7 +99,7 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.13-SNAPSHOT</version>
+			<version>1.14-SNAPSHOT</version>
 			<type>javadoc</type>
 			<scope>provided</scope>
 		</dependency>
@@ -83,7 +107,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.13.1-R0.1-SNAPSHOT</version>
+			<version>1.14.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 

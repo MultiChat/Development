@@ -62,7 +62,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.3", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.7.4", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge implements CommandExecutor {
 
 	public static SimpleMutableMessageChannel multichatChannel;
@@ -77,6 +77,7 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	static RawDataChannel prefixChannel;
 	static RawDataChannel suffixChannel;
+	static RawDataChannel displayNameChannel;
 	static RawDataChannel nickChannel;
 	static RawDataChannel worldChannel;
 	static RawDataChannel channelChannel;
@@ -115,7 +116,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
-		
+
 		// DEBUG MODE
 		//DebugManager.setDebug(true);
 
@@ -184,14 +185,15 @@ public final class MultiChatSponge implements CommandExecutor {
 		ChannelBinding.RawDataChannel commChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:comm");
 		ChannelBinding.RawDataChannel chatChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:chat");
 
-		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:action");
-		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:paction");
+		ChannelBinding.RawDataChannel actionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:act");
+		ChannelBinding.RawDataChannel playerActionChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:pact");
 
 		ChannelBinding.RawDataChannel prefixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:prefix");
 		ChannelBinding.RawDataChannel suffixChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:suffix");
+		ChannelBinding.RawDataChannel displayNameChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:dn");
 		ChannelBinding.RawDataChannel worldChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:world");
 		ChannelBinding.RawDataChannel nickChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:nick");
-		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:channel");
+		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ch");
 		ChannelBinding.RawDataChannel ignoreChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ignore");
 
 		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
@@ -210,6 +212,7 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		MultiChatSponge.prefixChannel = prefixChannel;
 		MultiChatSponge.suffixChannel = suffixChannel;
+		MultiChatSponge.displayNameChannel = displayNameChannel;
 		MultiChatSponge.nickChannel = nickChannel;
 		MultiChatSponge.worldChannel = worldChannel;
 		MultiChatSponge.channelChannel = channelChannel;
@@ -257,6 +260,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		Sponge.getChannelRegistrar().unbindChannel(actionChannel);
 		Sponge.getChannelRegistrar().unbindChannel(prefixChannel);
 		Sponge.getChannelRegistrar().unbindChannel(suffixChannel);
+		Sponge.getChannelRegistrar().unbindChannel(displayNameChannel);
 		Sponge.getChannelRegistrar().unbindChannel(nickChannel);
 		Sponge.getChannelRegistrar().unbindChannel(worldChannel);
 		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
@@ -335,6 +339,12 @@ public final class MultiChatSponge implements CommandExecutor {
 			final String finalDisplayName = displayNameFormat;
 
 			Sponge.getServer().getPlayer(playername).ifPresent(x -> x.offer(Keys.DISPLAY_NAME, Text.of(finalDisplayName)));
+
+			displayNameChannel.sendTo(player, buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(finalDisplayName));
+
+		} else {
+
+			displayNameChannel.sendTo(player, buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(playername));
 
 		}
 

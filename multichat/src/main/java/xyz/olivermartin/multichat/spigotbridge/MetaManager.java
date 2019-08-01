@@ -51,6 +51,9 @@ public class MetaManager {
 				Bukkit.getPlayer(playername).setDisplayName(displayNameFormat);
 				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
 			}
+			
+			comm.sendPluginChannelMessage("multichat:dn", Bukkit.getPlayer(playername).getUniqueId(), Bukkit.getPlayer(playername).getDisplayName());
+			
 		} else {
 
 			if (setDisplayName) {
@@ -63,6 +66,8 @@ public class MetaManager {
 				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
 
 			}
+			
+			comm.sendPluginChannelMessage("multichat:dn", Bukkit.getPlayer(playername).getUniqueId(), Bukkit.getPlayer(playername).getDisplayName());
 
 		}
 

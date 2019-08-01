@@ -46,6 +46,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	private static boolean vault;
 	private static boolean papi;
 
+	public static String serverName = "SERVER_NAME";
+
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
@@ -82,10 +84,12 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static String localChatFormat = "&7&lLOCAL &f> &f%DISPLAYNAME%&f: ";
 	public static boolean setLocalFormat = false;
 	public static boolean forceMultiChatFormat = false;
-	
+
 	public static boolean showNicknamePrefix = false;
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
+	public static int nicknameMaxLength = 20;
+	public static boolean nicknameLengthIncludeFormatting = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -104,6 +108,10 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
+		if (config.contains("server_name")) {
+			serverName = config.getString("server_name");
+		}
+
 		overrideGlobalFormat = config.getBoolean("override_global_format");
 		overrideGlobalFormatFormat = config.getString("override_global_format_format");
 		overrideAllMultiChatFormats = config.getBoolean("override_all_multichat_formatting");
@@ -120,11 +128,17 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			}
 
 		}
-		
+
 		if (config.contains("show_nickname_prefix")) {
 			showNicknamePrefix = config.getBoolean("show_nickname_prefix");
 			nicknamePrefix = config.getString("nickname_prefix");
 			nicknameBlacklist = config.getStringList("nickname_blacklist");
+			if (config.contains("nickname_length_limit")) {
+
+				nicknameMaxLength = config.getInt("nickname_length_limit");
+				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
+
+			}
 		}
 
 		File f = new File(configDir, nameDataFile);
@@ -222,13 +236,14 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:chat");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:dn");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:action", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:paction", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:channel", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", MultiChatPluginMessageListener.getInstance());
 
 		// Register listeners

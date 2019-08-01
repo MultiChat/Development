@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.7.3";
+	public static final String LATEST_VERSION = "1.7.4";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.7.3",
 			"1.7.2",
 			"1.7.1",
 			"1.7",
@@ -231,6 +232,9 @@ public class MultiChat extends Plugin implements Listener {
 
 		instance = this;
 
+		@SuppressWarnings("unused")
+		Metrics metrics = new Metrics(this);
+
 		configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] Creating plugin directory!");
@@ -277,12 +281,13 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:comm");
 			getProxy().registerChannel("multichat:prefix");
 			getProxy().registerChannel("multichat:suffix");
+			getProxy().registerChannel("multichat:dn");
 			getProxy().registerChannel("multichat:nick");
 			getProxy().registerChannel("multichat:world");
-			getProxy().registerChannel("multichat:action");
-			getProxy().registerChannel("multichat:paction");
+			getProxy().registerChannel("multichat:act");
+			getProxy().registerChannel("multichat:pact");
 			getProxy().registerChannel("multichat:chat");
-			getProxy().registerChannel("multichat:channel");
+			getProxy().registerChannel("multichat:ch");
 			getProxy().registerChannel("multichat:ignore");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
@@ -294,7 +299,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Run start-up routines
 			Startup();
 			UUIDNameManager.Startup();
-			
+
 			// Set up chat control stuff
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
