@@ -330,7 +330,7 @@ public final class MultiChatSponge implements CommandExecutor {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", prefix);
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", suffix);
-			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "�");
+			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
 
 			final String finalDisplayName = displayNameFormat;
 
