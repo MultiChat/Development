@@ -143,7 +143,7 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
-				//Make sure nickname is not just a formatting codes and would appear empty
+				//Make sure nickname is not formatting codes that would appear empty
 				if(NameManager.getInstance().stripAllFormattingCodes(args[0]).length() < 1) {
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname cannot be empty.");
 					return true;
