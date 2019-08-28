@@ -330,7 +330,7 @@ public final class MultiChatSponge implements CommandExecutor {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", prefix);
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", suffix);
-			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
+			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "ï¿½");
 
 			final String finalDisplayName = displayNameFormat;
 
@@ -371,6 +371,11 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		String strippedNickname = stripAllFormattingCodes(nickname);
 
+		if(strippedNickname.length() < 1) {
+			sender.sendMessage(Text.of("Sorry, your nickname cannot be empty."));
+			return CommandResult.success();
+		}
+		
 		UserStorageService uss = Sponge.getServiceManager().provideUnchecked(UserStorageService.class);
 		Optional<User> lookedUpName = uss.get(strippedNickname);
 

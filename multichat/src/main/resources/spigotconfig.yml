@@ -22,7 +22,7 @@ version: "1.7.3" #
 override_global_format: false
 
 # The format to use for the global chat if the setting above is set to true
-# 
+#
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
 # %DISPLAYNAME% = The display name of the sender
@@ -38,7 +38,7 @@ override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 # If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
 # This means that if a plugin such as Towny manages the chat format locally, then this will be used instead.
 # MultiChat will still send the message to all the other servers.
-# 
+#
 # NOTE: THIS IS DONE ON A BEST EFFORT BASIS! (MultiChat is a chat formatting plugin so is designed to format the chat!)
 override_all_multichat_formatting: false
 
@@ -56,7 +56,7 @@ force_multichat_format: false
 set_local_format: true
 
 # The local chat format to set if MultiChat is to manage the format
-# 
+#
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
 # %DISPLAYNAME% = The display name of the sender
@@ -106,6 +106,9 @@ nickname_prefix: "~"
 
 # The maximum length for nicknames
 nickname_length_limit: 20
+
+# Minimium length for nicknames
+nickname_length_min: 3
 
 # Should formatting codes such as "&3" be counted in the length of the nickname?
 nickname_length_limit_formatting: false
