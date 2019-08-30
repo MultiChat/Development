@@ -46,7 +46,7 @@ public class MetaManager {
 				displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
 				displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", chat.getPlayerPrefix(Bukkit.getPlayer(playername)));
 				displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", chat.getPlayerSuffix(Bukkit.getPlayer(playername)));
-				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "ง");
+				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "ยง");
 
 				Bukkit.getPlayer(playername).setDisplayName(displayNameFormat);
 				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
@@ -57,7 +57,7 @@ public class MetaManager {
 
 				displayNameFormat = displayNameFormat.replaceAll("%NICK%", nickname);
 				displayNameFormat = displayNameFormat.replaceAll("%NAME%", playername);
-				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "ง");
+				displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "ยง");
 
 				Bukkit.getPlayer(playername).setDisplayName(displayNameFormat);
 				Bukkit.getPlayer(playername).setPlayerListName(displayNameFormat);
