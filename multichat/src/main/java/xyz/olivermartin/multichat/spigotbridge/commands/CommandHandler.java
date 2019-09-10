@@ -267,11 +267,25 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 
 				}
+				
+				if (args[1].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
+					return true;
+
+				}
 			} else {
 				// Do not include formatting codes in the nickname length
 				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
+					return true;
+
+				}
+				
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
 					return true;
 
 				}
