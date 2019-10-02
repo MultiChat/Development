@@ -270,7 +270,7 @@ public class CommandHandler implements CommandExecutor {
 				
 				if (args[1].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
-					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Including format codes)");
 					return true;
 
 				}
@@ -283,7 +283,7 @@ public class CommandHandler implements CommandExecutor {
 
 				}
 				
-				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
 					return true;
