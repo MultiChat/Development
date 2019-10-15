@@ -25,6 +25,8 @@ public class MetaManager {
 	public void updatePlayerMeta(String playername, boolean setDisplayName, String displayNameFormat) {
 
 		String nickname;
+		
+		if (Bukkit.getPlayer(playername) == null) return;
 
 		nickname = NameManager.getInstance().getCurrentName(Bukkit.getPlayer(playername).getUniqueId());
 
