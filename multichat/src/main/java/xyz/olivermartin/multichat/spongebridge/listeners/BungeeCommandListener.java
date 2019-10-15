@@ -5,6 +5,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
+import org.spongepowered.api.scheduler.Task;
 
 /**
  * Used to execute command send from MultiChat on bungeecord
@@ -22,8 +23,13 @@ public class BungeeCommandListener implements RawDataListener {
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
-		String command = data.getUTF(0);
-		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
+		Task.Builder taskBuilder = Task.builder();
+		taskBuilder.execute(
+				() -> {
+					String command = data.getUTF(0);
+					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
+				}
+				);
 
 	}
 }
