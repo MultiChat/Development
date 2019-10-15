@@ -30,6 +30,7 @@ public class BungeeCommandListener implements RawDataListener {
 					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
 				}
 				);
+		taskBuilder.submit(Sponge.getPluginManager().getPlugin("multichat").get().getInstance().get());
 
 	}
 }
