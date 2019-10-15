@@ -24,12 +24,16 @@ public class BungeeCommandListener implements RawDataListener {
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
 		Task.Builder taskBuilder = Task.builder();
-		taskBuilder.execute(
-				() -> {
-					String command = data.getUTF(0);
-					Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
-				}
-				);
+		final String command = data.getUTF(0);
+		
+		taskBuilder.execute(new Runnable() {
+		    public void run() {
+				Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
+		    }
+		});
+		
+		taskBuilder.delayTicks(1);
+		
 		taskBuilder.submit(Sponge.getPluginManager().getPlugin("multichat").get().getInstance().get());
 
 	}
