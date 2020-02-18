@@ -1,36 +1,45 @@
 package xyz.olivermartin.multichat.spigotbridge.database;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public abstract class GenericDatabase {
 
 	protected String url;
 	private boolean ready;
-	
-	public GenericDatabase(String url) {
+
+	public GenericDatabase(String url) throws SQLException {
 		this.url = url;
 		ready = setupDatabase(url);
 	}
-	
+
 	public String getURL() {
 		return this.url;
 	}
-	
+
 	public boolean isReady() {
 		return this.ready;
 	}
+
+	protected abstract boolean setupDatabase(String url) throws SQLException;
+
+	protected abstract void disconnect() throws SQLException;
+
+	protected abstract boolean connect() throws SQLException;
+
+	public abstract ResultSet query(String sql) throws SQLException;
+
+	public abstract void update(String sql) throws SQLException;
 	
-	protected abstract boolean setupDatabase(String url);
-	
-	protected abstract void disconnect();
-	
-	protected abstract boolean connect();
-	
-	public void connectToDatabase() {
+	public abstract void execute(String sql) throws SQLException;
+
+	public void connectToDatabase() throws SQLException {
 		this.ready = connect();
 	}
-	
-	public void disconnectFromDatabase() {
+
+	public void disconnectFromDatabase() throws SQLException {
 		disconnect();
 		this.ready = false;
 	}
-	
+
 }

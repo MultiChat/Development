@@ -151,7 +151,22 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			FileInputStream saveFile;
 			try {
 				saveFile = new FileInputStream(file);
-				NameManager.getInstance().loadNicknameData(saveFile);
+				if (NameManager.getInstance() instanceof FileNameManager) {
+					((FileNameManager)NameManager.getInstance()).loadNicknameData(saveFile);
+				} else {
+
+
+
+					// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					System.err.println("NEED TO IMPLEMENT NICKNAME FILE AND SQL MODE SWITCHING!!!");
+
+
+
+
+
+
+				}
+
 			} catch (FileNotFoundException e) {
 				getLogger().info(logPrefix + "[ERROR] Could not load nickname data");
 				e.printStackTrace();
@@ -195,7 +210,21 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 				FileOutputStream saveFile2;
 				try {
 					saveFile2 = new FileOutputStream(file);
-					NameManager.getInstance().saveNicknameData(saveFile2);
+					if (NameManager.getInstance() instanceof FileNameManager) {
+						((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile2);
+					} else {
+
+
+
+						// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+						System.err.println("NEED TO IMPLEMENT NICKNAME FILE AND SQL MODE SWITCHING!!!");
+
+
+
+
+
+
+					}
 				} catch (FileNotFoundException e) {
 					getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
 					e.printStackTrace();
@@ -220,7 +249,22 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			FileOutputStream saveFile;
 			try {
 				saveFile = new FileOutputStream(file);
-				NameManager.getInstance().saveNicknameData(saveFile);
+				if (NameManager.getInstance() instanceof FileNameManager) {
+					((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile);
+				} else {
+
+
+
+					// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					System.err.println("NEED TO IMPLEMENT NICKNAME FILE AND SQL MODE SWITCHING!!!");
+
+
+
+
+
+
+				}
+
 			} catch (FileNotFoundException e) {
 				getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
 				e.printStackTrace();
@@ -312,7 +356,21 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		FileOutputStream saveFile;
 		try {
 			saveFile = new FileOutputStream(file);
-			NameManager.getInstance().saveNicknameData(saveFile);
+			if (NameManager.getInstance() instanceof FileNameManager) {
+				((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile);
+			} else {
+
+
+
+				// TODO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				System.err.println("NEED TO IMPLEMENT NICKNAME FILE AND SQL MODE SWITCHING!!!");
+
+
+
+
+
+
+			}
 		} catch (FileNotFoundException e) {
 			getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
 			e.printStackTrace();

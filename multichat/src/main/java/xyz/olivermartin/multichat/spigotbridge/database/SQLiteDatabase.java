@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SQLiteDatabase extends GenericDatabase {
@@ -11,31 +12,26 @@ public class SQLiteDatabase extends GenericDatabase {
 	private static final String URL_PREFIX = "jdbc:sqlite:";
 	private Connection conn;
 
-	public SQLiteDatabase(File path, String filename) {
+	public SQLiteDatabase(File path, String filename) throws SQLException {
 		super(URL_PREFIX + path + File.separator + filename);
 	}
 
-	protected boolean setupDatabase(String url) {
+	protected boolean setupDatabase(String url) throws SQLException {
 
-		try (Connection conn = DriverManager.getConnection(url)) {
+		Connection conn = DriverManager.getConnection(url);
 
-			if (conn != null) {
-				DatabaseMetaData meta = conn.getMetaData();
-				System.out.println("The driver name is " + meta.getDriverName());
-				System.out.println("A new database has been created.");
+		if (conn != null) {
+			DatabaseMetaData meta = conn.getMetaData();
+			System.out.println("The driver name is " + meta.getDriverName());
+			System.out.println("A new database has been created.");
 
-				this.conn = conn;
+			this.conn = conn;
 
-				// Database successfully created
-				return true;
-			}
-
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			// Database successfully created
+			return true;
+		} else {
+			return false;
 		}
-
-		// Database not successfully created
-		return false;
 
 	}
 
@@ -55,7 +51,7 @@ public class SQLiteDatabase extends GenericDatabase {
 	}
 
 	@Override
-	protected boolean connect() {
+	protected boolean connect() throws SQLException {
 
 		if (conn == null) {
 
@@ -73,6 +69,28 @@ public class SQLiteDatabase extends GenericDatabase {
 
 		// Already connected
 		return true;
+	}
+
+	@Override
+	public ResultSet query(String sql) throws SQLException {
+
+		ResultSet results = conn.createStatement().executeQuery(sql);
+		return results;
+
+	}
+
+	@Override
+	public void update(String sql) throws SQLException {
+
+		conn.createStatement().executeUpdate(sql);
+
+	}
+
+	@Override
+	public void execute(String sql) throws SQLException {
+
+		conn.createStatement().execute(sql);
+
 	}
 
 }
