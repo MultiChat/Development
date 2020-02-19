@@ -119,6 +119,18 @@ public class DatabaseManager {
 	public void setURLMySQL(String url) {
 		this.databaseURLMySQL = url;
 	}
+	
+	public void setUsernameMySQL(String user) {
+		this.databaseUsernameMySQL = user;
+	}
+	
+	public void setPasswordMySQL(String pass) {
+		this.databasePasswordMySQL = pass;
+	}
+
+	public void setMode(DatabaseMode dbm) {
+		databaseMode = dbm;
+	}
 
 	public GenericDatabase createDatabase(String name) throws SQLException {
 		return createDatabase(name, name);

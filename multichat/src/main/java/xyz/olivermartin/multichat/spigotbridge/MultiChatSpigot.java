@@ -25,6 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
 import xyz.olivermartin.multichat.spigotbridge.database.DatabaseManager;
+import xyz.olivermartin.multichat.spigotbridge.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerMonitor;
@@ -99,7 +100,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 		// Read nickname data
 
-		configDir = getDataFolder();
+		configDir = getDataFolder().getAbsoluteFile();
 		legacyNicknameFile = new File(configDir, "Nicknames.dat");
 
 		if (!getDataFolder().exists()) {
@@ -144,25 +145,61 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			}
 			if (config.contains("nickname_sql")) {
 
-				DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\")); // TODO
-				try {
+				nicknameSQL = config.getBoolean("nickname_sql");
 
-					DatabaseManager.getInstance().createDatabase("multichatspigot.db"); // TODO
+				if (nicknameSQL) {
 
-					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
-					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
-					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+					if (config.getBoolean("mysql")) {
 
-					nicknameSQL = config.getBoolean("nickname_sql");
-					NameManager.useSQL(nicknameSQL);
+						DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
 
-				} catch (SQLException e) {
-					nicknameSQL = false;
-					NameManager.useSQL(false);
-					System.err.println("Could not enable database! Using files...");
-					e.printStackTrace();
+						DatabaseManager.getInstance().setURLMySQL(config.getString("mysql_url"));
+						DatabaseManager.getInstance().setUsernameMySQL(config.getString("mysql_user"));
+						DatabaseManager.getInstance().setPasswordMySQL(config.getString("mysql_pass"));
+
+						try {
+
+							DatabaseManager.getInstance().createDatabase("multichatspigot.db", "multichatspigot");
+
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+
+							NameManager.useSQL(nicknameSQL);
+
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							NameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
+						}
+
+					} else {
+
+						DatabaseManager.getInstance().setMode(DatabaseMode.SQLite);
+
+						DatabaseManager.getInstance().setPathSQLite(configDir);
+
+						try {
+
+							DatabaseManager.getInstance().createDatabase("multichatspigot.db");
+
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+
+							NameManager.useSQL(nicknameSQL);
+
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							NameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
+						}
+
+					}
+
 				}
-
 
 			}
 		}
