@@ -28,6 +28,7 @@ public class SQLiteDatabase extends GenericDatabase {
 			this.conn = conn;
 
 			// Database successfully created
+		
 			return true;
 		} else {
 			return false;

@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.spigotbridge;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -43,11 +44,16 @@ public class SQLNameManager extends NameManager {
 		if (connected) {
 
 			try {
-				spigotdatabase.connectToDatabase();
-				ResultSet results = spigotdatabase.query("SELECT f_nick FROM [name_data] WHERE id = '" + uuid.toString() + "';");
-				results.next();
-				String name = results.getString("f_nick");
-				spigotdatabase.disconnectFromDatabase();
+
+				String name;
+
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
+					ResultSet results = spigotdatabase.query("SELECT f_nick FROM [name_data] WHERE id = '" + uuid.toString() + "';");
+					results.next();
+					name = results.getString("f_nick");
+					spigotdatabase.disconnectFromDatabase();
+				}
 
 				if (MultiChatSpigot.showNicknamePrefix && withPrefix) {
 					return MultiChatSpigot.nicknamePrefix + name;
@@ -73,11 +79,14 @@ public class SQLNameManager extends NameManager {
 		if (connected) {
 
 			try {
-				spigotdatabase.connectToDatabase();
-				ResultSet results = spigotdatabase.query("SELECT f_name FROM [name_data] WHERE id = '" + uuid.toString() + "';");
-				results.next();
-				String name = results.getString("f_name");
-				spigotdatabase.disconnectFromDatabase();
+				String name;
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
+					ResultSet results = spigotdatabase.query("SELECT f_name FROM [name_data] WHERE id = '" + uuid.toString() + "';");
+					results.next();
+					name = results.getString("f_name");
+					spigotdatabase.disconnectFromDatabase();
+				}
 
 				return name;
 
@@ -101,16 +110,19 @@ public class SQLNameManager extends NameManager {
 		if (connected) {
 
 			try {
-				spigotdatabase.connectToDatabase();
-				ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_nick = '" + nickname + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.empty();
-				} else {
-					UUID id = UUID.fromString(results.getString("id"));
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.of(id);
+
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
+					ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_nick = '" + nickname + "';");
+					results.next();
+					if (results.isClosed()) {
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.empty();
+					} else {
+						UUID id = UUID.fromString(results.getString("id"));
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.of(id);
+					}
 				}
 
 			} catch (SQLException e) {
@@ -133,16 +145,19 @@ public class SQLNameManager extends NameManager {
 		if (connected) {
 
 			try {
-				spigotdatabase.connectToDatabase();
-				ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_name = '" + username + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.empty();
-				} else {
-					UUID id = UUID.fromString(results.getString("id"));
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.of(id);
+
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
+					ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_name = '" + username + "';");
+					results.next();
+					if (results.isClosed()) {
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.empty();
+					} else {
+						UUID id = UUID.fromString(results.getString("id"));
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.of(id);
+					}
 				}
 
 			} catch (SQLException e) {
@@ -160,6 +175,11 @@ public class SQLNameManager extends NameManager {
 	@Override
 	public void registerPlayer(Player player) {
 
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
 		UUID uuid = player.getUniqueId();
 		String username = player.getName();
 		String oldUsername;
@@ -171,11 +191,13 @@ public class SQLNameManager extends NameManager {
 			if (!oldUsername.equalsIgnoreCase(username)) {
 
 				try {
-					spigotdatabase.connectToDatabase();
+					synchronized (spigotdatabase) {
+						spigotdatabase.connectToDatabase();
 
-					spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
 
-					spigotdatabase.disconnectFromDatabase();
+						spigotdatabase.disconnectFromDatabase();
+					}
 
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -186,11 +208,13 @@ public class SQLNameManager extends NameManager {
 		} else {
 
 			try {
-				spigotdatabase.connectToDatabase();
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
 
-				spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
+					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
 
-				spigotdatabase.disconnectFromDatabase();
+					spigotdatabase.disconnectFromDatabase();
+				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -205,6 +229,11 @@ public class SQLNameManager extends NameManager {
 
 	public void testRegisterFakePlayer(UUID uuid, String username) {
 
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
 		String oldUsername;
 
 		if (existsUUID(uuid)) {
@@ -214,11 +243,13 @@ public class SQLNameManager extends NameManager {
 			if (!oldUsername.equalsIgnoreCase(username)) {
 
 				try {
-					spigotdatabase.connectToDatabase();
+					synchronized (spigotdatabase) {
+						spigotdatabase.connectToDatabase();
 
-					spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
 
-					spigotdatabase.disconnectFromDatabase();
+						spigotdatabase.disconnectFromDatabase();
+					}
 
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -229,11 +260,13 @@ public class SQLNameManager extends NameManager {
 		} else {
 
 			try {
-				spigotdatabase.connectToDatabase();
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
 
-				spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
+					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
 
-				spigotdatabase.disconnectFromDatabase();
+					spigotdatabase.disconnectFromDatabase();
+				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -247,17 +280,24 @@ public class SQLNameManager extends NameManager {
 
 	public boolean existsUUID(UUID uuid) {
 
-		try {
-			spigotdatabase.connectToDatabase();
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return false;
+		}
 
-			ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE id = '" + uuid.toString() + "';");
-			results.next();
-			if (results.isClosed()) {
-				spigotdatabase.disconnectFromDatabase();
-				return false;
-			} else {
-				spigotdatabase.disconnectFromDatabase();
-				return true;
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE id = '" + uuid.toString() + "';");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return true;
+				}
 			}
 
 		} catch (SQLException e) {
@@ -270,6 +310,11 @@ public class SQLNameManager extends NameManager {
 	@Override
 	public void registerOfflinePlayerByUUID(UUID uuid, String username) {
 
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
 		if (existsUUID(uuid)) {
 
 			/*
@@ -279,11 +324,13 @@ public class SQLNameManager extends NameManager {
 		} else {
 
 			try {
-				spigotdatabase.connectToDatabase();
+				synchronized (spigotdatabase) {
+					spigotdatabase.connectToDatabase();
 
-				spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
+					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "', '" + username.toLowerCase() + "', '" + username + "');");
 
-				spigotdatabase.disconnectFromDatabase();
+					spigotdatabase.disconnectFromDatabase();
+				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -303,37 +350,237 @@ public class SQLNameManager extends NameManager {
 
 	@Override
 	public void setNickname(UUID uuid, String nickname) {
-		// TODO Auto-generated method stub
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
+		if (!existsUUID(uuid)) {
+			return;
+		}
+
+		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
+
+		if (otherPlayerHasNickname(unformattedNickname, uuid)) {
+			return;
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				spigotdatabase.update("UPDATE [name_data] SET u_nick = '" + unformattedNickname + "', f_nick = '" + nickname + "' WHERE id = '" + uuid.toString() + "';");
+
+				spigotdatabase.disconnectFromDatabase();
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public boolean existsPlayer(String username) {
-		// TODO Auto-generated method stub
-		return false;
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return false;
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT u_name FROM name_data WHERE u_name = '" + username.toLowerCase() + "';");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return true;
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	@Override
 	public boolean existsNickname(String nickname) {
-		// TODO Auto-generated method stub
-		return false;
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return false;
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT u_nick FROM name_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return true;
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
+
+	public boolean otherPlayerHasNickname(String nickname, UUID uuid) {
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return false;
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT id, u_nick FROM name_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
+				} else {
+					if (results.getString("id") == uuid.toString()) {
+						spigotdatabase.disconnectFromDatabase();
+						return false;
+					} else {
+						spigotdatabase.disconnectFromDatabase();
+						return true;
+					}
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
 	}
 
 	@Override
 	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return Optional.empty();
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT id, f_name, f_nick FROM name_data WHERE (u_nick LIKE '%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%');");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.empty();
+				} else {
+
+					Set<UUID> uuids = new HashSet<UUID>();
+					uuids.add(UUID.fromString(results.getString("id")));
+
+					while (results.next()) {
+						uuids.add(UUID.fromString(results.getString("id")));
+					}
+
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.of(uuids);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+
 	}
 
 	@Override
 	public Optional<Set<UUID>> getPartialNameMatches(String name) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return Optional.empty();
+		}
+
+		try {
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT id, f_name FROM name_data WHERE (u_name LIKE '%" + name.toLowerCase() + "%');");
+				results.next();
+				if (results.isClosed()) {
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.empty();
+				} else {
+
+					Set<UUID> uuids = new HashSet<UUID>();
+					uuids.add(UUID.fromString(results.getString("id")));
+
+					while (results.next()) {
+						uuids.add(UUID.fromString(results.getString("id")));
+					}
+
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.of(uuids);
+				}
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+
 	}
 
 	@Override
 	public void removeNickname(UUID uuid) {
-		// TODO Auto-generated method stub
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
+		if (!existsUUID(uuid)) {
+			return;
+		}
+
+		try {
+			String f_name;
+			synchronized (spigotdatabase) {
+				spigotdatabase.connectToDatabase();
+
+				ResultSet results = spigotdatabase.query("SELECT f_name FROM name_data WHERE id = '" + uuid.toString() + "';");
+				results.next();
+
+				f_name = results.getString("f_name");
+
+				spigotdatabase.disconnectFromDatabase();
+			}
+
+			setNickname(uuid, f_name);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 

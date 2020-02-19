@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
+import xyz.olivermartin.multichat.spigotbridge.database.DatabaseManager;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerMonitor;
@@ -90,6 +92,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
 	public static int nicknameMaxLength = 20;
 	public static boolean nicknameLengthIncludeFormatting = false;
+	public static boolean nicknameSQL = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
@@ -137,6 +140,29 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 				nicknameMaxLength = config.getInt("nickname_length_limit");
 				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
+
+			}
+			if (config.contains("nickname_sql")) {
+
+				DatabaseManager.getInstance().setPath(new File("C:\\multichat\\db\\")); // TODO
+				try {
+
+					DatabaseManager.getInstance().createDatabase("multichatspigot.db"); // TODO
+
+					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
+					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
+					DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+
+					nicknameSQL = config.getBoolean("nickname_sql");
+					NameManager.useSQL(nicknameSQL);
+
+				} catch (SQLException e) {
+					nicknameSQL = false;
+					NameManager.useSQL(false);
+					System.err.println("Could not enable database! Using files...");
+					e.printStackTrace();
+				}
+
 
 			}
 		}

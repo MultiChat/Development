@@ -57,7 +57,7 @@ public class DatabaseManager {
 
 			GenericDatabase db = odb.get();
 			UUID uuid1 = UUID.randomUUID();
-			
+
 			try {
 				db.connectToDatabase();
 				db.execute("DROP TABLE IF EXISTS name_data;");
@@ -71,28 +71,36 @@ public class DatabaseManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 			SQLNameManager sqlnm = new SQLNameManager();
 			System.out.println(sqlnm.getCurrentName(uuid1));
 			System.out.println(sqlnm.getName(uuid1));
-			
+
 			//if (sqlnm.getUUIDFromUnformattedNickname("Test").isPresent()) System.out.println(":(");
 			//if (sqlnm.getUUIDFromUnformattedNickname("revilo").isPresent()) System.out.println(":)");
-			
+
 			System.out.println(sqlnm.getUUIDFromName("Revilo410").get());
-			
+
 			System.out.println(sqlnm.getUUIDFromNickname("Revilo").get());
-			
+
 			System.out.println("!!!");
-			
+
 			UUID uuid2 = UUID.randomUUID();
 			sqlnm.testRegisterFakePlayer(uuid2, "Johno");
-			
+
 			System.out.println(sqlnm.getUUIDFromName("Johno").get());
-			
+
 			sqlnm.testRegisterFakePlayer(uuid2, "Johno2");
-			
+
 			System.out.println(sqlnm.getUUIDFromName("Johno2").get());
+
+			sqlnm.setNickname(uuid2, "JonnyBoy");
+
+			System.out.println(sqlnm.getCurrentName(uuid2));
+
+			sqlnm.removeNickname(uuid2);
+
+			System.out.println(sqlnm.getCurrentName(uuid2));
 
 		}
 
@@ -127,7 +135,7 @@ public class DatabaseManager {
 		switch (databaseMode) {
 		case SQLite:
 		default:
-			// TODO check doesnt already exist
+			// TODO check doesnt already exist????
 			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePath, fileName));
 			return databases.get(databaseName.toLowerCase());
 		}
