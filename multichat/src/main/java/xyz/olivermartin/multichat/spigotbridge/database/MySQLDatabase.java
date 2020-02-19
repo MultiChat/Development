@@ -11,16 +11,11 @@ public class MySQLDatabase extends GenericDatabase {
 	private static final String URL_PREFIX = "jdbc:mysql:";
 	private Connection conn;
 
-	private String username;
-	private String password;
-
 	public MySQLDatabase(String url, String databaseName, String username, String password) throws SQLException {
-		super(URL_PREFIX + "//" + url + "/" + databaseName);
+		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password);
 		System.out.println(URL_PREFIX + "//" + url + "/" + databaseName);
 		System.out.println(username);
 		System.out.println(password);
-		this.username = username;
-		this.password = password;
 	}
 
 	@Override

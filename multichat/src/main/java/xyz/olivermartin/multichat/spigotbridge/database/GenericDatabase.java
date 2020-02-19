@@ -7,9 +7,19 @@ public abstract class GenericDatabase {
 
 	protected String url;
 	private boolean ready;
+	
+	protected String username;
+	protected String password;
 
 	public GenericDatabase(String url) throws SQLException {
 		this.url = url;
+		ready = setupDatabase(url);
+	}
+	
+	public GenericDatabase(String url, String user, String pass) throws SQLException {
+		this.url = url;
+		this.username = user;
+		this.password = pass;
 		ready = setupDatabase(url);
 	}
 
