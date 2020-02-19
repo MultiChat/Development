@@ -16,6 +16,9 @@ public class MySQLDatabase extends GenericDatabase {
 
 	public MySQLDatabase(String url, String databaseName, String username, String password) throws SQLException {
 		super(URL_PREFIX + "//" + url + "/" + databaseName);
+		System.out.println(URL_PREFIX + "//" + url + "/" + databaseName);
+		System.out.println(username);
+		System.out.println(password);
 		this.username = username;
 		this.password = password;
 	}
