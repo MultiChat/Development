@@ -114,14 +114,13 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
 					ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE u_nick = '" + nickname + "';");
-					results.next();
-					if (results.isClosed()) {
-						spigotdatabase.disconnectFromDatabase();
-						return Optional.empty();
-					} else {
+					if (results.next()) {
 						UUID id = UUID.fromString(results.getString("id"));
 						spigotdatabase.disconnectFromDatabase();
 						return Optional.of(id);
+					} else {
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.empty();
 					}
 				}
 
@@ -149,14 +148,13 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
 					ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE u_name = '" + username + "';");
-					results.next();
-					if (results.isClosed()) {
-						spigotdatabase.disconnectFromDatabase();
-						return Optional.empty();
-					} else {
+					if (results.next() ) {
 						UUID id = UUID.fromString(results.getString("id"));
 						spigotdatabase.disconnectFromDatabase();
 						return Optional.of(id);
+					} else {
+						spigotdatabase.disconnectFromDatabase();
+						return Optional.empty();
 					}
 				}
 
@@ -393,13 +391,12 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT u_name FROM name_data WHERE u_name = '" + username.toLowerCase() + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return false;
-				} else {
+				if (results.next()) {
 					spigotdatabase.disconnectFromDatabase();
 					return true;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
 				}
 			}
 
@@ -423,13 +420,12 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT u_nick FROM name_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return false;
-				} else {
+				if (results.next()) {
 					spigotdatabase.disconnectFromDatabase();
 					return true;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
 				}
 			}
 
@@ -452,11 +448,7 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT id, u_nick FROM name_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return false;
-				} else {
+				if (results.next()) {
 					if (results.getString("id") == uuid.toString()) {
 						spigotdatabase.disconnectFromDatabase();
 						return false;
@@ -464,6 +456,9 @@ public class SQLNameManager extends NameManager {
 						spigotdatabase.disconnectFromDatabase();
 						return true;
 					}
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
 				}
 			}
 
@@ -487,12 +482,7 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT id, f_name, f_nick FROM name_data WHERE (u_nick LIKE '%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%');");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.empty();
-				} else {
-
+				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
 
@@ -502,6 +492,9 @@ public class SQLNameManager extends NameManager {
 
 					spigotdatabase.disconnectFromDatabase();
 					return Optional.of(uuids);
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.empty();
 				}
 			}
 
@@ -525,12 +518,7 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT id, f_name FROM name_data WHERE (u_name LIKE '%" + name.toLowerCase() + "%');");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return Optional.empty();
-				} else {
-
+				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
 
@@ -540,6 +528,9 @@ public class SQLNameManager extends NameManager {
 
 					spigotdatabase.disconnectFromDatabase();
 					return Optional.of(uuids);
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return Optional.empty();
 				}
 			}
 
