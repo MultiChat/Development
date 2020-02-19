@@ -49,7 +49,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT f_nick FROM [name_data] WHERE id = '" + uuid.toString() + "';");
+					ResultSet results = spigotdatabase.query("SELECT f_nick FROM name_data WHERE id = '" + uuid.toString() + "';");
 					results.next();
 					name = results.getString("f_nick");
 					spigotdatabase.disconnectFromDatabase();
@@ -82,7 +82,7 @@ public class SQLNameManager extends NameManager {
 				String name;
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT f_name FROM [name_data] WHERE id = '" + uuid.toString() + "';");
+					ResultSet results = spigotdatabase.query("SELECT f_name FROM name_data WHERE id = '" + uuid.toString() + "';");
 					results.next();
 					name = results.getString("f_name");
 					spigotdatabase.disconnectFromDatabase();
@@ -113,7 +113,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_nick = '" + nickname + "';");
+					ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE u_nick = '" + nickname + "';");
 					results.next();
 					if (results.isClosed()) {
 						spigotdatabase.disconnectFromDatabase();
@@ -148,7 +148,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT id FROM [name_data] WHERE u_name = '" + username + "';");
+					ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE u_name = '" + username + "';");
 					results.next();
 					if (results.isClosed()) {
 						spigotdatabase.disconnectFromDatabase();
@@ -194,7 +194,7 @@ public class SQLNameManager extends NameManager {
 					synchronized (spigotdatabase) {
 						spigotdatabase.connectToDatabase();
 
-						spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
 
 						spigotdatabase.disconnectFromDatabase();
 					}
@@ -246,7 +246,7 @@ public class SQLNameManager extends NameManager {
 					synchronized (spigotdatabase) {
 						spigotdatabase.connectToDatabase();
 
-						spigotdatabase.update("UPDATE [name_data] SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
 
 						spigotdatabase.disconnectFromDatabase();
 					}
@@ -370,7 +370,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				spigotdatabase.update("UPDATE [name_data] SET u_nick = '" + unformattedNickname + "', f_nick = '" + nickname + "' WHERE id = '" + uuid.toString() + "';");
+				spigotdatabase.update("UPDATE name_data SET u_nick = '" + unformattedNickname + "', f_nick = '" + nickname + "' WHERE id = '" + uuid.toString() + "';");
 
 				spigotdatabase.disconnectFromDatabase();
 			}
