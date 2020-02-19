@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spigotbridge.database;
+package xyz.olivermartin.multichat.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

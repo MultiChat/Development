@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.spigotbridge.database;
+package xyz.olivermartin.multichat.database;
 
 import java.io.File;
 import java.sql.ResultSet;
@@ -9,18 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.spigotbridge.SQLNameManager;
-
-/*
- * 
- * 
-DROP TABLE IF EXISTS name_data;
-
-CREATE TABLE name_data(id VARCHAR(128) PRIMARY KEY, user_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));
-
-INSERT INTO nicknames VALUES ('255-444-2221--11-11', 'revilo', '&4Revilo');
-
-SELECT * FROM nicknames;
- */
 
 public class DatabaseManager {
 
@@ -119,11 +107,11 @@ public class DatabaseManager {
 	public void setURLMySQL(String url) {
 		this.databaseURLMySQL = url;
 	}
-	
+
 	public void setUsernameMySQL(String user) {
 		this.databaseUsernameMySQL = user;
 	}
-	
+
 	public void setPasswordMySQL(String pass) {
 		this.databasePasswordMySQL = pass;
 	}

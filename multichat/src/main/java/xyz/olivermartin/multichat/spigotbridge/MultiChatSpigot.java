@@ -23,9 +23,9 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.database.DatabaseManager;
+import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
-import xyz.olivermartin.multichat.spigotbridge.database.DatabaseManager;
-import xyz.olivermartin.multichat.spigotbridge.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerMonitor;
