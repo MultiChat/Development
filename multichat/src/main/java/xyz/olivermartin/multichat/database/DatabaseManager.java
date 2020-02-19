@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.spigotbridge.SQLNameManager;
-
 public class DatabaseManager {
 
 	private static DatabaseManager instance;
@@ -40,10 +38,11 @@ public class DatabaseManager {
 	////////////
 
 	public static void main(String args[]) throws SQLException {
-		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
-		DatabaseManager.getInstance().createDatabase("multichatspigot.db");
 
-		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichatspigot.db");
+		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
+		DatabaseManager.getInstance().createDatabase("multichat.db");
+
+		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
 
 		if (odb.isPresent()) {
 
@@ -52,19 +51,19 @@ public class DatabaseManager {
 
 			try {
 				db.connectToDatabase();
-				db.execute("DROP TABLE IF EXISTS name_data;");
-				db.update("CREATE TABLE name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
-				db.update("INSERT INTO name_data VALUES ('" + uuid1.toString() + "', 'Revilo410', 'revilo410', 'revilo', '&4Revilo');");
-				ResultSet results = db.query("SELECT * FROM name_data;");
+				db.execute("DROP TABLE IF EXISTS user_chat;");
+				db.update("CREATE TABLE user_chat(id VARCHAR(128) PRIMARY KEY, muted boolean);");
+				db.update("INSERT INTO user_chat VALUES ('" + uuid1.toString() + "', FALSE);");
+				ResultSet results = db.query("SELECT * FROM user_chat;");
 				while (results.next()) {
-					System.out.println(results.getString("u_nick"));
+					System.out.println(results.getBoolean("muted"));
 				}
 				db.disconnectFromDatabase();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 
-			SQLNameManager sqlnm = new SQLNameManager();
+			/*SQLNameManager sqlnm = new SQLNameManager();
 			System.out.println(sqlnm.getCurrentName(uuid1));
 			System.out.println(sqlnm.getName(uuid1));
 
@@ -92,7 +91,7 @@ public class DatabaseManager {
 
 			sqlnm.removeNickname(uuid2);
 
-			System.out.println(sqlnm.getCurrentName(uuid2));
+			System.out.println(sqlnm.getCurrentName(uuid2));*/
 
 		}
 
