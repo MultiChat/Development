@@ -118,7 +118,8 @@ nickname_length_limit_formatting: false
 nickname_sql: false
 
 # If the above option is true, MultiChat will use SQLite by default. Set the below to true if you would prefer to use MySQL.
+# The MySQL database must be called "multichatspigot"
 mysql: false
-mysql_url: ""
+mysql_url: "" # For example "localhost:3306"
 mysql_user: ""
 mysql_pass: ""
