@@ -51,12 +51,24 @@ public class DatabaseManager {
 
 			try {
 				db.connectToDatabase();
-				db.execute("DROP TABLE IF EXISTS user_chat;");
-				db.update("CREATE TABLE user_chat(id VARCHAR(128) PRIMARY KEY, muted boolean);");
-				db.update("INSERT INTO user_chat VALUES ('" + uuid1.toString() + "', FALSE);");
-				ResultSet results = db.query("SELECT * FROM user_chat;");
+				db.execute("DROP TABLE IF EXISTS muted_users;");
+				db.execute("DROP TABLE IF EXISTS ignored_users;");
+				// TODO Announcements
+				// TODO Bulletins
+				// TODO Casts
+				// TODO Mod & Admin Chat Preferences
+				// TODO Group Chat Info
+				// TODO Group Spy Info
+				// TODO Social Spy Info
+				// TODO Global Chat Info
+
+				db.update("CREATE TABLE muted_users(id VARCHAR(128) PRIMARY KEY);");
+				db.update("CREATE TABLE ignored_users(ignorer_id VARCHAR(128) PRIMARY KEY, ignoree_id VARCHAR(128));");
+
+				db.update("INSERT INTO muted_users VALUES ('" + uuid1.toString() + "');");
+				ResultSet results = db.query("SELECT * FROM muted_users;");
 				while (results.next()) {
-					System.out.println(results.getBoolean("muted"));
+					System.out.println(results.getString("id"));
 				}
 				db.disconnectFromDatabase();
 			} catch (SQLException e) {
