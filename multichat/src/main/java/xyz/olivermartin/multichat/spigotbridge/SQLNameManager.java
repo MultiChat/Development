@@ -290,13 +290,12 @@ public class SQLNameManager extends NameManager {
 				spigotdatabase.connectToDatabase();
 
 				ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE id = '" + uuid.toString() + "';");
-				results.next();
-				if (results.isClosed()) {
-					spigotdatabase.disconnectFromDatabase();
-					return false;
-				} else {
+				if (results.next()) { //TODO fixed this line...
 					spigotdatabase.disconnectFromDatabase();
 					return true;
+				} else {
+					spigotdatabase.disconnectFromDatabase();
+					return false;
 				}
 			}
 
