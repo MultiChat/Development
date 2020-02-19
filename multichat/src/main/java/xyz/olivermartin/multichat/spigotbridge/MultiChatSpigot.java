@@ -144,7 +144,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			}
 			if (config.contains("nickname_sql")) {
 
-				DatabaseManager.getInstance().setPath(new File("C:\\multichat\\db\\")); // TODO
+				DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\")); // TODO
 				try {
 
 					DatabaseManager.getInstance().createDatabase("multichatspigot.db"); // TODO

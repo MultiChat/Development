@@ -36,7 +36,11 @@ public class DatabaseManager {
 
 	/* END STATIC */
 
-	private File databasePath;
+	private File databasePathSQLite;
+	private String databaseURLMySQL;
+	private String databaseUsernameMySQL;
+	private String databasePasswordMySQL;
+
 	private DatabaseMode databaseMode = DatabaseMode.SQLite;
 
 	private Map<String, GenericDatabase> databases;
@@ -48,7 +52,7 @@ public class DatabaseManager {
 	////////////
 
 	public static void main(String args[]) throws SQLException {
-		DatabaseManager.getInstance().setPath(new File("C:\\multichat\\db\\"));
+		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
 		DatabaseManager.getInstance().createDatabase("multichatspigot.db");
 
 		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichatspigot.db");
@@ -108,8 +112,12 @@ public class DatabaseManager {
 
 	////////////
 
-	public void setPath(File path) {
-		this.databasePath = path;
+	public void setPathSQLite(File path) {
+		this.databasePathSQLite = path;
+	}
+
+	public void setURLMySQL(String url) {
+		this.databaseURLMySQL = url;
 	}
 
 	public GenericDatabase createDatabase(String name) throws SQLException {
@@ -117,7 +125,18 @@ public class DatabaseManager {
 	}
 
 	public boolean isReady() {
-		return databasePath != null;
+		switch (databaseMode) {
+		case MySQL:
+			if (databaseURLMySQL != null && databaseUsernameMySQL != null && databasePasswordMySQL != null) {
+				return true;
+			} else {
+				return false;
+			}
+		case SQLite:
+		default:
+			return databasePathSQLite != null;
+		}
+
 	}
 
 	/**
@@ -128,16 +147,24 @@ public class DatabaseManager {
 
 		if (!isReady()) throw new RuntimeException("MultiChat Database Manager Not Ready!");
 
-		if (!databasePath.exists()) {
-			databasePath.mkdirs();
-		}
-
 		switch (databaseMode) {
+		case MySQL:
+
+			databases.put(databaseName.toLowerCase(), new MySQLDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL));
+
+			return databases.get(databaseName.toLowerCase());
+
 		case SQLite:
 		default:
-			// TODO check doesnt already exist????
-			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePath, fileName));
+
+			if (!databasePathSQLite.exists()) {
+				databasePathSQLite.mkdirs();
+			}
+
+			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePathSQLite, fileName));
+
 			return databases.get(databaseName.toLowerCase());
+
 		}
 
 	}
