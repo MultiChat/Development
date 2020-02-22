@@ -80,7 +80,7 @@ public class ChatListenerLowest implements Listener {
 		format = format.replace("!!!1!!!", "%1$s");
 		format = format.replace("!!!2!!!", "%2$s");
 
-		if (channel.equals("local")) {
+		if (channel.equals("local") || (!MultiChatSpigot.globalChatServer)) {
 			// TRY TO FIX ISSUE WITH MULTICHAT NOT FORMATTING LOCAL MESSAGES IF NOT IN GLOBAL MODE if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 			event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 		} else {
