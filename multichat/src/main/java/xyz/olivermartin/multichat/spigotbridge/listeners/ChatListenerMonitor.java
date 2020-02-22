@@ -20,7 +20,7 @@ public class ChatListenerMonitor implements Listener {
 
 		// IF ITS LOCAL CHAT WE CAN IGNORE IT
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
-			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local")) {
+			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local") || (!MultiChatSpigot.globalChatServer)) {
 				return;
 			}
 		}

@@ -30,7 +30,7 @@ public class ChatListenerLowest implements Listener {
 		}
 
 
-		if (channel.equals("local")) {
+		if (channel.equals("local") || (!MultiChatSpigot.globalChatServer)) {
 
 			// Local chat
 

@@ -97,9 +97,9 @@ public class ChatListenerHighest implements Listener {
 
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
 
-			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local")) {
+			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local") || (!MultiChatSpigot.globalChatServer)) {
 
-				// If its a local chat message then we dont need to do anything else!
+				// If its a local chat message (or we can't use global chat here) then we dont need to do anything else!
 				return;
 			}
 
