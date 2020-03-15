@@ -121,5 +121,6 @@ nickname_sql: false
 # The MySQL database must be called "multichatspigot"
 mysql: false
 mysql_url: "" # For example "localhost:3306"
+mysql_database: "multichatspigot" # Put the name of your MySQL database here
 mysql_user: ""
 mysql_pass: ""

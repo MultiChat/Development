@@ -158,8 +158,12 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 						DatabaseManager.getInstance().setPasswordMySQL(config.getString("mysql_pass"));
 
 						try {
-
-							DatabaseManager.getInstance().createDatabase("multichatspigot.db", "multichatspigot");
+							
+							if (config.contains("mysql_database")) {
+								DatabaseManager.getInstance().createDatabase("multichatspigot.db", config.getString("mysql_database"));
+							} else {
+								DatabaseManager.getInstance().createDatabase("multichatspigot.db", "multichatspigot");
+							}
 
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128) PRIMARY KEY, f_name VARCHAR(255), u_name VARCHAR(255), u_nick VARCHAR(255), f_nick VARCHAR(255));");
