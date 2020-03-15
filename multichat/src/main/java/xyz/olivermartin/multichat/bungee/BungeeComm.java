@@ -227,12 +227,12 @@ public class BungeeComm implements Listener {
 
 				DebugManager.log("{multichat:chat} Got player successfully! Name = " + player.getName());
 
-				synchronized (player) {
+				//synchronized (player) {
 
-					DebugManager.log("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
-					Channel.getGlobalChannel().sendMessage(player, message, format);
+				DebugManager.log("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
+				Channel.getGlobalChannel().sendMessage(player, message, format);
 
-				}
+				//}
 
 			} catch (IOException e) {
 				DebugManager.log("{multichat:chat} ERROR READING PLUGIN MESSAGE");
