@@ -20,7 +20,7 @@ commands:
       permission: multichatspigot.username
       permission-message: You do not have permission (multichatspigot.username)
    multichatspigot:
-      description: MultiChatSpigot reload command
-      usage: /multichatspigot reload
+      description: MultiChatSpigot reload and migrate commands
+      usage: /multichatspigot [reload/migratetosql]
       permission: multichatspigot.reload
       permission-message: You do not have permission (multichatspigot.reload)

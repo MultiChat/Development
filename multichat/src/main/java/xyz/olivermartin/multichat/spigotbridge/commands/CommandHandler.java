@@ -98,6 +98,22 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
+			} else if (args[0].equalsIgnoreCase("migratetosql")) {
+
+				if (commandSender instanceof Player) {
+					
+					commandSender.sendMessage(ChatColor.DARK_RED + "This command can only be executed from the server console for security reasons!");
+					return true;
+					
+				} else {
+					
+					// TODO SQL MIGRATE COMMANDS
+					
+					commandSender.sendMessage(ChatColor.DARK_RED + "NOT YET IMPLEMENTED!");
+					return true;
+					
+				}
+				
 			} else {
 				// Show usage
 				return false;
@@ -438,7 +454,7 @@ public class CommandHandler implements CommandExecutor {
 
 			}
 
-		}
+		} 
 		return false;
 	}
 
