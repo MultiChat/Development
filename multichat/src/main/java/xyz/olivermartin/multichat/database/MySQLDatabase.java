@@ -1,7 +1,6 @@
 package xyz.olivermartin.multichat.database;
 
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +23,7 @@ public class MySQLDatabase extends GenericDatabase {
 		Connection conn = DriverManager.getConnection(url, username, password);
 
 		if (conn != null) {
-			DatabaseMetaData meta = conn.getMetaData();
+			//DatabaseMetaData meta = conn.getMetaData();
 			//System.out.println("The driver name is " + meta.getDriverName());
 			//System.out.println("A new database has been created.");
 
@@ -58,14 +57,10 @@ public class MySQLDatabase extends GenericDatabase {
 	protected boolean connect() throws SQLException {
 
 		if (conn == null) {
-
 			return setupDatabase(url);
-
-		} else {
+		} else if (conn.isClosed()) {
 			try {
-				if (conn.isClosed()) {
-					return setupDatabase(url);
-				}
+				return setupDatabase(url);
 			} catch (SQLException e) {
 				return false;
 			}

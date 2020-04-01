@@ -420,6 +420,12 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
+		
+		try {
+			DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
 
 		File file = new File(configDir, nameDataFile);
 		FileOutputStream saveFile;
