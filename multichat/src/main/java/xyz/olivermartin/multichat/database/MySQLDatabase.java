@@ -13,9 +13,9 @@ public class MySQLDatabase extends GenericDatabase {
 
 	public MySQLDatabase(String url, String databaseName, String username, String password) throws SQLException {
 		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password);
-		System.out.println(URL_PREFIX + "//" + url + "/" + databaseName);
-		System.out.println(username);
-		System.out.println(password);
+		//System.out.println(URL_PREFIX + "//" + url + "/" + databaseName);
+		//System.out.println(username);
+		//System.out.println(password);
 	}
 
 	@Override
@@ -25,8 +25,8 @@ public class MySQLDatabase extends GenericDatabase {
 
 		if (conn != null) {
 			DatabaseMetaData meta = conn.getMetaData();
-			System.out.println("The driver name is " + meta.getDriverName());
-			System.out.println("A new database has been created.");
+			//System.out.println("The driver name is " + meta.getDriverName());
+			//System.out.println("A new database has been created.");
 
 			this.conn = conn;
 

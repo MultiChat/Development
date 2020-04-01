@@ -85,6 +85,16 @@ public class DatabaseManager {
 						System.out.println(results.getString("f_nick"));
 					}
 				}
+				
+				results = db.query("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = '" + uuid1.toString() + "';");
+				while (results.next()) {
+					if (results.getString("f_nick") == null) {
+						System.out.println(results.getString("f_name"));
+					} else {
+						System.out.println(results.getString("f_nick"));
+					}
+				}
+				
 				db.disconnectFromDatabase();
 			} catch (SQLException e) {
 				e.printStackTrace();
