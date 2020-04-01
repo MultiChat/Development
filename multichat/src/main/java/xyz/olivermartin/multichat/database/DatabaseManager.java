@@ -38,8 +38,61 @@ public class DatabaseManager {
 	////////////
 
 	public static void main(String args[]) throws SQLException {
-
+		
 		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
+		DatabaseManager.getInstance().createDatabase("multichat.db");
+
+		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
+
+		if (odb.isPresent()) {
+
+			GenericDatabase db = odb.get();
+			UUID uuid1 = UUID.randomUUID();
+			UUID uuid2 = UUID.randomUUID();
+
+			try {
+				db.connectToDatabase();
+				db.execute("DROP TABLE IF EXISTS name_data;");
+				db.execute("DROP TABLE IF EXISTS nick_data;");
+
+				db.update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+				db.update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+				
+				db.update("INSERT INTO name_data VALUES ('" + uuid1.toString() + "', 'Revilo410', 'revilo410');");
+				db.update("INSERT INTO nick_data VALUES ('" + uuid1.toString() + "', '&3Revi', 'revi');");
+				db.update("INSERT INTO name_data VALUES ('" + uuid2.toString() + "', 'Revilo510', 'revilo510');");
+				ResultSet results = db.query("SELECT * FROM name_data;");
+				while (results.next()) {
+					System.out.println(results.getString("id"));
+				}
+				
+				results = db.query("SELECT * FROM nick_data;");
+				while (results.next()) {
+					System.out.println(results.getString("id"));
+				}
+				
+				results = db.query("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
+				while (results.next()) {
+					System.out.println(results.getString("id"));
+				}
+				
+				results = db.query("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
+				while (results.next()) {
+					System.out.println(results.getString("id"));
+					if (results.getString("f_nick") == null) {
+						System.out.println(results.getString("f_name"));
+					} else {
+						System.out.println(results.getString("f_nick"));
+					}
+				}
+				db.disconnectFromDatabase();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+
+		/*DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
 		DatabaseManager.getInstance().createDatabase("multichat.db");
 
 		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
@@ -103,9 +156,9 @@ public class DatabaseManager {
 
 			sqlnm.removeNickname(uuid2);
 
-			System.out.println(sqlnm.getCurrentName(uuid2));*/
+			System.out.println(sqlnm.getCurrentName(uuid2));
 
-		}
+		}*/
 
 	}
 
