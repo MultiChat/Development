@@ -63,3 +63,8 @@ welcome: true
 # %NAME% = Le nom du joueur
 
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs!"
+
+# TRANSLATION NEEDED: Should the welcome message be broadcast to the entire network?
+# TRUE = BROADCAST
+# FALSE = PRIVATE MESSAGE TO THE INDIVIDUAL PLAYER
+broadcast_welcome_message: true
