@@ -336,6 +336,68 @@ public class SQLNameManager extends NameManager {
 
 	}
 
+	public void registerMigratedPlayer(UUID uuid, String name, String formattedName, String nick, String formattedNick) {
+
+		if (!connected) {
+			System.err.println("NOT CONNECTED TO DB?!?!?!?"); //TODO?
+			return;
+		}
+
+		// TODO remove debug
+		//System.out.println(name + "," + formattedName + "," + (nick == null ? "NULL!!!" : nick) + "," + (formattedNick == null ? "NULL!!!" : formattedNick) );
+
+		boolean setNick = (nick != null);
+
+		// TODO remove debug
+		//System.out.println("SETNICK: " + setNick);
+
+		if (existsUUID(uuid)) {
+
+			synchronized (spigotdatabase) {
+
+				try {
+					spigotdatabase.connectToDatabase();
+					spigotdatabase.update("UPDATE name_data SET f_name = '" + formattedName + "', u_name = '" + name + "' WHERE id = '" + uuid.toString() + "';");
+
+					if (setNick) {
+
+						if (hasNickname(uuid)) {
+							spigotdatabase.update("UPDATE nick_data SET u_nick = '" + nick + "', f_nick = '" + formattedNick + "' WHERE id = '" + uuid.toString() + "';");
+						} else {
+							spigotdatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+						}
+
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		} else {
+
+			try {
+				synchronized (spigotdatabase) {
+
+					spigotdatabase.connectToDatabase();
+					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + formattedName + "', '" + name + "');");
+
+					if (setNick) {
+						spigotdatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+					}
+
+					//spigotdatabase.disconnectFromDatabase();
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
 	@Override
 	public void registerOfflinePlayerByUUID(UUID uuid, String username) {
 

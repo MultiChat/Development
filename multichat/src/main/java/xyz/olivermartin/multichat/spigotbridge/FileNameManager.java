@@ -52,6 +52,19 @@ public class FileNameManager extends NameManager {
 		mapNameFormatted = new HashMap<String,String>();
 
 	}
+	
+	public Map<UUID,String> getMapUUIDName() {
+		return mapUUIDName;
+	}
+	public Map<UUID,String> getMapUUIDNick() {
+		return mapUUIDNick;
+	}
+	public Map<String, String> getMapNameFormatted() {
+		return mapNameFormatted;
+	}
+	public Map<String, String> getMapNickFormatted() {
+		return mapNickFormatted;
+	}
 
 	/**
 	 * Returns the FORMATTED NICKNAME of a player if they have one set, otherwise returns their username

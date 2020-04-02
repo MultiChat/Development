@@ -1,5 +1,11 @@
 package xyz.olivermartin.multichat.spigotbridge.commands;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +20,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
+import xyz.olivermartin.multichat.spigotbridge.FileNameManager;
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.NameManager;
+import xyz.olivermartin.multichat.spigotbridge.SQLNameManager;
 import xyz.olivermartin.multichat.spigotbridge.SpigotConfigManager;
 
 public class CommandHandler implements CommandExecutor {
@@ -107,9 +115,83 @@ public class CommandHandler implements CommandExecutor {
 
 				} else {
 
-					// TODO SQL MIGRATE COMMANDS
+					if (! (NameManager.getInstance() instanceof SQLNameManager)) {
+						commandSender.sendMessage(ChatColor.DARK_RED + "This command can only be used in SQL mode!");
+						return true;
+					}
 
-					commandSender.sendMessage(ChatColor.DARK_RED + "NOT YET IMPLEMENTED!");
+					File f = new File(MultiChatSpigot.configDir, MultiChatSpigot.nameDataFile);
+					FileNameManager fnm = new FileNameManager();
+
+					if ((f.exists()) && (!f.isDirectory())) {
+
+						commandSender.sendMessage(ChatColor.GREEN + "Starting load of nickname file data...");
+
+						File file = new File(MultiChatSpigot.configDir, MultiChatSpigot.nameDataFile);
+						FileInputStream saveFile;
+						try {
+							saveFile = new FileInputStream(file);
+							fnm.loadNicknameData(saveFile);
+							commandSender.sendMessage(ChatColor.GREEN + "Successfully loaded nickname data...");
+
+							Map<UUID,String> mapUUIDName = fnm.getMapUUIDName();
+							Map<UUID,String> mapUUIDNick = fnm.getMapUUIDNick();
+							Map<String,String> mapNameFormatted = fnm.getMapNameFormatted();
+							Map<String,String> mapNickFormatted = fnm.getMapNickFormatted();
+
+							commandSender.sendMessage(ChatColor.GREEN + "Starting migration");
+
+							int count = 0;
+							int max = mapUUIDName.size();
+							int checkcount = 25;
+							int checkpoint = max/100*checkcount;
+
+							for (Entry<UUID, String> entry : mapUUIDName.entrySet()) {
+
+								count++;
+								if (count > checkpoint) {
+									commandSender.sendMessage(ChatColor.GREEN + "Completed " + checkcount + "% of migration...");
+									checkcount += 25;
+									checkpoint = max/100*checkcount;
+								}
+
+								UUID uuid = entry.getKey();
+								String name = entry.getValue();
+								String formattedName = mapNameFormatted.get(name);
+								String nick;
+								String formattedNick;
+								if (mapUUIDNick.containsKey(uuid)) {
+									nick = mapUUIDNick.get(uuid);
+									formattedNick = mapNickFormatted.get(nick);
+									if (formattedNick.equals(formattedName)) {
+										nick = null;
+										formattedNick = null;
+									}
+								} else {
+									nick = null;
+									formattedNick = null;
+								}
+								
+								
+
+								((SQLNameManager)NameManager.getInstance()).registerMigratedPlayer(uuid, name, formattedName, nick, formattedNick);
+
+							}
+
+							commandSender.sendMessage(ChatColor.GREEN + "Successfully migrated: " + max + " records");
+							
+							commandSender.sendMessage(ChatColor.GREEN + "Saving nickname data file...");
+							
+							FileOutputStream saveFile2 = new FileOutputStream(file);
+							fnm.saveNicknameData(saveFile2);
+
+						} catch (FileNotFoundException e) {
+							commandSender.sendMessage(ChatColor.DARK_RED + "[ERROR] Could not load nickname data!");
+							e.printStackTrace();
+						}
+
+					}
+
 					return true;
 
 				}
