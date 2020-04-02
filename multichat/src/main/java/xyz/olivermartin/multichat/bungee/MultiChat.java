@@ -82,6 +82,10 @@ public class MultiChat extends Plugin implements Listener {
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
+	public static boolean logPMs = true;
+	public static boolean logStaffChat = true;
+	public static boolean logGroupChat = true;
+
 	private static MultiChat instance;
 
 	public static MultiChat getInstance() {
@@ -268,7 +272,7 @@ public class MultiChat extends Plugin implements Listener {
 			if (!configversion.equals(LATEST_VERSION))  {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
-				getLogger().info("[!!!] [WARNING] MULTICHAT 1.7 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
 				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
@@ -306,6 +310,12 @@ public class MultiChat extends Plugin implements Listener {
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
 				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+			}
+
+			if (configYML.contains("privacy_settings")) {
+				logPMs = configYML.getSection("privacy_settings").getBoolean("log_pms");
+				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
+				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
 			}
 
 			// Set default channel

@@ -115,11 +115,17 @@ public class MultiChatCommand extends Command {
 					ChatControl.reload();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
-					
+
 					// Set up chat control stuff
 					if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_control")) {
 						ChatControl.controlLinks = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getBoolean("link_control");
 						ChatControl.linkMessage = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_removal_message");
+					}
+
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("privacy_settings")) {
+						MultiChat.logPMs = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_pms");
+						MultiChat.logStaffChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_staffchat");
+						MultiChat.logGroupChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_groupchat");
 					}
 
 					// Set default channel
