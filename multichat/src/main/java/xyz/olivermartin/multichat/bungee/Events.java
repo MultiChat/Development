@@ -350,7 +350,7 @@ public class Events implements Listener {
 							event.setCancelled(true);
 							return;
 						}
-						
+
 						if (!player.hasPermission("multichat.chat.link")) {
 							message = ChatControl.replaceLinks(message);
 							event.setMessage(message);
@@ -428,9 +428,9 @@ public class Events implements Listener {
 			//ConsoleManager.log("Created new global chat entry for " + player.getName());
 
 		}
-		
+
 		if (MultiChat.forceChannelOnJoin) {
-			
+
 			boolean globalMode;
 			if (!MultiChat.defaultChannel.equalsIgnoreCase("local")) {
 				globalMode = true;
@@ -438,7 +438,7 @@ public class Events implements Listener {
 				globalMode = false;
 			}
 			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
-			
+
 		}
 
 		// Set player to appropriate channels
@@ -470,11 +470,17 @@ public class Events implements Listener {
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
 
+			boolean broadcastWelcome = true;
+			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("broadcast_welcome_message")) {
+				broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("broadcast_welcome_message");
+			}
+
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
 
-					if (firstJoin && ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome")) {
+					if (firstJoin && ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome")
+							&& (broadcastWelcome || onlineplayer.getName().equals(player.getName()))) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
 					}
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));

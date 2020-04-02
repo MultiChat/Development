@@ -57,3 +57,8 @@ welcome: true
 # %NAME% = The name of the sender
 
 welcome_message: "&dWelcome %NAME% to the network for the first time!"
+
+# Should the welcome message be broadcast to the entire network?
+# TRUE = BROADCAST
+# FALSE = PRIVATE MESSAGE TO THE INDIVIDUAL PLAYER
+broadcast_welcome_message: true
