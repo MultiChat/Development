@@ -26,6 +26,37 @@ public class SpigotCommunicationManager {
 		/* Empty */
 	}
 
+	public void sendProxyExecuteMessage(String command) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			out.writeUTF(command);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatSpigot.pluginName), "multichat:pxe", stream.toByteArray());
+
+	}
+
+	public void sendProxyExecutePlayerMessage(String command, String player) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+			out.writeUTF(command);
+			out.writeUTF(player);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatSpigot.pluginName), "multichat:ppxe", stream.toByteArray());
+
+	}
+
 	public void sendPluginChannelMessage(String channel, UUID uuid, String message) {
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();

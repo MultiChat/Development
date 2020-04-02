@@ -24,3 +24,14 @@ commands:
       usage: /multichatspigot [reload/migratetosql]
       permission: multichatspigot.reload
       permission-message: You do not have permission (multichatspigot.reload)
+   pxe:
+      description: Proxy Execute - Execute commands on Proxy server
+      usage: /pxe [-p <player>] <command to execute>
+      permission: multichatspigot.pexecute
+      permission-message: You do not have permission (multichatspigot.pexecute)
+   pexecute:
+      description: Proxy Execute - Execute commands on Proxy server
+      usage: /pexecute [-p <player>] <command to execute>
+      permission: multichatspigot.pexecute
+      permission-message: You do not have permission (multichatspigot.pexecute)
+      

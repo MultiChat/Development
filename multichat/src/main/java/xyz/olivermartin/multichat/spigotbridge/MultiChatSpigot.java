@@ -321,6 +321,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:dn");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:pxe");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:ppxe");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", MultiChatPluginMessageListener.getInstance());
@@ -344,6 +346,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		this.getCommand("realname").setExecutor(CommandHandler.getInstance());
 		this.getCommand("username").setExecutor(CommandHandler.getInstance());
 		this.getCommand("multichatspigot").setExecutor(CommandHandler.getInstance());
+		this.getCommand("pxe").setExecutor(CommandHandler.getInstance());
+		this.getCommand("pexecute").setExecutor(CommandHandler.getInstance());
 
 		// Manage dependencies
 

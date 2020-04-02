@@ -25,6 +25,7 @@ import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.NameManager;
 import xyz.olivermartin.multichat.spigotbridge.SQLNameManager;
+import xyz.olivermartin.multichat.spigotbridge.SpigotCommunicationManager;
 import xyz.olivermartin.multichat.spigotbridge.SpigotConfigManager;
 
 public class CommandHandler implements CommandExecutor {
@@ -171,17 +172,17 @@ public class CommandHandler implements CommandExecutor {
 									nick = null;
 									formattedNick = null;
 								}
-								
-								
+
+
 
 								((SQLNameManager)NameManager.getInstance()).registerMigratedPlayer(uuid, name, formattedName, nick, formattedNick);
 
 							}
 
 							commandSender.sendMessage(ChatColor.GREEN + "Successfully migrated: " + max + " records");
-							
+
 							commandSender.sendMessage(ChatColor.GREEN + "Saving nickname data file...");
-							
+
 							FileOutputStream saveFile2 = new FileOutputStream(file);
 							fnm.saveNicknameData(saveFile2);
 
@@ -199,6 +200,68 @@ public class CommandHandler implements CommandExecutor {
 			} else {
 				// Show usage
 				return false;
+			}
+
+		} else if (cmd.getName().equalsIgnoreCase("pxe") || cmd.getName().equalsIgnoreCase("pexecute")) {
+
+
+			/* PROXY EXECUTE */
+
+			// Show usage
+			if (args.length < 1) {
+				
+				return false;
+				
+			} else {
+				
+				boolean playerFlag = false;
+				String player = ".*";
+				
+				// Handle flags
+				int index = 0;
+				
+				while (index < args.length) {
+
+					if (args[index].equalsIgnoreCase("-p")) {
+						if (index+1 < args.length) {
+							playerFlag = true;
+							player = args[index+1];
+						}
+					} else {
+						break;
+					}
+
+					index = index+2;
+
+				}
+				
+				if (index >= args.length) {
+					return false; // Show usage
+				}
+				
+				String message = "";
+				for (String arg : args) {
+					if (index > 0) {
+						index--;
+					} else {
+						message = message + arg + " ";
+					}
+				}
+				
+				if (playerFlag) {
+					
+					SpigotCommunicationManager.getInstance().sendProxyExecutePlayerMessage(message, player);
+					
+				} else {
+					
+					SpigotCommunicationManager.getInstance().sendProxyExecuteMessage(message);
+					
+				}
+				
+				commandSender.sendMessage(ChatColor.GREEN + "SENT COMMAND TO PROXY SERVER");
+				
+				return true;
+				
 			}
 
 		}
