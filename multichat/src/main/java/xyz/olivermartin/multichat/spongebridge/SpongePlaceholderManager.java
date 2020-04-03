@@ -10,16 +10,8 @@ public class SpongePlaceholderManager {
 		String prefix = "";
 		String suffix = "";
 
-		if (MultiChatSponge.nicknames.containsKey(player.getUniqueId())) {
-			if (MultiChatSponge.showNicknamePrefix) {
-				nickname = MultiChatSponge.nicknamePrefix + MultiChatSponge.nicknames.get(player.getUniqueId());
-			} else {
-				nickname = MultiChatSponge.nicknames.get(player.getUniqueId());
-			}
-		} else {
-			nickname =  player.getName();
-		}
-		
+		nickname = SpongeNameManager.getInstance().getCurrentName(player.getUniqueId(), MultiChatSponge.showNicknamePrefix);
+
 		DebugManager.log("PLAYERS NICKNAME / REALNAME IS: " + nickname);
 
 		if (player.getOption("prefix").isPresent()) {
@@ -46,7 +38,7 @@ public class SpongePlaceholderManager {
 		format = format.replace("%SERVER%", MultiChatSponge.serverName);
 
 		DebugManager.log("PLACEHOLDER MANAGER IS RETURNING THIS FORMAT: " + format);
-		
+
 		return format;
 
 	}

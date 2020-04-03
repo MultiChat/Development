@@ -2,28 +2,25 @@ package xyz.olivermartin.multichat.spongebridge;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import org.spongepowered.api.Platform;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandException;
-import org.spongepowered.api.command.CommandResult;
-import org.spongepowered.api.command.CommandSource;
-import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
@@ -32,7 +29,6 @@ import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
-import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
@@ -45,7 +41,10 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import xyz.olivermartin.multichat.database.DatabaseManager;
+import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
+import xyz.olivermartin.multichat.spongebridge.commands.SpongeNickCommand;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
@@ -63,7 +62,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  *
  */
 @Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
-public final class MultiChatSponge implements CommandExecutor {
+public final class MultiChatSponge {
 
 	public static SimpleMutableMessageChannel multichatChannel;
 
@@ -83,7 +82,7 @@ public final class MultiChatSponge implements CommandExecutor {
 	static RawDataChannel channelChannel;
 	static RawDataChannel ignoreChannel;
 
-	public static Map<UUID,String> nicknames;
+	//public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
 
 	public static boolean setDisplayNameLastVal = false;
@@ -103,6 +102,9 @@ public final class MultiChatSponge implements CommandExecutor {
 	public static boolean showNicknamePrefix = false;
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
+	public static int nicknameMaxLength = 20;
+	public static boolean nicknameLengthIncludeFormatting = false;
+	public static boolean nicknameSQL = false;
 
 	public static Map<Player, String> playerChannels = new HashMap<Player, String>();
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
@@ -113,12 +115,16 @@ public final class MultiChatSponge implements CommandExecutor {
 	@DefaultConfig(sharedRoot = true)
 	private ConfigurationLoader<CommentedConfigurationNode> configLoader;
 
+	@Inject
+	@ConfigDir(sharedRoot = false)
+	private Path privateConfigDir;
+
 	@SuppressWarnings("serial")
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
 
 		// DEBUG MODE
-		//DebugManager.setDebug(true);
+		//DebugManager.setDebug(true);//TODO
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
@@ -131,50 +137,315 @@ public final class MultiChatSponge implements CommandExecutor {
 			showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean();
 			nicknamePrefix = config.getNode("nickname_prefix").getString();
 			nicknameBlacklist = config.getNode("nickname_blacklist").getList(value -> value.toString());
-		}
+			if (!config.getNode("nickname_length_limit").isVirtual()) {
+				nicknameMaxLength = config.getNode("nickname_length_limit").getInt();
+				nicknameLengthIncludeFormatting = config.getNode("nickname_length_limit_formatting").getBoolean();
+			}
 
-		configLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
-		ConfigurationNode rootNode;
 
-		try {
+			// SQL
 
-			rootNode = configLoader.load();
+			if (!config.getNode("nickname_sql").isVirtual()) {
 
-			try {
+				nicknameSQL = config.getNode("nickname_sql").getBoolean();
 
-				nicknames = (Map<UUID, String>) rootNode.getNode("nicknames").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+				if (nicknameSQL) {
 
-				if (nicknames == null) {
-					nicknames = new HashMap<UUID,String>();
-					System.out.println("[MultiChatSponge] Created nicknames map");
+					if (config.getNode("mysql").getBoolean()) {
+
+						DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
+
+						DatabaseManager.getInstance().setURLMySQL(config.getNode("mysql_url").getString());
+						DatabaseManager.getInstance().setUsernameMySQL(config.getNode("mysql_user").getString());
+						DatabaseManager.getInstance().setPasswordMySQL(config.getNode("mysql_pass").getString());
+
+						try {
+
+							if (!config.getNode("mysql_database").isVirtual()) {
+								DatabaseManager.getInstance().createDatabase("multichatsponge.db", config.getNode("mysql_database").getString());
+							} else {
+								DatabaseManager.getInstance().createDatabase("multichatsponge.db", "multichatsponge");
+							}
+
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							///DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+
+							SpongeNameManager.useSQL(nicknameSQL);
+
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							SpongeNameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
+						}
+
+					} else {
+
+						DatabaseManager.getInstance().setMode(DatabaseMode.SQLite);
+
+						File configDir = privateConfigDir.toFile();
+
+						if (!(configDir.exists() && configDir.isDirectory())) {
+							configDir.mkdir();
+						}
+
+						DatabaseManager.getInstance().setPathSQLite(configDir);
+
+						try {
+
+							DatabaseManager.getInstance().createDatabase("multichatsponge.db");
+
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							//DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+
+							SpongeNameManager.useSQL(nicknameSQL);
+
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							SpongeNameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
+						}
+
+					}
+
 				}
 
-				System.out.println("[MultiChatSponge] Nicknames appeared to load correctly!");
-
-			} catch (ClassCastException e) {
-
-				nicknames = new HashMap<UUID,String>();
-
-			} catch (ObjectMappingException e) {
-
-				nicknames = new HashMap<UUID,String>();
-
 			}
 
-			try {
+			// /SQL
 
-				configLoader.save(rootNode);
 
-			} catch (IOException e) {
+		}
 
-				e.printStackTrace();
+		if (SpongeNameManager.getInstance() instanceof SpongeFileNameManager) {
+
+			File f = new File("multichat_namedata");
+			File fLegacy = new File("nicknames");
+
+			if ((f.exists()) && (!f.isDirectory())) {
+
+				// New file based storage
+				configLoader = HoconConfigurationLoader.builder().setFile(f).build();
+				ConfigurationNode rootNode;
+
+				Map<UUID, String> mapUUIDNick;
+				Map<String, UUID> mapNickUUID;
+				Map<String, String> mapNickFormatted;
+
+				try {
+
+					rootNode = configLoader.load();
+
+					try {
+
+						mapUUIDNick = (Map<UUID, String>) rootNode.getNode("mapUUIDNick").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+						mapNickUUID = (Map<String, UUID>) rootNode.getNode("mapNickUUID").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
+						mapNickFormatted = (Map<String, String>) rootNode.getNode("mapNickFormatted").getValue(new TypeToken<Map<String,String>>() { /* EMPTY */ });
+
+						if (mapUUIDNick == null) {
+							mapUUIDNick = new HashMap<UUID,String>();
+							mapNickUUID = new HashMap<String, UUID>();
+							mapNickFormatted = new HashMap<String,String>();
+							System.out.println("[MultiChatSponge] Created new nicknames maps for file storage!");
+						}
+
+						System.out.println("[MultiChatSponge] Nicknames appeared to load correctly!");
+
+					} catch (ClassCastException e) {
+
+						mapUUIDNick = new HashMap<UUID,String>();
+						mapNickUUID = new HashMap<String, UUID>();
+						mapNickFormatted = new HashMap<String,String>();
+
+					} catch (ObjectMappingException e) {
+
+						mapUUIDNick = new HashMap<UUID,String>();
+						mapNickUUID = new HashMap<String, UUID>();
+						mapNickFormatted = new HashMap<String,String>();
+
+					}
+
+					try {
+
+						configLoader.save(rootNode);
+
+					} catch (IOException e) {
+
+						e.printStackTrace();
+
+					}
+
+				} catch (IOException e) {
+
+					e.printStackTrace();
+					mapUUIDNick = new HashMap<UUID,String>();
+					mapNickUUID = new HashMap<String, UUID>();
+					mapNickFormatted = new HashMap<String,String>();
+
+				}
+
+				((SpongeFileNameManager)SpongeNameManager.getInstance()).loadFromFile(mapUUIDNick, mapNickUUID, mapNickFormatted);
+
+			} else if (fLegacy.exists()) {
+
+				// Legacy storage
+				ConfigurationLoader<CommentedConfigurationNode> legacyConfigLoader = HoconConfigurationLoader.builder().setFile(new File("nicknames")).build();
+				ConfigurationNode rootNode;
+
+				Map<UUID, String> nicknames;
+
+				try {
+
+					rootNode = legacyConfigLoader.load();
+
+					try {
+
+						nicknames = (Map<UUID, String>) rootNode.getNode("nicknames").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+
+						if (nicknames == null) {
+							nicknames = new HashMap<UUID,String>();
+							System.out.println("[MultiChatSponge] Created nicknames map");
+						}
+
+						System.out.println("[MultiChatSponge] Loaded a legacy (PRE-1.8) nicknames file!");
+						System.out.println("[MultiChatSponge] Attempting conversion...");
+
+					} catch (ClassCastException e) {
+
+						nicknames = new HashMap<UUID,String>();
+
+					} catch (ObjectMappingException e) {
+
+						nicknames = new HashMap<UUID,String>();
+
+					}
+
+					try {
+
+						legacyConfigLoader.save(rootNode);
+
+					} catch (IOException e) {
+
+						e.printStackTrace();
+
+					}
+
+				} catch (IOException e) {
+
+					e.printStackTrace();
+					nicknames = new HashMap<UUID,String>();
+
+				}
+
+				// Now loaded the legacy nicknames into "nicknames" var
+
+				for (Entry<UUID, String> e : nicknames.entrySet()) {
+					SpongeNameManager.getInstance().setNickname(e.getKey(), e.getValue());
+				}
+
+				System.out.println("[MultiChatSponge] Conversion completed.");
+				System.out.println("[MultiChatSponge] Converted " + nicknames.size() + " records!");
+
+				// Attempting to save the new file...
+
+				configLoader = HoconConfigurationLoader.builder().setFile(f).build();
+				ConfigurationNode rootNode2;
+
+				rootNode2 = configLoader.createEmptyNode();
+
+				try {
+
+					rootNode2.getNode("mapUUIDNick").setValue(new TypeToken<Map<UUID,String>>() {}, 
+							((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapUUIDNick());
+					rootNode2.getNode("mapNickUUID").setValue(new TypeToken<Map<String,UUID>>() {}, 
+							((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapNickUUID());
+					rootNode2.getNode("mapNickFormatted").setValue(new TypeToken<Map<String,String>>() {}, 
+							((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapNickFormatted());
+
+					try {
+						configLoader.save(rootNode2);
+						System.out.println("[MultiChatSponge] SAVED NEW NICKNAME DATA!.");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+				} catch (ObjectMappingException e) {
+					e.printStackTrace();
+					System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
+				}
+
+			} else {
+
+				// First startup
+
+				// New file based storage
+				configLoader = HoconConfigurationLoader.builder().setFile(f).build();
+				ConfigurationNode rootNode;
+
+				Map<UUID, String> mapUUIDNick;
+				Map<String, UUID> mapNickUUID;
+				Map<String, String> mapNickFormatted;
+
+				try {
+
+					rootNode = configLoader.load();
+
+					try {
+
+						mapUUIDNick = (Map<UUID, String>) rootNode.getNode("mapUUIDNick").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+						mapNickUUID = (Map<String, UUID>) rootNode.getNode("mapNickUUID").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
+						mapNickFormatted = (Map<String, String>) rootNode.getNode("mapNickFormatted").getValue(new TypeToken<Map<String,String>>() { /* EMPTY */ });
+
+						if (mapUUIDNick == null) {
+							mapUUIDNick = new HashMap<UUID,String>();
+							mapNickUUID = new HashMap<String, UUID>();
+							mapNickFormatted = new HashMap<String,String>();
+							System.out.println("[MultiChatSponge] Created new nicknames maps for file storage!");
+						}
+
+						System.out.println("[MultiChatSponge] Nicknames appeared to load correctly!");
+
+					} catch (ClassCastException e) {
+
+						mapUUIDNick = new HashMap<UUID,String>();
+						mapNickUUID = new HashMap<String, UUID>();
+						mapNickFormatted = new HashMap<String,String>();
+
+					} catch (ObjectMappingException e) {
+
+						mapUUIDNick = new HashMap<UUID,String>();
+						mapNickUUID = new HashMap<String, UUID>();
+						mapNickFormatted = new HashMap<String,String>();
+
+					}
+
+					try {
+
+						configLoader.save(rootNode);
+
+					} catch (IOException e) {
+
+						e.printStackTrace();
+
+					}
+
+				} catch (IOException e) {
+
+					e.printStackTrace();
+					mapUUIDNick = new HashMap<UUID,String>();
+					mapNickUUID = new HashMap<String, UUID>();
+					mapNickFormatted = new HashMap<String,String>();
+
+				}
+
+				((SpongeFileNameManager)SpongeNameManager.getInstance()).loadFromFile(mapUUIDNick, mapNickUUID, mapNickFormatted);
 
 			}
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-			nicknames = new HashMap<UUID,String>();
 
 		}
 
@@ -231,7 +502,7 @@ public final class MultiChatSponge implements CommandExecutor {
 						GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
 						GenericArguments.remainingJoinedStrings(Text.of("message")))
 				.permission("multichatsponge.nick.self")
-				.executor(this)
+				.executor(new SpongeNickCommand())
 				.build();
 
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
@@ -266,23 +537,38 @@ public final class MultiChatSponge implements CommandExecutor {
 		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
 		Sponge.getChannelRegistrar().unbindChannel(ignoreChannel);
 
-		ConfigurationNode rootNode;
+		if (nicknameSQL) {
+			try {
+				DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} else {
 
-		rootNode = configLoader.createEmptyNode();
+			ConfigurationNode rootNode;
 
-		try {
-
-			rootNode.getNode("nicknames").setValue(new TypeToken<Map<UUID,String>>() {}, nicknames);
+			rootNode = configLoader.createEmptyNode();
 
 			try {
-				configLoader.save(rootNode);
-			} catch (IOException e) {
+
+				rootNode.getNode("mapUUIDNick").setValue(new TypeToken<Map<UUID,String>>() {}, 
+						((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapUUIDNick());
+				rootNode.getNode("mapNickUUID").setValue(new TypeToken<Map<String,UUID>>() {}, 
+						((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapNickUUID());
+				rootNode.getNode("mapNickFormatted").setValue(new TypeToken<Map<String,String>>() {}, 
+						((SpongeFileNameManager)SpongeNameManager.getInstance()).getMapNickFormatted());
+
+				try {
+					configLoader.save(rootNode);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+			} catch (ObjectMappingException e) {
 				e.printStackTrace();
+				System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 			}
 
-		} catch (ObjectMappingException e) {
-			e.printStackTrace();
-			System.err.println("[MultiChatSponge] ERROR: Could not write nicknames :(");
 		}
 
 	}
@@ -302,11 +588,7 @@ public final class MultiChatSponge implements CommandExecutor {
 		String prefix = "";
 		String suffix = "";
 
-		if (nicknames.containsKey(player.getUniqueId())) {
-			nickname = nicknames.get(player.getUniqueId());
-		} else {
-			nickname =  player.getName();
-		}
+		nickname = SpongeNameManager.getInstance().getCurrentName(player.getUniqueId());
 
 		final String fNickname = nickname;
 		nickChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(fNickname));
@@ -350,93 +632,7 @@ public final class MultiChatSponge implements CommandExecutor {
 
 	}
 
-	@Override
-	public CommandResult execute(CommandSource sender, CommandContext args) throws CommandException {
-
-		if (sender instanceof Player) {
-			sender = (Player) sender;
-		} else {
-			sender.sendMessage(Text.of("Only players can use this command!"));
-			return CommandResult.success();
-		}
-
-		Player target = args.<Player>getOne("player").get();
-		String nickname = args.<String>getOne("message").get();
-
-		if (target != sender) {
-			if (!sender.hasPermission("multichatsponge.nick.others")) {
-				sender.sendMessage(Text.of("You do not have permission to nickname other players!"));
-				return CommandResult.success();
-			}
-		}
-
-		UUID targetUUID = target.getUniqueId();
-
-		if (nickname.equalsIgnoreCase("off")) {
-			removeNickname(targetUUID);
-			updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
-			sender.sendMessage(Text.of(target.getName() + " has had their nickname removed!"));
-			return CommandResult.success();
-		}
-
-		String strippedNickname = stripAllFormattingCodes(nickname);
-
-		UserStorageService uss = Sponge.getServiceManager().provideUnchecked(UserStorageService.class);
-		Optional<User> lookedUpName = uss.get(strippedNickname);
-
-		// Check if a player name exists already (but not the name of this player)
-		if (lookedUpName.isPresent() && !strippedNickname.equalsIgnoreCase(target.getName()) && !sender.hasPermission("multichatsponge.nick.impersonate")) {
-			sender.sendMessage(Text.of("Sorry, a player already exists with this name!"));
-			return CommandResult.success();
-		}
-
-		String targetNickname;
-		if (nicknames.containsKey(targetUUID)) {
-			targetNickname = stripAllFormattingCodes(nicknames.get(targetUUID));
-		} else {
-			targetNickname = target.getName();
-		}
-
-		// Check if a nickname exists already
-		if (nicknames.values().stream()
-				.map(nick -> stripAllFormattingCodes(nick))
-				.anyMatch(nick -> nick.equalsIgnoreCase(strippedNickname))
-				&& !targetNickname.equalsIgnoreCase(strippedNickname) ) {
-			//&& !sender.hasPermission("multichatsponge.nick.duplicate")) {
-
-			sender.sendMessage(Text.of("Sorry, a player already has that nickname!"));
-			return CommandResult.success();
-
-		}
-
-		boolean blacklisted = false;
-		for (String bl : MultiChatSponge.nicknameBlacklist) {
-			if (strippedNickname.matches(bl)) blacklisted = true;
-		}
-
-		if (blacklisted) {
-
-			sender.sendMessage(Text.of("Sorry, this name is not allowed!"));
-			return CommandResult.success();
-
-		}
-
-		addNickname(targetUUID,nickname);
-		updatePlayerMeta(target.getName(), setDisplayNameLastVal, displayNameFormatLastVal);
-
-		sender.sendMessage(Text.of(target.getName() + " has been nicknamed!"));
-		return CommandResult.success();
-	}
-
-	private void addNickname(UUID uuid, String nickname) {
-		nicknames.put(uuid,nickname);
-	}
-
-	private void removeNickname(UUID uuid) {
-		nicknames.remove(uuid);
-	}
-
-	public String stripAllFormattingCodes(String input) {
+	/*public String stripAllFormattingCodes(String input) {
 
 		char COLOR_CHAR = '&';
 		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
@@ -447,6 +643,6 @@ public final class MultiChatSponge implements CommandExecutor {
 
 		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
 
-	}
+	}*/
 
 }
