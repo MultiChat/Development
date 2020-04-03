@@ -44,6 +44,7 @@ import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import xyz.olivermartin.multichat.database.DatabaseManager;
 import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
+import xyz.olivermartin.multichat.spongebridge.commands.MultiChatSpongeCommand;
 import xyz.olivermartin.multichat.spongebridge.commands.SpongeNickCommand;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
@@ -504,8 +505,16 @@ public final class MultiChatSponge {
 				.permission("multichatsponge.nick.self")
 				.executor(new SpongeNickCommand())
 				.build();
+		
+		CommandSpec multichatspongeCommandSpec = CommandSpec.builder()
+				.description(Text.of("MultiChatSponge command"))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))))
+				.permission("multichatsponge.admin")
+				.executor(new MultiChatSpongeCommand())
+				.build();
 
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
+		Sponge.getCommandManager().register(this, multichatspongeCommandSpec, "multichatsponge");
 
 		// Register message channel
 
