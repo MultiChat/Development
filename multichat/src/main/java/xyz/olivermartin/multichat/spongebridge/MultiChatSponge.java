@@ -104,6 +104,7 @@ public final class MultiChatSponge {
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
 	public static int nicknameMaxLength = 20;
+	public static int nicknameMinLength = 3;
 	public static boolean nicknameLengthIncludeFormatting = false;
 	public static boolean nicknameSQL = false;
 
@@ -141,6 +142,12 @@ public final class MultiChatSponge {
 			if (!config.getNode("nickname_length_limit").isVirtual()) {
 				nicknameMaxLength = config.getNode("nickname_length_limit").getInt();
 				nicknameLengthIncludeFormatting = config.getNode("nickname_length_limit_formatting").getBoolean();
+			}
+
+			if (!config.getNode("nickname_length_min").isVirtual()) {
+
+				nicknameMinLength = config.getNode("nickname_length_min").getInt();
+
 			}
 
 
@@ -505,7 +512,7 @@ public final class MultiChatSponge {
 				.permission("multichatsponge.nick.self")
 				.executor(new SpongeNickCommand())
 				.build();
-		
+
 		CommandSpec multichatspongeCommandSpec = CommandSpec.builder()
 				.description(Text.of("MultiChatSponge command"))
 				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("command"))))

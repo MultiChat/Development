@@ -84,10 +84,18 @@ public class SpongeNickCommand implements CommandExecutor {
 				sender.sendMessage(Text.of("Sorry your nickname is too long, max " + MultiChatSponge.nicknameMaxLength + " characters! (Including format codes)"));
 				return CommandResult.success();
 			}
+			if (nickname.length() < MultiChatSponge.nicknameMinLength && !sender.hasPermission("multichatsponge.nick.anylength")) {
+				sender.sendMessage(Text.of("Sorry your nickname is too short, min " + MultiChatSponge.nicknameMinLength + " characters! (Including format codes)"));
+				return CommandResult.success();
+			}
 		} else {
 			// Do not include formatting codes in the nickname length
 			if (SpongeNameManager.getInstance().stripAllFormattingCodes(nickname).length() > MultiChatSponge.nicknameMaxLength && !sender.hasPermission("multichatsponge.nick.anylength")) {
 				sender.sendMessage(Text.of("Sorry your nickname is too long, max " + MultiChatSponge.nicknameMaxLength + " characters! (Excluding format codes)"));
+				return CommandResult.success();
+			}
+			if (SpongeNameManager.getInstance().stripAllFormattingCodes(nickname).length() < MultiChatSponge.nicknameMinLength && !sender.hasPermission("multichatsponge.nick.anylength")) {
+				sender.sendMessage(Text.of("Sorry your nickname is too short, min " + MultiChatSponge.nicknameMinLength + " characters! (Excluding format codes)"));
 				return CommandResult.success();
 			}
 		}

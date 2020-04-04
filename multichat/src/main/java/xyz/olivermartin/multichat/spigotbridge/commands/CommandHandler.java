@@ -209,17 +209,17 @@ public class CommandHandler implements CommandExecutor {
 
 			// Show usage
 			if (args.length < 1) {
-				
+
 				return false;
-				
+
 			} else {
-				
+
 				boolean playerFlag = false;
 				String player = ".*";
-				
+
 				// Handle flags
 				int index = 0;
-				
+
 				while (index < args.length) {
 
 					if (args[index].equalsIgnoreCase("-p")) {
@@ -234,11 +234,11 @@ public class CommandHandler implements CommandExecutor {
 					index = index+2;
 
 				}
-				
+
 				if (index >= args.length) {
 					return false; // Show usage
 				}
-				
+
 				String message = "";
 				for (String arg : args) {
 					if (index > 0) {
@@ -247,21 +247,21 @@ public class CommandHandler implements CommandExecutor {
 						message = message + arg + " ";
 					}
 				}
-				
+
 				if (playerFlag) {
-					
+
 					SpigotCommunicationManager.getInstance().sendProxyExecutePlayerMessage(message, player);
-					
+
 				} else {
-					
+
 					SpigotCommunicationManager.getInstance().sendProxyExecuteMessage(message);
-					
+
 				}
-				
+
 				commandSender.sendMessage(ChatColor.GREEN + "SENT COMMAND TO PROXY SERVER");
-				
+
 				return true;
-				
+
 			}
 
 		}
@@ -406,18 +406,22 @@ public class CommandHandler implements CommandExecutor {
 			if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
 				// Include formatting codes in the nickname length
 				if (args[1].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
 					return true;
-
+				}
+				if (args[1].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Including format codes)");
+					return true;
 				}
 			} else {
 				// Do not include formatting codes in the nickname length
 				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
 					return true;
-
+				}
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
+					return true;
 				}
 			}
 

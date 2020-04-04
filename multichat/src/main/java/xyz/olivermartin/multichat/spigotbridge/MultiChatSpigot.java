@@ -92,6 +92,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
 	public static int nicknameMaxLength = 20;
+	public static int nicknameMinLength = 3;
 	public static boolean nicknameLengthIncludeFormatting = false;
 	public static boolean nicknameSQL = false;
 
@@ -142,6 +143,11 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 				nicknameMaxLength = config.getInt("nickname_length_limit");
 				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
 
+			}
+			if (config.contains("nickname_length_min")) {
+				
+				nicknameMinLength = config.getInt("nickname_length_min");
+				
 			}
 			if (config.contains("nickname_sql")) {
 
