@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.spongebridge.commands;
 
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -19,6 +20,8 @@ import xyz.olivermartin.multichat.spongebridge.SpongeNameManager;
 
 public class SpongeNickCommand implements CommandExecutor {
 
+	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
+
 	@Override
 	public CommandResult execute(CommandSource sender, CommandContext args) throws CommandException {
 
@@ -29,8 +32,20 @@ public class SpongeNickCommand implements CommandExecutor {
 			return CommandResult.success();
 		}
 
-		Player target = args.<Player>getOne("player").get();
+		Optional<Player> opTarget = args.<Player>getOne("player");
+
+		if (!opTarget.isPresent()) {
+			sender.sendMessage(Text.of("That player could not be found!"));
+			return CommandResult.success();
+		}
+
+		Player target = opTarget.get();
 		String nickname = args.<String>getOne("message").get();
+
+		if (target == null) {
+			sender.sendMessage(Text.of("That player could not be found!"));
+			return CommandResult.success();
+		}
 
 		if (target != sender) {
 			if (!sender.hasPermission("multichatsponge.nick.others")) {
@@ -46,6 +61,35 @@ public class SpongeNickCommand implements CommandExecutor {
 			MultiChatSponge.updatePlayerMeta(target.getName(), MultiChatSponge.setDisplayNameLastVal, MultiChatSponge.displayNameFormatLastVal);
 			sender.sendMessage(Text.of(target.getName() + " has had their nickname removed!"));
 			return CommandResult.success();
+		}
+
+		if (SpongeNameManager.getInstance().containsColorCodes(nickname) && !(sender.hasPermission("multichatsponge.nick.color") || sender.hasPermission("multichatsponge.nick.colour"))) {
+			sender.sendMessage(Text.of("You do not have permission to use nicknames with color codes!"));
+			return CommandResult.success();
+		}
+
+		if (SpongeNameManager.getInstance().containsFormatCodes(nickname) && !(sender.hasPermission("multichatsponge.nick.format"))) {
+			sender.sendMessage(Text.of("You do not have permission to use nicknames with format codes!"));
+			return CommandResult.success();
+		}
+
+		if (!simpleNickname.matcher(nickname).matches() && !(sender.hasPermission("multichatsponge.nick.special"))) {
+			sender.sendMessage(Text.of("You do not have permission to use nicknames with special characters!"));
+			return CommandResult.success();
+		}
+
+		if (MultiChatSponge.nicknameLengthIncludeFormatting) {
+			// Include formatting codes in the nickname length
+			if (nickname.length() > MultiChatSponge.nicknameMaxLength && !sender.hasPermission("multichatsponge.nick.anylength")) {
+				sender.sendMessage(Text.of("Sorry your nickname is too long, max " + MultiChatSponge.nicknameMaxLength + " characters! (Including format codes)"));
+				return CommandResult.success();
+			}
+		} else {
+			// Do not include formatting codes in the nickname length
+			if (SpongeNameManager.getInstance().stripAllFormattingCodes(nickname).length() > MultiChatSponge.nicknameMaxLength && !sender.hasPermission("multichatsponge.nick.anylength")) {
+				sender.sendMessage(Text.of("Sorry your nickname is too long, max " + MultiChatSponge.nicknameMaxLength + " characters! (Excluding format codes)"));
+				return CommandResult.success();
+			}
 		}
 
 		String strippedNickname = SpongeNameManager.getInstance().stripAllFormattingCodes(nickname);
