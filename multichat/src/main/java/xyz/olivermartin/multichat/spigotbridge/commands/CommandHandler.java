@@ -96,6 +96,11 @@ public class CommandHandler implements CommandExecutor {
 							MultiChatSpigot.nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
 
 						}
+						if (config.contains("nickname_length_min")) {
+							
+							MultiChatSpigot.nicknameMinLength = config.getInt("nickname_length_min");
+							
+						}
 					}
 
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
