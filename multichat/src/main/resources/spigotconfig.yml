@@ -110,6 +110,9 @@ nickname_prefix: "~"
 # The maximum length for nicknames
 nickname_length_limit: 20
 
+# The minimum length for nicknames
+nickname_length_min: 3
+
 # Should formatting codes such as "&3" be counted in the length of the nickname?
 nickname_length_limit_formatting: false
 
