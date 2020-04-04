@@ -102,6 +102,11 @@ public class SpongeNickCommand implements CommandExecutor {
 
 		String strippedNickname = SpongeNameManager.getInstance().stripAllFormattingCodes(nickname);
 
+		if (strippedNickname.length() < 1 ) {
+			sender.sendMessage(Text.of("Sorry your nickname cannot be empty!"));
+			return CommandResult.success();
+		}
+
 		UserStorageService uss = Sponge.getServiceManager().provideUnchecked(UserStorageService.class);
 		Optional<User> lookedUpName = uss.get(strippedNickname);
 

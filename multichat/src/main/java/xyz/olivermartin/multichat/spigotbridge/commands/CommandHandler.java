@@ -97,9 +97,9 @@ public class CommandHandler implements CommandExecutor {
 
 						}
 						if (config.contains("nickname_length_min")) {
-							
+
 							MultiChatSpigot.nicknameMinLength = config.getInt("nickname_length_min");
-							
+
 						}
 					}
 
@@ -316,19 +316,28 @@ public class CommandHandler implements CommandExecutor {
 				if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
 					// Include formatting codes in the nickname length
 					if (args[0].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
 						return true;
-
+					}
+					if (args[0].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Including format codes)");
+						return true;
 					}
 				} else {
 					// Do not include formatting codes in the nickname length
 					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
 						return true;
-
 					}
+					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
+						return true;
+					}
+				}
+
+				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() < 1) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname cannot be empty!");
+					return true;
 				}
 
 				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
@@ -428,6 +437,11 @@ public class CommandHandler implements CommandExecutor {
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
 					return true;
 				}
+			}
+
+			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < 1) {
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname cannot be empty!");
+				return true;
 			}
 
 			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
