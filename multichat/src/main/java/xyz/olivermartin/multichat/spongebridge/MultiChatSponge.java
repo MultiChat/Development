@@ -46,6 +46,7 @@ import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
 import xyz.olivermartin.multichat.spongebridge.commands.MultiChatSpongeCommand;
 import xyz.olivermartin.multichat.spongebridge.commands.SpongeNickCommand;
+import xyz.olivermartin.multichat.spongebridge.commands.SpongeRealnameCommand;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeCommandListener;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeePlayerCommandListener;
@@ -520,8 +521,16 @@ public final class MultiChatSponge {
 				.executor(new MultiChatSpongeCommand())
 				.build();
 
+		CommandSpec realnameCommandSpec = CommandSpec.builder()
+				.description(Text.of("Sponge Realname Command"))
+				.arguments(GenericArguments.onlyOne(GenericArguments.string(Text.of("nickname"))))
+				.permission("multichatsponge.realname")
+				.executor(new SpongeRealnameCommand())
+				.build();
+
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 		Sponge.getCommandManager().register(this, multichatspongeCommandSpec, "multichatsponge");
+		Sponge.getCommandManager().register(this, realnameCommandSpec, "realname");
 
 		// Register message channel
 
