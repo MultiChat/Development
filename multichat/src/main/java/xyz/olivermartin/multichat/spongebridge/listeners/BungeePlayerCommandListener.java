@@ -33,7 +33,7 @@ public class BungeePlayerCommandListener implements RawDataListener {
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
 		String playerRegex = data.getUTF(0);
-		String command = data.getUTF(0);
+		String command = data.getUTF(1);
 
 		/* THIS BIT NOW IS A BIT OF A HACK! */
 
@@ -81,6 +81,7 @@ public class BungeePlayerCommandListener implements RawDataListener {
 			if (p.getName().matches(playerRegex)) {
 
 				Sponge.getCommandManager().process(p, command);
+				System.out.println("!!!!" + command);
 
 			}
 
