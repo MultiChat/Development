@@ -19,7 +19,7 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 	public CommandResult execute(CommandSource sender, CommandContext rawArgs) throws CommandException {
 
 		Collection<String> listArgs = rawArgs.getAll("message");
-		String[] args = (String[]) listArgs.toArray();
+		String[] args = listArgs.toArray(new String[0]);
 
 		// Show usage
 		if (args.length < 1) {
