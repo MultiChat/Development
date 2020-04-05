@@ -132,7 +132,7 @@ public final class MultiChatSponge {
 	public void onServerStart(GameStartedServerEvent event) {
 
 		// DEBUG MODE
-		DebugManager.setDebug(true);//TODO
+		//DebugManager.setDebug(true);//TODO
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
