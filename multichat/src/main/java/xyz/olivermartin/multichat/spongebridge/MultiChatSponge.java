@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -69,6 +70,8 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
 public final class MultiChatSponge {
 
 	public static SimpleMutableMessageChannel multichatChannel;
+	
+	public static MultiChatSponge instance;
 
 	ChannelRegistrar channelRegistrar;
 
@@ -118,6 +121,8 @@ public final class MultiChatSponge {
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
+	
+	public static Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 
 	@Inject
 	@DefaultConfig(sharedRoot = true)
@@ -133,6 +138,8 @@ public final class MultiChatSponge {
 
 		// DEBUG MODE
 		//DebugManager.setDebug(true);//TODO
+		
+		instance = this;
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");
 		ConfigurationNode config = SpongeConfigManager.getInstance().getHandler("multichatsponge.yml").getConfig();
