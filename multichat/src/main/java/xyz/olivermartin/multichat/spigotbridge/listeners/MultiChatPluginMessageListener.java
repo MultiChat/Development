@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -113,6 +115,40 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 
 				String playerRegex = in.readUTF();
 				String command = in.readUTF();
+
+				/* THIS BIT NOW IS A BIT OF A HACK! */
+
+				/*
+				 * To implement sending single messages to global or local chat channels, we do a nice hack...
+				 * We send a "command" of local or global chat...
+				 * Then we deal with it here and add to the "CHAT QUEUE" in the MultiChatSpigot class
+				 * And then we send the chat message as if it were normal, but it will check the CHAT QUEUE to deal with it...
+				 */
+
+				if (command.startsWith("!SINGLE L MESSAGE!") || command.startsWith("!SINGLE G MESSAGE!")) {
+
+					String message = command.substring("!SINGLE X MESSAGE!".length(),command.length());
+
+					if (MultiChatSpigot.chatQueues.containsKey(playerRegex.toLowerCase())) {
+
+						Queue<String> chatQueue = MultiChatSpigot.chatQueues.get(playerRegex.toLowerCase());
+						chatQueue.add(command);
+
+					} else {
+
+						Queue<String> chatQueue = new LinkedList<String>();
+						chatQueue.add(command);
+						MultiChatSpigot.chatQueues.put(playerRegex.toLowerCase(), chatQueue);
+
+					}
+
+					Bukkit.getServer().getPlayer(playerRegex).chat(message);
+
+					return;
+
+				}
+
+				/* END HACK */
 
 				for (Player p : Bukkit.getServer().getOnlinePlayers()) {
 

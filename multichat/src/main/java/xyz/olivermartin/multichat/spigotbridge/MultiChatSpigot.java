@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -57,6 +58,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	public static Map<String, String> placeholderMap = new HashMap<String, String>();
+
+	public static Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();
@@ -145,9 +148,9 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 			}
 			if (config.contains("nickname_length_min")) {
-				
+
 				nicknameMinLength = config.getInt("nickname_length_min");
-				
+
 			}
 			if (config.contains("nickname_sql")) {
 
