@@ -11,7 +11,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
-import xyz.olivermartin.multichat.bungee.DebugManager;
+import xyz.olivermartin.multichat.spongebridge.DebugManager;
 import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
 
 public class SpongeProxyExecuteCommand implements CommandExecutor {
