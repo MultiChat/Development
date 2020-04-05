@@ -11,6 +11,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
 
 public class SpongeProxyExecuteCommand implements CommandExecutor {
@@ -20,6 +21,8 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 
 		Collection<String> listArgs = rawArgs.getAll("message");
 		String[] args = listArgs.toArray(new String[0]);
+
+		DebugManager.log("[PXE] Getting ready for PXE");
 
 		// Show usage
 		if (args.length < 1) {
@@ -37,11 +40,20 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 
 			while (index < args.length) {
 
+				DebugManager.log("[PXE] Index = " + index);
+				DebugManager.log("[PXE] Current arg is = " + args[index]);
+
 				if (args[index].equalsIgnoreCase("-p")) {
+
+					DebugManager.log("[PXE] IT IS A -p FLAG!");
+
 					if (index+1 < args.length) {
+						DebugManager.log("[PXE] And there is another arg too!");
 						playerFlag = true;
 						player = args[index+1];
+						DebugManager.log("[PXE] That means we have a player: " + player);
 					}
+
 				} else {
 					break;
 				}
@@ -58,9 +70,11 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 			String message = "";
 			for (String arg : args) {
 				if (index > 0) {
+					DebugManager.log("[PXE] Second loop, index = " + index);
 					index--;
 				} else {
 					message = message + arg + " ";
+					DebugManager.log("[PXE] Message so far is: " + message);
 				}
 			}
 
@@ -73,9 +87,13 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 
 			if (playerFlag) {
 
+				DebugManager.log("[PXE] Player flag true so sending ppxe message!");
+
 				MultiChatSponge.sendProxyExecutePlayerMessage(facilitatingPlayer, message, player);
 
 			} else {
+
+				DebugManager.log("[PXE] Sending regular pxe message!");
 
 				MultiChatSponge.sendProxyExecuteMessage(facilitatingPlayer, message);
 
