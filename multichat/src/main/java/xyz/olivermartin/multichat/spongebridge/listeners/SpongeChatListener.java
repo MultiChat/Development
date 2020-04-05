@@ -245,9 +245,20 @@ public class SpongeChatListener {
 
 				if (MultiChatSponge.playerChannels.containsKey(player)) {
 
-					if (queueValue.equals("local")) return;
+					if (queueValue.equals("local")) {
+						return;
+					} else if (queueValue.equals("global")) {
 
-					if ((!MultiChatSponge.playerChannels.get(player).equals("local"))) {
+						// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
+						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
+						DebugManager.log("We need to send the message to bungeecord!");
+						DebugManager.log("Data to send is: ");
+						DebugManager.log("PLAYER:" + player.getName());
+						DebugManager.log("MESSAGE:" + message);
+						DebugManager.log("FORMAT: " + format.replace("%", "%%"));
+						MultiChatSponge.sendChatToBungee(player, message, format.replace("%", "%%"));
+
+					} else if ((!MultiChatSponge.playerChannels.get(player).equals("local"))) {
 
 						// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
 						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
@@ -259,6 +270,7 @@ public class SpongeChatListener {
 						MultiChatSponge.sendChatToBungee(player, message, format.replace("%", "%%"));
 
 					}
+
 				}
 
 			}
