@@ -81,7 +81,6 @@ public class BungeePlayerCommandListener implements RawDataListener {
 			if (p.getName().matches(playerRegex)) {
 
 				Sponge.getCommandManager().process(p, command);
-				System.out.println("!!!!" + command);
 
 			}
 
