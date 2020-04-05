@@ -46,6 +46,7 @@ import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.PseudoChannel;
 import xyz.olivermartin.multichat.spongebridge.commands.MultiChatSpongeCommand;
 import xyz.olivermartin.multichat.spongebridge.commands.SpongeNickCommand;
+import xyz.olivermartin.multichat.spongebridge.commands.SpongeProxyExecuteCommand;
 import xyz.olivermartin.multichat.spongebridge.commands.SpongeRealnameCommand;
 import xyz.olivermartin.multichat.spongebridge.commands.SpongeUsernameCommand;
 import xyz.olivermartin.multichat.spongebridge.listeners.BungeeChatListener;
@@ -84,6 +85,9 @@ public final class MultiChatSponge {
 	static RawDataChannel worldChannel;
 	static RawDataChannel channelChannel;
 	static RawDataChannel ignoreChannel;
+
+	static RawDataChannel pexecuteChannel;
+	static RawDataChannel ppexecuteChannel;
 
 	//public static Map<UUID,String> nicknames;
 	public static Map<UUID,String> displayNames = new HashMap<UUID,String>();
@@ -477,6 +481,9 @@ public final class MultiChatSponge {
 		ChannelBinding.RawDataChannel channelChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ch");
 		ChannelBinding.RawDataChannel ignoreChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ignore");
 
+		ChannelBinding.RawDataChannel pexecuteChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:pxe");
+		ChannelBinding.RawDataChannel ppexecuteChannel = Sponge.getGame().getChannelRegistrar().createRawChannel(this, "multichat:ppxe");
+
 		commChannel.addListener(Platform.Type.SERVER, new MetaListener(commChannel));
 		chatChannel.addListener(Platform.Type.SERVER, new BungeeChatListener(chatChannel));
 		channelChannel.addListener(Platform.Type.SERVER, new PlayerChannelListener());
@@ -498,6 +505,9 @@ public final class MultiChatSponge {
 		MultiChatSponge.worldChannel = worldChannel;
 		MultiChatSponge.channelChannel = channelChannel;
 		MultiChatSponge.ignoreChannel = ignoreChannel;
+
+		MultiChatSponge.pexecuteChannel = pexecuteChannel;
+		MultiChatSponge.ppexecuteChannel = ppexecuteChannel;
 
 		// Register listeners
 
@@ -536,10 +546,19 @@ public final class MultiChatSponge {
 				.executor(new SpongeUsernameCommand())
 				.build();
 
+		CommandSpec pexecuteCommandSpec = CommandSpec.builder()
+				.description(Text.of("Sponge Proxy Execute Command"))
+				.arguments(
+						GenericArguments.remainingJoinedStrings(Text.of("message")))
+				.permission("multichatsponge.pexecute")
+				.executor(new SpongeProxyExecuteCommand())
+				.build();
+
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 		Sponge.getCommandManager().register(this, multichatspongeCommandSpec, "multichatsponge");
 		Sponge.getCommandManager().register(this, realnameCommandSpec, "realname");
 		Sponge.getCommandManager().register(this, usernameCommandSpec, "username");
+		Sponge.getCommandManager().register(this, pexecuteCommandSpec, "pexecute", "pxe");
 
 		// Register message channel
 
@@ -570,6 +589,8 @@ public final class MultiChatSponge {
 		Sponge.getChannelRegistrar().unbindChannel(worldChannel);
 		Sponge.getChannelRegistrar().unbindChannel(channelChannel);
 		Sponge.getChannelRegistrar().unbindChannel(ignoreChannel);
+		Sponge.getChannelRegistrar().unbindChannel(pexecuteChannel);
+		Sponge.getChannelRegistrar().unbindChannel(ppexecuteChannel);
 
 		if (nicknameSQL) {
 			try {
@@ -610,6 +631,18 @@ public final class MultiChatSponge {
 	public static void sendChatToBungee(Player player, String message, String format) {
 
 		chatChannel.sendTo(player,buffer -> buffer.writeUTF(player.getUniqueId().toString()).writeUTF(message).writeUTF(format));
+
+	}
+
+	public static void sendProxyExecuteMessage(Player player, String message) {
+
+		pexecuteChannel.sendTo(player,buffer -> buffer.writeUTF(message));
+
+	}
+
+	public static void sendProxyExecutePlayerMessage(Player player, String message, String targetPlayer) {
+
+		ppexecuteChannel.sendTo(player,buffer -> buffer.writeUTF(message).writeUTF(targetPlayer));
 
 	}
 
@@ -665,18 +698,5 @@ public final class MultiChatSponge {
 		}
 
 	}
-
-	/*public String stripAllFormattingCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
-
-		if (input == null) {
-			return null;
-		}
-
-		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
-
-	}*/
 
 }
