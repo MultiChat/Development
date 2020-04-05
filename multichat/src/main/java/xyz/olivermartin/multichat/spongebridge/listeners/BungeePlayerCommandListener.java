@@ -32,8 +32,8 @@ public class BungeePlayerCommandListener implements RawDataListener {
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Platform.Type side) {
 
-		String playerRegex = data.getUTF(0);
-		String command = data.getUTF(1);
+		String playerRegex = data.readUTF();
+		String command = data.readUTF();
 
 		/* THIS BIT NOW IS A BIT OF A HACK! */
 
