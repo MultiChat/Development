@@ -14,13 +14,40 @@ public class ChatListenerMonitor implements Listener {
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onChat(final AsyncPlayerChatEvent event) {
 
+		String queueValue = "";
+
+		if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
+			// Hack for /global /local direct messaging...
+			String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).poll();
+
+			if (MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).size() < 1) {
+				MultiChatSpigot.chatQueues.remove(event.getPlayer().getName().toLowerCase());
+			}
+
+			if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+				queueValue = "local";
+			} else {
+				queueValue = "global";
+			}
+		}
+
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
 		if (event.isCancelled()) return;
 
 
 		// IF ITS LOCAL CHAT WE CAN IGNORE IT
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
-			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local") || (!MultiChatSpigot.globalChatServer)) {
+
+			if (!MultiChatSpigot.globalChatServer) {
+				return;
+			}
+
+			if (!queueValue.equals("")) {
+				// Hack for /global /local direct messaging...
+				if (queueValue.equalsIgnoreCase("local")) {
+					return;
+				}
+			} else if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local") || (!MultiChatSpigot.globalChatServer)) {
 				return;
 			}
 		}

@@ -29,6 +29,16 @@ public class ChatListenerLowest implements Listener {
 			channel = "global";
 		}
 
+		if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
+			// Hack for /global /local direct messaging...
+			String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();
+			if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+				channel = "local";
+			} else {
+				channel = "global";
+			}
+		} 
+
 
 		if (channel.equals("local") || (!MultiChatSpigot.globalChatServer)) {
 
