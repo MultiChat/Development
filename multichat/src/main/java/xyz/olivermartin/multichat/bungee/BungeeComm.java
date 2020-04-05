@@ -444,7 +444,7 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:pxe")) {
 
-			DebugManager.log("[multichat:dn] Got an incoming pexecute message!");
+			DebugManager.log("[multichat:pxe] Got an incoming pexecute message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -452,6 +452,7 @@ public class BungeeComm implements Listener {
 			try {
 
 				String command = in.readUTF();
+				DebugManager.log("[multichat:pxe] Command is: " + command);
 				ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), command);
 
 			} catch (IOException e) {
@@ -462,7 +463,7 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:ppxe")) {
 
-			DebugManager.log("[multichat:dn] Got an incoming pexecute message (for a player)!");
+			DebugManager.log("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -471,6 +472,9 @@ public class BungeeComm implements Listener {
 
 				String command = in.readUTF();
 				String playerRegex = in.readUTF();
+
+				DebugManager.log("[multichat:ppxe] Command is: " + command);
+				DebugManager.log("[multichat:ppxe] Player regex is: " + playerRegex);
 
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
 
