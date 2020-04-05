@@ -1,6 +1,6 @@
 package xyz.olivermartin.multichat.spongebridge.commands;
 
-import java.util.Collection;
+import java.util.Optional;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
@@ -19,8 +19,15 @@ public class SpongeProxyExecuteCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource sender, CommandContext rawArgs) throws CommandException {
 
-		Collection<String> listArgs = rawArgs.getAll("message");
-		String[] args = listArgs.toArray(new String[0]);
+		Optional<String> strArgs = rawArgs.getOne("message");
+		String[] args;
+
+		if (strArgs.isPresent()) {
+			args = strArgs.get().split(" ");
+		} else {
+			sender.sendMessage(Text.of("Usage: /pexecute [-p <player>] <command>"));
+			return CommandResult.success();
+		}
 
 		DebugManager.log("[PXE] Getting ready for PXE");
 
