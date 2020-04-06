@@ -313,66 +313,66 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
+			//TODO? I removed these checks... I think thats good... if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
 
-				if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
-					}
-
-					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
-
-						String message = event.getMessage();
-
-						if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
-							MessageManager.sendMessage(player, "mute_cannot_send_message");
-							event.setCancelled(true);
-							return;
-						}
-
-						DebugManager.log(player.getName() + "- about to check for spam");
-
-						if (ChatControl.handleSpam(player, message, "global_chat")) {
-							DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
-							event.setCancelled(true);
-							return;
-						}
-
-						Optional<String> crm;
-
-						crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
-
-						if (crm.isPresent()) {
-							message = crm.get();
-							event.setMessage(message);
-						} else {
-							event.setCancelled(true);
-							return;
-						}
-
-						if (!player.hasPermission("multichat.chat.link")) {
-							message = ChatControl.replaceLinks(message);
-							event.setMessage(message);
-						}
-
-						// Let server know players channel preference
-						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
-
-						// Message passes through to spigot here
-
-						if (hiddenStaff.contains(player.getUniqueId())) {
-							hiddenStaff.remove(player.getUniqueId());
-						}
-
-					} else {
-						MessageManager.sendMessage(player, "freezechat_frozen");
-						event.setCancelled(true);
-					}
-
-				}
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+				BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 			}
+
+			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+
+				String message = event.getMessage();
+
+				if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
+					MessageManager.sendMessage(player, "mute_cannot_send_message");
+					event.setCancelled(true);
+					return;
+				}
+
+				DebugManager.log(player.getName() + "- about to check for spam");
+
+				if (ChatControl.handleSpam(player, message, "global_chat")) {
+					DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
+					event.setCancelled(true);
+					return;
+				}
+
+				Optional<String> crm;
+
+				crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+
+				if (crm.isPresent()) {
+					message = crm.get();
+					event.setMessage(message);
+				} else {
+					event.setCancelled(true);
+					return;
+				}
+
+				if (!player.hasPermission("multichat.chat.link")) {
+					message = ChatControl.replaceLinks(message);
+					event.setMessage(message);
+				}
+
+				// Let server know players channel preference
+				BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
+
+				// Message passes through to spigot here
+
+				if (hiddenStaff.contains(player.getUniqueId())) {
+					hiddenStaff.remove(player.getUniqueId());
+				}
+
+			} else {
+				MessageManager.sendMessage(player, "freezechat_frozen");
+				event.setCancelled(true);
+			}
+
 		}
+		//TODO ?}
+		//TODO? }
 	}
 
 	@EventHandler
