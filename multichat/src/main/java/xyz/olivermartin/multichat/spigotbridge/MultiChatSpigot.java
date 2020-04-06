@@ -112,8 +112,16 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
+		
+		String translationsDir = configDir.toString() + File.separator + "translations";
+		if (!new File(translationsDir).exists()) {
+			getLogger().info(logPrefix + "Creating translations directory!");
+			new File(translationsDir).mkdirs();
+		}
 
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
+		SpigotConfigManager.getInstance().registerHandler("spigotconfig_fr.yml", new File(translationsDir));
+		
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
 		if (config.contains("server_name")) {
