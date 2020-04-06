@@ -138,6 +138,14 @@ force_channel_on_join: false
 channelcommand:
 - ch
 
+# The /global command has the following aliases (other than /global)
+globalcommand:
+- g
+
+# The /local command has the following aliases (other than /local)
+localcommand:
+- l
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                     Global Chat                      | #

@@ -25,10 +25,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class LocalCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public LocalCommand() {
-		super("local", "multichat.chat.mode", aliases);
+		super("local", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("localcommand").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

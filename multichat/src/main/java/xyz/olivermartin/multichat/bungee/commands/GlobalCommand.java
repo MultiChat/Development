@@ -25,10 +25,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class GlobalCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public GlobalCommand() {
-		super("global", "multichat.chat.mode", aliases);
+		super("global", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("globalcommand").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
