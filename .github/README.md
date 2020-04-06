@@ -3,7 +3,7 @@
 # Development
 Welcome to the public code repository for MultiChat by Revilo410. (Oliver Martin)
 
-MultiChat is an advanced chat management system for Spigot/Bungeecord with over 4000 downloads.
+MultiChat is an advanced chat management system for Spigot/Bungeecord with over **15000** downloads.
 
 [Official Listing](https://www.spigotmc.org/resources/multichat.26204/)
 
