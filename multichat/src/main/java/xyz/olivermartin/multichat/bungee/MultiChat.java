@@ -260,6 +260,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
 		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("config_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("chatcontrol_fr.yml", new File(translationsDir));
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();

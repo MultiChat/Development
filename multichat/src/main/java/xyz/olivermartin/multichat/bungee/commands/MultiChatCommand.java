@@ -107,6 +107,8 @@ public class MultiChatCommand extends Command {
 
 					ConfigManager.getInstance().getHandler("messages_fr.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("joinmessages_fr.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("config_fr.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("chatcontrol_fr.yml").startupConfig();
 
 					// Reload, and re-register commands
 					CommandManager.reload();
