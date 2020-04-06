@@ -362,7 +362,7 @@ public class CommandHandler implements CommandExecutor {
 					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).matches(bl)) blacklisted = true;
 				}
 
-				if (blacklisted) {
+				if (blacklisted && !sender.hasPermission("multichatspigot.nick.blacklist")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
 					return true;
@@ -466,7 +466,7 @@ public class CommandHandler implements CommandExecutor {
 				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).matches(bl)) blacklisted = true;
 			}
 
-			if (blacklisted) {
+			if (blacklisted && !sender.hasPermission("multichatspigot.nick.blacklist")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
 				return true;

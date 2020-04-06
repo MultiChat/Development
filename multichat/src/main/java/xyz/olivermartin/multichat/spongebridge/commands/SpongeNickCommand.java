@@ -130,7 +130,7 @@ public class SpongeNickCommand implements CommandExecutor {
 			if (strippedNickname.matches(bl)) blacklisted = true;
 		}
 
-		if (blacklisted) {
+		if (blacklisted && !sender.hasPermission("multichatsponge.nick.blacklist")) {
 
 			sender.sendMessage(Text.of("Sorry, this name is not allowed!"));
 			return CommandResult.success();
