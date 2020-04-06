@@ -15,6 +15,7 @@ import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
 import org.spongepowered.api.text.Text;
 
+import xyz.olivermartin.multichat.spongebridge.DebugManager;
 import xyz.olivermartin.multichat.spongebridge.MultiChatSponge;
 
 /**
@@ -35,6 +36,8 @@ public class BungeePlayerCommandListener implements RawDataListener {
 		String playerRegex = data.readUTF();
 		String command = data.readUTF();
 
+		DebugManager.log("[MCE-P] Got player: " + playerRegex + ", and command: " + command);
+
 		/* THIS BIT NOW IS A BIT OF A HACK! */
 
 		/*
@@ -45,6 +48,8 @@ public class BungeePlayerCommandListener implements RawDataListener {
 		 */
 
 		if (command.startsWith("!SINGLE L MESSAGE!") || command.startsWith("!SINGLE G MESSAGE!")) {
+
+			DebugManager.log("[MCE-P] Doing the local global direct message hack!");
 
 			String message = command.substring("!SINGLE X MESSAGE!".length(),command.length());
 
@@ -79,6 +84,9 @@ public class BungeePlayerCommandListener implements RawDataListener {
 		for (Player p : Sponge.getServer().getOnlinePlayers()) {
 
 			if (p.getName().matches(playerRegex)) {
+
+				DebugManager.log("[MCE-P] Player match found: " + p.getName());
+				DebugManager.log("[MCE-P] Getting them to execute command: " + command);
 
 				Sponge.getCommandManager().process(p, command);
 

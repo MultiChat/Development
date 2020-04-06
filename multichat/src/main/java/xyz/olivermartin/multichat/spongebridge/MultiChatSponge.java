@@ -137,7 +137,7 @@ public final class MultiChatSponge {
 	public void onServerStart(GameStartedServerEvent event) {
 
 		// DEBUG MODE
-		//DebugManager.setDebug(true);//TODO
+		DebugManager.setDebug(true);//TODO
 		
 		instance = this;
 
