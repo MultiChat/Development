@@ -13,10 +13,11 @@ version: "1.8"   #
 
 # 1. General
 # 2. Private Messaging
-# 3. Global Chat
-# 4. Group Chats
-# 5. Staff Chats
-# 6. Other
+# 3. Chat Channels
+# 4. Global Chat
+# 5. Group Chats
+# 6. Staff Chats
+# 7. Other
 
 ############################################################
 # +------------------------------------------------------+ #

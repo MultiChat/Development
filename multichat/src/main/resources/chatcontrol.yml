@@ -12,7 +12,9 @@ version: "1.8"   #
 ##################
 
 # 1. Chat Control Rules
-# 2. Mute and Ignore Settings
+# 2. Anti-Spam Settings
+# 3. Mute and Ignore Settings
+# 4. Link / URL Controls
 
 ############################################################
 # +------------------------------------------------------+ #
