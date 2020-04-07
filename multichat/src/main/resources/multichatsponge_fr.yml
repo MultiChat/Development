@@ -88,24 +88,23 @@ show_nickname_prefix: false
 # Que doit être affiché avant le surnom ?
 nickname_prefix: "~"
 
-# TRANSLATIONS NEEDED:
-
-# The maximum length for nicknames
+# Nombre de caratères maximal d'un surnom
 nickname_length_limit: 20
 
-# The minimum length for nicknames
+# Nombre de caratère minimal d'un surnom
 nickname_length_min: 3
 
-# Should formatting codes such as "&3" be counted in the length of the nickname?
+# Faut-il compter les codes de formatage tels que &3 dans le nombre de caractères du surnom ?
 nickname_length_limit_formatting: false
 
-# Should MultiChat use a database to store nicknames instead of regular files?
+# MultiChat devrait-il utiliser un sytème de base données (MySQL ou SQLite) pour stocker les surnoms au lieu du system de fichier standard?
 # (PLEASE NOTE THE SERVER MUST BE RESTARTED FOR THIS TO TAKE EFFECT)
 nickname_sql: false
 
-# If the above option is true, MultiChat will use SQLite by default. Set the below to true if you would prefer to use MySQL.
+# Si l’option ci-dessus est true, MultiChat utilisera SQLite par défaut.
+# Définissez l'option ci-dessous à true si vous préférez utiliser MySQL.
 mysql: false
-mysql_url: "" # For example "localhost:3306"
-mysql_database: "" # Put the name of your MySQL database here
-mysql_user: ""
-mysql_pass: ""
+mysql_url: "" # Adresse IP ou web de la base de données et le port TCP (ex : "localhost:3306")
+mysql_database: "" # Nom de la base de données
+mysql_user: "" #Utilistateur base de données
+mysql_pass: "" #Mot de passe

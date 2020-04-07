@@ -265,7 +265,7 @@ multichatexecutecommand:
 - gexe
 - gcommand
 
-# Control what aspects of chat are logged by MultiChat (useful for GDPR etc.)
+# Contrôlez quels aspects du chat sont enregistrés dans les logs MultiChat (utile pour la RGDP etc.)
 privacy_settings:
     log_pms: true
     log_staffchat: true

@@ -64,7 +64,6 @@ welcome: true
 
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs!"
 
-# TRANSLATION NEEDED: Should the welcome message be broadcast to the entire network?
-# TRUE = BROADCAST
-# FALSE = PRIVATE MESSAGE TO THE INDIVIDUAL PLAYER
+# Le message de bienvenue doit-il être diffusé sur l’ensemble du réseau ?
+# TRUE = # Paramétrage disponible : true (diffusion du message) ou false (diffusion au joueur qui se connecte uniquement)
 broadcast_welcome_message: true
