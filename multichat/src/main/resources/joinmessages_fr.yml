@@ -53,7 +53,7 @@ silentquit: "%NAME% &b&os'est déconnecté silencieusement"
 
 ##############################################################
 
-# Un message de bienvenue doit-il être affiché la première fois qu'un joueur rejoint le réseau ?
+# Un message de bienvenue doit-il être diffusé sur l’ensemble du réseau la première fois qu'un joueur rejoint?
 # Paramétrage disponible : true ou false
 
 welcome: true
@@ -64,6 +64,12 @@ welcome: true
 
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs!"
 
-# Le message de bienvenue doit-il être diffusé sur l’ensemble du réseau ?
-# TRUE = # Paramétrage disponible : true (diffusion du message) ou false (diffusion au joueur qui se connecte uniquement)
-broadcast_welcome_message: true
+# Un autre message de bienvenue doit-il être affiché au joueur qui se connecte uniquement?
+
+private_welcome: false
+
+# Définissez le message de bienvenue ci-dessous
+# Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
+# %NAME% = Le nom du joueur
+
+private_welcome_message: "&dSalut %NAME%! S'il vous plaît lire les règles!"

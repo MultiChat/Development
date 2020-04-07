@@ -463,26 +463,37 @@ public class Events implements Listener {
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
+			String privateWelcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("private_welcome_message");
 
 			ChatManipulation chatman = new ChatManipulation();
 
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
+			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
 
 			boolean broadcastWelcome = true;
-			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("broadcast_welcome_message")) {
-				broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("broadcast_welcome_message");
+			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("welcome")) {
+				broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome");
+			}
+
+			boolean privateWelcome = false;
+			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("private_welcome")) {
+				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
 			}
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
 
-					if (firstJoin && ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome")
-							&& (broadcastWelcome || onlineplayer.getName().equals(player.getName()))) {
+					if (firstJoin && broadcastWelcome) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
 					}
+
+					if (firstJoin && privateWelcome && onlineplayer.getName().equals(player.getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
+					}
+
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {
