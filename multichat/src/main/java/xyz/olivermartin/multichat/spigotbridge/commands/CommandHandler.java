@@ -150,7 +150,7 @@ public class CommandHandler implements CommandExecutor {
 							int count = 0;
 							int max = mapUUIDName.size();
 							int checkcount = 25;
-							int checkpoint = max/100*checkcount;
+							int checkpoint = checkcount/100*max;
 
 							for (Entry<UUID, String> entry : mapUUIDName.entrySet()) {
 
@@ -158,7 +158,7 @@ public class CommandHandler implements CommandExecutor {
 								if (count > checkpoint) {
 									commandSender.sendMessage(ChatColor.GREEN + "Completed " + checkcount + "% of migration...");
 									checkcount += 25;
-									checkpoint = max/100*checkcount;
+									checkpoint = checkcount/100*max;
 								}
 
 								UUID uuid = entry.getKey();

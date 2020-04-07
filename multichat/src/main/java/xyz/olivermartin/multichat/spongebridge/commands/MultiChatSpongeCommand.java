@@ -115,7 +115,7 @@ public class MultiChatSpongeCommand implements CommandExecutor {
 				int count = 0;
 				int max = profiles.size();
 				int checkcount = 25;
-				int checkpoint = max/100*checkcount;
+				int checkpoint = checkcount/100*max;
 
 				for (GameProfile gp : profiles) {
 
@@ -123,7 +123,7 @@ public class MultiChatSpongeCommand implements CommandExecutor {
 					if (count > checkpoint) {
 						sender.sendMessage(Text.of("Completed " + checkcount + "% of migration..."));
 						checkcount += 25;
-						checkpoint = max/100*checkcount;
+						checkpoint = checkcount/100*max;
 					}
 
 					if (!gp.getName().isPresent()) continue;
