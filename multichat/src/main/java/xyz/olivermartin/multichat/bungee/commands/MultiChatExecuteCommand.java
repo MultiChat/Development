@@ -65,6 +65,8 @@ public class MultiChatExecuteCommand extends Command {
 					message = message + arg + " ";
 				}
 			}
+			
+			message = message.trim();
 
 			for (ServerInfo s : ProxyServer.getInstance().getServers().values()) {
 

@@ -6,11 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -22,6 +24,8 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.database.DatabaseManager;
+import xyz.olivermartin.multichat.database.DatabaseMode;
 import xyz.olivermartin.multichat.spigotbridge.commands.CommandHandler;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerHighest;
 import xyz.olivermartin.multichat.spigotbridge.listeners.ChatListenerLowest;
@@ -55,6 +59,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 	public static Map<String, String> placeholderMap = new HashMap<String, String>();
 
+	public static Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
+
 	public static Optional<Chat> getVaultChat() {
 		if (chat == null) return Optional.empty();
 		return Optional.of(chat);
@@ -70,7 +76,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 	public static File configDir;
 
-	private static final String nameDataFile = "namedata.dat";
+	public static final String nameDataFile = "namedata.dat";
 	private static File legacyNicknameFile; 
 
 	public static boolean setDisplayNameLastVal = false;
@@ -89,14 +95,16 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 	public static String nicknamePrefix = "~";
 	public static List<String> nicknameBlacklist = new ArrayList<String>();
 	public static int nicknameMaxLength = 20;
+	public static int nicknameMinLength = 3;
 	public static boolean nicknameLengthIncludeFormatting = false;
+	public static boolean nicknameSQL = false;
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
 
 		// Read nickname data
 
-		configDir = getDataFolder();
+		configDir = getDataFolder().getAbsoluteFile();
 		legacyNicknameFile = new File(configDir, "Nicknames.dat");
 
 		if (!getDataFolder().exists()) {
@@ -104,8 +112,16 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
+		
+		String translationsDir = configDir.toString() + File.separator + "translations";
+		if (!new File(translationsDir).exists()) {
+			getLogger().info(logPrefix + "Creating translations directory!");
+			new File(translationsDir).mkdirs();
+		}
 
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
+		SpigotConfigManager.getInstance().registerHandler("spigotconfig_fr.yml", new File(translationsDir));
+		
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
 		if (config.contains("server_name")) {
@@ -139,63 +155,169 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 				nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
 
 			}
-		}
+			if (config.contains("nickname_length_min")) {
 
-		File f = new File(configDir, nameDataFile);
+				nicknameMinLength = config.getInt("nickname_length_min");
 
-		if ((f.exists()) && (!f.isDirectory())) {
-
-			getLogger().info(logPrefix + "Attempting startup load for Nicknames");
-
-			File file = new File(configDir, nameDataFile);
-			FileInputStream saveFile;
-			try {
-				saveFile = new FileInputStream(file);
-				NameManager.getInstance().loadNicknameData(saveFile);
-			} catch (FileNotFoundException e) {
-				getLogger().info(logPrefix + "[ERROR] Could not load nickname data");
-				e.printStackTrace();
 			}
+			if (config.contains("nickname_sql")) {
 
-			getLogger().info(logPrefix + "Load completed!");
+				nicknameSQL = config.getBoolean("nickname_sql");
 
-		} else if (legacyNicknameFile.exists()) {
+				if (nicknameSQL) {
 
-			// LEGACY NICKNAME FILE HANDLING --------------------------------------------
+					if (config.getBoolean("mysql")) {
 
-			HashMap<UUID, String> result = null;
+						DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
 
-			try {
+						DatabaseManager.getInstance().setURLMySQL(config.getString("mysql_url"));
+						DatabaseManager.getInstance().setUsernameMySQL(config.getString("mysql_user"));
+						DatabaseManager.getInstance().setPasswordMySQL(config.getString("mysql_pass"));
 
-				FileInputStream saveFile = new FileInputStream(legacyNicknameFile);
-				ObjectInputStream in = new ObjectInputStream(saveFile);
-				result = (HashMap<UUID, String>) in.readObject();
-				in.close();
-				getLogger().info(logPrefix + "Loaded a legacy (pre 1.6) nicknames file. Attempting conversion...");
+						try {
 
-				int counter = 0;
+							if (config.contains("mysql_database")) {
+								DatabaseManager.getInstance().createDatabase("multichatspigot.db", config.getString("mysql_database"));
+							} else {
+								DatabaseManager.getInstance().createDatabase("multichatspigot.db", "multichatspigot");
+							}
 
-				if (result != null) {
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
 
-					if (result.keySet() != null) {
+							NameManager.useSQL(nicknameSQL);
 
-						for (UUID u : result.keySet()) {
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							NameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
+						}
 
-							counter++;
-							NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
-							NameManager.getInstance().setNickname(u, result.get(u));
+					} else {
 
+						DatabaseManager.getInstance().setMode(DatabaseMode.SQLite);
+
+						DatabaseManager.getInstance().setPathSQLite(configDir);
+
+						try {
+
+							DatabaseManager.getInstance().createDatabase("multichatspigot.db");
+
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+
+							NameManager.useSQL(nicknameSQL);
+
+						} catch (SQLException e) {
+							nicknameSQL = false;
+							NameManager.useSQL(false);
+							System.err.println("Could not enable database! Using files...");
+							e.printStackTrace();
 						}
 
 					}
 
 				}
 
+			}
+		}
+
+		// If we are using File Based name storage
+		if (NameManager.getInstance() instanceof FileNameManager) {
+
+			File f = new File(configDir, nameDataFile);
+
+			if ((f.exists()) && (!f.isDirectory())) {
+
+				getLogger().info(logPrefix + "Attempting startup load for Nicknames");
+
 				File file = new File(configDir, nameDataFile);
-				FileOutputStream saveFile2;
+				FileInputStream saveFile;
 				try {
-					saveFile2 = new FileOutputStream(file);
-					NameManager.getInstance().saveNicknameData(saveFile2);
+					saveFile = new FileInputStream(file);
+					if (NameManager.getInstance() instanceof FileNameManager) {
+						((FileNameManager)NameManager.getInstance()).loadNicknameData(saveFile);
+					}
+
+				} catch (FileNotFoundException e) {
+					getLogger().info(logPrefix + "[ERROR] Could not load nickname data");
+					e.printStackTrace();
+				}
+
+				getLogger().info(logPrefix + "Load completed!");
+
+			} else if (legacyNicknameFile.exists()) {
+
+				// LEGACY NICKNAME FILE HANDLING --------------------------------------------
+
+				HashMap<UUID, String> result = null;
+
+				try {
+
+					FileInputStream saveFile = new FileInputStream(legacyNicknameFile);
+					ObjectInputStream in = new ObjectInputStream(saveFile);
+					result = (HashMap<UUID, String>) in.readObject();
+					in.close();
+					getLogger().info(logPrefix + "Loaded a legacy (pre 1.6) nicknames file. Attempting conversion...");
+
+					int counter = 0;
+
+					if (result != null) {
+
+						if (result.keySet() != null) {
+
+							for (UUID u : result.keySet()) {
+
+								counter++;
+								NameManager.getInstance().registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
+								NameManager.getInstance().setNickname(u, result.get(u));
+
+							}
+
+						}
+
+					}
+
+					File file = new File(configDir, nameDataFile);
+					FileOutputStream saveFile2;
+					try {
+						saveFile2 = new FileOutputStream(file);
+						if (NameManager.getInstance() instanceof FileNameManager) {
+							((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile2);
+						}
+					} catch (FileNotFoundException e) {
+						getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
+						e.printStackTrace();
+					}
+
+					getLogger().info(logPrefix + "The files were created!");
+
+				} catch (IOException|ClassNotFoundException e) {
+
+					getLogger().info(logPrefix + "[ERROR] An error has occured reading the legacy nicknames file. Please delete it.");
+					e.printStackTrace();
+
+				}
+
+			} else {
+
+				getLogger().info(logPrefix + "Name data files do not exist to load. Must be first startup!");
+				getLogger().info(logPrefix + "Enabling Nicknames! :D");
+				getLogger().info(logPrefix + "Attempting to create hash files!");
+
+				File file = new File(configDir, nameDataFile);
+				FileOutputStream saveFile;
+				try {
+					saveFile = new FileOutputStream(file);
+					if (NameManager.getInstance() instanceof FileNameManager) {
+						((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile);
+					}
+
 				} catch (FileNotFoundException e) {
 					getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
 					e.printStackTrace();
@@ -203,30 +325,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 				getLogger().info(logPrefix + "The files were created!");
 
-			} catch (IOException|ClassNotFoundException e) {
-
-				getLogger().info(logPrefix + "[ERROR] An error has occured reading the legacy nicknames file. Please delete it.");
-				e.printStackTrace();
-
 			}
-
-		} else {
-
-			getLogger().info(logPrefix + "Name data files do not exist to load. Must be first startup!");
-			getLogger().info(logPrefix + "Enabling Nicknames! :D");
-			getLogger().info(logPrefix + "Attempting to create hash files!");
-
-			File file = new File(configDir, nameDataFile);
-			FileOutputStream saveFile;
-			try {
-				saveFile = new FileOutputStream(file);
-				NameManager.getInstance().saveNicknameData(saveFile);
-			} catch (FileNotFoundException e) {
-				getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
-				e.printStackTrace();
-			}
-
-			getLogger().info(logPrefix + "The files were created!");
 
 		}
 
@@ -239,6 +338,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:dn");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:pxe");
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:ppxe");
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", MultiChatPluginMessageListener.getInstance());
@@ -262,6 +363,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 		this.getCommand("realname").setExecutor(CommandHandler.getInstance());
 		this.getCommand("username").setExecutor(CommandHandler.getInstance());
 		this.getCommand("multichatspigot").setExecutor(CommandHandler.getInstance());
+		this.getCommand("pxe").setExecutor(CommandHandler.getInstance());
+		this.getCommand("pexecute").setExecutor(CommandHandler.getInstance());
 
 		// Manage dependencies
 
@@ -308,15 +411,28 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 	public void onDisable() {
 
-		File file = new File(configDir, nameDataFile);
-		FileOutputStream saveFile;
-		try {
-			saveFile = new FileOutputStream(file);
-			NameManager.getInstance().saveNicknameData(saveFile);
-		} catch (FileNotFoundException e) {
-			getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
-			e.printStackTrace();
+		if (nicknameSQL) {
+			try {
+				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} else {
+
+			File file = new File(configDir, nameDataFile);
+			FileOutputStream saveFile;
+			try {
+				saveFile = new FileOutputStream(file);
+				if (NameManager.getInstance() instanceof FileNameManager) {
+					((FileNameManager)NameManager.getInstance()).saveNicknameData(saveFile);
+				}
+			} catch (FileNotFoundException e) {
+				getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
+				e.printStackTrace();
+			}
+
 		}
+
 	}
 
 }

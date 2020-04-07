@@ -57,6 +57,15 @@ public class ChatListenerHighest implements Listener {
 
 			String channelName = MultiChatSpigot.playerChannels.get(event.getPlayer());
 
+			// HACK for /local <message> and /global<message>
+			
+			if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
+				String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();
+				channelName = tempChannel.startsWith("!SINGLE L MESSAGE!") ? "local" : "global";
+			}
+			
+			// END HACK
+			
 			if (MultiChatSpigot.channelObjects.containsKey(channelName)) {
 
 				PseudoChannel channelObject = MultiChatSpigot.channelObjects.get(channelName);
@@ -96,10 +105,20 @@ public class ChatListenerHighest implements Listener {
 		}
 
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
+			
+			if (!MultiChatSpigot.globalChatServer) {
+				return;
+			}
+			
+			if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
+				// Hack for /global /local direct messaging...
+				String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();
+				if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+					return;
+				}
+			} else if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local") || (!MultiChatSpigot.globalChatServer)) {
 
-			if (MultiChatSpigot.playerChannels.get(event.getPlayer()).equals("local")) {
-
-				// If its a local chat message then we dont need to do anything else!
+				// If its a local chat message (or we can't use global chat here) then we dont need to do anything else!
 				return;
 			}
 

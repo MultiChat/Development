@@ -9,11 +9,11 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 
 public class ConsoleManager {
-	
+
 	public static void log(String message) {
 		logToConsole(message);
 	}
-	
+
 	public static void logDisplayMessage(String message) {
 		logToConsole(MessageManager.getMessage("console_display_prefix") + message);
 	}
@@ -23,25 +23,37 @@ public class ConsoleManager {
 		logToConsole(MessageManager.getMessage("console_chat_prefix") + message);
 
 	}
-	
+
 	public static void logModChat(String message) {
+
+		if (!MultiChat.logStaffChat) {
+			return;
+		}
 
 		logToConsole(MessageManager.getMessage("console_modchat_prefix") + message);
 
 	}
-	
+
 	public static void logGroupChat(String message) {
+
+		if (!MultiChat.logGroupChat) {
+			return;
+		}
 
 		logToConsole(MessageManager.getMessage("console_groupchat_prefix") + message);
 
 	}
-	
+
 	public static void logAdminChat(String message) {
+
+		if (!MultiChat.logStaffChat) {
+			return;
+		}
 
 		logToConsole(MessageManager.getMessage("console_adminchat_prefix") + message);
 
 	}
-	
+
 	public static void logHelpMe(String message) {
 
 		logToConsole(MessageManager.getMessage("console_helpme_prefix") + message);
@@ -54,11 +66,15 @@ public class ConsoleManager {
 		logToConsole(MessageManager.getMessage("console_chat_prefix") + prefix, message);
 
 	}
-	
+
 	public static void logSocialSpy(String p1, String p2, String message) {
-		
+
+		if (!MultiChat.logPMs) {
+			return;
+		}
+
 		logToConsole(MessageManager.getMessage("console_socialspy_prefix") + "(" + p1 + " -> " + p2 + ")  " + message);
-		
+
 	}
 
 	private static void logToConsole(String message, String unformattedMessage) {

@@ -1,9 +1,8 @@
 name: MultiChatSpigot
-version: 1.7.5
+version: 1.8
 author: Revilo410
 main: xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot
 softdepend: [Vault,PlaceholderAPI]
-api-version: 1.14
 commands:
    nick:
       description: Gives a player a nickname
@@ -21,7 +20,18 @@ commands:
       permission: multichatspigot.username
       permission-message: You do not have permission (multichatspigot.username)
    multichatspigot:
-      description: MultiChatSpigot reload command
-      usage: /multichatspigot reload
+      description: MultiChatSpigot reload and migrate commands
+      usage: /multichatspigot [reload/migratetosql]
       permission: multichatspigot.reload
       permission-message: You do not have permission (multichatspigot.reload)
+   pxe:
+      description: Proxy Execute - Execute commands on Proxy server
+      usage: /pxe [-p <player>] <command to execute>
+      permission: multichatspigot.pexecute
+      permission-message: You do not have permission (multichatspigot.pexecute)
+   pexecute:
+      description: Proxy Execute - Execute commands on Proxy server
+      usage: /pexecute [-p <player>] <command to execute>
+      permission: multichatspigot.pexecute
+      permission-message: You do not have permission (multichatspigot.pexecute)
+      

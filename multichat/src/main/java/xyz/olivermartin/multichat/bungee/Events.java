@@ -313,66 +313,66 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
+			//TODO? I removed these checks... I think thats good... if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
 
-				if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
-					}
-
-					if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
-
-						String message = event.getMessage();
-
-						if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
-							MessageManager.sendMessage(player, "mute_cannot_send_message");
-							event.setCancelled(true);
-							return;
-						}
-
-						DebugManager.log(player.getName() + "- about to check for spam");
-
-						if (ChatControl.handleSpam(player, message, "global_chat")) {
-							DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
-							event.setCancelled(true);
-							return;
-						}
-
-						Optional<String> crm;
-
-						crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
-
-						if (crm.isPresent()) {
-							message = crm.get();
-							event.setMessage(message);
-						} else {
-							event.setCancelled(true);
-							return;
-						}
-						
-						if (!player.hasPermission("multichat.chat.link")) {
-							message = ChatControl.replaceLinks(message);
-							event.setMessage(message);
-						}
-
-						// Let server know players channel preference
-						BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
-
-						// Message passes through to spigot here
-
-						if (hiddenStaff.contains(player.getUniqueId())) {
-							hiddenStaff.remove(player.getUniqueId());
-						}
-
-					} else {
-						MessageManager.sendMessage(player, "freezechat_frozen");
-						event.setCancelled(true);
-					}
-
-				}
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+				BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 			}
+
+			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+
+				String message = event.getMessage();
+
+				if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
+					MessageManager.sendMessage(player, "mute_cannot_send_message");
+					event.setCancelled(true);
+					return;
+				}
+
+				DebugManager.log(player.getName() + "- about to check for spam");
+
+				if (ChatControl.handleSpam(player, message, "global_chat")) {
+					DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
+					event.setCancelled(true);
+					return;
+				}
+
+				Optional<String> crm;
+
+				crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+
+				if (crm.isPresent()) {
+					message = crm.get();
+					event.setMessage(message);
+				} else {
+					event.setCancelled(true);
+					return;
+				}
+
+				if (!player.hasPermission("multichat.chat.link")) {
+					message = ChatControl.replaceLinks(message);
+					event.setMessage(message);
+				}
+
+				// Let server know players channel preference
+				BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
+
+				// Message passes through to spigot here
+
+				if (hiddenStaff.contains(player.getUniqueId())) {
+					hiddenStaff.remove(player.getUniqueId());
+				}
+
+			} else {
+				MessageManager.sendMessage(player, "freezechat_frozen");
+				event.setCancelled(true);
+			}
+
 		}
+		//TODO ?}
+		//TODO? }
 	}
 
 	@EventHandler
@@ -428,9 +428,9 @@ public class Events implements Listener {
 			//ConsoleManager.log("Created new global chat entry for " + player.getName());
 
 		}
-		
+
 		if (MultiChat.forceChannelOnJoin) {
-			
+
 			boolean globalMode;
 			if (!MultiChat.defaultChannel.equalsIgnoreCase("local")) {
 				globalMode = true;
@@ -438,7 +438,7 @@ public class Events implements Listener {
 				globalMode = false;
 			}
 			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
-			
+
 		}
 
 		// Set player to appropriate channels
@@ -463,20 +463,37 @@ public class Events implements Listener {
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
+			String privateWelcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("private_welcome_message");
 
 			ChatManipulation chatman = new ChatManipulation();
 
 			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
 			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
 			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
+			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
+
+			boolean broadcastWelcome = true;
+			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("welcome")) {
+				broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome");
+			}
+
+			boolean privateWelcome = false;
+			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("private_welcome")) {
+				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
+			}
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
 
-					if (firstJoin && ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome")) {
+					if (firstJoin && broadcastWelcome) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
 					}
+
+					if (firstJoin && privateWelcome && onlineplayer.getName().equals(player.getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
+					}
+
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
 
 				} else {

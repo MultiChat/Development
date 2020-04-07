@@ -29,8 +29,18 @@ public class ChatListenerLowest implements Listener {
 			channel = "global";
 		}
 
+		if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
+			// Hack for /global /local direct messaging...
+			String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();
+			if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+				channel = "local";
+			} else {
+				channel = "global";
+			}
+		} 
 
-		if (channel.equals("local")) {
+
+		if (channel.equals("local") || (!MultiChatSpigot.globalChatServer)) {
 
 			// Local chat
 
@@ -80,10 +90,11 @@ public class ChatListenerLowest implements Listener {
 		format = format.replace("!!!1!!!", "%1$s");
 		format = format.replace("!!!2!!!", "%2$s");
 
-		if (channel.equals("local")) {
-			// If we are a global chat server, then we want to set the format!
-			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
+		if (channel.equals("local") || (!MultiChatSpigot.globalChatServer)) {
+			// TRY TO FIX ISSUE WITH MULTICHAT NOT FORMATTING LOCAL MESSAGES IF NOT IN GLOBAL MODE if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
+			event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 		} else {
+			// If we are a global chat server, then we want to set the format!
 			if (MultiChatSpigot.globalChatServer) event.setFormat(ChatColor.translateAlternateColorCodes('&', format));
 		}
 	}

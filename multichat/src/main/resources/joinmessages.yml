@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.7.5" #
+version: "1.8"   #
 ##################
 
 ############################################################
@@ -48,7 +48,7 @@ silentquit: "&b&o%NAME% &b&oleft the network silently"
 
 ##############################################################
 
-# Should a welcome message be displayed the first time a player joins the network?
+# Should a welcome message be broadcast to the network the first time a player joins?
 
 welcome: true
 
@@ -57,3 +57,12 @@ welcome: true
 # %NAME% = The name of the sender
 
 welcome_message: "&dWelcome %NAME% to the network for the first time!"
+
+# Should a private welcome message (separate to the one above) be sent to the player the first time they join the network?
+
+private_welcome: false
+
+# Define the private welcome message here
+# USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
+# %NAME% = The name of the sender
+private_welcome_message: "&5Hi there %NAME%, please make sure you read the /rules!"

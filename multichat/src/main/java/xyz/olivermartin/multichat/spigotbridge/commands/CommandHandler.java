@@ -1,5 +1,11 @@
 package xyz.olivermartin.multichat.spigotbridge.commands;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,9 +20,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
+import xyz.olivermartin.multichat.spigotbridge.FileNameManager;
 import xyz.olivermartin.multichat.spigotbridge.MetaManager;
 import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 import xyz.olivermartin.multichat.spigotbridge.NameManager;
+import xyz.olivermartin.multichat.spigotbridge.SQLNameManager;
+import xyz.olivermartin.multichat.spigotbridge.SpigotCommunicationManager;
 import xyz.olivermartin.multichat.spigotbridge.SpigotConfigManager;
 
 public class CommandHandler implements CommandExecutor {
@@ -87,6 +96,11 @@ public class CommandHandler implements CommandExecutor {
 							MultiChatSpigot.nicknameLengthIncludeFormatting = config.getBoolean("nickname_length_limit_formatting");
 
 						}
+						if (config.contains("nickname_length_min")) {
+
+							MultiChatSpigot.nicknameMinLength = config.getInt("nickname_length_min");
+
+						}
 					}
 
 					commandSender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded!");
@@ -98,9 +112,161 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
+			} else if (args[0].equalsIgnoreCase("migratetosql")) {
+
+				if (commandSender instanceof Player) {
+
+					commandSender.sendMessage(ChatColor.DARK_RED + "This command can only be executed from the server console for security reasons!");
+					return true;
+
+				} else {
+
+					if (! (NameManager.getInstance() instanceof SQLNameManager)) {
+						commandSender.sendMessage(ChatColor.DARK_RED + "This command can only be used in SQL mode!");
+						return true;
+					}
+
+					File f = new File(MultiChatSpigot.configDir, MultiChatSpigot.nameDataFile);
+					FileNameManager fnm = new FileNameManager();
+
+					if ((f.exists()) && (!f.isDirectory())) {
+
+						commandSender.sendMessage(ChatColor.GREEN + "Starting load of nickname file data...");
+
+						File file = new File(MultiChatSpigot.configDir, MultiChatSpigot.nameDataFile);
+						FileInputStream saveFile;
+						try {
+							saveFile = new FileInputStream(file);
+							fnm.loadNicknameData(saveFile);
+							commandSender.sendMessage(ChatColor.GREEN + "Successfully loaded nickname data...");
+
+							Map<UUID,String> mapUUIDName = fnm.getMapUUIDName();
+							Map<UUID,String> mapUUIDNick = fnm.getMapUUIDNick();
+							Map<String,String> mapNameFormatted = fnm.getMapNameFormatted();
+							Map<String,String> mapNickFormatted = fnm.getMapNickFormatted();
+
+							commandSender.sendMessage(ChatColor.GREEN + "Starting migration");
+
+							int count = 0;
+							int max = mapUUIDName.size();
+							int checkcount = 25;
+							int checkpoint = checkcount/100*max;
+
+							for (Entry<UUID, String> entry : mapUUIDName.entrySet()) {
+
+								count++;
+								if (count > checkpoint) {
+									commandSender.sendMessage(ChatColor.GREEN + "Completed " + checkcount + "% of migration...");
+									checkcount += 25;
+									checkpoint = checkcount/100*max;
+								}
+
+								UUID uuid = entry.getKey();
+								String name = entry.getValue();
+								String formattedName = mapNameFormatted.get(name);
+								String nick;
+								String formattedNick;
+								if (mapUUIDNick.containsKey(uuid)) {
+									nick = mapUUIDNick.get(uuid);
+									formattedNick = mapNickFormatted.get(nick);
+									if (formattedNick.equals(formattedName)) {
+										nick = null;
+										formattedNick = null;
+									}
+								} else {
+									nick = null;
+									formattedNick = null;
+								}
+
+
+
+								((SQLNameManager)NameManager.getInstance()).registerMigratedPlayer(uuid, name, formattedName, nick, formattedNick);
+
+							}
+
+							commandSender.sendMessage(ChatColor.GREEN + "Successfully migrated: " + max + " records");
+
+							commandSender.sendMessage(ChatColor.GREEN + "Saving nickname data file...");
+
+							FileOutputStream saveFile2 = new FileOutputStream(file);
+							fnm.saveNicknameData(saveFile2);
+
+						} catch (FileNotFoundException e) {
+							commandSender.sendMessage(ChatColor.DARK_RED + "[ERROR] Could not load nickname data!");
+							e.printStackTrace();
+						}
+
+					}
+
+					return true;
+
+				}
+
 			} else {
 				// Show usage
 				return false;
+			}
+
+		} else if (cmd.getName().equalsIgnoreCase("pxe") || cmd.getName().equalsIgnoreCase("pexecute")) {
+
+
+			/* PROXY EXECUTE */
+
+			// Show usage
+			if (args.length < 1) {
+
+				return false;
+
+			} else {
+
+				boolean playerFlag = false;
+				String player = ".*";
+
+				// Handle flags
+				int index = 0;
+
+				while (index < args.length) {
+
+					if (args[index].equalsIgnoreCase("-p")) {
+						if (index+1 < args.length) {
+							playerFlag = true;
+							player = args[index+1];
+						}
+					} else {
+						break;
+					}
+
+					index = index+2;
+
+				}
+
+				if (index >= args.length) {
+					return false; // Show usage
+				}
+
+				String message = "";
+				for (String arg : args) {
+					if (index > 0) {
+						index--;
+					} else {
+						message = message + arg + " ";
+					}
+				}
+
+				if (playerFlag) {
+
+					SpigotCommunicationManager.getInstance().sendProxyExecutePlayerMessage(message, player);
+
+				} else {
+
+					SpigotCommunicationManager.getInstance().sendProxyExecuteMessage(message);
+
+				}
+
+				commandSender.sendMessage(ChatColor.GREEN + "SENT COMMAND TO PROXY SERVER");
+
+				return true;
+
 			}
 
 		}
@@ -150,19 +316,28 @@ public class CommandHandler implements CommandExecutor {
 				if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
 					// Include formatting codes in the nickname length
 					if (args[0].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
 						return true;
-
+					}
+					if (args[0].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Including format codes)");
+						return true;
 					}
 				} else {
 					// Do not include formatting codes in the nickname length
 					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
 						return true;
-
 					}
+					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+						sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
+						return true;
+					}
+				}
+
+				if (NameManager.getInstance().stripAllFormattingCodes(args[0]).length() < 1) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname cannot be empty!");
+					return true;
 				}
 
 				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
@@ -187,7 +362,7 @@ public class CommandHandler implements CommandExecutor {
 					if (NameManager.getInstance().stripAllFormattingCodes(args[0]).matches(bl)) blacklisted = true;
 				}
 
-				if (blacklisted) {
+				if (blacklisted && !sender.hasPermission("multichatspigot.nick.blacklist")) {
 
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
 					return true;
@@ -245,32 +420,41 @@ public class CommandHandler implements CommandExecutor {
 			if (MultiChatSpigot.nicknameLengthIncludeFormatting) {
 				// Include formatting codes in the nickname length
 				if (args[1].length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Including format codes)");
 					return true;
-
+				}
+				if (args[1].length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Including format codes)");
+					return true;
 				}
 			} else {
 				// Do not include formatting codes in the nickname length
 				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() > MultiChatSpigot.nicknameMaxLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
-
 					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too long, max " + MultiChatSpigot.nicknameMaxLength + " characters! (Excluding format codes)");
 					return true;
-
 				}
+				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < MultiChatSpigot.nicknameMinLength && !sender.hasPermission("multichatspigot.nick.anylength")) {
+					sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname is too short, min " + MultiChatSpigot.nicknameMinLength + " characters! (Excluding format codes)");
+					return true;
+				}
+			}
+
+			if (NameManager.getInstance().stripAllFormattingCodes(args[1]).length() < 1) {
+				sender.sendMessage(ChatColor.DARK_RED + "Sorry your nickname cannot be empty!");
+				return true;
 			}
 
 			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
 			String targetName = NameManager.getInstance().getName(targetUUID);
 
-			if (NameManager.getInstance().existsNickname(args[1]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
+			if (NameManager.getInstance().existsNickname(args[1]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[1])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this nickname is already in use!");
 				return true;
 
 			}
 
-			if (NameManager.getInstance().existsPlayer(args[1]) && !targetName.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
+			if (NameManager.getInstance().existsPlayer(args[1]) && !targetName.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[1])) && !sender.hasPermission("multichatspigot.nick.impersonate")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, a player already exists with this name!");
 				return true;
@@ -282,7 +466,7 @@ public class CommandHandler implements CommandExecutor {
 				if (NameManager.getInstance().stripAllFormattingCodes(args[1]).matches(bl)) blacklisted = true;
 			}
 
-			if (blacklisted) {
+			if (blacklisted && !sender.hasPermission("multichatspigot.nick.blacklist")) {
 
 				sender.sendMessage(ChatColor.DARK_RED + "Sorry, this name is not allowed!");
 				return true;
@@ -438,7 +622,7 @@ public class CommandHandler implements CommandExecutor {
 
 			}
 
-		}
+		} 
 		return false;
 	}
 

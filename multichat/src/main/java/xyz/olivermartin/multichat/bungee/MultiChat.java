@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.7.5";
+	public static final String LATEST_VERSION = "1.8";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.7.5",
 			"1.7.4",
 			"1.7.3",
 			"1.7.2",
@@ -80,6 +81,10 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
+
+	public static boolean logPMs = true;
+	public static boolean logStaffChat = true;
+	public static boolean logGroupChat = true;
 
 	private static MultiChat instance;
 
@@ -255,6 +260,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
 		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("config_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerHandler("chatcontrol_fr.yml", new File(translationsDir));
 
 		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
@@ -267,7 +274,7 @@ public class MultiChat extends Plugin implements Listener {
 			if (!configversion.equals(LATEST_VERSION))  {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
-				getLogger().info("[!!!] [WARNING] MULTICHAT 1.7 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
 				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
@@ -290,6 +297,8 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:chat");
 			getProxy().registerChannel("multichat:ch");
 			getProxy().registerChannel("multichat:ignore");
+			getProxy().registerChannel("multichat:pxe");
+			getProxy().registerChannel("multichat:ppxe");
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register commands
@@ -305,6 +314,12 @@ public class MultiChat extends Plugin implements Listener {
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
 				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+			}
+
+			if (configYML.contains("privacy_settings")) {
+				logPMs = configYML.getSection("privacy_settings").getBoolean("log_pms");
+				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
+				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
 			}
 
 			// Set default channel

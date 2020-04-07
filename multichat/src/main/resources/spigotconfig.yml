@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.7.5" #
+version: "1.8"   #
 ##################
 
 # Specify the name of this server here for the %SERVER% placeholder
@@ -110,5 +110,19 @@ nickname_prefix: "~"
 # The maximum length for nicknames
 nickname_length_limit: 20
 
+# The minimum length for nicknames
+nickname_length_min: 3
+
 # Should formatting codes such as "&3" be counted in the length of the nickname?
 nickname_length_limit_formatting: false
+
+# Should MultiChat use a database to store nicknames instead of regular files?
+# (PLEASE NOTE THE SERVER MUST BE RESTARTED FOR THIS TO TAKE EFFECT)
+nickname_sql: false
+
+# If the above option is true, MultiChat will use SQLite by default. Set the below to true if you would prefer to use MySQL.
+mysql: false
+mysql_url: "" # For example "localhost:3306"
+mysql_database: "multichatspigot" # Put the name of your MySQL database here
+mysql_user: ""
+mysql_pass: ""

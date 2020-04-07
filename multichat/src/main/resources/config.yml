@@ -8,15 +8,16 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.7.5" #
+version: "1.8"   #
 ##################
 
 # 1. General
 # 2. Private Messaging
-# 3. Global Chat
-# 4. Group Chats
-# 5. Staff Chats
-# 6. Other
+# 3. Chat Channels
+# 4. Global Chat
+# 5. Group Chats
+# 6. Staff Chats
+# 7. Other
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -138,6 +139,14 @@ force_channel_on_join: false
 channelcommand:
 - ch
 
+# The /global command has the following aliases (other than /global)
+globalcommand:
+- g
+
+# The /local command has the following aliases (other than /local)
+localcommand:
+- l
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                     Global Chat                      | #
@@ -250,3 +259,9 @@ multichatexecutecommand:
 - gexecute
 - gexe
 - gcommand
+
+# Control what aspects of chat are logged by MultiChat (useful for GDPR etc.)
+privacy_settings:
+    log_pms: true
+    log_staffchat: true
+    log_groupchat: true

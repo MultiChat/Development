@@ -33,10 +33,29 @@ public class SpongeChatListener {
 			Set<Player> onlinePlayers = new HashSet<Player>(Sponge.getServer().getOnlinePlayers());
 			Iterator<Player> it = onlinePlayers.iterator();
 
+			String queueValue = "";
+
 			// Deal with ignores and channel members
 			if (MultiChatSponge.playerChannels.containsKey(player)) {
 
 				String channelName = MultiChatSponge.playerChannels.get(player);
+
+				if (MultiChatSponge.chatQueues.containsKey(player.getName().toLowerCase())) {
+					// Hack for /global /local direct messaging...
+					String tempChannel = MultiChatSponge.chatQueues.get(player.getName().toLowerCase()).poll();
+
+					if (MultiChatSponge.chatQueues.get(player.getName().toLowerCase()).size() < 1) {
+						MultiChatSponge.chatQueues.remove(player.getName().toLowerCase());
+					}
+
+					if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+						channelName = "local";
+					} else {
+						channelName = "global";
+					}
+
+					queueValue = channelName;
+				}
 
 				if (MultiChatSponge.channelObjects.containsKey(channelName)) {
 
@@ -74,6 +93,23 @@ public class SpongeChatListener {
 
 			}
 
+			if (queueValue.equals("")) {
+				if (MultiChatSponge.chatQueues.containsKey(player.getName().toLowerCase())) {
+					// Hack for /global /local direct messaging...
+					String tempChannel = MultiChatSponge.chatQueues.get(player.getName().toLowerCase()).poll();
+
+					if (MultiChatSponge.chatQueues.get(player.getName().toLowerCase()).size() < 1) {
+						MultiChatSponge.chatQueues.remove(player.getName().toLowerCase());
+					}
+
+					if(tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+						queueValue = "local";
+					} else {
+						queueValue = "global";
+					}
+				}
+			}
+
 			String channel;
 			String format;
 			String message = event.getRawMessage().toPlain();
@@ -82,6 +118,10 @@ public class SpongeChatListener {
 				channel = MultiChatSponge.playerChannels.get(player);
 			} else {
 				channel = "global";
+			}
+
+			if (!queueValue.equals("")) {
+				channel = queueValue;
 			}
 
 			if (channel.equals("local")) {
@@ -126,7 +166,7 @@ public class SpongeChatListener {
 
 				DebugManager.log("PlaceholderAPI is present");
 
-				
+
 				format = TextSerializers.FORMATTING_CODE.serialize(MultiChatSponge.papi.get().replaceSourcePlaceholders(format+"#", event.getSource()));
 				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
 				format = format.substring(0,format.length()-1);
@@ -167,7 +207,7 @@ public class SpongeChatListener {
 					DebugManager.log("Here is exactly how the message is formatted:");
 					Sponge.getGame().getServer().getConsole().sendMessage(toSend);
 				}
-				
+
 				DebugManager.log("The text in plaintext form is: " + toSend.toString());
 
 			} else {
@@ -181,7 +221,7 @@ public class SpongeChatListener {
 
 			// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 			if (MultiChatSponge.globalChatServer) {
-				
+
 				DebugManager.log("This server is linked to the global chat!");
 
 				event.setCancelled(true);
@@ -204,7 +244,21 @@ public class SpongeChatListener {
 				MultiChatSponge.updatePlayerMeta(player.getName(), MultiChatSponge.setDisplayNameLastVal, MultiChatSponge.displayNameFormatLastVal);
 
 				if (MultiChatSponge.playerChannels.containsKey(player)) {
-					if (!MultiChatSponge.playerChannels.get(player).equals("local")) {
+
+					if (queueValue.equals("local")) {
+						return;
+					} else if (queueValue.equals("global")) {
+
+						// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
+						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
+						DebugManager.log("We need to send the message to bungeecord!");
+						DebugManager.log("Data to send is: ");
+						DebugManager.log("PLAYER:" + player.getName());
+						DebugManager.log("MESSAGE:" + message);
+						DebugManager.log("FORMAT: " + format.replace("%", "%%"));
+						MultiChatSponge.sendChatToBungee(player, message, format.replace("%", "%%"));
+
+					} else if ((!MultiChatSponge.playerChannels.get(player).equals("local"))) {
 
 						// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
 						// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
@@ -216,6 +270,7 @@ public class SpongeChatListener {
 						MultiChatSponge.sendChatToBungee(player, message, format.replace("%", "%%"));
 
 					}
+
 				}
 
 			}
