@@ -142,7 +142,7 @@ public class Channel {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
-			if (receiver != null) {
+			if (receiver != null && sender != null) {
 
 				synchronized (receiver) {
 
@@ -172,6 +172,14 @@ public class Channel {
 
 				}
 
+			} else {
+				
+				DebugManager.log("NULL POINTER WAS DETECTED CHECKS!");
+				DebugManager.log("< START >");
+				DebugManager.log(sender.getName());
+				DebugManager.log(receiver.getUniqueId().toString());
+				DebugManager.log("< / END >");
+				
 			}
 		}
 
