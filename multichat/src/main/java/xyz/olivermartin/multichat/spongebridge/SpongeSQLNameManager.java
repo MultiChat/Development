@@ -50,27 +50,25 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 				String name;
 
 				synchronized (spongedatabase) {
-					DebugManager.log("!Syncronise on database...");
+
 					spongedatabase.connectToDatabase();
-					DebugManager.log("!Connected to database...");
+
 					ResultSet results = spongedatabase.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid.toString());
-					DebugManager.log("!Query executed...");
-					DebugManager.log("!Is it closed? : " + results.isClosed());
+
 					results.next();
-					DebugManager.log("!Should now have the nex result ready!");
+
 					if (results.getString("f_nick") == null) {
 						name = results.getString("f_name");
 					} else {
 						name = results.getString("f_nick");
+						if (MultiChatSponge.showNicknamePrefix && withPrefix) {
+							name = MultiChatSponge.nicknamePrefix + name;
+						}
 					}
 
 				}
 
-				if (MultiChatSponge.showNicknamePrefix && withPrefix) {
-					return MultiChatSponge.nicknamePrefix + name;
-				} else {
-					return name;
-				}
+				return name;
 
 			} catch (SQLException e) {
 				e.printStackTrace();

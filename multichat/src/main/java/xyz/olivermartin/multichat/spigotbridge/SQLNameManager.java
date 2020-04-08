@@ -55,15 +55,13 @@ public class SQLNameManager extends NameManager {
 						name = results.getString("f_name");
 					} else {
 						name = results.getString("f_nick");
+						if (MultiChatSpigot.showNicknamePrefix && withPrefix) {
+							name = MultiChatSpigot.nicknamePrefix + name;
+						}
 					}
-					//spigotdatabase.disconnectFromDatabase();
 				}
 
-				if (MultiChatSpigot.showNicknamePrefix && withPrefix) {
-					return MultiChatSpigot.nicknamePrefix + name;
-				} else {
-					return name;
-				}
+				return name;
 
 			} catch (SQLException e) {
 				e.printStackTrace();
