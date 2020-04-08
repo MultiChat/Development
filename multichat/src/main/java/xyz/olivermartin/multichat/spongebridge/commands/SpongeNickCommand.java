@@ -116,7 +116,7 @@ public class SpongeNickCommand implements CommandExecutor {
 			return CommandResult.success();
 		}
 
-		String targetNickname = SpongeNameManager.getInstance().stripAllFormattingCodes(SpongeNameManager.getInstance().getCurrentName(targetUUID));
+		String targetNickname = SpongeNameManager.getInstance().stripAllFormattingCodes(SpongeNameManager.getInstance().getCurrentName(targetUUID, false));
 
 		if (SpongeNameManager.getInstance().existsNickname(strippedNickname) && !targetNickname.equalsIgnoreCase(strippedNickname)) {
 
