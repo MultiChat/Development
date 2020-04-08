@@ -66,7 +66,7 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8.1", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge {
 
 	public static SimpleMutableMessageChannel multichatChannel;
