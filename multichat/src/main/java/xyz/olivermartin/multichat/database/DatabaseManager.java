@@ -38,7 +38,7 @@ public class DatabaseManager {
 	////////////
 
 	public static void main(String args[]) throws SQLException {
-		
+
 		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
 		DatabaseManager.getInstance().createDatabase("multichat.db");
 
@@ -52,31 +52,31 @@ public class DatabaseManager {
 
 			try {
 				db.connectToDatabase();
-				db.execute("DROP TABLE IF EXISTS name_data;");
-				db.execute("DROP TABLE IF EXISTS nick_data;");
+				db.safeExecute("DROP TABLE IF EXISTS name_data;");
+				db.safeExecute("DROP TABLE IF EXISTS nick_data;");
 
-				db.update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-				db.update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
-				
-				db.update("INSERT INTO name_data VALUES ('" + uuid1.toString() + "', 'Revilo410', 'revilo410');");
-				db.update("INSERT INTO nick_data VALUES ('" + uuid1.toString() + "', '&3Revi', 'revi');");
-				db.update("INSERT INTO name_data VALUES ('" + uuid2.toString() + "', 'Revilo510', 'revilo510');");
-				ResultSet results = db.query("SELECT * FROM name_data;");
+				db.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+				db.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+
+				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo410', 'revilo410');", uuid1.toString());
+				db.safeUpdate("INSERT INTO nick_data VALUES (?, '&3Revi', 'revi');", uuid1.toString());
+				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo510', 'revilo510');", uuid2.toString());
+				ResultSet results = db.safeQuery("SELECT * FROM name_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
-				
-				results = db.query("SELECT * FROM nick_data;");
+
+				results = db.safeQuery("SELECT * FROM nick_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
-				
-				results = db.query("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
+
+				results = db.safeQuery("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
-				
-				results = db.query("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
+
+				results = db.safeQuery("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 					if (results.getString("f_nick") == null) {
@@ -85,8 +85,8 @@ public class DatabaseManager {
 						System.out.println(results.getString("f_nick"));
 					}
 				}
-				
-				results = db.query("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = '" + uuid1.toString() + "';");
+
+				results = db.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid1.toString());
 				while (results.next()) {
 					if (results.getString("f_nick") == null) {
 						System.out.println(results.getString("f_name"));
@@ -94,12 +94,12 @@ public class DatabaseManager {
 						System.out.println(results.getString("f_nick"));
 					}
 				}
-				
+
 				db.disconnectFromDatabase();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 
 		/*DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));

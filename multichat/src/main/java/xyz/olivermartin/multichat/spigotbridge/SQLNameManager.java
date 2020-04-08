@@ -49,7 +49,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = '" + uuid.toString() + "';");
+					ResultSet results = spigotdatabase.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid.toString());
 					results.next();
 					if (results.getString("f_nick") == null) {
 						name = results.getString("f_name");
@@ -86,7 +86,7 @@ public class SQLNameManager extends NameManager {
 				String name;
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT f_name FROM name_data WHERE id = '" + uuid.toString() + "';");
+					ResultSet results = spigotdatabase.safeQuery("SELECT f_name FROM name_data WHERE id = ?;", uuid.toString());
 					results.next();
 					name = results.getString("f_name");
 					//spigotdatabase.disconnectFromDatabase();
@@ -117,7 +117,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT id FROM nick_data WHERE u_nick = '" + nickname + "';");
+					ResultSet results = spigotdatabase.safeQuery("SELECT id FROM nick_data WHERE u_nick = ?;", nickname);
 					if (results.next()) {
 						UUID id = UUID.fromString(results.getString("id"));
 						//spigotdatabase.disconnectFromDatabase();
@@ -151,7 +151,7 @@ public class SQLNameManager extends NameManager {
 
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
-					ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE u_name = '" + username + "';");
+					ResultSet results = spigotdatabase.safeQuery("SELECT id FROM name_data WHERE u_name = ?;", username);
 					if (results.next() ) {
 						UUID id = UUID.fromString(results.getString("id"));
 						//spigotdatabase.disconnectFromDatabase();
@@ -196,7 +196,7 @@ public class SQLNameManager extends NameManager {
 					synchronized (spigotdatabase) {
 						spigotdatabase.connectToDatabase();
 
-						spigotdatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.safeUpdate("UPDATE name_data SET u_name = ?, f_name = ? WHERE id = ?;", username.toLowerCase(), username, uuid.toString());
 
 						//spigotdatabase.disconnectFromDatabase();
 					}
@@ -213,7 +213,7 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
 
-					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase()+ "');");
+					spigotdatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 
 					//spigotdatabase.disconnectFromDatabase();
 				}
@@ -248,7 +248,7 @@ public class SQLNameManager extends NameManager {
 					synchronized (spigotdatabase) {
 						spigotdatabase.connectToDatabase();
 
-						spigotdatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spigotdatabase.safeUpdate("UPDATE name_data SET u_name = ?, f_name = ? WHERE id = ?;", username.toLowerCase(), username, uuid.toString());
 
 						//spigotdatabase.disconnectFromDatabase();
 					}
@@ -265,7 +265,7 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
 
-					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "');");
+					spigotdatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 
 					//spigotdatabase.disconnectFromDatabase();
 				}
@@ -291,7 +291,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT id FROM name_data WHERE id = '" + uuid.toString() + "';");
+				ResultSet results = spigotdatabase.safeQuery("SELECT id FROM name_data WHERE id = ?;", uuid.toString());
 				if (results.next()) { //TODO fixed this line...
 					//spigotdatabase.disconnectFromDatabase();
 					return true;
@@ -319,7 +319,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT id FROM nick_data WHERE id = '" + uuid.toString() + "';");
+				ResultSet results = spigotdatabase.safeQuery("SELECT id FROM nick_data WHERE id = ?;", uuid.toString());
 				if (results.next()) { //TODO fixed this line...
 					//spigotdatabase.disconnectFromDatabase();
 					return true;
@@ -357,14 +357,14 @@ public class SQLNameManager extends NameManager {
 
 				try {
 					spigotdatabase.connectToDatabase();
-					spigotdatabase.update("UPDATE name_data SET f_name = '" + formattedName + "', u_name = '" + name + "' WHERE id = '" + uuid.toString() + "';");
+					spigotdatabase.safeUpdate("UPDATE name_data SET f_name = ?, u_name = ? WHERE id = ?;", formattedName, name, uuid.toString());
 
 					if (setNick) {
 
 						if (hasNickname(uuid)) {
-							spigotdatabase.update("UPDATE nick_data SET u_nick = '" + nick + "', f_nick = '" + formattedNick + "' WHERE id = '" + uuid.toString() + "';");
+							spigotdatabase.safeUpdate("UPDATE nick_data SET u_nick = ?, f_nick = ? WHERE id = ?;", nick, formattedNick, uuid.toString());
 						} else {
-							spigotdatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+							spigotdatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), nick, formattedNick);
 						}
 
 					}
@@ -381,10 +381,10 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 
 					spigotdatabase.connectToDatabase();
-					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + formattedName + "', '" + name + "');");
+					spigotdatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), formattedName, name);
 
 					if (setNick) {
-						spigotdatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+						spigotdatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), nick, formattedNick);
 					}
 
 					//spigotdatabase.disconnectFromDatabase();
@@ -418,7 +418,7 @@ public class SQLNameManager extends NameManager {
 				synchronized (spigotdatabase) {
 					spigotdatabase.connectToDatabase();
 
-					spigotdatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "');");
+					spigotdatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 
 					//spigotdatabase.disconnectFromDatabase();
 				}
@@ -462,10 +462,10 @@ public class SQLNameManager extends NameManager {
 
 				if (hasNickname(uuid)) {
 					spigotdatabase.connectToDatabase();
-					spigotdatabase.update("UPDATE nick_data SET u_nick = '" + unformattedNickname + "', f_nick = '" + nickname + "' WHERE id = '" + uuid.toString() + "';");
+					spigotdatabase.safeUpdate("UPDATE nick_data SET u_nick = ?, f_nick = ? WHERE id = ?;", unformattedNickname, nickname, uuid.toString());
 				} else {
 					spigotdatabase.connectToDatabase();
-					spigotdatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + unformattedNickname + "', '" + nickname + "');");
+					spigotdatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), unformattedNickname, nickname);
 				}
 
 				//spigotdatabase.disconnectFromDatabase();
@@ -489,7 +489,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT u_name FROM name_data WHERE u_name = '" + username.toLowerCase() + "';");
+				ResultSet results = spigotdatabase.safeQuery("SELECT u_name FROM name_data WHERE u_name = ?;", username.toLowerCase());
 				if (results.next()) {
 					//spigotdatabase.disconnectFromDatabase();
 					return true;
@@ -518,7 +518,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT u_nick FROM nick_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				ResultSet results = spigotdatabase.safeQuery("SELECT u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
 				if (results.next()) {
 					//spigotdatabase.disconnectFromDatabase();
 					return true;
@@ -546,7 +546,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT id, u_nick FROM nick_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				ResultSet results = spigotdatabase.safeQuery("SELECT id, u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
 				if (results.next()) {
 					if (results.getString("id").equals(uuid.toString())) {
 						//spigotdatabase.disconnectFromDatabase();
@@ -580,7 +580,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT id FROM nick_data WHERE (u_nick LIKE '%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%');");
+				ResultSet results = spigotdatabase.safeQuery("SELECT id FROM nick_data WHERE (u_nick LIKE ?);", "%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%");
 				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
@@ -616,7 +616,7 @@ public class SQLNameManager extends NameManager {
 			synchronized (spigotdatabase) {
 				spigotdatabase.connectToDatabase();
 
-				ResultSet results = spigotdatabase.query("SELECT id, f_name FROM name_data WHERE (u_name LIKE '%" + name.toLowerCase() + "%');");
+				ResultSet results = spigotdatabase.safeQuery("SELECT id, f_name FROM name_data WHERE (u_name LIKE ?);", "%" + name.toLowerCase() + "%");
 				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
@@ -662,7 +662,7 @@ public class SQLNameManager extends NameManager {
 
 				spigotdatabase.connectToDatabase();
 
-				spigotdatabase.update("DELETE FROM nick_data WHERE id  = '" + uuid.toString() + "';");
+				spigotdatabase.safeUpdate("DELETE FROM nick_data WHERE id  = ?;", uuid.toString());
 
 				//spigotdatabase.disconnectFromDatabase();
 			}

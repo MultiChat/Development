@@ -189,8 +189,8 @@ public final class MultiChatSponge {
 							}
 
 							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().connectToDatabase();
-							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
 							///DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
 
 							SpongeNameManager.useSQL(nicknameSQL);
@@ -219,8 +219,8 @@ public final class MultiChatSponge {
 							DatabaseManager.getInstance().createDatabase("multichatsponge.db");
 
 							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().connectToDatabase();
-							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
 							//DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
 
 							SpongeNameManager.useSQL(nicknameSQL);

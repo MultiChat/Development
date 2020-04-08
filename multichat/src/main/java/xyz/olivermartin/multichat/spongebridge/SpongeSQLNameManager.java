@@ -53,7 +53,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 					DebugManager.log("!Syncronise on database...");
 					spongedatabase.connectToDatabase();
 					DebugManager.log("!Connected to database...");
-					ResultSet results = spongedatabase.query("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = '" + uuid.toString() + "';");
+					ResultSet results = spongedatabase.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid.toString());
 					DebugManager.log("!Query executed...");
 					DebugManager.log("!Is it closed? : " + results.isClosed());
 					results.next();
@@ -93,7 +93,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 				String name;
 				synchronized (spongedatabase) {
 					spongedatabase.connectToDatabase();
-					ResultSet results = spongedatabase.query("SELECT f_name FROM name_data WHERE id = '" + uuid.toString() + "';");
+					ResultSet results = spongedatabase.safeQuery("SELECT f_name FROM name_data WHERE id = ?;", uuid.toString());
 					results.next();
 					name = results.getString("f_name");
 
@@ -124,7 +124,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 
 				synchronized (spongedatabase) {
 					spongedatabase.connectToDatabase();
-					ResultSet results = spongedatabase.query("SELECT id FROM nick_data WHERE u_nick = '" + nickname + "';");
+					ResultSet results = spongedatabase.safeQuery("SELECT id FROM nick_data WHERE u_nick = ?;", nickname);
 					if (results.next()) {
 						UUID id = UUID.fromString(results.getString("id"));
 
@@ -158,7 +158,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 
 				synchronized (spongedatabase) {
 					spongedatabase.connectToDatabase();
-					ResultSet results = spongedatabase.query("SELECT id FROM name_data WHERE u_name = '" + username + "';");
+					ResultSet results = spongedatabase.safeQuery("SELECT id FROM name_data WHERE u_name = ?;", username);
 					if (results.next() ) {
 						UUID id = UUID.fromString(results.getString("id"));
 
@@ -209,7 +209,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 					synchronized (spongedatabase) {
 						spongedatabase.connectToDatabase();
 
-						spongedatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spongedatabase.safeUpdate("UPDATE name_data SET u_name = ?, f_name = ? WHERE id = ?;", username.toLowerCase(), username, uuid.toString());
 
 					}
 
@@ -230,7 +230,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 					spongedatabase.connectToDatabase();
 					DebugManager.log("SHOULD NOW BE CONNECTED...");
 
-					spongedatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase()+ "');");
+					spongedatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 					DebugManager.log("SHOULD NOW HAVE ADDED THE NEW ROWS TO THE DATABASE!");
 				}
 
@@ -264,7 +264,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 					synchronized (spongedatabase) {
 						spongedatabase.connectToDatabase();
 
-						spongedatabase.update("UPDATE name_data SET u_name = '" + username.toLowerCase() + "', f_name = '" + username + "' WHERE id = '" + uuid.toString() + "';");
+						spongedatabase.safeUpdate("UPDATE name_data SET u_name = ?, f_name = ? WHERE id = ?;", username.toLowerCase(), username, uuid.toString());
 
 					}
 
@@ -280,7 +280,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 				synchronized (spongedatabase) {
 					spongedatabase.connectToDatabase();
 
-					spongedatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "');");
+					spongedatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 
 				}
 
@@ -305,7 +305,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT id FROM name_data WHERE id = '" + uuid.toString() + "';");
+				ResultSet results = spongedatabase.safeQuery("SELECT id FROM name_data WHERE id = ?;", uuid.toString());
 				if (results.next()) {
 					return true;
 				} else {
@@ -331,7 +331,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT id FROM nick_data WHERE id = '" + uuid.toString() + "';");
+				ResultSet results = spongedatabase.safeQuery("SELECT id FROM nick_data WHERE id = ?;", uuid.toString());
 				if (results.next()) {
 					return true;
 				} else {
@@ -367,14 +367,14 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 
 				try {
 					spongedatabase.connectToDatabase();
-					spongedatabase.update("UPDATE name_data SET f_name = '" + formattedName + "', u_name = '" + name + "' WHERE id = '" + uuid.toString() + "';");
+					spongedatabase.safeUpdate("UPDATE name_data SET f_name = ?, u_name = ? WHERE id = ?;", formattedName, name, uuid.toString());
 
 					if (setNick) {
 
 						if (hasNickname(uuid)) {
-							spongedatabase.update("UPDATE nick_data SET u_nick = '" + nick + "', f_nick = '" + formattedNick + "' WHERE id = '" + uuid.toString() + "';");
+							spongedatabase.safeUpdate("UPDATE nick_data SET u_nick = ?, f_nick = ? WHERE id = ?;", nick, formattedNick, uuid.toString());
 						} else {
-							spongedatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+							spongedatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), nick, formattedNick);
 						}
 
 					}
@@ -391,10 +391,10 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 				synchronized (spongedatabase) {
 
 					spongedatabase.connectToDatabase();
-					spongedatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + formattedName + "', '" + name + "');");
+					spongedatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), formattedName, name);
 
 					if (setNick) {
-						spongedatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + nick + "', '" + formattedNick + "');");
+						spongedatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), nick, formattedNick);
 					}
 
 				}
@@ -427,7 +427,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 				synchronized (spongedatabase) {
 					spongedatabase.connectToDatabase();
 
-					spongedatabase.update("INSERT INTO name_data VALUES ('" + uuid.toString() + "', '" + username + "', '" + username.toLowerCase() + "');");
+					spongedatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
 
 				}
 
@@ -470,10 +470,10 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 
 				if (hasNickname(uuid)) {
 					spongedatabase.connectToDatabase();
-					spongedatabase.update("UPDATE nick_data SET u_nick = '" + unformattedNickname + "', f_nick = '" + nickname + "' WHERE id = '" + uuid.toString() + "';");
+					spongedatabase.safeUpdate("UPDATE nick_data SET u_nick = ?, f_nick = ? WHERE id = ?;", unformattedNickname, nickname, uuid.toString());
 				} else {
 					spongedatabase.connectToDatabase();
-					spongedatabase.update("INSERT INTO nick_data VALUES ('" + uuid.toString() + "', '" + unformattedNickname + "', '" + nickname + "');");
+					spongedatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), unformattedNickname, nickname);
 				}
 
 			}
@@ -496,7 +496,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT u_name FROM name_data WHERE u_name = '" + username.toLowerCase() + "';");
+				ResultSet results = spongedatabase.safeQuery("SELECT u_name FROM name_data WHERE u_name = ?;", username.toLowerCase());
 				if (results.next()) {
 					return true;
 				} else {
@@ -523,7 +523,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT u_nick FROM nick_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				ResultSet results = spongedatabase.safeQuery("SELECT u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
 				if (results.next()) {
 					return true;
 				} else {
@@ -549,7 +549,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT id, u_nick FROM nick_data WHERE u_nick = '" + stripAllFormattingCodes(nickname.toLowerCase()) + "';");
+				ResultSet results = spongedatabase.safeQuery("SELECT id, u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
 				if (results.next()) {
 					if (results.getString("id").equals(uuid.toString())) {
 						return false;
@@ -580,7 +580,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT id FROM nick_data WHERE (u_nick LIKE '%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%');");
+				ResultSet results = spongedatabase.safeQuery("SELECT id FROM nick_data WHERE (u_nick LIKE ?);", "%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%");
 				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
@@ -614,7 +614,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 			synchronized (spongedatabase) {
 				spongedatabase.connectToDatabase();
 
-				ResultSet results = spongedatabase.query("SELECT id, f_name FROM name_data WHERE (u_name LIKE '%" + name.toLowerCase() + "%');");
+				ResultSet results = spongedatabase.safeQuery("SELECT id, f_name FROM name_data WHERE (u_name LIKE ?);", "%" + name.toLowerCase() + "%");
 				if (results.next()) {
 					Set<UUID> uuids = new HashSet<UUID>();
 					uuids.add(UUID.fromString(results.getString("id")));
@@ -658,7 +658,7 @@ public class SpongeSQLNameManager extends SpongeNameManager {
 
 				spongedatabase.connectToDatabase();
 
-				spongedatabase.update("DELETE FROM nick_data WHERE id  = '" + uuid.toString() + "';");
+				spongedatabase.safeUpdate("DELETE FROM nick_data WHERE id  = ?;", uuid.toString());
 
 			}
 
