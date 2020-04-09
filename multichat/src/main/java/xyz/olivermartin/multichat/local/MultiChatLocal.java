@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.local;
 
+import java.io.File;
+
 /**
  * This is MultiChat's API local to each server (not the proxy)
  * 
@@ -21,6 +23,7 @@ public class MultiChatLocal {
 	/* END STATIC */
 
 	private MultiChatLocalPlatform platform;
+	private File configDirectory;
 	private LocalNameManager nameManager;
 	private LocalConfigManager configManager;
 
@@ -49,6 +52,29 @@ public class MultiChatLocal {
 	public MultiChatLocalPlatform getPlatform() {
 		if (this.platform == null) throw new IllegalStateException("MultiChatLocal platform has not been registered");
 		return this.platform;
+	}
+
+	/**
+	 * Register the config directory being used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param configDirectory The config directory being used by MultiChatLocal
+	 */
+	public void registerConfigDirectory(File configDirectory) {
+		this.configDirectory = configDirectory;
+	}
+
+	/**
+	 * Get the config directory currently being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The config directory being used
+	 */
+	public File getConfigDirectory() {
+		if (this.configDirectory == null) throw new IllegalStateException("MultiChatLocal config directory has not been registered");
+		return this.configDirectory;
 	}
 
 	/**
