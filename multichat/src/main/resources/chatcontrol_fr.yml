@@ -6,10 +6,10 @@
 
 # By Revilo410
 
-#################
-# NE PAS EDITER #
-version: "1.8"  #
-#################
+##################
+# NE PAS EDITER  #
+version: "1.8.1" #
+##################
 
 # French Translation by Nogapra - Thank you !
 # Pour utiliser ce fichier, renommer en 'chatcontrol.yml'.

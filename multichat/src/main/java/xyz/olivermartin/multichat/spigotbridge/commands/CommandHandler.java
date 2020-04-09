@@ -340,7 +340,7 @@ public class CommandHandler implements CommandExecutor {
 					return true;
 				}
 
-				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
+				String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID, false));
 				String targetName = NameManager.getInstance().getName(targetUUID);
 
 				if (NameManager.getInstance().existsNickname(args[0]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[0])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {
@@ -444,7 +444,7 @@ public class CommandHandler implements CommandExecutor {
 				return true;
 			}
 
-			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID));
+			String targetNickname = NameManager.getInstance().stripAllFormattingCodes(NameManager.getInstance().getCurrentName(targetUUID, false));
 			String targetName = NameManager.getInstance().getName(targetUUID);
 
 			if (NameManager.getInstance().existsNickname(args[1]) && !targetNickname.equalsIgnoreCase(NameManager.getInstance().stripAllFormattingCodes(args[1])) ) { //&& !sender.hasPermission("multichatspigot.nick.duplicate")) {

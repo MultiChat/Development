@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.database;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -71,7 +72,7 @@ public class SQLiteDatabase extends GenericDatabase {
 		return true;
 	}
 
-	@Override
+	/*@Override
 	public ResultSet query(String sql) throws SQLException {
 
 		ResultSet results = conn.createStatement().executeQuery(sql);
@@ -90,6 +91,47 @@ public class SQLiteDatabase extends GenericDatabase {
 	public void execute(String sql) throws SQLException {
 
 		conn.createStatement().execute(sql);
+
+	}*/
+
+	@Override
+	public ResultSet safeQuery(String sqlTemplate, String... stringParameters) throws SQLException {
+
+		PreparedStatement p = conn.prepareStatement(sqlTemplate);
+
+		for (int i = 1; i <= stringParameters.length; i++) {
+			p.setString(i, stringParameters[i-1]);
+		}
+
+		ResultSet results = p.executeQuery();
+
+		return results;
+
+	}
+
+	@Override
+	public void safeUpdate(String sqlTemplate, String... stringParameters) throws SQLException {
+
+		PreparedStatement p = conn.prepareStatement(sqlTemplate);
+
+		for (int i = 1; i <= stringParameters.length; i++) {
+			p.setString(i, stringParameters[i-1]);
+		}
+
+		p.executeUpdate();
+
+	}
+
+	@Override
+	public void safeExecute(String sqlTemplate, String... stringParameters) throws SQLException {
+
+		PreparedStatement p = conn.prepareStatement(sqlTemplate);
+
+		for (int i = 1; i <= stringParameters.length; i++) {
+			p.setString(i, stringParameters[i-1]);
+		}
+
+		p.execute();
 
 	}
 

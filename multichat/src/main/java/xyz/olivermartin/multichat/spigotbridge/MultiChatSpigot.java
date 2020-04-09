@@ -112,7 +112,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
-		
+
 		String translationsDir = configDir.toString() + File.separator + "translations";
 		if (!new File(translationsDir).exists()) {
 			getLogger().info(logPrefix + "Creating translations directory!");
@@ -121,7 +121,7 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig.yml", configDir);
 		SpigotConfigManager.getInstance().registerHandler("spigotconfig_fr.yml", new File(translationsDir));
-		
+
 		Configuration config = SpigotConfigManager.getInstance().getHandler("spigotconfig.yml").getConfig();
 
 		if (config.contains("server_name")) {
@@ -183,8 +183,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 							}
 
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
-							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
 
 							NameManager.useSQL(nicknameSQL);
@@ -207,8 +207,8 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 							DatabaseManager.getInstance().createDatabase("multichatspigot.db");
 
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
-							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().update("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
 							DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
 
 							NameManager.useSQL(nicknameSQL);
