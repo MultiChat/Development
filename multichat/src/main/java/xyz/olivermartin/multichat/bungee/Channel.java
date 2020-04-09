@@ -176,8 +176,8 @@ public class Channel {
 				
 				DebugManager.log("NULL POINTER WAS DETECTED CHECKS!");
 				DebugManager.log("< START >");
-				DebugManager.log(sender.getName());
-				DebugManager.log(receiver.getUniqueId().toString());
+				DebugManager.log(sender != null ? sender.getName() : "SENDER NULL");
+				DebugManager.log(receiver != null ? receiver.getUniqueId().toString() : "RECEIVER NULL");
 				DebugManager.log("< / END >");
 				
 			}
