@@ -45,7 +45,6 @@ public class MultiChatSpigot extends JavaPlugin implements Listener {
 
 	public static final String pluginName = "MultiChatSpigot";
 	public static final String logPrefix = ""; // Legacy
-
 	private static Chat chat = null;
 	private static boolean vault;
 	private static boolean papi;

@@ -26,6 +26,7 @@ public class MultiChatLocal {
 	private File configDirectory;
 	private LocalNameManager nameManager;
 	private LocalConfigManager configManager;
+	private LocalMetaManager metaManager;
 
 	/* END ATTRIBUTES */
 
@@ -101,7 +102,7 @@ public class MultiChatLocal {
 	}
 
 	/**
-	 * Register the config to be used by MultiChatLocal
+	 * Register the config manager to be used by MultiChatLocal
 	 * 
 	 * <p>Should be registered in onEnable()</p>
 	 * 
@@ -121,6 +122,29 @@ public class MultiChatLocal {
 	public LocalConfigManager getConfigManager() {
 		if (this.configManager == null) throw new IllegalStateException("No MultiChat local config manager has been registered");
 		return this.configManager;
+	}
+
+	/**
+	 * Register the meta manager to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param metaManager The meta manager to register to the API
+	 */
+	public void registerMetaManager(LocalMetaManager metaManager) {
+		this.metaManager = metaManager;
+	}
+
+	/**
+	 * Get the meta manager being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The local meta manager
+	 */
+	public LocalMetaManager getMetaManager() {
+		if (this.metaManager == null) throw new IllegalStateException("No MultiChat local meta manager has been registered");
+		return this.metaManager;
 	}
 
 }
