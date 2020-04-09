@@ -16,19 +16,22 @@ import java.util.regex.PatternSyntaxException;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class LocalFileNameManager extends LocalNameManager {
+public abstract class LocalFileNameManager extends LocalNameManager {
 
-	private Map<UUID,String> mapUUIDNick;
-	private Map<UUID,String> mapUUIDName;
-	private Map<String,UUID> mapNickUUID;
-	private Map<String,UUID> mapNameUUID;
+	protected Map<UUID,String> mapUUIDNick;
+	protected Map<UUID,String> mapUUIDName;
+	protected Map<String,UUID> mapNickUUID;
+	protected Map<String,UUID> mapNameUUID;
 
-	private Map<String,String> mapNickFormatted;
-	private Map<String,String> mapNameFormatted;
+	protected Map<String,String> mapNickFormatted;
+	protected Map<String,String> mapNameFormatted;
+	
+	protected MultiChatLocalPlatform platform;
 
-	public LocalFileNameManager() {
+	public LocalFileNameManager(MultiChatLocalPlatform platform) {
 
 		super(LocalNameManagerMode.FILE);
+		this.platform = platform;
 		setDefaultData();
 
 	}
