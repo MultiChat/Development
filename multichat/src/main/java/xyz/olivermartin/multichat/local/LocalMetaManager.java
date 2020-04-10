@@ -16,4 +16,6 @@ public abstract class LocalMetaManager {
 	
 	public abstract String getWorld(UUID uuid);
 	
+	public abstract String getDisplayName(UUID uuid);
+	
 }

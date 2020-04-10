@@ -2,6 +2,8 @@ package xyz.olivermartin.multichat.local;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.local.communication.LocalProxyCommunicationManager;
+
 /**
  * This is MultiChat's API local to each server (not the proxy)
  * 
@@ -23,10 +25,12 @@ public class MultiChatLocal {
 	/* END STATIC */
 
 	private MultiChatLocalPlatform platform;
+	private String pluginName;
 	private File configDirectory;
 	private LocalNameManager nameManager;
 	private LocalConfigManager configManager;
 	private LocalMetaManager metaManager;
+	private LocalProxyCommunicationManager proxyCommunicationManager;
 
 	/* END ATTRIBUTES */
 
@@ -53,6 +57,31 @@ public class MultiChatLocal {
 	public MultiChatLocalPlatform getPlatform() {
 		if (this.platform == null) throw new IllegalStateException("MultiChatLocal platform has not been registered");
 		return this.platform;
+	}
+
+	/**
+	 * Register the name of the MultiChatLocal plugin (i.e. MultiChatSpigot etc.)
+	 * 
+	 * <p>It is important that this matches the name in plugin.yml or equivalent!</p>
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param pluginName The name of the MultiChatLocal plugin
+	 */
+	public void registerPluginName(String pluginName) {
+		this.pluginName = pluginName;
+	}
+
+	/**
+	 * Get the name of the MultiChatLocal plugin (i.e. MultiChatSpigot, MultiChatSponge ...)
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * s
+	 * @return The name of the MultiChatLocal plugin
+	 */
+	public String getPluginName() {
+		if (this.pluginName == null) throw new IllegalStateException("MultiChatLocal plugin name has not been registered");
+		return this.pluginName;
 	}
 
 	/**
@@ -145,6 +174,29 @@ public class MultiChatLocal {
 	public LocalMetaManager getMetaManager() {
 		if (this.metaManager == null) throw new IllegalStateException("No MultiChat local meta manager has been registered");
 		return this.metaManager;
+	}
+
+	/**
+	 * Register the proxy communication manager to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param proxyCommunicationManager The Proxy Communication manager to register to the API
+	 */
+	public void registerProxyCommunicationManager(LocalProxyCommunicationManager proxyCommunicationManager) {
+		this.proxyCommunicationManager = proxyCommunicationManager;
+	}
+
+	/**
+	 * Get the proxy communication manager being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy communication manager registered with the API
+	 */
+	public LocalProxyCommunicationManager getProxyCommunicationManager() {
+		if (this.proxyCommunicationManager == null) throw new IllegalStateException("No MultiChat proxy communication manager has been registered");
+		return this.proxyCommunicationManager;
 	}
 
 }
