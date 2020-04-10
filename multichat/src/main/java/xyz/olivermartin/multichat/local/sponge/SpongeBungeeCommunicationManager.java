@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local.communication;
+package xyz.olivermartin.multichat.local.sponge;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +9,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
+import xyz.olivermartin.multichat.local.communication.LocalBungeeCommunicationManager;
 
 /**
  * Allows MultiChatLocal running on Sponge to communicate with a Bungeecord Proxy

@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local.communication;
+package xyz.olivermartin.multichat.local.spigot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -10,6 +10,7 @@ import org.bukkit.plugin.messaging.PluginMessageRecipient;
 
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
+import xyz.olivermartin.multichat.local.communication.LocalBungeeCommunicationManager;
 
 /**
  * Allows MultiChatLocal running on Spigot to communicate with a Bungeecord Proxy

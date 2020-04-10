@@ -29,6 +29,7 @@ public class MultiChatLocal {
 	private File configDirectory;
 	private LocalNameManager nameManager;
 	private LocalConfigManager configManager;
+	private LocalDataStore dataStore;
 	private LocalMetaManager metaManager;
 	private LocalProxyCommunicationManager proxyCommunicationManager;
 
@@ -151,6 +152,29 @@ public class MultiChatLocal {
 	public LocalConfigManager getConfigManager() {
 		if (this.configManager == null) throw new IllegalStateException("No MultiChat local config manager has been registered");
 		return this.configManager;
+	}
+
+	/**
+	 * Register the local data store to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param dataStore The local data store to register to the API
+	 */
+	public void registerDataStore(LocalDataStore dataStore) {
+		this.dataStore = dataStore;
+	}
+
+	/**
+	 * Get the local data store being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The local data store
+	 */
+	public LocalDataStore getDataStore() {
+		if (this.dataStore == null) throw new IllegalStateException("No MultiChat local data store has been registered");
+		return this.dataStore;
 	}
 
 	/**
