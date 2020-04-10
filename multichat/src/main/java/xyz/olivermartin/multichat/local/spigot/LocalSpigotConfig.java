@@ -31,6 +31,7 @@ public class LocalSpigotConfig extends LocalConfig {
 	protected void setMemberAttributes() {
 		showNicknamePrefix = config.getBoolean("show_nickname_prefix",false);
 		nicknamePrefix = config.getString("nickname_prefix","~");
+		serverName = config.getString("server_name","SPIGOT_SERVER");
 	}
 
 }

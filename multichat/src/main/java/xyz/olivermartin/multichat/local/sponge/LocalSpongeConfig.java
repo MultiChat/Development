@@ -37,6 +37,7 @@ public class LocalSpongeConfig extends LocalConfig {
 	protected void setMemberAttributes() {
 		showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean(false);
 		nicknamePrefix = config.getNode("nickname_prefix").getString("~");
+		serverName = config.getNode("server_name").getString("SPONGE_SERVER");
 	}
 
 }

@@ -11,6 +11,9 @@ public abstract class LocalConfig {
 	// NICKNAME SETTINGS
 	public boolean showNicknamePrefix;
 	public String nicknamePrefix;
+	
+	// SERVER SETTINGS
+	public String serverName;
 
 	// FILE SETTINGS
 	private File configPath;
