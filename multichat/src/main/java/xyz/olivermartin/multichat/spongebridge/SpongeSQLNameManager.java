@@ -9,8 +9,8 @@ import java.util.UUID;
 
 import org.spongepowered.api.entity.living.player.Player;
 
-import xyz.olivermartin.multichat.database.DatabaseManager;
-import xyz.olivermartin.multichat.database.GenericDatabase;
+import xyz.olivermartin.multichat.common.database.DatabaseManager;
+import xyz.olivermartin.multichat.common.database.GenericDatabase;
 
 public class SpongeSQLNameManager extends SpongeNameManager {
 

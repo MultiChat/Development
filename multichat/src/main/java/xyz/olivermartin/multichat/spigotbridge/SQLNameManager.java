@@ -10,8 +10,8 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import xyz.olivermartin.multichat.database.DatabaseManager;
-import xyz.olivermartin.multichat.database.GenericDatabase;
+import xyz.olivermartin.multichat.common.database.DatabaseManager;
+import xyz.olivermartin.multichat.common.database.GenericDatabase;
 
 public class SQLNameManager extends NameManager {
 

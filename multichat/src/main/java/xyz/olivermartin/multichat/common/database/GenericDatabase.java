@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.database;
+package xyz.olivermartin.multichat.common.database;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
