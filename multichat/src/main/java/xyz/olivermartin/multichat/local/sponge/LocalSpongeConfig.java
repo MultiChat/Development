@@ -2,6 +2,9 @@ package xyz.olivermartin.multichat.local.sponge;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -34,10 +37,29 @@ public class LocalSpongeConfig extends LocalConfig {
 	}
 
 	@Override
-	protected void setMemberAttributes() {
-		showNicknamePrefix = config.getNode("show_nickname_prefix").getBoolean(false);
-		nicknamePrefix = config.getNode("nickname_prefix").getString("~");
-		serverName = config.getNode("server_name").getString("SPONGE_SERVER");
+	protected String getString(String configNode, String defaultValue) {
+		return config.getNode(configNode).getString(defaultValue);
+	}
+
+	@Override
+	protected boolean getBoolean(String configNode, boolean defaultValue) {
+		return config.getNode(configNode).getBoolean(defaultValue);
+	}
+
+	@Override
+	protected int getInt(String configNode, int defaultValue) {
+		return config.getNode(configNode).getInt(defaultValue);
+	}
+
+	@Override
+	protected List<String> getStringList(String configNode) {
+		return config.getNode(configNode).getList(value -> value.toString());
+	}
+
+	@Override
+	protected Map<String, String> getPlaceholdersMap(String rootConfigNode) {
+		Map<String,String> map = new HashMap<String,String>();
+		return map; // TODO This feature is currently unused in Sponge.
 	}
 
 }
