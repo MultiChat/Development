@@ -27,6 +27,10 @@ public abstract class LocalNameManager {
 
 	}
 
+	public LocalNameManagerMode getMode() {
+		return this.mode;
+	}
+
 	/**
 	 * Returns the FORMATTED NICKNAME (WITH PREFIX IF SET) of a player if they have one set, otherwise returns their username
 	 * 
