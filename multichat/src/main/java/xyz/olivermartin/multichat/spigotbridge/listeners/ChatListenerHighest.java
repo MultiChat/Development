@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,31 +26,26 @@ public class ChatListenerHighest implements Listener {
 
 		// Deal with coloured chat
 		if (MultiChatSpigot.colourMap.containsKey(event.getPlayer().getUniqueId())) {
-			
-			System.out.println("Player in colour map.."); //TODO REMOVE
 
 			boolean colour = MultiChatSpigot.colourMap.get(event.getPlayer().getUniqueId());
 
 			if (colour) {
-				System.out.println("They have the colour permission! Translating!"); // TODO REMOVE
 				event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
 			}
 
 		}
-		
-		Bukkit.getConsoleSender().sendMessage("Event currently is... " + event.getMessage()); // TODO REMOVE!
 
 		synchronized (MultiChatSpigot.placeholderMap) {
 			for (String key : MultiChatSpigot.placeholderMap.keySet()) {
-				
+
 				String value = MultiChatSpigot.placeholderMap.get(key);
 				value = SpigotPlaceholderManager.buildMultiChatPlaceholder(event.getPlayer(), value);
-				
+
 				// If we are hooked with PAPI then use their placeholders!
 				if (MultiChatSpigot.hookedPAPI()) {
 					value = PlaceholderAPI.setPlaceholders(event.getPlayer(), value);
 				}
-				
+
 				if (event.getFormat().contains(key)) {
 					event.setFormat(event.getFormat().replace(key, value));
 				}
@@ -64,14 +58,14 @@ public class ChatListenerHighest implements Listener {
 			String channelName = MultiChatSpigot.playerChannels.get(event.getPlayer());
 
 			// HACK for /local <message> and /global<message>
-			
+
 			if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
 				String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();
 				channelName = tempChannel.startsWith("!SINGLE L MESSAGE!") ? "local" : "global";
 			}
-			
+
 			// END HACK
-			
+
 			if (MultiChatSpigot.channelObjects.containsKey(channelName)) {
 
 				PseudoChannel channelObject = MultiChatSpigot.channelObjects.get(channelName);
@@ -111,11 +105,11 @@ public class ChatListenerHighest implements Listener {
 		}
 
 		if (MultiChatSpigot.playerChannels.containsKey(event.getPlayer())) {
-			
+
 			if (!MultiChatSpigot.globalChatServer) {
 				return;
 			}
-			
+
 			if (MultiChatSpigot.chatQueues.containsKey(event.getPlayer().getName().toLowerCase())) {
 				// Hack for /global /local direct messaging...
 				String tempChannel = MultiChatSpigot.chatQueues.get(event.getPlayer().getName().toLowerCase()).peek();

@@ -221,7 +221,7 @@ public class BungeeComm implements Listener {
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) {
-					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message...");
+					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message... (Is IP-Forwarding on?)");
 					return;
 				}
 
