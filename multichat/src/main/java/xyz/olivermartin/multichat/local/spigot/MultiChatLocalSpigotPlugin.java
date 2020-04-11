@@ -72,6 +72,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
 		api.registerDataStore(dataStore);
+		
+		// Register console logger
+		// TODO
+		getLogger().info("");
 
 		// Register name manager...
 		LocalNameManager nameManager;
