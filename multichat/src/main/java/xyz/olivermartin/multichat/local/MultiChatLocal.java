@@ -33,6 +33,7 @@ public class MultiChatLocal {
 	private LocalMetaManager metaManager;
 	private LocalProxyCommunicationManager proxyCommunicationManager;
 	private LocalFileSystemManager fileSystemManager;
+	private LocalConsoleLogger consoleLogger;
 
 	/* END ATTRIBUTES */
 
@@ -245,6 +246,29 @@ public class MultiChatLocal {
 	public LocalFileSystemManager getFileSystemManager() {
 		if (this.fileSystemManager == null) throw new IllegalStateException("No MultiChat file system manager has been registered");
 		return this.fileSystemManager;
+	}
+
+	/**
+	 * Register the console logger to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param consoleLogger The local console logger to register to the API
+	 */
+	public void registerConsoleLogger(LocalConsoleLogger consoleLogger) {
+		this.consoleLogger = consoleLogger;
+	}
+
+	/**
+	 * Get the console logger being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The console logger registered with the API
+	 */
+	public LocalConsoleLogger getConsoleLogger() {
+		if (this.consoleLogger == null) throw new IllegalStateException("No MultiChat console logger has been registered");
+		return this.consoleLogger;
 	}
 
 }

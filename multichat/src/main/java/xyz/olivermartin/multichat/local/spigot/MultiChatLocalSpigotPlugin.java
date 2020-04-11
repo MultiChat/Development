@@ -13,6 +13,7 @@ import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.DatabaseMode;
 import xyz.olivermartin.multichat.local.LocalConfigManager;
+import xyz.olivermartin.multichat.local.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.LocalDataStore;
 import xyz.olivermartin.multichat.local.LocalDatabaseCredentials;
 import xyz.olivermartin.multichat.local.LocalFileNameManager;
@@ -72,10 +73,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
 		api.registerDataStore(dataStore);
-		
+
 		// Register console logger
-		// TODO
-		getLogger().info("");
+		LocalConsoleLogger consoleLogger = new LocalSpigotConsoleLogger(getLogger());
+		api.registerConsoleLogger(consoleLogger);
 
 		// Register name manager...
 		LocalNameManager nameManager;
