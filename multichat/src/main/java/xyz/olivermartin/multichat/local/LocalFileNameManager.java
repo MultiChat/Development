@@ -25,7 +25,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 
 	protected Map<String,String> mapNickFormatted;
 	protected Map<String,String> mapNameFormatted;
-	
+
 	protected MultiChatLocalPlatform platform;
 
 	public LocalFileNameManager(MultiChatLocalPlatform platform) {
@@ -109,8 +109,8 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 
 		synchronized (mapUUIDNick) {
 			if (mapUUIDNick.containsKey(uuid)) {
-				if (MultiChatLocal.getInstance().getConfigManager().getLocalConfig().showNicknamePrefix && withPrefix) {
-					return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().nicknamePrefix + mapNickFormatted.get(mapUUIDNick.get(uuid));
+				if (MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isShowNicknamePrefix() && withPrefix) {
+					return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getNicknamePrefix() + mapNickFormatted.get(mapUUIDNick.get(uuid));
 				} else {
 					return mapNickFormatted.get(mapUUIDNick.get(uuid));
 				}

@@ -59,8 +59,8 @@ public class LocalSQLNameManager extends LocalNameManager {
 					name = results.getString("f_name");
 				} else {
 					name = results.getString("f_nick");
-					if (MultiChatLocal.getInstance().getConfigManager().getLocalConfig().showNicknamePrefix && withPrefix) {
-						name = MultiChatLocal.getInstance().getConfigManager().getLocalConfig().nicknamePrefix + name;
+					if (MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isShowNicknamePrefix() && withPrefix) {
+						name = MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getNicknamePrefix() + name;
 					}
 				}
 			}

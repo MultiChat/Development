@@ -11,30 +11,30 @@ import java.util.Map;
 public abstract class LocalConfig {
 
 	// SERVER SETTINGS
-	public String serverName;
+	private String serverName;
 
 	// GLOBAL CHAT SETTINGS
-	public boolean overrideGlobalFormat;
-	public String overrideGlobalFormatFormat;
-	public boolean overrideAllMultiChatFormatting;
-	public boolean forceMultiChatFormat;
+	private boolean overrideGlobalFormat;
+	private String overrideGlobalFormatFormat;
+	private boolean overrideAllMultiChatFormatting;
+	private boolean forceMultiChatFormat;
 
 	// LOCAL CHAT SETTINGS
-	public boolean setLocalFormat;
-	public String localChatFormat;
+	private boolean setLocalFormat;
+	private String localChatFormat;
 
 	// PLACEHOLDER SETTINGS
-	public Map<String,String> multichatPlaceholders;
+	private Map<String,String> multichatPlaceholders;
 
 	// NICKNAME SETTINGS
-	public List<String> nicknameBlacklist;
-	public boolean showNicknamePrefix;
-	public String nicknamePrefix;
-	public int nicknameLengthLimit;
-	public int nicknameLengthMin;
-	public boolean nicknameLengthLimitFormatting;
-	public boolean nicknameSQL;
-	public boolean mySQL;
+	private List<String> nicknameBlacklist;
+	private boolean showNicknamePrefix;
+	private String nicknamePrefix;
+	private int nicknameLengthLimit;
+	private int nicknameLengthMin;
+	private boolean nicknameLengthLimitFormatting;
+	private boolean nicknameSQL;
+	private boolean mySQL;
 
 
 	// FILE SETTINGS
@@ -162,5 +162,117 @@ public abstract class LocalConfig {
 		LocalConfigStatus startupStatus = startupConfig();
 		return startupStatus;
 
+	}
+
+	/**
+	 * @return the serverName
+	 */
+	public String getServerName() {
+		return serverName;
+	}
+
+	/**
+	 * @return the overrideGlobalFormat
+	 */
+	public boolean isOverrideGlobalFormat() {
+		return overrideGlobalFormat;
+	}
+
+	/**
+	 * @return the overrideGlobalFormatFormat
+	 */
+	public String getOverrideGlobalFormatFormat() {
+		return overrideGlobalFormatFormat;
+	}
+
+	/**
+	 * @return the overrideAllMultiChatFormatting
+	 */
+	public boolean isOverrideAllMultiChatFormatting() {
+		return overrideAllMultiChatFormatting;
+	}
+
+	/**
+	 * @return the forceMultiChatFormat
+	 */
+	public boolean isForceMultiChatFormat() {
+		return forceMultiChatFormat;
+	}
+
+	/**
+	 * @return the setLocalFormat
+	 */
+	public boolean isSetLocalFormat() {
+		return setLocalFormat;
+	}
+
+	/**
+	 * @return the localChatFormat
+	 */
+	public String getLocalChatFormat() {
+		return localChatFormat;
+	}
+
+	/**
+	 * @return the multichatPlaceholders
+	 */
+	public Map<String, String> getMultichatPlaceholders() {
+		return multichatPlaceholders;
+	}
+
+	/**
+	 * @return the nicknameBlacklist
+	 */
+	public List<String> getNicknameBlacklist() {
+		return nicknameBlacklist;
+	}
+
+	/**
+	 * @return the showNicknamePrefix
+	 */
+	public boolean isShowNicknamePrefix() {
+		return showNicknamePrefix;
+	}
+
+	/**
+	 * @return the nicknamePrefix
+	 */
+	public String getNicknamePrefix() {
+		return nicknamePrefix;
+	}
+
+	/**
+	 * @return the nicknameLengthLimit
+	 */
+	public int getNicknameLengthLimit() {
+		return nicknameLengthLimit;
+	}
+
+	/**
+	 * @return the nicknameLengthMin
+	 */
+	public int getNicknameLengthMin() {
+		return nicknameLengthMin;
+	}
+
+	/**
+	 * @return the nicknameLengthLimitFormatting
+	 */
+	public boolean isNicknameLengthLimitFormatting() {
+		return nicknameLengthLimitFormatting;
+	}
+
+	/**
+	 * @return the nicknameSQL
+	 */
+	public boolean isNicknameSQL() {
+		return nicknameSQL;
+	}
+
+	/**
+	 * @return the mySQL
+	 */
+	public boolean isMySQL() {
+		return mySQL;
 	}
 }

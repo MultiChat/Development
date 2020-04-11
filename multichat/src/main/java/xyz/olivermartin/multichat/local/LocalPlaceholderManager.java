@@ -40,7 +40,7 @@ public abstract class LocalPlaceholderManager {
 		message = message.replace("%PREFIX%", MultiChatLocal.getInstance().getMetaManager().getPrefix(uuid));
 		message = message.replace("%SUFFIX%", MultiChatLocal.getInstance().getMetaManager().getSuffix(uuid));
 		message = message.replace("%WORLD%", MultiChatLocal.getInstance().getMetaManager().getWorld(uuid));
-		message = message.replace("%SERVER%", MultiChatLocal.getInstance().getConfigManager().getLocalConfig().serverName);
+		message = message.replace("%SERVER%", MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
 		
 		return message;
 		
