@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local;
+package xyz.olivermartin.multichat.local.spigot;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +8,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.UUID;
+
+import xyz.olivermartin.multichat.local.LocalFileNameManager;
+import xyz.olivermartin.multichat.local.LocalNameManager;
+import xyz.olivermartin.multichat.local.LocalNameManagerMode;
+import xyz.olivermartin.multichat.local.LocalNicknameFile;
+import xyz.olivermartin.multichat.local.MultiChatLocal;
+import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 
 public class LocalSpigotNicknameFile extends LocalNicknameFile {
 

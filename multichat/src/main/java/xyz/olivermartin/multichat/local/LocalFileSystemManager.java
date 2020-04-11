@@ -2,6 +2,9 @@ package xyz.olivermartin.multichat.local;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.local.spigot.LocalSpigotNicknameFile;
+import xyz.olivermartin.multichat.local.sponge.LocalSpongeNicknameFile;
+
 public class LocalFileSystemManager {
 
 	private LocalNicknameFile nicknameFile;

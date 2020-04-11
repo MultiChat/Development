@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local;
+package xyz.olivermartin.multichat.local.sponge;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +11,12 @@ import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+import xyz.olivermartin.multichat.local.LocalFileNameManager;
+import xyz.olivermartin.multichat.local.LocalNameManager;
+import xyz.olivermartin.multichat.local.LocalNameManagerMode;
+import xyz.olivermartin.multichat.local.LocalNicknameFile;
+import xyz.olivermartin.multichat.local.MultiChatLocal;
+import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 
 public class LocalSpongeNicknameFile extends LocalNicknameFile {
 
