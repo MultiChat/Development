@@ -363,6 +363,8 @@ public class Events implements Listener {
 				DebugManager.log(Channel.getChannel(player.getUniqueId()).getName());
 				DebugManager.log(player.getServer().getInfo().getName());
 				DebugManager.log("< / END >");
+				
+				DebugManager.log("Does player have colour permission? " + (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
 				// Let server know players channel preference
 				BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));

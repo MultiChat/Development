@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,14 +27,19 @@ public class ChatListenerHighest implements Listener {
 
 		// Deal with coloured chat
 		if (MultiChatSpigot.colourMap.containsKey(event.getPlayer().getUniqueId())) {
+			
+			System.out.println("Player in colour map.."); //TODO REMOVE
 
 			boolean colour = MultiChatSpigot.colourMap.get(event.getPlayer().getUniqueId());
 
 			if (colour) {
+				System.out.println("They have the colour permission! Translating!"); // TODO REMOVE
 				event.setMessage(ChatColor.translateAlternateColorCodes('&', event.getMessage()));
 			}
 
 		}
+		
+		Bukkit.getConsoleSender().sendMessage("Event currently is... " + event.getMessage()); // TODO REMOVE!
 
 		synchronized (MultiChatSpigot.placeholderMap) {
 			for (String key : MultiChatSpigot.placeholderMap.keySet()) {

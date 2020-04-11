@@ -208,6 +208,7 @@ public class MultiChatPluginMessageListener implements PluginMessageListener {
 					MultiChatSpigot.playerChannels.put(bukkitPlayer, channelName);
 
 					boolean colour = oin.readBoolean();
+					System.out.println("Colour permission: " + colour); //TODO REMOVE
 					MultiChatSpigot.colourMap.put(bukkitPlayer.getUniqueId(), colour);
 
 					boolean whitelistMembers = oin.readBoolean();
