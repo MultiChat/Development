@@ -32,6 +32,7 @@ public class MultiChatLocal {
 	private LocalDataStore dataStore;
 	private LocalMetaManager metaManager;
 	private LocalProxyCommunicationManager proxyCommunicationManager;
+	private LocalFileSystemManager fileSystemManager;
 
 	/* END ATTRIBUTES */
 
@@ -221,6 +222,29 @@ public class MultiChatLocal {
 	public LocalProxyCommunicationManager getProxyCommunicationManager() {
 		if (this.proxyCommunicationManager == null) throw new IllegalStateException("No MultiChat proxy communication manager has been registered");
 		return this.proxyCommunicationManager;
+	}
+
+	/**
+	 * Register the file system manager to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param fileSystemManager The File System manager to register to the API
+	 */
+	public void registerFileSystemManager(LocalFileSystemManager fileSystemManager) {
+		this.fileSystemManager = fileSystemManager;
+	}
+
+	/**
+	 * Get the file system manager being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The file system manager registered with the API
+	 */
+	public LocalFileSystemManager getFileSystemManager() {
+		if (this.fileSystemManager == null) throw new IllegalStateException("No MultiChat file system manager has been registered");
+		return this.fileSystemManager;
 	}
 
 }

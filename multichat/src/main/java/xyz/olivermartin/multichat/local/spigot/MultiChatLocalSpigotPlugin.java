@@ -1,25 +1,22 @@
 package xyz.olivermartin.multichat.local.spigot;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.DatabaseMode;
 import xyz.olivermartin.multichat.local.LocalConfigManager;
 import xyz.olivermartin.multichat.local.LocalDataStore;
 import xyz.olivermartin.multichat.local.LocalDatabaseCredentials;
 import xyz.olivermartin.multichat.local.LocalFileNameManager;
+import xyz.olivermartin.multichat.local.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.LocalMetaManager;
 import xyz.olivermartin.multichat.local.LocalNameManager;
 import xyz.olivermartin.multichat.local.LocalNameManagerMode;
@@ -27,6 +24,8 @@ import xyz.olivermartin.multichat.local.LocalSQLNameManager;
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.communication.LocalProxyCommunicationManager;
+import xyz.olivermartin.multichat.local.spigot.hooks.LocalSpigotPAPIHook;
+import xyz.olivermartin.multichat.local.spigot.hooks.LocalSpigotVaultHook;
 import xyz.olivermartin.multichat.spigotbridge.listeners.MultiChatPluginMessageListener;
 
 public class MultiChatLocalSpigotPlugin extends JavaPlugin {
@@ -34,14 +33,18 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
+		// GET API
 		MultiChatLocal api = MultiChatLocal.getInstance();
 
+		// Register platform
 		MultiChatLocalPlatform platform = MultiChatLocalPlatform.SPIGOT;
 		api.registerPlatform(MultiChatLocalPlatform.SPIGOT);
 
+		// Register name
 		String pluginName = "MultiChatSpigot";
 		api.registerPluginName(pluginName);
 
+		// Register config directory
 		File configDir = getDataFolder().getAbsoluteFile();
 		if (!getDataFolder().exists()) {
 			//TODO Need to use logger properly! getLogger().info(logPrefix + "Creating plugin directory!");
@@ -50,6 +53,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		}
 		api.registerConfigDirectory(configDir);
 
+		// Create directory for translations
 		String translationsDirString = configDir.toString() + File.separator + "translations";
 		File translationsDir = new File(translationsDirString);
 		if (!translationsDir.exists()) {
@@ -57,15 +61,19 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 			translationsDir.mkdirs();
 		}
 
+		// Register config manager
 		LocalConfigManager configMan = new LocalConfigManager();
 		api.registerConfigManager(configMan);
 
+		// Register config files
 		configMan.registerLocalConfig(platform, "spigotconfig.yml", configDir);
-		configMan.registerLocalConfig(platform, "spigotconfig_fr.yml", translationsDir);
+		// TODO Need a new way to copy the translations config... configMan.registerLocalConfig(platform, "spigotconfig_fr.yml", translationsDir);
 
+		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
 		api.registerDataStore(dataStore);
 
+		// Register name manager...
 		LocalNameManager nameManager;
 
 		// TODO Move setup database to somewhere else? --> LocalDatabaseManager can definitely do this.
@@ -115,176 +123,34 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		}
 
-		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
-
-			LocalFileNameManager fileNameManager = (LocalFileNameManager)nameManager;
-
-			// TODO This here is the legacy file loading code... This needs to be refactored to somewhere else!
-
-			/* START LEGACY */
-
-			String nameDataFile = "namedata.dat";
-			File legacyNicknameFile = new File(configDir,"Nicknames.dat");
-			String logPrefix = "[MultiChatSpigot] ";
-
-			File f = new File(configDir, nameDataFile);
-
-			if ((f.exists()) && (!f.isDirectory())) {
-
-				getLogger().info(logPrefix + "Attempting startup load for Nicknames");
-
-				File file = new File(configDir, nameDataFile);
-				FileInputStream saveFile;
-				try {
-					saveFile = new FileInputStream(file);
-
-					ObjectInputStream in = new ObjectInputStream(saveFile);
-
-					@SuppressWarnings("unchecked")
-					Map<UUID, String> mapUUIDNick = (Map<UUID, String>) in.readObject();
-					@SuppressWarnings("unchecked")
-					Map<UUID, String> mapUUIDName = (Map<UUID, String>) in.readObject();
-					@SuppressWarnings("unchecked")
-					Map<String, UUID> mapNickUUID = (Map<String, UUID>) in.readObject();
-					@SuppressWarnings("unchecked")
-					Map<String, UUID> mapNameUUID = (Map<String, UUID>) in.readObject();
-					@SuppressWarnings("unchecked")
-					Map<String, String> mapNickFormatted = (Map<String, String>) in.readObject();
-					@SuppressWarnings("unchecked")
-					Map<String, String> mapNameFormatted = (Map<String, String>) in.readObject();
-
-					in.close();
-
-					fileNameManager.setMapUUIDNick(mapUUIDNick);
-					fileNameManager.setMapUUIDName(mapUUIDName);
-					fileNameManager.setMapNickUUID(mapNickUUID);
-					fileNameManager.setMapNameUUID(mapNameUUID);
-					fileNameManager.setMapNickFormatted(mapNickFormatted);
-					fileNameManager.setMapNameFormatted(mapNameFormatted);
-
-				} catch (IOException | ClassNotFoundException e) {
-					getLogger().info(logPrefix + "[ERROR] Could not load nickname data");
-					e.printStackTrace();
-				}
-
-				//getLogger().info(logPrefix + "Load completed!");
-
-			} else if (legacyNicknameFile.exists()) {
-
-				// LEGACY NICKNAME FILE HANDLING --------------------------------------------
-
-
-				HashMap<UUID, String> result = null;
-
-				try {
-
-					FileInputStream saveFile = new FileInputStream(legacyNicknameFile);
-					ObjectInputStream in = new ObjectInputStream(saveFile);
-
-					result = (HashMap<UUID, String>) in.readObject();
-					in.close();
-					getLogger().info(logPrefix + "Loaded a legacy (pre 1.6) nicknames file. Attempting conversion...");
-
-					int counter = 0;
-
-					if (result != null) {
-
-						if (result.keySet() != null) {
-
-							for (UUID u : result.keySet()) {
-
-								counter++;
-								nameManager.registerOfflinePlayerByUUID(u, "NotJoinedYet"+String.valueOf(counter));
-								nameManager.setNickname(u, result.get(u));
-
-							}
-
-						}
-
-					}
-
-					File file = new File(configDir, nameDataFile);
-					FileOutputStream saveFile2;
-					try {
-						saveFile2 = new FileOutputStream(file);
-
-						ObjectOutputStream out = new ObjectOutputStream(saveFile2);
-
-						out.writeObject(fileNameManager.getMapUUIDNick());
-						out.writeObject(fileNameManager.getMapUUIDName());
-						out.writeObject(fileNameManager.getMapNickUUID());
-						out.writeObject(fileNameManager.getMapNameUUID());
-						out.writeObject(fileNameManager.getMapNickFormatted());
-						out.writeObject(fileNameManager.getMapNameFormatted());
-
-						out.close();
-
-					} catch (FileNotFoundException e) {
-						getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
-						e.printStackTrace();
-					}
-
-				} catch (IOException|ClassNotFoundException e) {
-
-					getLogger().info(logPrefix + "[ERROR] An error has occured reading the legacy nicknames file. Please delete it.");
-					e.printStackTrace();
-
-				}
-
-			} else {
-
-				getLogger().info(logPrefix + "Name data files do not exist to load. Must be first startup!");
-				getLogger().info(logPrefix + "Enabling Nicknames! :D");
-				getLogger().info(logPrefix + "Attempting to create hash files!");
-
-				File file = new File(configDir, nameDataFile);
-				FileOutputStream saveFile;
-				try {
-					saveFile = new FileOutputStream(file);
-
-					ObjectOutputStream out = new ObjectOutputStream(saveFile);
-
-					out.writeObject(fileNameManager.getMapUUIDNick());
-					out.writeObject(fileNameManager.getMapUUIDName());
-					out.writeObject(fileNameManager.getMapNickUUID());
-					out.writeObject(fileNameManager.getMapNameUUID());
-					out.writeObject(fileNameManager.getMapNickFormatted());
-					out.writeObject(fileNameManager.getMapNameFormatted());
-
-					out.close();
-
-				} catch (FileNotFoundException e) {
-					getLogger().info(logPrefix + "[ERROR] Could not save nickname data");
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				getLogger().info(logPrefix + "The files were created!");
-
-			}
-
-			/* END LEGACY */
-
-		}
-
 		api.registerNameManager(nameManager);
 
-		LocalProxyCommunicationManager proxyCommunicationManager = new SpigotBungeeCommunicationManager();
-		api.registerProxyCommunicationManager(proxyCommunicationManager);
+		LocalFileSystemManager fileSystemManager = new LocalFileSystemManager();
+		api.registerFileSystemManager(fileSystemManager);
 
+		// If we are using file based storage for name data, then register and load the nickname file into name manager
+		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+			fileSystemManager.registerNicknameFile(MultiChatLocalPlatform.SPIGOT, "namedata.dat", configDir);
+		}
+
+		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpigotMetaManager();
 		api.registerMetaManager(metaManager);
 
 		// Register plugin communication channels
 		registerCommunicationChannels();
 
+		// Register communication manager
+		LocalProxyCommunicationManager proxyCommunicationManager = new SpigotBungeeCommunicationManager();
+		api.registerProxyCommunicationManager(proxyCommunicationManager);
+
 		// Register Listeners
 
 		// Register Commands
 
-		// Manage dependencies...? Does anything need to be done here?
+		// Manage dependencies
+		setupVaultChat();
+		setupPAPI();
 
 	}
 
@@ -307,6 +173,32 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", MultiChatPluginMessageListener.getInstance());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", MultiChatPluginMessageListener.getInstance());
+
+	}
+
+	private void setupVaultChat() {
+
+		if (getServer().getPluginManager().getPlugin("Vault") == null) return;
+
+		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
+
+		if (rsp == null) {
+			// TODO Logger
+			getLogger().info("[ERROR] Vault was found, but will not work properly until you install a compatible permissions plugin!");
+			return;
+		}
+
+		LocalSpigotVaultHook.getInstance().hook(rsp.getProvider());
+
+	}
+
+	private void setupPAPI() {
+
+		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") == null) {
+			return;
+		} else {
+			LocalSpigotPAPIHook.getInstance().hook();
+		}
 
 	}
 
