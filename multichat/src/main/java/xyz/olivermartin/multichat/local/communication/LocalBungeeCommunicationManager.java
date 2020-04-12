@@ -57,12 +57,12 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 	}
 
 	@Override
-	protected void sendProxyExecuteMessage(String command) {
+	public void sendProxyExecuteMessage(String command) {
 		sendString(pxeChannel, command);
 	}
 
 	@Override
-	protected void sendProxyExecutePlayerMessage(String command, String player) {
+	public void sendProxyExecutePlayerMessage(String command, String player) {
 		sendStringAndString(ppxeChannel, command, player);
 	}
 
