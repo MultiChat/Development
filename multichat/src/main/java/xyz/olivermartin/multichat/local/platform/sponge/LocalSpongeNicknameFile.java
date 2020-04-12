@@ -11,17 +11,14 @@ import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
-import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
-import xyz.olivermartin.multichat.local.storage.LocalNameManager;
-import xyz.olivermartin.multichat.local.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.storage.LocalNicknameFile;
 
 public class LocalSpongeNicknameFile extends LocalNicknameFile {
 
-	public LocalSpongeNicknameFile(File configPath, String fileName) {
-		super(configPath, fileName, MultiChatLocalPlatform.SPONGE);
+	public LocalSpongeNicknameFile(File configPath, String fileName, LocalFileNameManager lfnm) {
+		super(configPath, fileName, lfnm, MultiChatLocalPlatform.SPONGE);
 	}
 
 	@SuppressWarnings("serial")
@@ -35,41 +32,29 @@ public class LocalSpongeNicknameFile extends LocalNicknameFile {
 		Map<String, UUID> mapNickUUID;
 		Map<String, String> mapNickFormatted;
 
-		LocalNameManager nameManager = MultiChatLocal.getInstance().getNameManager();
+		try {
 
-		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+			rootNode = configLoader.load();
 
-			LocalFileNameManager fileNameManager = (LocalFileNameManager) nameManager;
+			mapUUIDNick = (Map<UUID, String>) rootNode.getNode("mapUUIDNick").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
+			mapNickUUID = (Map<String, UUID>) rootNode.getNode("mapNickUUID").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
+			mapNickFormatted = (Map<String, String>) rootNode.getNode("mapNickFormatted").getValue(new TypeToken<Map<String,String>>() { /* EMPTY */ });
 
-			try {
-
-				rootNode = configLoader.load();
-
-				mapUUIDNick = (Map<UUID, String>) rootNode.getNode("mapUUIDNick").getValue(new TypeToken<Map<UUID,String>>() { /* EMPTY */ });
-				mapNickUUID = (Map<String, UUID>) rootNode.getNode("mapNickUUID").getValue(new TypeToken<Map<String, UUID>>() { /* EMPTY */ });
-				mapNickFormatted = (Map<String, String>) rootNode.getNode("mapNickFormatted").getValue(new TypeToken<Map<String,String>>() { /* EMPTY */ });
-
-				if (mapUUIDNick == null) {
-					mapUUIDNick = new HashMap<UUID,String>();
-					mapNickUUID = new HashMap<String, UUID>();
-					mapNickFormatted = new HashMap<String,String>();
-				}
-
-				fileNameManager.setMapUUIDNick(mapUUIDNick);
-				fileNameManager.setMapNickUUID(mapNickUUID);
-				fileNameManager.setMapNickFormatted(mapNickFormatted);
-
-				configLoader.save(rootNode);
-
-				return true;
-
-			} catch (ObjectMappingException | IOException e) {
-
-				return false;
-
+			if (mapUUIDNick == null) {
+				mapUUIDNick = new HashMap<UUID,String>();
+				mapNickUUID = new HashMap<String, UUID>();
+				mapNickFormatted = new HashMap<String,String>();
 			}
 
-		} else {
+			lfnm.setMapUUIDNick(mapUUIDNick);
+			lfnm.setMapNickUUID(mapNickUUID);
+			lfnm.setMapNickFormatted(mapNickFormatted);
+
+			configLoader.save(rootNode);
+
+			return true;
+
+		} catch (ObjectMappingException | IOException e) {
 
 			return false;
 
@@ -84,34 +69,22 @@ public class LocalSpongeNicknameFile extends LocalNicknameFile {
 		HoconConfigurationLoader configLoader = HoconConfigurationLoader.builder().setFile(file).build();
 		ConfigurationNode rootNode;
 
-		LocalNameManager nameManager = MultiChatLocal.getInstance().getNameManager();
+		try {
 
-		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+			rootNode = configLoader.createEmptyNode();
 
-			LocalFileNameManager fileNameManager = (LocalFileNameManager) nameManager;
+			rootNode.getNode("mapUUIDNick").setValue(new TypeToken<Map<UUID,String>>() {}, 
+					(lfnm.getMapUUIDNick()));
+			rootNode.getNode("mapNickUUID").setValue(new TypeToken<Map<String,UUID>>() {}, 
+					(lfnm.getMapNickUUID()));
+			rootNode.getNode("mapNickFormatted").setValue(new TypeToken<Map<String,String>>() {}, 
+					(lfnm.getMapNickFormatted()));
 
-			try {
+			configLoader.save(rootNode);
 
-				rootNode = configLoader.createEmptyNode();
+			return true;
 
-				rootNode.getNode("mapUUIDNick").setValue(new TypeToken<Map<UUID,String>>() {}, 
-						(fileNameManager.getMapUUIDNick()));
-				rootNode.getNode("mapNickUUID").setValue(new TypeToken<Map<String,UUID>>() {}, 
-						(fileNameManager.getMapNickUUID()));
-				rootNode.getNode("mapNickFormatted").setValue(new TypeToken<Map<String,String>>() {}, 
-						(fileNameManager.getMapNickFormatted()));
-
-				configLoader.save(rootNode);
-
-				return true;
-
-			} catch (ObjectMappingException | IOException e) {
-
-				return false;
-
-			}
-
-		} else {
+		} catch (ObjectMappingException | IOException e) {
 
 			return false;
 

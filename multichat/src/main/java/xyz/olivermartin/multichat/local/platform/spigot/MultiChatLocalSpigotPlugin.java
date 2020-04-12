@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHoo
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
 import xyz.olivermartin.multichat.local.storage.LocalDatabaseSetupManager;
+import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
 import xyz.olivermartin.multichat.local.storage.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.storage.LocalNameManager;
 import xyz.olivermartin.multichat.local.storage.LocalNameManagerMode;
@@ -99,7 +100,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// If we are using file based storage for name data, then register and load the nickname file into name manager
 		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
-			fileSystemManager.registerNicknameFile(MultiChatLocalPlatform.SPIGOT, "namedata.dat", configDir);
+			fileSystemManager.registerNicknameFile(MultiChatLocalPlatform.SPIGOT, "namedata.dat", configDir, (LocalFileNameManager)nameManager);
 		}
 
 		// Copy translations files...

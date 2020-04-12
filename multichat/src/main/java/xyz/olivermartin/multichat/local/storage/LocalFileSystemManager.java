@@ -27,14 +27,14 @@ public class LocalFileSystemManager {
 	 * @param fileName filename i.e. namedata.dat
 	 * @param configPath THE PATH WITHOUT THE FILE NAME
 	 */
-	public void registerNicknameFile(MultiChatLocalPlatform platform, String fileName, File configPath) {
+	public void registerNicknameFile(MultiChatLocalPlatform platform, String fileName, File configPath, LocalFileNameManager lfnm) {
 
 		switch (platform) {
 		case SPIGOT:
-			nicknameFile = new LocalSpigotNicknameFile(configPath, fileName);
+			nicknameFile = new LocalSpigotNicknameFile(configPath, fileName, lfnm);
 			break;
 		case SPONGE:
-			nicknameFile = new LocalSpongeNicknameFile(configPath, fileName);
+			nicknameFile = new LocalSpongeNicknameFile(configPath, fileName, lfnm);
 			break;
 		default:
 			throw new IllegalArgumentException("Could not register file because this type of platform is not allowed.");

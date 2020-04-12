@@ -11,11 +11,13 @@ public abstract class LocalNicknameFile {
 	private String fileName;
 	protected boolean ready;
 	private MultiChatLocalPlatform platform;
+	protected LocalFileNameManager lfnm;
 
-	public LocalNicknameFile(File configPath, String fileName, MultiChatLocalPlatform platform) {
+	public LocalNicknameFile(File configPath, String fileName, LocalFileNameManager lfnm, MultiChatLocalPlatform platform) {
 		this.configPath = configPath;
 		this.fileName = fileName;
 		this.platform = platform;
+		this.lfnm = lfnm;
 		ready = startupFile();
 	}
 

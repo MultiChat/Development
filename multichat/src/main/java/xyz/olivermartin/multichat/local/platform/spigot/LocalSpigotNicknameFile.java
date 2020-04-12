@@ -9,17 +9,14 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
-import xyz.olivermartin.multichat.local.storage.LocalNameManager;
-import xyz.olivermartin.multichat.local.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.storage.LocalNicknameFile;
 
 public class LocalSpigotNicknameFile extends LocalNicknameFile {
 
-	public LocalSpigotNicknameFile(File configPath, String fileName) {
-		super(configPath, fileName, MultiChatLocalPlatform.SPIGOT);
+	public LocalSpigotNicknameFile(File configPath, String fileName, LocalFileNameManager lfnm) {
+		super(configPath, fileName, lfnm, MultiChatLocalPlatform.SPIGOT);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -32,41 +29,27 @@ public class LocalSpigotNicknameFile extends LocalNicknameFile {
 
 			fileInputStream = new FileInputStream(file);
 
-			LocalNameManager nameManager = MultiChatLocal.getInstance().getNameManager();
+			ObjectInputStream in = new ObjectInputStream(fileInputStream);
 
-			if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+			Map<UUID, String> mapUUIDNick = (Map<UUID, String>) in.readObject();
+			Map<UUID, String> mapUUIDName = (Map<UUID, String>) in.readObject();
+			Map<String, UUID> mapNickUUID = (Map<String, UUID>) in.readObject();
+			Map<String, UUID> mapNameUUID = (Map<String, UUID>) in.readObject();
+			Map<String, String> mapNickFormatted = (Map<String, String>) in.readObject();
+			Map<String, String> mapNameFormatted = (Map<String, String>) in.readObject();
 
-				LocalFileNameManager fileNameManager = (LocalFileNameManager) nameManager;
+			in.close();
 
-				ObjectInputStream in = new ObjectInputStream(fileInputStream);
+			lfnm.setMapUUIDNick(mapUUIDNick);
+			lfnm.setMapUUIDName(mapUUIDName);
+			lfnm.setMapNickUUID(mapNickUUID);
+			lfnm.setMapNameUUID(mapNameUUID);
+			lfnm.setMapNickFormatted(mapNickFormatted);
+			lfnm.setMapNameFormatted(mapNameFormatted);
 
-				Map<UUID, String> mapUUIDNick = (Map<UUID, String>) in.readObject();
-				Map<UUID, String> mapUUIDName = (Map<UUID, String>) in.readObject();
-				Map<String, UUID> mapNickUUID = (Map<String, UUID>) in.readObject();
-				Map<String, UUID> mapNameUUID = (Map<String, UUID>) in.readObject();
-				Map<String, String> mapNickFormatted = (Map<String, String>) in.readObject();
-				Map<String, String> mapNameFormatted = (Map<String, String>) in.readObject();
+			fileInputStream.close();
 
-				in.close();
-
-				fileNameManager.setMapUUIDNick(mapUUIDNick);
-				fileNameManager.setMapUUIDName(mapUUIDName);
-				fileNameManager.setMapNickUUID(mapNickUUID);
-				fileNameManager.setMapNameUUID(mapNameUUID);
-				fileNameManager.setMapNickFormatted(mapNickFormatted);
-				fileNameManager.setMapNameFormatted(mapNameFormatted);
-
-				fileInputStream.close();
-
-				return true;
-
-			} else {
-
-				fileInputStream.close();
-				// Cannot load as not in file based mode!
-				return false;
-
-			}
+			return true;
 
 		} catch (IOException | ClassNotFoundException e) {
 
@@ -82,34 +65,20 @@ public class LocalSpigotNicknameFile extends LocalNicknameFile {
 
 		try {
 
-			LocalNameManager nameManager = MultiChatLocal.getInstance().getNameManager();
-
 			fileOutputStream = new FileOutputStream(file);
 
-			if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+			ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
 
-				LocalFileNameManager fileNameManager = (LocalFileNameManager) nameManager;
+			out.writeObject(lfnm.getMapUUIDNick());
+			out.writeObject(lfnm.getMapUUIDName());
+			out.writeObject(lfnm.getMapNickUUID());
+			out.writeObject(lfnm.getMapNameUUID());
+			out.writeObject(lfnm.getMapNickFormatted());
+			out.writeObject(lfnm.getMapNameFormatted());
 
-				ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
+			out.close();
 
-				out.writeObject(fileNameManager.getMapUUIDNick());
-				out.writeObject(fileNameManager.getMapUUIDName());
-				out.writeObject(fileNameManager.getMapNickUUID());
-				out.writeObject(fileNameManager.getMapNameUUID());
-				out.writeObject(fileNameManager.getMapNickFormatted());
-				out.writeObject(fileNameManager.getMapNameFormatted());
-
-				out.close();
-
-				return true;
-
-			} else {
-
-				fileOutputStream.close();
-				// Cannot save as not in file based mode!
-				return false;
-
-			}
+			return true;
 
 		} catch (IOException e) {
 
