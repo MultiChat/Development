@@ -50,4 +50,33 @@ public class SpongeBungeeCommunicationManager extends LocalBungeeCommunicationMa
 		return true;
 	}
 
+	@Override
+	protected boolean sendStringAndString(String channel, String string1, String string2) {
+
+		if (!this.channels.containsKey(channel)) throw new IllegalStateException("Sponge Raw Data Channels must first be registered with MultiChat's SpongeBungeeCommunicationManager!");
+
+		if (Sponge.getServer().getOnlinePlayers().size() < 1) return false;
+
+		Player facilitatingPlayer = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+		this.channels.get(channel).sendTo(facilitatingPlayer, buffer -> buffer.writeUTF(string1).writeUTF(string2));
+
+		return true;
+
+	}
+
+	@Override
+	protected boolean sendString(String channel, String string) {
+
+		if (!this.channels.containsKey(channel)) throw new IllegalStateException("Sponge Raw Data Channels must first be registered with MultiChat's SpongeBungeeCommunicationManager!");
+
+		if (Sponge.getServer().getOnlinePlayers().size() < 1) return false;
+
+		Player facilitatingPlayer = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+		this.channels.get(channel).sendTo(facilitatingPlayer, buffer -> buffer.writeUTF(string));
+
+		return true;
+	}
+
 }

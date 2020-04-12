@@ -48,4 +48,52 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 	}
 
+	@Override
+	protected boolean sendStringAndString(String channel, String string1, String string2) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+
+			out.writeUTF(string1);
+			out.writeUTF(string2);
+
+		} catch (IOException e) {
+
+			return false;
+
+		}
+
+		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
+
+		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+
+		return true;
+	}
+
+	@Override
+	protected boolean sendString(String channel, String string) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+
+			out.writeUTF(string);
+
+		} catch (IOException e) {
+
+			return false;
+
+		}
+
+		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
+
+		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+
+		return true;
+
+	}
+
 }

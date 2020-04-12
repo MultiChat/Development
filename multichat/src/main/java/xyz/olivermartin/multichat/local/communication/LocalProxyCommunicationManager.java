@@ -50,4 +50,8 @@ public abstract class LocalProxyCommunicationManager {
 
 	protected abstract void sendDisplayNameUpdate(UUID uuid, String displayName);
 
+	public abstract void sendProxyExecuteMessage(String command);
+
+	public abstract void sendProxyExecutePlayerMessage(String command, String player);
+
 }
