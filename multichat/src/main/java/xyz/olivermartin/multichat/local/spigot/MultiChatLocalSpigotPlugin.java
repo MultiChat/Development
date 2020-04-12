@@ -1,9 +1,6 @@
 package xyz.olivermartin.multichat.local.spigot;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.sql.SQLException;
 
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -11,12 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
-import xyz.olivermartin.multichat.common.database.DatabaseMode;
 import xyz.olivermartin.multichat.local.LocalConfigManager;
 import xyz.olivermartin.multichat.local.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.LocalDataStore;
-import xyz.olivermartin.multichat.local.LocalDatabaseCredentials;
-import xyz.olivermartin.multichat.local.LocalFileNameManager;
+import xyz.olivermartin.multichat.local.LocalDatabaseSetupManager;
 import xyz.olivermartin.multichat.local.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.LocalMetaManager;
 import xyz.olivermartin.multichat.local.LocalNameManager;
@@ -37,6 +32,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// GET API
 		MultiChatLocal api = MultiChatLocal.getInstance();
 
+		// Register console logger
+		LocalConsoleLogger consoleLogger = new LocalSpigotConsoleLogger(getLogger());
+		api.registerConsoleLogger(consoleLogger);
+
 		// Register platform
 		MultiChatLocalPlatform platform = MultiChatLocalPlatform.SPIGOT;
 		api.registerPlatform(MultiChatLocalPlatform.SPIGOT);
@@ -48,7 +47,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register config directory
 		File configDir = getDataFolder().getAbsoluteFile();
 		if (!getDataFolder().exists()) {
-			//TODO Need to use logger properly! getLogger().info(logPrefix + "Creating plugin directory!");
+			consoleLogger.log("Creating plugin directory...");
 			getDataFolder().mkdirs();
 			configDir = getDataFolder();
 		}
@@ -58,7 +57,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		String translationsDirString = configDir.toString() + File.separator + "translations";
 		File translationsDir = new File(translationsDirString);
 		if (!translationsDir.exists()) {
-			//TODO logger getLogger().info(logPrefix + "Creating translations directory!");
+			consoleLogger.log("Creating translations directory...");
 			translationsDir.mkdirs();
 		}
 
@@ -68,58 +67,23 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// Register config files
 		configMan.registerLocalConfig(platform, "spigotconfig.yml", configDir);
-		// TODO Need a new way to copy the translations config... configMan.registerLocalConfig(platform, "spigotconfig_fr.yml", translationsDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
 		api.registerDataStore(dataStore);
 
-		// Register console logger
-		LocalConsoleLogger consoleLogger = new LocalSpigotConsoleLogger(getLogger());
-		api.registerConsoleLogger(consoleLogger);
-
 		// Register name manager...
 		LocalNameManager nameManager;
 
-		// TODO Move setup database to somewhere else? --> LocalDatabaseManager can definitely do this.
 		if (configMan.getLocalConfig().isNicknameSQL()) {
 
-			try {
+			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(MultiChatLocalPlatform.SPIGOT, configMan.getLocalConfig().isMySQL());
 
-				if (configMan.getLocalConfig().isMySQL()) {
-
-					// MYSQL SETTINGS
-
-					DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
-
-					DatabaseManager.getInstance().setURLMySQL(LocalDatabaseCredentials.getInstance().getURL());
-					DatabaseManager.getInstance().setUsernameMySQL(LocalDatabaseCredentials.getInstance().getUser());
-					DatabaseManager.getInstance().setPasswordMySQL(LocalDatabaseCredentials.getInstance().getPassword());
-
-					DatabaseManager.getInstance().createDatabase("multichatspigot.db", LocalDatabaseCredentials.getInstance().getDatabase());
-
-				} else {
-
-					// SQLITE SETTINGS
-
-					DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
-					DatabaseManager.getInstance().setPathSQLite(configDir);
-
-					DatabaseManager.getInstance().createDatabase("multichatspigot.db");
-
-				}
-
-				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().connectToDatabase();
-				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
-
+			if (ldsm.isConnected()) {
 				nameManager = new LocalSQLNameManager("multichatspigot.db");
-
-			} catch (SQLException e) {
-
-				// TODO Show error?!
+			} else {
+				consoleLogger.log("Could not connect to database! Using file based storage instead...");
 				nameManager = new LocalSpigotFileNameManager();
-
 			}
 
 		} else {
@@ -137,6 +101,9 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
 			fileSystemManager.registerNicknameFile(MultiChatLocalPlatform.SPIGOT, "namedata.dat", configDir);
 		}
+
+		// Copy translations files...
+		fileSystemManager.createResource("spigotconfig_fr.yml", translationsDir);
 
 		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpigotMetaManager();
@@ -188,12 +155,12 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
 
 		if (rsp == null) {
-			// TODO Logger
-			getLogger().info("[ERROR] Vault was found, but will not work properly until you install a compatible permissions plugin!");
+			MultiChatLocal.getInstance().getConsoleLogger().log("[ERROR] Vault was found, but will not work properly until you install a compatible permissions plugin!");
 			return;
 		}
 
 		LocalSpigotVaultHook.getInstance().hook(rsp.getProvider());
+		MultiChatLocal.getInstance().getConsoleLogger().log("MultiChatLocal hooked with Vault!");
 
 	}
 
@@ -203,6 +170,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 			return;
 		} else {
 			LocalSpigotPAPIHook.getInstance().hook();
+			MultiChatLocal.getInstance().getConsoleLogger().log("MultiChatLocal hooked with PlaceholderAPI!");
 		}
 
 	}
@@ -210,44 +178,17 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		// TODO make more generic!
-
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 
 			try {
 				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
+			} catch (SQLException e) {
+				MultiChatLocal.getInstance().getConsoleLogger().log("Error when disconnecting from database!");
 			}
 
 		} else {
 
-			/* LEGACY! */
-
-			LocalFileNameManager fileNameManager = (LocalFileNameManager) MultiChatLocal.getInstance().getNameManager();
-
-			String nameDataFile = "namedata.dat";
-			File file = new File(MultiChatLocal.getInstance().getConfigDirectory(), nameDataFile);
-			FileOutputStream saveFile;
-			try {
-				saveFile = new FileOutputStream(file);
-
-				ObjectOutputStream out = new ObjectOutputStream(saveFile);
-
-				out.writeObject(fileNameManager.getMapUUIDNick());
-				out.writeObject(fileNameManager.getMapUUIDName());
-				out.writeObject(fileNameManager.getMapNickUUID());
-				out.writeObject(fileNameManager.getMapNameUUID());
-				out.writeObject(fileNameManager.getMapNickFormatted());
-				out.writeObject(fileNameManager.getMapNameFormatted());
-
-				out.close();
-
-
-			} catch (IOException e) {
-				getLogger().info("[ERROR] Could not save nickname data");
-				e.printStackTrace();
-			}
+			MultiChatLocal.getInstance().getFileSystemManager().getNicknameFile().save();
 
 		}
 

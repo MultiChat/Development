@@ -1,6 +1,10 @@
 package xyz.olivermartin.multichat.local;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
 
 import xyz.olivermartin.multichat.local.spigot.LocalSpigotNicknameFile;
 import xyz.olivermartin.multichat.local.sponge.LocalSpongeNicknameFile;
@@ -42,6 +46,21 @@ public class LocalFileSystemManager {
 
 		if (nicknameFile == null) throw new IllegalStateException("No local nickname file has been registered");
 		return nicknameFile;
+
+	}
+
+	public boolean createResource(String fileName, File destination) {
+
+		// Load default file into input stream
+		InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+
+		// Copy to desired location
+		try {
+			Files.copy(inputStream, new File(destination, fileName).toPath(), new CopyOption[0]);
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
 
 	}
 
