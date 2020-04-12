@@ -34,4 +34,14 @@ public class MultiChatLocalSpigotCommandSender implements MultiChatLocalCommandS
 		return (sender instanceof Player);
 	}
 
+	@Override
+	public void sendInfoMessageA(String message) {
+		sender.sendMessage(ChatColor.DARK_AQUA + message);
+	}
+
+	@Override
+	public void sendInfoMessageB(String message) {
+		sender.sendMessage(ChatColor.AQUA + message);
+	}
+
 }
