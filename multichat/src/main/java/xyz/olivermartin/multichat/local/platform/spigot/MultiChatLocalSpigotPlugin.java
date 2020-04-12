@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.local.platform.spigot.commands.MultiChatLocalS
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotNickCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotProxyExecuteCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotRealnameCommand;
+import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotUsernameCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHook;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
@@ -130,6 +131,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		this.getCommand("pexecute").setExecutor(pxeCommand);
 		this.getCommand("nick").setExecutor(new SpigotNickCommand());
 		this.getCommand("realname").setExecutor(new SpigotRealnameCommand());
+		this.getCommand("username").setExecutor(new SpigotUsernameCommand());
 
 		// Manage dependencies
 		setupVaultChat();
