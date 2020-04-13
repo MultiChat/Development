@@ -5,9 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.commands.MultiChatLocalCommandSender;
-import xyz.olivermartin.multichat.local.commands.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.commands.NickCommand;
+import xyz.olivermartin.multichat.local.platform.spigot.MultiChatLocalSpigotPlayer;
 
 public class SpigotNickCommand extends NickCommand implements CommandExecutor {
 

@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import xyz.olivermartin.multichat.local.MultiChatLocal;
+import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.config.LocalConfig;
 import xyz.olivermartin.multichat.local.storage.LocalNameManager;
 
