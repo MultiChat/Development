@@ -24,9 +24,11 @@ import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHo
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotActionListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotCastListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotIgnoreListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotLoginListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerActionListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerChannelListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerMetaListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotWorldChangeListener;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
 import xyz.olivermartin.multichat.local.storage.LocalDatabaseSetupManager;
 import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
@@ -128,6 +130,8 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerProxyCommunicationManager(proxyCommunicationManager);
 
 		// Register Listeners
+		getServer().getPluginManager().registerEvents(new LocalSpigotWorldChangeListener(), this);
+		getServer().getPluginManager().registerEvents(new LocalSpigotLoginListener(), this);
 
 		// Register Commands
 		this.getCommand("multichatlocal").setExecutor(new MultiChatLocalSpigotCommand());

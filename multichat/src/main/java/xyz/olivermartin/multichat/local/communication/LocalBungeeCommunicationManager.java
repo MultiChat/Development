@@ -37,7 +37,7 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 	}
 
 	@Override
-	protected void sendWorldUpdate(UUID uuid, String world) {
+	public void sendWorldUpdate(UUID uuid, String world) {
 		sendUUIDAndString(worldChannel, uuid, world);
 	}
 

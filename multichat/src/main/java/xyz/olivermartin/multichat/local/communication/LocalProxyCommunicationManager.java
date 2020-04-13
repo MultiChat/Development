@@ -42,7 +42,7 @@ public abstract class LocalProxyCommunicationManager {
 
 	protected abstract void sendNicknameUpdate(UUID uuid, String nickname);
 
-	protected abstract void sendWorldUpdate(UUID uuid, String world);
+	public abstract void sendWorldUpdate(UUID uuid, String world);
 
 	protected abstract void sendPrefixUpdate(UUID uuid, String prefix);
 
