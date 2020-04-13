@@ -21,6 +21,12 @@ import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotRealnameC
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotUsernameCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHook;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotActionListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotCastListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotIgnoreListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerActionListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerChannelListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
 import xyz.olivermartin.multichat.local.storage.LocalDatabaseSetupManager;
 import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
@@ -28,7 +34,6 @@ import xyz.olivermartin.multichat.local.storage.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.storage.LocalNameManager;
 import xyz.olivermartin.multichat.local.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.storage.LocalSQLNameManager;
-import xyz.olivermartin.multichat.spigotbridge.listeners.MultiChatPluginMessageListener;
 
 public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
@@ -151,13 +156,12 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:pxe");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:ppxe");
 
-		// TODO NEED TO MAKE LOCAL VERSIONS OF THESE LISTENERS!!!
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", MultiChatPluginMessageListener.getInstance());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", MultiChatPluginMessageListener.getInstance());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", new LocalSpigotPlayerMetaListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:chat", new LocalSpigotCastListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:act", new LocalSpigotActionListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", new LocalSpigotPlayerActionListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", new LocalSpigotPlayerChannelListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", new LocalSpigotIgnoreListener());
 
 	}
 
