@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.local.storage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.LocalPseudoChannel;
@@ -56,5 +57,10 @@ public class LocalDataStore {
 	 * List of channels with their members
 	 */
 	public Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
+
+	/**
+	 * Map of who players ignore
+	 */
+	public Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 
 }
