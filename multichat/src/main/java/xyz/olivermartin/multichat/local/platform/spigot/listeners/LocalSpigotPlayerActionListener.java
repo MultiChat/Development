@@ -33,4 +33,9 @@ public class LocalSpigotPlayerActionListener extends LocalPlayerActionListener i
 
 	}
 
+	@Override
+	protected void sendChatAsPlayer(String playerName, String rawMessage) {
+		Bukkit.getServer().getPlayer(playerName).chat(rawMessage);
+	}
+
 }

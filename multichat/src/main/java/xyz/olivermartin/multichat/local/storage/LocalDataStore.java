@@ -1,5 +1,9 @@
 package xyz.olivermartin.multichat.local.storage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Queue;
+
 /**
  * A local data store of settings and other things for MultiChatLocal
  * 
@@ -29,5 +33,10 @@ public class LocalDataStore {
 	 * The format to be used for Global chat received from the proxy
 	 */
 	public String globalChatFormat = "&f%DISPLAYNAME%&f: ";
+	
+	/**
+	 * Chat Queues to handle the local global hack
+	 */
+	public Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 	
 }
