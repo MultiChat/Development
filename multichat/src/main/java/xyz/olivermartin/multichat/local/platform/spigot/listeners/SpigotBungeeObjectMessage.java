@@ -25,4 +25,9 @@ public class SpigotBungeeObjectMessage implements LocalBungeeObjectMessage {
 		return in.readObject();
 	}
 
+	@Override
+	public boolean readBoolean() throws IOException {
+		return in.readBoolean();
+	}
+
 }
