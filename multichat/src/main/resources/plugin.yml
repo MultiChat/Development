@@ -20,8 +20,8 @@ commands:
       permission: multichatlocal.username
       permission-message: You do not have permission (multichatlocal.username)
    multichatlocal:
-      description: MultiChatLocal reload and migrate commands
-      usage: /multichatlocal [reload/migratetosql]
+      description: MultiChatLocal reload, debug and migrate commands
+      usage: /multichatlocal [reload/debug/migratetosql]
       permission: multichatlocal.reload
       permission-message: You do not have permission (multichatlocal.reload)
    pxe:
