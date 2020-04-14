@@ -27,6 +27,11 @@ public abstract class LocalConsoleLogger {
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
+	
+	public boolean toggleDebug() {
+		this.debug = !this.debug;
+		return this.debug;
+	}
 
 	public MultiChatLocalPlatform getPlatform() {
 		return this.platform;

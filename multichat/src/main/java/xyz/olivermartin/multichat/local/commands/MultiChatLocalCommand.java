@@ -27,6 +27,10 @@ public abstract class MultiChatLocalCommand {
 
 			return migrateToSQL(sender);
 
+		} else if (args[0].equalsIgnoreCase("debug")) {
+
+			return debug(sender);
+
 		} else {
 
 			return false;
@@ -44,6 +48,23 @@ public abstract class MultiChatLocalCommand {
 		} else {
 
 			sender.sendBadMessage("You do not have permission to reload the plugin");
+
+		}
+
+		return true;
+
+	}
+	
+	private boolean debug(MultiChatLocalCommandSender sender) {
+
+		if (sender.hasPermission("multichatlocal.debug")) {
+
+			boolean result = MultiChatLocal.getInstance().getConsoleLogger().toggleDebug();
+			sender.sendGoodMessage("Debug mode set to " + result);
+
+		} else {
+
+			sender.sendBadMessage("You do not have permission to enable/disable debug mode");
 
 		}
 
