@@ -1,8 +1,9 @@
-package xyz.olivermartin.multichat.local.listeners;
+package xyz.olivermartin.multichat.local.listeners.communication;
 
 import java.io.IOException;
 
 import xyz.olivermartin.multichat.local.MultiChatLocal;
+import xyz.olivermartin.multichat.local.listeners.LocalBungeeMessage;
 
 public abstract class LocalActionListener {
 

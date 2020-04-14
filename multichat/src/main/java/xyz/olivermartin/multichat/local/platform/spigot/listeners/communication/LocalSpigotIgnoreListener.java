@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local.platform.spigot.listeners;
+package xyz.olivermartin.multichat.local.platform.spigot.listeners.communication;
 
 import java.io.IOException;
 
@@ -7,7 +7,8 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.listeners.LocalBungeeObjectMessage;
-import xyz.olivermartin.multichat.local.listeners.LocalIgnoreListener;
+import xyz.olivermartin.multichat.local.listeners.communication.LocalIgnoreListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.SpigotBungeeObjectMessage;
 
 public class LocalSpigotIgnoreListener extends LocalIgnoreListener implements PluginMessageListener {
 

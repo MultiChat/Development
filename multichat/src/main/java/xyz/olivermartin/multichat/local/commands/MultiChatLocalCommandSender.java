@@ -14,4 +14,6 @@ public interface MultiChatLocalCommandSender {
 	
 	public boolean isPlayer();
 	
+	public String getName();
+	
 }

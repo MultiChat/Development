@@ -44,4 +44,9 @@ public class MultiChatLocalSpigotCommandSender implements MultiChatLocalCommandS
 		sender.sendMessage(ChatColor.AQUA + message);
 	}
 
+	@Override
+	public String getName() {
+		return sender.getName();
+	}
+
 }

@@ -38,6 +38,7 @@ public class MultiChatLocal {
 	private LocalProxyCommunicationManager proxyCommunicationManager;
 	private LocalFileSystemManager fileSystemManager;
 	private LocalConsoleLogger consoleLogger;
+	private LocalPlaceholderManager placeholderManager;
 
 	/* END ATTRIBUTES */
 
@@ -273,6 +274,29 @@ public class MultiChatLocal {
 	public LocalConsoleLogger getConsoleLogger() {
 		if (this.consoleLogger == null) throw new IllegalStateException("No MultiChat console logger has been registered");
 		return this.consoleLogger;
+	}
+
+	/**
+	 * Register the placeholder manager to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param placeholderManager The local placeholder manager to register to the API
+	 */
+	public void registerPlaceholderManager(LocalPlaceholderManager placeholderManager) {
+		this.placeholderManager = placeholderManager;
+	}
+
+	/**
+	 * Get the placeholder manager being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The placeholder manager registered with the API
+	 */
+	public LocalPlaceholderManager getPlaceholderManager() {
+		if (this.placeholderManager == null) throw new IllegalStateException("No MultiChat placeholder manager has been registered");
+		return this.placeholderManager;
 	}
 
 }

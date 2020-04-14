@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local.platform.spigot.listeners;
+package xyz.olivermartin.multichat.local.platform.spigot.listeners.communication;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -10,8 +10,9 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.listeners.LocalBungeeObjectMessage;
-import xyz.olivermartin.multichat.local.listeners.LocalPlayerChannelListener;
+import xyz.olivermartin.multichat.local.listeners.communication.LocalPlayerChannelListener;
 import xyz.olivermartin.multichat.local.platform.spigot.MultiChatLocalSpigotPlayer;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.SpigotBungeeObjectMessage;
 
 public class LocalSpigotPlayerChannelListener extends LocalPlayerChannelListener implements PluginMessageListener {
 

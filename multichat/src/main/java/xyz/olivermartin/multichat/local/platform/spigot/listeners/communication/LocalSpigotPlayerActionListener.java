@@ -1,11 +1,12 @@
-package xyz.olivermartin.multichat.local.platform.spigot.listeners;
+package xyz.olivermartin.multichat.local.platform.spigot.listeners.communication;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import xyz.olivermartin.multichat.local.listeners.LocalBungeeMessage;
-import xyz.olivermartin.multichat.local.listeners.LocalPlayerActionListener;
+import xyz.olivermartin.multichat.local.listeners.communication.LocalPlayerActionListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.SpigotBungeeMessage;
 
 public class LocalSpigotPlayerActionListener extends LocalPlayerActionListener implements PluginMessageListener {
 

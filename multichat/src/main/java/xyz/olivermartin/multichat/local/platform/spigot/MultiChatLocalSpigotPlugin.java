@@ -10,6 +10,7 @@ import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.LocalMetaManager;
+import xyz.olivermartin.multichat.local.LocalPlaceholderManager;
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.communication.LocalProxyCommunicationManager;
@@ -21,14 +22,14 @@ import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotRealnameC
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotUsernameCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHook;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotActionListener;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotCastListener;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotIgnoreListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotLoginListener;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerActionListener;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerChannelListener;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotWorldChangeListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotActionListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotCastListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotIgnoreListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotPlayerActionListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotPlayerChannelListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
 import xyz.olivermartin.multichat.local.storage.LocalDatabaseSetupManager;
 import xyz.olivermartin.multichat.local.storage.LocalFileNameManager;
@@ -128,6 +129,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register communication manager
 		LocalProxyCommunicationManager proxyCommunicationManager = new SpigotBungeeCommunicationManager();
 		api.registerProxyCommunicationManager(proxyCommunicationManager);
+
+		// Register placeholder manager
+		LocalPlaceholderManager placeholderManager = new LocalSpigotPlaceholderManager();
+		api.registerPlaceholderManager(placeholderManager);
 
 		// Register Listeners
 		getServer().getPluginManager().registerEvents(new LocalSpigotWorldChangeListener(), this);

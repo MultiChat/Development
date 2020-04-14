@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.local.listeners;
+package xyz.olivermartin.multichat.local.listeners.communication;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.UUID;
 import xyz.olivermartin.multichat.local.LocalPseudoChannel;
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
+import xyz.olivermartin.multichat.local.listeners.LocalBungeeObjectMessage;
 
 public abstract class LocalPlayerChannelListener {
 
