@@ -3,13 +3,13 @@ package xyz.olivermartin.multichat.local;
 import java.util.UUID;
 
 public abstract class LocalPlaceholderManager {
-	
+
 	private MultiChatLocalPlatform platform;
-	
+
 	public LocalPlaceholderManager(MultiChatLocalPlatform platform) {
 		this.platform = platform;
 	}
-	
+
 	public MultiChatLocalPlatform getPlatform() {
 		return this.platform;
 	}
@@ -24,7 +24,7 @@ public abstract class LocalPlaceholderManager {
 	 * @return The built chat format
 	 */
 	public abstract String buildChatFormat(UUID uuid, String format);
-	
+
 	/**
 	 * This method replaces all placeholders according to MultiChat's rules (doesn't pay attention to other plugins)
 	 * 
@@ -33,17 +33,34 @@ public abstract class LocalPlaceholderManager {
 	 * @return The message with all MultiChat placeholders replaced
 	 */
 	public String processMultiChatPlaceholders(UUID uuid, String message) {
+
+		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
 		
+		logger.debug("---------------------------");
+
+		logger.debug("Processing placeholders...");
+
+		logger.debug("%NAME% = " + MultiChatLocal.getInstance().getNameManager().getName(uuid));
 		message = message.replace("%NAME%", MultiChatLocal.getInstance().getNameManager().getName(uuid));
+		logger.debug("%NICK% = " + MultiChatLocal.getInstance().getMetaManager().getNick(uuid));
 		message = message.replace("%NICK%", MultiChatLocal.getInstance().getMetaManager().getNick(uuid));
+		logger.debug("%DISPLAYNAME% = " + MultiChatLocal.getInstance().getMetaManager().getDisplayName(uuid));
 		message = message.replace("%DISPLAYNAME%", MultiChatLocal.getInstance().getMetaManager().getDisplayName(uuid));
+		logger.debug("%PREFIX% = " + MultiChatLocal.getInstance().getMetaManager().getPrefix(uuid));
 		message = message.replace("%PREFIX%", MultiChatLocal.getInstance().getMetaManager().getPrefix(uuid));
+		logger.debug("%SUFFIX% = " + MultiChatLocal.getInstance().getMetaManager().getSuffix(uuid));
 		message = message.replace("%SUFFIX%", MultiChatLocal.getInstance().getMetaManager().getSuffix(uuid));
+		logger.debug("%WORLD% = " + MultiChatLocal.getInstance().getMetaManager().getWorld(uuid));
 		message = message.replace("%WORLD%", MultiChatLocal.getInstance().getMetaManager().getWorld(uuid));
+		logger.debug("%SERVER% = " + MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
 		message = message.replace("%SERVER%", MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
+
+		logger.debug("Final Message = " + MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
+		
+		logger.debug("---------------------------");
 		
 		return message;
-		
+
 	}
-	
+
 }
