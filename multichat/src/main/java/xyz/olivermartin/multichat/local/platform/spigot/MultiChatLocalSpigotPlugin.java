@@ -24,6 +24,9 @@ import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHoo
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotLoginListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotWorldChangeListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.chat.LocalSpigotChatListenerHighest;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.chat.LocalSpigotChatListenerLowest;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.chat.LocalSpigotChatListenerMonitor;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotActionListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotCastListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.communication.LocalSpigotIgnoreListener;
@@ -137,6 +140,9 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register Listeners
 		getServer().getPluginManager().registerEvents(new LocalSpigotWorldChangeListener(), this);
 		getServer().getPluginManager().registerEvents(new LocalSpigotLoginListener(), this);
+		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerLowest(), this);
+		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerHighest(), this);
+		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerMonitor(), this);
 
 		// Register Commands
 		this.getCommand("multichatlocal").setExecutor(new MultiChatLocalSpigotCommand());

@@ -5,17 +5,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import xyz.olivermartin.multichat.local.MultiChatLocal;
-import xyz.olivermartin.multichat.local.config.LocalConfig;
 import xyz.olivermartin.multichat.local.listeners.chat.LocalChatListenerMonitor;
-import xyz.olivermartin.multichat.local.storage.LocalDataStore;
+import xyz.olivermartin.multichat.local.listeners.chat.MultiChatLocalPlayerChatEvent;
 
 public class LocalSpigotChatListenerMonitor extends LocalChatListenerMonitor implements Listener {
 
 	@EventHandler(priority=EventPriority.MONITOR)
 	public void onChat(final AsyncPlayerChatEvent event) {
 
-		
+		MultiChatLocalPlayerChatEvent mcce = new MultiChatLocalSpigotPlayerChatEvent(event);
+		handleChatMessage(mcce);
 
 	}
 
