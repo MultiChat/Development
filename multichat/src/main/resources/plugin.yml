@@ -1,37 +1,37 @@
 name: MultiChatSpigot
 version: 1.8.1
 author: Revilo410
-main: xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot
+main: xyz.olivermartin.multichat.local.platform.spigot.MultiChatLocalSpigotPlugin
 softdepend: [Vault,PlaceholderAPI]
 commands:
    nick:
       description: Gives a player a nickname
       usage: /nick [player] <nickname / off>
-      permission: multichatspigot.nick.self
-      permission-message: You do not have permission (multichatspigot.nick.self / multichatspigot.nick.others)
+      permission: multichatlocal.nick.self
+      permission-message: You do not have permission (multichatlocal.nick.self / multichatlocal.nick.others)
    realname:
       description: Gets the real name of a player from a nickname
       usage: /realname <nickname>
-      permission: multichatspigot.realname
-      permission-message: You do not have permission (multichatspigot.realname)
+      permission: multichatlocal.realname
+      permission-message: You do not have permission (multichatlocal.realname)
    username:
       description: Searches for a user with the specified name
       usage: /username <query>
-      permission: multichatspigot.username
-      permission-message: You do not have permission (multichatspigot.username)
-   multichatspigot:
-      description: MultiChatSpigot reload and migrate commands
-      usage: /multichatspigot [reload/migratetosql]
-      permission: multichatspigot.reload
-      permission-message: You do not have permission (multichatspigot.reload)
+      permission: multichatlocal.username
+      permission-message: You do not have permission (multichatlocal.username)
+   multichatlocal:
+      description: MultiChatLocal reload and migrate commands
+      usage: /multichatlocal [reload/migratetosql]
+      permission: multichatlocal.reload
+      permission-message: You do not have permission (multichatlocal.reload)
    pxe:
       description: Proxy Execute - Execute commands on Proxy server
       usage: /pxe [-p <player>] <command to execute>
-      permission: multichatspigot.pexecute
-      permission-message: You do not have permission (multichatspigot.pexecute)
+      permission: multichatlocal.pexecute
+      permission-message: You do not have permission (multichatlocal.pexecute)
    pexecute:
       description: Proxy Execute - Execute commands on Proxy server
       usage: /pexecute [-p <player>] <command to execute>
-      permission: multichatspigot.pexecute
-      permission-message: You do not have permission (multichatspigot.pexecute)
+      permission: multichatlocal.pexecute
+      permission-message: You do not have permission (multichatlocal.pexecute)
       
