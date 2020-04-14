@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.local.storage;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 
 public abstract class LocalNicknameFile {
@@ -47,16 +48,21 @@ public abstract class LocalNicknameFile {
 	}
 
 	protected boolean startupFile() {
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNicknameFile] Starting up file...");
 
 		File file = new File(configPath, fileName);
 
 		boolean status;
 
 		if (!file.exists()) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNicknameFile] File does not already exist...");
 			status = saveFile(file);
 		}
 
 		status = loadFile(file);
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNicknameFile] FINAL STATUS = " + status);
 
 		return status;
 

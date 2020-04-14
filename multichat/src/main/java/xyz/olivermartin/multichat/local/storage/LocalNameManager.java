@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import xyz.olivermartin.multichat.local.MultiChatLocal;
+
 /**
  * MultiChatLocal's Name Manager
  * 
@@ -38,7 +40,9 @@ public abstract class LocalNameManager {
 	 * @return The NICKNAME of the player if it is set, otherwise their username
 	 */
 	public String getCurrentName(UUID uuid) {
-		return getCurrentName(uuid, true);
+		String currentName = getCurrentName(uuid, true);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNameManager] CurrentName = " + currentName);
+		return currentName;
 	}
 
 	/**
@@ -85,9 +89,13 @@ public abstract class LocalNameManager {
 
 		nickname = nickname.toLowerCase();
 		nickname = stripAllFormattingCodes(nickname);
+		
+		Optional<UUID> uuid = getUUIDFromUnformattedNickname(nickname);
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNameManager] UUIDFromNickname: " + nickname);
 
-		return getUUIDFromUnformattedNickname(nickname);
-
+		return uuid;
+		
 	}
 
 	/**
@@ -213,7 +221,11 @@ public abstract class LocalNameManager {
 	 * @return If this player is currently online on the server
 	 */
 	public boolean isOnline(UUID uuid) {
-		return online.contains(uuid);
+		boolean result = online.contains(uuid);
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNameManager] Is UUID (" + uuid.toString() + ") online? - " + result);
+		
+		return result;
 	}
 
 	/**

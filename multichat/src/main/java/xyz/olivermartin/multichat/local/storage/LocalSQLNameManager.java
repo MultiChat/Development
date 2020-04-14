@@ -28,6 +28,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		super(LocalNameManagerMode.SQL);
 		connected = getDatabase(databaseName);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Connection Staus: " + connected);
 
 	}
 
@@ -66,6 +67,8 @@ public class LocalSQLNameManager extends LocalNameManager {
 				}
 			}
 
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] CurrentName = " + name);
+
 			return name;
 
 		} catch (SQLException e) {
@@ -89,6 +92,8 @@ public class LocalSQLNameManager extends LocalNameManager {
 				results.next();
 				name = results.getString("f_name");
 			}
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Name = " + name);
 
 			return name;
 
@@ -158,19 +163,26 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		if (!connected) throw new IllegalStateException("MultiChatLocal's Name Manager could not connect to specified database!");
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Registering Player:" + uuid.toString() + ", " + username);
+
 		String oldUsername;
 
 		if (existsUUID(uuid)) {
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] UUID already exists in database...");
 
 			oldUsername = getName(uuid);
 
 			if (!oldUsername.equalsIgnoreCase(username)) {
 
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Player has a new username (" + username + "), was previously (" + oldUsername + ")");
+
 				try {
 					synchronized (localDatabase) {
 						localDatabase.connectToDatabase();
-
+						MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Updating database...");
 						localDatabase.safeUpdate("UPDATE name_data SET u_name = ?, f_name = ? WHERE id = ?;", username.toLowerCase(), username, uuid.toString());
+						MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Database updated!");
 					}
 
 				} catch (SQLException e) {
@@ -181,11 +193,14 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		} else {
 
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] UUID does not already exist in database...");
+
 			try {
 				synchronized (localDatabase) {
 					localDatabase.connectToDatabase();
-
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Updating database...");
 					localDatabase.safeUpdate("INSERT INTO name_data VALUES (?, ?, ?);", uuid.toString(), username, username.toLowerCase());
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Database updated!");
 				}
 
 			} catch (SQLException e) {
@@ -269,14 +284,18 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		if (!connected) throw new IllegalStateException("MultiChatLocal's Name Manager could not connect to specified database!");
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Checking if: " + uuid + " has a nickname...");
+
 		try {
 			synchronized (localDatabase) {
 				localDatabase.connectToDatabase();
 
 				ResultSet results = localDatabase.safeQuery("SELECT id FROM nick_data WHERE id = ?;", uuid.toString());
 				if (results.next()) {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] They do have a nickname!");
 					return true;
 				} else {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] They do not have a nickname!");
 					return false;
 				}
 			}
@@ -368,6 +387,8 @@ public class LocalSQLNameManager extends LocalNameManager {
 	@Override
 	public void unregisterPlayer(UUID uuid) {
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Unregistering player with UUID: " + uuid);
+
 		online.remove(uuid);
 
 	}
@@ -377,13 +398,19 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		if (!connected) throw new IllegalStateException("MultiChatLocal's Name Manager could not connect to specified database!");
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Setting new nickname (" + nickname + ") for " + uuid);
+
 		if (!existsUUID(uuid)) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] This UUID does not exist! Abandoning...");
 			return;
 		}
 
 		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Unformatted nickname = " + unformattedNickname);
+
 		if (otherPlayerHasNickname(unformattedNickname, uuid)) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Someone else already has this nickname... Abandoning...");
 			return;
 		}
 
@@ -391,14 +418,18 @@ public class LocalSQLNameManager extends LocalNameManager {
 			synchronized (localDatabase) {
 
 				if (hasNickname(uuid)) {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Player previously had a nickname already... updating database...");
 					localDatabase.connectToDatabase();
 					localDatabase.safeUpdate("UPDATE nick_data SET u_nick = ?, f_nick = ? WHERE id = ?;", unformattedNickname, nickname, uuid.toString());
 				} else {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Player did not have a nickname before... inserting into database...");
 					localDatabase.connectToDatabase();
 					localDatabase.safeUpdate("INSERT INTO nick_data VALUES (?, ?, ?);", uuid.toString(), unformattedNickname, nickname);
 				}
 
 			}
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Process completed. Nickname is set.");
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -417,8 +448,10 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 				ResultSet results = localDatabase.safeQuery("SELECT u_name FROM name_data WHERE u_name = ?;", username.toLowerCase());
 				if (results.next()) {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Player " + username + " exists");
 					return true;
 				} else {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Player " + username + " does not exist");
 					return false;
 				}
 			}
@@ -441,8 +474,10 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 				ResultSet results = localDatabase.safeQuery("SELECT u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
 				if (results.next()) {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Nickname " + nickname + " exists");
 					return true;
 				} else {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Nickname " + nickname + " does not exist");
 					return false;
 				}
 			}
@@ -548,7 +583,10 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 		if (!connected) throw new IllegalStateException("MultiChatLocal's Name Manager could not connect to specified database!");
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Removing nickname for " + uuid);
+
 		if (!existsUUID(uuid)) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] This UUID doesn't exist... Abandoning...");
 			return;
 		}
 
@@ -557,12 +595,15 @@ public class LocalSQLNameManager extends LocalNameManager {
 			synchronized (localDatabase) {
 
 				if (!hasNickname(uuid)) {
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] This player does not have a nickname to remove... Abandoning...");
 					return;
 				}
 
 				localDatabase.connectToDatabase();
 
 				localDatabase.safeUpdate("DELETE FROM nick_data WHERE id  = ?;", uuid.toString());
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Process complete, nickname removed.");
 			}
 
 		} catch (SQLException e) {

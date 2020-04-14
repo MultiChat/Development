@@ -12,8 +12,8 @@ public abstract class LocalConsoleLogger {
 	protected LocalConsoleLogger(MultiChatLocalPlatform platform) {
 		this.platform = platform;
 		debug = false;
-		prefix = "&8[&2M&aC&3L&8]&f ";
-		debugPrefix = "&8[&2M&aC&3L&8][&4DEBUG&8]&f ";
+		prefix = "&8[&2M&aC&3L&8]&7 ";
+		debugPrefix = "&8[&2M&aC&3L&8][&4DEBUG&8]&7 ";
 	}
 
 	public void setPrefix(String prefix) {
