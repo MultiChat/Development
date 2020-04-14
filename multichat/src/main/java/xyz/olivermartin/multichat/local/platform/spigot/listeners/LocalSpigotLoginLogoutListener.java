@@ -4,19 +4,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
-import xyz.olivermartin.multichat.local.listeners.LocalLoginListener;
+import xyz.olivermartin.multichat.local.listeners.LocalLoginLogoutListener;
 import xyz.olivermartin.multichat.local.platform.spigot.MultiChatLocalSpigotPlayer;
 
-public class LocalSpigotLoginListener extends LocalLoginListener implements Listener {
+public class LocalSpigotLoginLogoutListener extends LocalLoginLogoutListener implements Listener {
 
 	@EventHandler
 	public void onLogin(final PlayerJoinEvent event) {
 		MultiChatLocalPlayer mclp = new MultiChatLocalSpigotPlayer(event.getPlayer());
-		handleEvent(mclp);
+		handleLoginEvent(mclp);
+	}
+
+	@EventHandler
+	public void onLogout(PlayerQuitEvent event) {
+		MultiChatLocalPlayer mclp = new MultiChatLocalSpigotPlayer(event.getPlayer());
+		handleLogoutEvent(mclp);
 	}
 
 	@Override

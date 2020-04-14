@@ -22,7 +22,7 @@ import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotRealnameC
 import xyz.olivermartin.multichat.local.platform.spigot.commands.SpigotUsernameCommand;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotPAPIHook;
 import xyz.olivermartin.multichat.local.platform.spigot.hooks.LocalSpigotVaultHook;
-import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotLoginListener;
+import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotLoginLogoutListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.LocalSpigotWorldChangeListener;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.chat.LocalSpigotChatListenerHighest;
 import xyz.olivermartin.multichat.local.platform.spigot.listeners.chat.LocalSpigotChatListenerLowest;
@@ -139,7 +139,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// Register Listeners
 		getServer().getPluginManager().registerEvents(new LocalSpigotWorldChangeListener(), this);
-		getServer().getPluginManager().registerEvents(new LocalSpigotLoginListener(), this);
+		getServer().getPluginManager().registerEvents(new LocalSpigotLoginLogoutListener(), this);
 		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerLowest(), this);
 		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerHighest(), this);
 		getServer().getPluginManager().registerEvents(new LocalSpigotChatListenerMonitor(), this);
