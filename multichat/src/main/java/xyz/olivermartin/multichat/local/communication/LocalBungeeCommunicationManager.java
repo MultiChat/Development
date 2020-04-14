@@ -20,12 +20,15 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 	protected final String displayNameChannel = "multichat:dn";
 	protected final String pxeChannel = "multichat:pxe";
 	protected final String ppxeChannel = "multichat:ppxe";
+	protected final String chatChannel = "multichat:chat";
 
 	protected LocalBungeeCommunicationManager(MultiChatLocalPlatform localPlatform) {
 		super(localPlatform, MultiChatProxyPlatform.BUNGEE);
 	}
 
 	protected abstract boolean sendUUIDAndString(String channel, UUID uuid, String value);
+	
+	protected abstract boolean sendUUIDAndStringAndString(String channel, UUID uuid, String value1, String value2);
 
 	protected abstract boolean sendStringAndString(String channel, String string1, String string2);
 
@@ -64,6 +67,11 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 	@Override
 	public void sendProxyExecutePlayerMessage(String command, String player) {
 		sendStringAndString(ppxeChannel, command, player);
+	}
+	
+	@Override
+	public void sendChatMessage(UUID uuid, String message, String format) {
+		sendUUIDAndStringAndString(chatChannel, uuid, message, format);
 	}
 
 }
