@@ -85,6 +85,7 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 					if (ignoredPlayers.contains(event.getPlayer().getUniqueId())) {
 
+						MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removed a recipient due to ignore...");
 						it.remove();
 
 					}
@@ -93,6 +94,7 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 			} else {
 
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removed a recipient due to not being a channel member");
 				it.remove();
 
 			}
