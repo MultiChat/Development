@@ -15,7 +15,9 @@ public abstract class LocalIgnoreListener {
 
 		try {
 
+			MultiChatLocal.getInstance().getConsoleLogger().debug("{multichat:ignore} Reading ignore map...");
 			MultiChatLocal.getInstance().getDataStore().ignoreMap = (Map<UUID, Set<UUID>>) message.readObject();
+			MultiChatLocal.getInstance().getConsoleLogger().debug("{multichat:ignore} Successfully read ignore map!");
 			return true;
 
 		} catch (IOException e) {

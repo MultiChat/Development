@@ -8,10 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import xyz.olivermartin.multichat.local.LocalPseudoChannel;
+import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.listeners.chat.MultiChatLocalPlayerChatEvent;
 import xyz.olivermartin.multichat.local.platform.spigot.MultiChatLocalSpigotPlayer;
-import xyz.olivermartin.multichat.spigotbridge.MultiChatSpigot;
 
 public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayerChatEvent {
 
@@ -63,8 +63,12 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 	@Override
 	public void removeIgnoredPlayersAndNonChannelMembersFromRecipients(LocalPseudoChannel channel) {
 
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removing Ignored Players and Non Channel Members from recipients!");
+
 		Set<UUID> ignoredPlayers;
 		//LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
+
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Starting with " + event.getRecipients().size() + " recipients");
 
 		Iterator<Player> it = event.getRecipients().iterator();
 
@@ -72,7 +76,7 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 			Player p = it.next();
 
-			ignoredPlayers = MultiChatSpigot.ignoreMap.get(p.getUniqueId());
+			ignoredPlayers = MultiChatLocal.getInstance().getDataStore().ignoreMap.get(p.getUniqueId());
 
 			if ( (channel.whitelistMembers && channel.members.contains(p.getUniqueId())) || (!channel.whitelistMembers && !channel.members.contains(p.getUniqueId()))) {
 

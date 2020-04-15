@@ -8,8 +8,20 @@ public abstract class LocalLoginLogoutListener {
 	protected abstract boolean isPlayerStillOnline(MultiChatLocalPlayer player);
 
 	protected void handleLoginEvent(MultiChatLocalPlayer player) {
+		
+		MultiChatLocal.getInstance().getNameManager().registerPlayer(player.getUniqueId(), player.getName());
 
-		runTaskLater(10L, new LocalLoginListenerTask(player));
+		if (!MultiChatLocal.getInstance().getDataStore().playerChannels.containsKey(player.getUniqueId())) {
+			MultiChatLocal.getInstance().getDataStore().playerChannels.put(player.getUniqueId(), "global");
+		}
+
+		if (!MultiChatLocal.getInstance().getDataStore().colourMap.containsKey(player.getUniqueId())) {
+			MultiChatLocal.getInstance().getDataStore().colourMap.put(player.getUniqueId(), false);
+		}
+
+		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(player.getUniqueId());
+
+		//runTaskLater(10L, new LocalLoginListenerTask(player));
 
 	}
 
