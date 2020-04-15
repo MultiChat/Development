@@ -63,12 +63,12 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 	@Override
 	public void removeIgnoredPlayersAndNonChannelMembersFromRecipients(LocalPseudoChannel channel) {
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removing Ignored Players and Non Channel Members from recipients!");
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removing Ignored Players and Non Channel Members from recipients!");
 
 		Set<UUID> ignoredPlayers;
 		//LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Starting with " + event.getRecipients().size() + " recipients");
+		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Starting with " + event.getRecipients().size() + " recipients");
 
 		Iterator<Player> it = event.getRecipients().iterator();
 
@@ -85,7 +85,7 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 					if (ignoredPlayers.contains(event.getPlayer().getUniqueId())) {
 
-						MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removed a recipient due to ignore...");
+						MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to ignore...");
 						it.remove();
 
 					}
@@ -94,7 +94,7 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 			} else {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLOcalSpigotChatEvent] Removed a recipient due to not being a channel member");
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to not being a channel member");
 				it.remove();
 
 			}
