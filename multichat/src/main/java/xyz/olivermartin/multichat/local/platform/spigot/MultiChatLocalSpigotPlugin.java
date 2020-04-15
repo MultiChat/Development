@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
+import xyz.olivermartin.multichat.local.LocalChatManager;
 import xyz.olivermartin.multichat.local.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.LocalMetaManager;
 import xyz.olivermartin.multichat.local.LocalPlaceholderManager;
@@ -136,6 +137,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register placeholder manager
 		LocalPlaceholderManager placeholderManager = new LocalSpigotPlaceholderManager();
 		api.registerPlaceholderManager(placeholderManager);
+
+		// Register chat manager
+		LocalChatManager chatManager = new LocalSpigotChatManager();
+		api.registerChatManager(chatManager);
 
 		// Register Listeners
 		getServer().getPluginManager().registerEvents(new LocalSpigotWorldChangeListener(), this);

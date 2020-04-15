@@ -39,6 +39,7 @@ public class MultiChatLocal {
 	private LocalFileSystemManager fileSystemManager;
 	private LocalConsoleLogger consoleLogger;
 	private LocalPlaceholderManager placeholderManager;
+	private LocalChatManager chatManager;
 
 	/* END ATTRIBUTES */
 
@@ -297,6 +298,29 @@ public class MultiChatLocal {
 	public LocalPlaceholderManager getPlaceholderManager() {
 		if (this.placeholderManager == null) throw new IllegalStateException("No MultiChat placeholder manager has been registered");
 		return this.placeholderManager;
+	}
+
+	/**
+	 * Register the chat manager to be used by MultiChatLocal
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param chatManager The local chat manager to register to the API
+	 */
+	public void registerChatManager(LocalChatManager chatManager) {
+		this.chatManager = chatManager;
+	}
+
+	/**
+	 * Get the chat manager being used by MultiChatLocal
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The chat manager registered with the API
+	 */
+	public LocalChatManager getChatManager() {
+		if (this.chatManager == null) throw new IllegalStateException("No MultiChat chat manager has been registered");
+		return this.chatManager;
 	}
 
 }
