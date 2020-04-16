@@ -33,6 +33,8 @@ import xyz.olivermartin.multichat.local.platform.sponge.commands.SpongeProxyExec
 import xyz.olivermartin.multichat.local.platform.sponge.commands.SpongeRealnameCommand;
 import xyz.olivermartin.multichat.local.platform.sponge.commands.SpongeUsernameCommand;
 import xyz.olivermartin.multichat.local.platform.sponge.hooks.LocalSpongePAPIHook;
+import xyz.olivermartin.multichat.local.platform.sponge.listeners.LocalSpongeLoginLogoutListener;
+import xyz.olivermartin.multichat.local.platform.sponge.listeners.LocalSpongeWorldChangeListener;
 import xyz.olivermartin.multichat.local.platform.sponge.listeners.communication.LocalSpongeActionListener;
 import xyz.olivermartin.multichat.local.platform.sponge.listeners.communication.LocalSpongeCastListener;
 import xyz.olivermartin.multichat.local.platform.sponge.listeners.communication.LocalSpongeIgnoreListener;
@@ -152,7 +154,8 @@ public class MultiChatLocalSpongePlugin {
 		api.registerChatManager(chatManager); // TODO Issues here...
 
 		// Register Listeners
-		// TODO!
+		Sponge.getEventManager().registerListeners(this, new LocalSpongeWorldChangeListener());
+		Sponge.getEventManager().registerListeners(this, new LocalSpongeLoginLogoutListener());
 
 		// Register Commands
 
