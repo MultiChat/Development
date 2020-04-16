@@ -49,7 +49,7 @@ public abstract class LocalChatListenerHighest {
 		}
 
 		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into global chat, so at this point we are returning! Bye!");
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into local chat, so at this point we are returning! Bye!");
 			return;
 		}
 
