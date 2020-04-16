@@ -13,7 +13,7 @@ public class LocalSpongePlaceholderManager extends LocalPlaceholderManager {
 
 	@Override
 	public String buildChatFormat(UUID uuid, String format) {
-		return processMultiChatPlaceholders(uuid, format);
+		return processMultiChatPlaceholders(uuid, format).replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
 	}
 
 }

@@ -39,6 +39,9 @@ public abstract class LocalPlaceholderManager {
 		logger.debug("---------------------------");
 
 		logger.debug("Processing placeholders...");
+		
+		logger.debug("INPUT FORMAT = " + message);
+		logger.debug("INPUT FORMAT (visualised) = " + message.replace("&", "(#d)").replace("§", "(#e)"));
 
 		logger.debug("%NAME% = " + MultiChatLocal.getInstance().getNameManager().getName(uuid));
 		message = message.replace("%NAME%", MultiChatLocal.getInstance().getNameManager().getName(uuid));
@@ -55,7 +58,8 @@ public abstract class LocalPlaceholderManager {
 		logger.debug("%SERVER% = " + MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
 		message = message.replace("%SERVER%", MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
 
-		logger.debug("Final Message = " + MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getServerName());
+		logger.debug("Final Message = " + message);
+		logger.debug("Final Message (visualised) = " + message.replace("&", "(#d)").replace("§", "(#e)"));
 		
 		logger.debug("---------------------------");
 		
