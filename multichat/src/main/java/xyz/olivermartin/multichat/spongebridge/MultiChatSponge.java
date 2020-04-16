@@ -28,8 +28,6 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.network.ChannelBinding;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelRegistrar;
-import org.spongepowered.api.plugin.Dependency;
-import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
@@ -66,11 +64,11 @@ import xyz.olivermartin.multichat.spongebridge.listeners.SpongeLoginListener;
  * @author Oliver Martin (Revilo410)
  *
  */
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8.1", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+//@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8.1", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public final class MultiChatSponge {
 
 	public static SimpleMutableMessageChannel multichatChannel;
-	
+
 	public static MultiChatSponge instance;
 
 	ChannelRegistrar channelRegistrar;
@@ -121,7 +119,7 @@ public final class MultiChatSponge {
 	public static Map<String, PseudoChannel> channelObjects = new HashMap<String, PseudoChannel>();
 	public static Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 	public static Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
-	
+
 	public static Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 
 	@Inject
@@ -138,7 +136,7 @@ public final class MultiChatSponge {
 
 		// DEBUG MODE
 		//DebugManager.setDebug(true);//TODO
-		
+
 		instance = this;
 
 		SpongeConfigManager.getInstance().registerHandler("multichatsponge.yml");

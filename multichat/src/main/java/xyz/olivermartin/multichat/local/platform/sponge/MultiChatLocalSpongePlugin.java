@@ -159,6 +159,7 @@ public class MultiChatLocalSpongePlugin {
 		// Register Listeners
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeWorldChangeListener());
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeLoginLogoutListener());
+		// TODO Chat Listeners
 
 		// Register Commands
 
