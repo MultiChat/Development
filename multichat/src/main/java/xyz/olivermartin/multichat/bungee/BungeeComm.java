@@ -166,9 +166,6 @@ public class BungeeComm implements Listener {
 			oout.writeBoolean(channelObject.isWhitelistMembers());
 			oout.writeObject(channelObject.getMembers());
 
-
-
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -56,7 +56,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// Register platform
 		MultiChatLocalPlatform platform = MultiChatLocalPlatform.SPIGOT;
-		api.registerPlatform(MultiChatLocalPlatform.SPIGOT);
+		api.registerPlatform(platform);
 
 		// Register name
 		String pluginName = "MultiChatSpigot";
@@ -95,7 +95,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		if (configMan.getLocalConfig().isNicknameSQL()) {
 
-			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(MultiChatLocalPlatform.SPIGOT, configMan.getLocalConfig().isMySQL());
+			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(platform, configMan.getLocalConfig().isMySQL());
 
 			if (ldsm.isConnected()) {
 				nameManager = new LocalSQLNameManager("multichatspigot.db");
@@ -117,7 +117,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// If we are using file based storage for name data, then register and load the nickname file into name manager
 		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
-			fileSystemManager.registerNicknameFile(MultiChatLocalPlatform.SPIGOT, "namedata.dat", configDir, (LocalFileNameManager)nameManager);
+			fileSystemManager.registerNicknameFile(platform, "namedata.dat", configDir, (LocalFileNameManager)nameManager);
 		}
 
 		// Copy translations files...
