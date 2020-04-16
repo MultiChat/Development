@@ -55,14 +55,22 @@ public abstract class LocalChatManager {
 
 			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player in chat queue...");
 
-			String tempChannel ;
+			String tempChannel;
 
 			if (pollQueue) {
 				tempChannel = store.chatQueues.get(player.getName().toLowerCase()).poll();
+
+				if (store.chatQueues.get(player.getName().toLowerCase()).size() < 1) {
+					store.chatQueues.remove(player.getName().toLowerCase());
+				}
+
 			} else {
 				tempChannel = store.chatQueues.get(player.getName().toLowerCase()).peek();
 			}
 
+			MultiChatLocal.getInstance().getConsoleLogger().debug("What did we get from the chat queue? Is it null?: " + (tempChannel==null));
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("It was: " + tempChannel);
 
 			if (tempChannel.startsWith("!SINGLE L MESSAGE!")) {
 
