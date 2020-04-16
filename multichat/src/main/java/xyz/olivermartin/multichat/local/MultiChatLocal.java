@@ -2,7 +2,6 @@ package xyz.olivermartin.multichat.local;
 
 import java.io.File;
 
-import xyz.olivermartin.multichat.local.communication.LocalProxyCommunicationManager;
 import xyz.olivermartin.multichat.local.config.LocalConfigManager;
 import xyz.olivermartin.multichat.local.storage.LocalDataStore;
 import xyz.olivermartin.multichat.local.storage.LocalFileSystemManager;

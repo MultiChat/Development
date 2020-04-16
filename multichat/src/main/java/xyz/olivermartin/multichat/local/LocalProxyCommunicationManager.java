@@ -1,9 +1,7 @@
-package xyz.olivermartin.multichat.local.communication;
+package xyz.olivermartin.multichat.local;
 
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.local.MultiChatLocal;
-import xyz.olivermartin.multichat.local.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.proxy.MultiChatProxyPlatform;
 
 /**
