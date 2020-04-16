@@ -1,0 +1,30 @@
+package xyz.olivermartin.multichat.local.platform.sponge.listeners.communication;
+
+import org.spongepowered.api.Platform.Type;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.network.ChannelBuf;
+import org.spongepowered.api.network.RawDataListener;
+import org.spongepowered.api.network.RemoteConnection;
+import org.spongepowered.api.text.serializer.TextSerializers;
+
+import xyz.olivermartin.multichat.local.listeners.LocalBungeeMessage;
+import xyz.olivermartin.multichat.local.listeners.communication.LocalCastListener;
+import xyz.olivermartin.multichat.local.platform.sponge.listeners.SpongeBungeeMessage;
+
+public class LocalSpongeCastListener extends LocalCastListener implements RawDataListener {
+
+	@Override
+	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
+
+		LocalBungeeMessage lbm = new SpongeBungeeMessage(data);
+
+		handleMessage(lbm);
+
+	}
+
+	@Override
+	protected void broadcastRawMessageToChat(String message) {
+		Sponge.getServer().getBroadcastChannel().send(TextSerializers.FORMATTING_CODE.deserialize(message));
+	}
+
+}
