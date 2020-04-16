@@ -32,6 +32,11 @@ public class SpongeBungeeCommunicationManager extends LocalBungeeCommunicationMa
 		this.channels.put(channelName, channel);
 	}
 
+	public RawDataChannel getChannel(String channel) {
+		if (!this.channels.containsKey(channel)) throw new IllegalStateException("Sponge Raw Data Channels must first be registered with MultiChat's SpongeBungeeCommunicationManager!");
+		return channels.get(channel);
+	}
+
 	public void unregisterChannel(String channelName) {
 		if (this.channels.containsKey(channelName)) this.channels.remove(channelName);
 	}

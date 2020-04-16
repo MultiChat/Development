@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.local.platform.sponge;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import org.spongepowered.api.Platform;
@@ -11,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.network.ChannelBinding;
 import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.plugin.Dependency;
@@ -20,6 +22,7 @@ import org.spongepowered.api.text.Text;
 import com.google.inject.Inject;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
+import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.LocalChatManager;
 import xyz.olivermartin.multichat.local.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.LocalMetaManager;
@@ -254,6 +257,54 @@ public class MultiChatLocalSpongePlugin {
 
 		actionChannel.addListener(Platform.Type.SERVER, new LocalSpongeActionListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerActionListener());
+
+	}
+
+	@Listener
+	public void onServerStop(GameStoppingServerEvent event) {
+
+		SpongeBungeeCommunicationManager commManager = (SpongeBungeeCommunicationManager)MultiChatLocal.getInstance().getProxyCommunicationManager();
+
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:comm"));
+		commManager.unregisterChannel("multichat:comm");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:chat"));
+		commManager.unregisterChannel("multichat:chat");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:act"));
+		commManager.unregisterChannel("multichat:act");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:pact"));
+		commManager.unregisterChannel("multichat:pact");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:prefix"));
+		commManager.unregisterChannel("multichat:prefix");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:suffix"));
+		commManager.unregisterChannel("multichat:suffix");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:dn"));
+		commManager.unregisterChannel("multichat:dn");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:nick"));
+		commManager.unregisterChannel("multichat:nick");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:world"));
+		commManager.unregisterChannel("multichat:world");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ch"));
+		commManager.unregisterChannel("multichat:ch");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ignore"));
+		commManager.unregisterChannel("multichat:ignore");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:pxe"));
+		commManager.unregisterChannel("multichat:pxe");
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ppxe"));
+		commManager.unregisterChannel("multichat:ppxe");
+
+		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
+
+			try {
+				DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+			} catch (SQLException e) {
+				MultiChatLocal.getInstance().getConsoleLogger().log("Error when disconnecting from database!");
+			}
+
+		} else {
+
+			MultiChatLocal.getInstance().getFileSystemManager().getNicknameFile().save();
+
+		}
 
 	}
 
