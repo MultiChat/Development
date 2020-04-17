@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.PatternSyntaxException;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -485,6 +486,8 @@ public class BungeeComm implements Listener {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (PatternSyntaxException e2) {
+				MessageManager.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
 			}
 
 		}

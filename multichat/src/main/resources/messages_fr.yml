@@ -267,6 +267,7 @@ command_execute_usage: |
  Par défaut, la commande sera exécutée par la console, vous pouvez plutôt faire exécuter la commande par les joueurs à l'aide de l'indicateur -p.
  Par défaut, la commande sera exécutée sur tous les serveurs, vous pouvez limiter les serveurs qui exécuteront la commande avec l'indicateur -s.
 command_execute_sent: "&2La commande a bien été envoyé"
+command_execute_regex: "&cL'expression spécifiée n'était pas valide"
 
 command_reply_usage: "&bUtilisation : /r <message>"
 command_reply_desc: "&bRépondre à la dernière personne qui vous a envoyé un message privé"
