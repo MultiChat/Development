@@ -9,48 +9,12 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import me.rojo8399.placeholderapi.PlaceholderService;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.sponge.MultiChatLocalSpongePlayer;
-import xyz.olivermartin.multichat.local.sponge.hooks.LocalSpongePAPIHook;
 
 public class LocalSpongeChatListenerHighest {
-
-	protected String processExternalPlaceholders(Object source, String message) {
-
-		if (LocalSpongePAPIHook.getInstance().isHooked()) {
-
-			PlaceholderService papi = LocalSpongePAPIHook.getInstance().getHook().get();
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have: " + message);
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
-
-			message = TextSerializers.FORMATTING_CODE.serialize(papi.replaceSourcePlaceholders(message+"#", source));
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have: " + message);
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
-
-			// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
-			message = message.substring(0,message.length()-1);
-			message = message.replace("{NAME}", "%NAME%");
-			message = message.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
-			message = message.replace("{PREFIX}", "%PREFIX%");
-			message = message.replace("{SUFFIX}", "%SUFFIX%");
-			message = message.replace("{NICK}", "%NICK%");
-			message = message.replace("{SERVER}", "%SERVER%");
-			message = message.replace("{WORLD}", "%WORLD%");
-			message = message.replace("{MODE}", "%MODE%");
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have: " + message);
-			MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
-
-		}
-
-		return message;
-
-	}
 
 	@Listener(order=Order.LAST)
 	public void onChat(MessageChannelEvent.Chat event) {
@@ -72,7 +36,7 @@ public class LocalSpongeChatListenerHighest {
 
 		MultiChatMessageChannel messageChannel = new MultiChatMessageChannel(mclp);
 
-		event.setChannel(messageChannel); // TODO Is this how we do it? Seems about right! (Can also set default message channel for a player too)
+		event.setChannel(messageChannel);
 
 		String channel = messageChannel.getMultiChatChannelName();
 		String message = event.getRawMessage().toPlain();
@@ -80,8 +44,10 @@ public class LocalSpongeChatListenerHighest {
 
 		// Build chat format
 		format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(player.getUniqueId(), format);
+		
+		format = chatManager.processMultiChatConfigPlaceholders(mclp, message);
 
-		format = processExternalPlaceholders(event.getSource(), format);
+		format = chatManager.processExternalPlaceholders(mclp, format);
 
 		Text toSendMessage;
 		Text toSendFormat;

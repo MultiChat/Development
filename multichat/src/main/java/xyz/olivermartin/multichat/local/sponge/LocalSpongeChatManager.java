@@ -1,24 +1,22 @@
 package xyz.olivermartin.multichat.local.sponge;
 
+import java.util.Optional;
+
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.text.Text;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
+import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.sponge.hooks.LocalSpongePAPIHook;
 
 public class LocalSpongeChatManager extends LocalChatManager {
 
 	@Override
-	@Deprecated
 	public String translateColourCodes(String message) {
-		return TextSerializers.FORMATTING_CODE.deserialize(message).toString();
-	}
-	
-	public Text translateColourCodesForSponge(String message) {
-		return TextSerializers.FORMATTING_CODE.deserialize(message);
+		return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
 	}
 
 	@Override
@@ -27,7 +25,30 @@ public class LocalSpongeChatManager extends LocalChatManager {
 		// If we are hooked with PAPI then use their placeholders!
 		if (LocalSpongePAPIHook.getInstance().isHooked()) {
 			PlaceholderService papi = LocalSpongePAPIHook.getInstance().getHook().get();
-			message = TextSerializers.FORMATTING_CODE.serialize(papi.replaceSourcePlaceholders(message, Sponge.getServer().getPlayer(player.getUniqueId()))); // TODO Do not know if this will work!
+			Optional<Player> opPlayer = Sponge.getServer().getPlayer(player.getUniqueId());
+			if (opPlayer.isPresent()) {
+				MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have: " + message);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
+
+				message = TextSerializers.FORMATTING_CODE.serialize(papi.replaceSourcePlaceholders(message+"#", opPlayer.get()));
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have: " + message);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
+
+				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
+				message = message.substring(0,message.length()-1);
+				message = message.replace("{NAME}", "%NAME%");
+				message = message.replace("{DISPLAYNAME}", "%DISPLAYNAME%");
+				message = message.replace("{PREFIX}", "%PREFIX%");
+				message = message.replace("{SUFFIX}", "%SUFFIX%");
+				message = message.replace("{NICK}", "%NICK%");
+				message = message.replace("{SERVER}", "%SERVER%");
+				message = message.replace("{WORLD}", "%WORLD%");
+				message = message.replace("{MODE}", "%MODE%");
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have: " + message);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
+			}
 		}
 
 		return message;

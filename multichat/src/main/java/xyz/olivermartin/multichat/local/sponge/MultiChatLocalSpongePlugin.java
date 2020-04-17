@@ -155,7 +155,7 @@ public class MultiChatLocalSpongePlugin {
 
 		// Register chat manager
 		LocalChatManager chatManager = new LocalSpongeChatManager();
-		api.registerChatManager(chatManager); // TODO Issues here...
+		api.registerChatManager(chatManager);
 
 		// Register Listeners
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeWorldChangeListener());
