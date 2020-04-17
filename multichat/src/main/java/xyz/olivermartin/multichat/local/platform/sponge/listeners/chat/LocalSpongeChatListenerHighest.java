@@ -15,7 +15,6 @@ import xyz.olivermartin.multichat.local.MultiChatLocal;
 import xyz.olivermartin.multichat.local.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.platform.sponge.MultiChatLocalSpongePlayer;
 import xyz.olivermartin.multichat.local.platform.sponge.hooks.LocalSpongePAPIHook;
-import xyz.olivermartin.multichat.spongebridge.DebugManager;
 
 public class LocalSpongeChatListenerHighest {
 
@@ -24,15 +23,15 @@ public class LocalSpongeChatListenerHighest {
 		if (LocalSpongePAPIHook.getInstance().isHooked()) {
 
 			PlaceholderService papi = LocalSpongePAPIHook.getInstance().getHook().get();
-			
+
 			MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have: " + message);
 			MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
 
 			message = TextSerializers.FORMATTING_CODE.serialize(papi.replaceSourcePlaceholders(message+"#", source));
-			
+
 			MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have: " + message);
 			MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have (visualised): " + message.replace("&", "(#d)").replace("§", "(#e)"));
-			
+
 			// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
 			message = message.substring(0,message.length()-1);
 			message = message.replace("{NAME}", "%NAME%");
