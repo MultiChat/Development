@@ -44,8 +44,8 @@ public class LocalSpongeChatListenerHighest {
 
 		// Build chat format
 		format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(player.getUniqueId(), format);
-		
-		format = chatManager.processMultiChatConfigPlaceholders(mclp, message);
+
+		format = chatManager.processMultiChatConfigPlaceholders(mclp, format);
 
 		format = chatManager.processExternalPlaceholders(mclp, format);
 
