@@ -80,6 +80,13 @@ public class GlobalCommand extends Command {
 							if (!player.hasPermission("multichat.chat.link")) {
 								message = ChatControl.replaceLinks(message);
 							}
+							
+							// If they had this channel hidden, then unhide it...
+							Channel global = Channel.getGlobalChannel();
+							if (!global.isMember(player.getUniqueId())) {
+								global.removeMember(player.getUniqueId());
+								MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
+							}
 
 							// Let server know players channel preference
 							BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));

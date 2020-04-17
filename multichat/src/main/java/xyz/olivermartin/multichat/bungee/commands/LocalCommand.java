@@ -77,6 +77,13 @@ public class LocalCommand extends Command {
 						message = ChatControl.replaceLinks(message);
 					}
 
+					// If they had this channel hidden, then unhide it...
+					Channel local = Channel.getLocalChannel();
+					if (!local.isMember(player.getUniqueId())) {
+						local.removeMember(player.getUniqueId());
+						MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
+					}
+
 					// Let server know players channel preference
 					BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
 
