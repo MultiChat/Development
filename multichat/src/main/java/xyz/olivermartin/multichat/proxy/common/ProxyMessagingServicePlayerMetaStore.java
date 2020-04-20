@@ -1,15 +1,11 @@
 package xyz.olivermartin.multichat.proxy.common;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
 public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
-
-	private List<UUID> online;
 
 	private Map<UUID, String> prefixMap;
 	private Map<UUID, String> suffixMap;
@@ -26,8 +22,6 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 		this.worldMap = new HashMap<UUID, String>();
 		this.displayNameMap = new HashMap<UUID, String>();
 
-		this.online = new ArrayList<UUID>();
-
 	}
 
 	@Override
@@ -41,7 +35,7 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 
 	@Override
 	public void offerPrefix(UUID uuid, String prefix) {
-		if (isOnline(uuid)) {
+		if (MultiChatProxy.getInstance().getPlayerManager().isOnline(uuid)) {
 			prefixMap.put(uuid, prefix);
 		}
 	}
@@ -57,7 +51,7 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 
 	@Override
 	public void offerSuffix(UUID uuid, String suffix) {
-		if (isOnline(uuid)) {
+		if (MultiChatProxy.getInstance().getPlayerManager().isOnline(uuid)) {
 			suffixMap.put(uuid, suffix);
 		}
 	}
@@ -73,7 +67,7 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 
 	@Override
 	public void offerWorld(UUID uuid, String world) {
-		if (isOnline(uuid)) {
+		if (MultiChatProxy.getInstance().getPlayerManager().isOnline(uuid)) {
 			worldMap.put(uuid, world);
 		}
 	}
@@ -89,7 +83,7 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 
 	@Override
 	public void offerNickname(UUID uuid, String nickname) {
-		if (isOnline(uuid)) {
+		if (MultiChatProxy.getInstance().getPlayerManager().isOnline(uuid)) {
 			nicknameMap.put(uuid, nickname);
 		}
 	}
@@ -111,29 +105,18 @@ public class ProxyMessagingServicePlayerMetaStore extends ProxyPlayerMetaStore {
 
 	@Override
 	public void offerDisplayName(UUID uuid, String displayName) {
-		if (isOnline(uuid)) {
+		if (MultiChatProxy.getInstance().getPlayerManager().isOnline(uuid)) {
 			displayNameMap.put(uuid, displayName);
 		}
 	}
 
 	@Override
-	public void registerPlayer(UUID uuid) {
-		online.add(uuid);
-	}
-
-	@Override
-	public void unregisterPlayer(UUID uuid) {
-		online.remove(uuid);
+	public void clearPlayer(UUID uuid) {
 		prefixMap.remove(uuid);
 		suffixMap.remove(uuid);
 		worldMap.remove(uuid);
 		displayNameMap.remove(uuid);
 		nicknameMap.remove(uuid);
-	}
-
-	@Override
-	public boolean isOnline(UUID uuid) {
-		return online.contains(uuid);
 	}
 
 }

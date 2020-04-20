@@ -16,25 +16,6 @@ public abstract class ProxyPlayerMetaStore {
 	}
 
 	/**
-	 * Register a player as being online with the meta store
-	 * @param uuid
-	 */
-	public abstract void registerPlayer(UUID uuid);
-
-	/**
-	 * Register a player as being offline with the meta store
-	 * @param uuid
-	 * @param name
-	 */
-	public abstract void unregisterPlayer(UUID uuid);
-
-	/**
-	 * Check if a player is currently registered as being online
-	 * @param uuid
-	 */
-	public abstract boolean isOnline(UUID uuid);
-
-	/**
 	 * Get the prefix of an online player
 	 * @param uuid
 	 * @return An optional that may contain the prefix of the player
@@ -108,5 +89,12 @@ public abstract class ProxyPlayerMetaStore {
 	 * @param displayname
 	 */
 	public abstract void offerDisplayName(UUID uuid, String displayName);
+	
+	/**
+	 * Remove the meta cached online for this player
+	 * Should be called when a player logs off.
+	 * @param uuid
+	 */
+	public abstract void clearPlayer(UUID uuid);
 
 }
