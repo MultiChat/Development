@@ -15,6 +15,20 @@ public abstract class ProxyPlayerMetaStore {
 	}
 
 	/**
+	 * Register a player as being online with the meta store
+	 * @param uuid
+	 * @param name
+	 */
+	public abstract void registerPlayer(UUID uuid, String name);
+
+	/**
+	 * Register a player as being offline with the meta store
+	 * @param uuid
+	 * @param name
+	 */
+	public abstract void unregisterPlayer(UUID uuid);
+
+	/**
 	 * Get the prefix of an online player
 	 * @param uuid
 	 * @return The prefix if they are online, or blank if they are not
