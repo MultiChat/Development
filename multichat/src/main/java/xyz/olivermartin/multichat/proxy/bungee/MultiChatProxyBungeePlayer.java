@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.bungee;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -22,22 +23,45 @@ public class MultiChatProxyBungeePlayer extends MultiChatProxyBungeeCommandSende
 
 	@Override
 	public String getPrefix() {
-		return MultiChatProxy.getInstance().getPlayerMetaStore().getPrefix(getUniqueId());
+		Optional<String> opValue = MultiChatProxy.getInstance().getPlayerMetaStore().getPrefix(getUniqueId());
+		if (opValue.isPresent())  {
+			return opValue.get();
+		} else {
+			return "";
+		}
 	}
 
 	@Override
 	public String getSuffix() {
-		return MultiChatProxy.getInstance().getPlayerMetaStore().getSuffix(getUniqueId());
+		Optional<String> opValue = MultiChatProxy.getInstance().getPlayerMetaStore().getSuffix(getUniqueId());
+		if (opValue.isPresent())  {
+			return opValue.get();
+		} else {
+			return "";
+		}
 	}
 
 	@Override
 	public String getDisplayName() {
-		return MultiChatProxy.getInstance().getPlayerMetaStore().getDisplayName(getUniqueId());
+		Optional<String> opValue = MultiChatProxy.getInstance().getPlayerMetaStore().getDisplayName(getUniqueId());
+		if (opValue.isPresent())  {
+
+			player.setDisplayName(opValue.get());
+
+			return opValue.get();
+		} else {
+			return getCurrentName();
+		}
 	}
 
 	@Override
 	public String getWorld() {
-		return MultiChatProxy.getInstance().getPlayerMetaStore().getWorld(getUniqueId());
+		Optional<String> opValue = MultiChatProxy.getInstance().getPlayerMetaStore().getWorld(getUniqueId());
+		if (opValue.isPresent())  {
+			return opValue.get();
+		} else {
+			return "";
+		}
 	}
 
 	@Override
@@ -49,7 +73,12 @@ public class MultiChatProxyBungeePlayer extends MultiChatProxyBungeeCommandSende
 
 	@Override
 	public String getCurrentName() {
-		return MultiChatProxy.getInstance().getPlayerMetaStore().getCurrentName(getUniqueId());
+		Optional<String> opValue = MultiChatProxy.getInstance().getPlayerMetaStore().getNickname(getUniqueId());
+		if (opValue.isPresent())  {
+			return opValue.get();
+		} else {
+			return getName();
+		}
 	}
 
 }

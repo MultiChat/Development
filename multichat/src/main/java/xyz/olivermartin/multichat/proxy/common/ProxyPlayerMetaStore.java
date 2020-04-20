@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public abstract class ProxyPlayerMetaStore {
@@ -17,9 +18,8 @@ public abstract class ProxyPlayerMetaStore {
 	/**
 	 * Register a player as being online with the meta store
 	 * @param uuid
-	 * @param name
 	 */
-	public abstract void registerPlayer(UUID uuid, String name);
+	public abstract void registerPlayer(UUID uuid);
 
 	/**
 	 * Register a player as being offline with the meta store
@@ -29,11 +29,17 @@ public abstract class ProxyPlayerMetaStore {
 	public abstract void unregisterPlayer(UUID uuid);
 
 	/**
+	 * Check if a player is currently registered as being online
+	 * @param uuid
+	 */
+	public abstract boolean isOnline(UUID uuid);
+
+	/**
 	 * Get the prefix of an online player
 	 * @param uuid
-	 * @return The prefix if they are online, or blank if they are not
+	 * @return An optional that may contain the prefix of the player
 	 */
-	public abstract String getPrefix(UUID uuid);
+	public abstract Optional<String> getPrefix(UUID uuid);
 
 	/**
 	 * Offer a value for the prefix for this player
@@ -46,9 +52,9 @@ public abstract class ProxyPlayerMetaStore {
 	/**
 	 * Get the suffix of an online player
 	 * @param uuid
-	 * @return The suffix if they are online, or blank if they are not
+	 * @return An optional that may contain the suffix of the player
 	 */
-	public abstract String getSuffix(UUID uuid);
+	public abstract Optional<String> getSuffix(UUID uuid);
 
 	/**
 	 * Offer a value for the suffix for this player
@@ -61,9 +67,9 @@ public abstract class ProxyPlayerMetaStore {
 	/**
 	 * Get the world of an online player
 	 * @param uuid
-	 * @return The world if they are online, or blank if they are not
+	 * @return An optional that may contain the world of the player
 	 */
-	public abstract String getWorld(UUID uuid);
+	public abstract Optional<String> getWorld(UUID uuid);
 
 	/**
 	 * Offer a value for the world for this player
@@ -74,41 +80,26 @@ public abstract class ProxyPlayerMetaStore {
 	public abstract void offerWorld(UUID uuid, String world);
 
 	/**
-	 * Gets the nickname if one is set, otherwise gets the username
+	 * Gets the nickname if one is set
 	 * @param uuid
-	 * @return The nickname of the player if they are online, blank if they are not
+	 * @return An optional that may contain the nickname of the player
 	 */
-	public abstract String getCurrentName(UUID uuid);
+	public abstract Optional<String> getNickname(UUID uuid);
 
 	/**
-	 * Offer a value for the current name for this player
+	 * Offer a value for the nickname for this player
 	 * Note, if the offer will be used or discarded is dependent on the MODE of the PlayerMetaStore
 	 * @param uuid
-	 * @param currentName
+	 * @param nickname
 	 */
-	public abstract void offerCurrentName(UUID uuid, String currentName);
-
-	/**
-	 * Get the name of an online player
-	 * @param uuid
-	 * @return The name if they are online, or blank if they are not
-	 */
-	public abstract String getName(UUID uuid);
-
-	/**
-	 * Offer a value for the name for this player
-	 * Note, if the offer will be used or discarded is dependent on the MODE of the PlayerMetaStore
-	 * @param uuid
-	 * @param name
-	 */
-	public abstract void offerName(UUID uuid, String name);
+	public abstract void offerNickname(UUID uuid, String nickname);
 
 	/**
 	 * Get the display name of an online player
 	 * @param uuid
-	 * @return The display name if they are online, or blank if they are not
+	 * @return An optional which may contain the display name of the player
 	 */
-	public abstract String getDisplayName(UUID uuid);
+	public abstract Optional<String> getDisplayName(UUID uuid);
 
 	/**
 	 * Offer a value for the display name for this player
