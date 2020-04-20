@@ -25,7 +25,7 @@ public class MultiChatProxy {
 	private MultiChatProxyPlatform platform;
 	private String pluginName;
 	private File configDirectory;
-	private ProxyPlayerMetaManager playerMetaManager;
+	private ProxyPlayerMetaStore playerMetaStore;
 
 	/* END ATTRIBUTES */
 
@@ -103,26 +103,26 @@ public class MultiChatProxy {
 	}
 
 	/**
-	 * Register the player meta manager to be used by MultiChatProxy
+	 * Register the player meta store to be used by MultiChatProxy
 	 * 
 	 * <p>Should be registered in onEnable()</p>
 	 * 
-	 * @param playerMetaManager The player meta manager to register to the API
+	 * @param playerMetaStore The player meta store to register to the API
 	 */
-	public void registerPlayerMetaManager(ProxyPlayerMetaManager playerMetaManager) {
-		this.playerMetaManager = playerMetaManager;
+	public void registerPlayerMetaStore(ProxyPlayerMetaStore playerMetaStore) {
+		this.playerMetaStore = playerMetaStore;
 	}
 
 	/**
-	 * Get the player meta manager being used by MultiChatProxy
+	 * Get the player meta store being used by MultiChatProxy
 	 * 
 	 * <p>Will throw Illegal State Exception if one has not been registered</p>
 	 * 
-	 * @return The proxy player meta manager
+	 * @return The proxy player meta store
 	 */
-	public ProxyPlayerMetaManager getPlayerMetaManager() {
-		if (this.playerMetaManager == null) throw new IllegalStateException("No MultiChat proxy player meta manager has been registered");
-		return this.playerMetaManager;
+	public ProxyPlayerMetaStore getPlayerMetaStore() {
+		if (this.playerMetaStore == null) throw new IllegalStateException("No MultiChat proxy player meta store has been registered");
+		return this.playerMetaStore;
 	}
 
 }
