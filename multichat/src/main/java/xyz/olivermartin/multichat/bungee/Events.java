@@ -146,7 +146,9 @@ public class Events implements Listener {
 
 		///
 		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-			BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+			if (player.getServer() != null) {
+				BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+			}
 		}
 		///
 
@@ -318,7 +320,9 @@ public class Events implements Listener {
 			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
 			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-				BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+				if (player.getServer() != null) {
+					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+				}
 			}
 
 			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
@@ -355,14 +359,6 @@ public class Events implements Listener {
 					message = ChatControl.replaceLinks(message);
 					event.setMessage(message);
 				}
-				
-				DebugManager.log("NULL POINTER CHECKS!");
-				DebugManager.log("< START >");
-				DebugManager.log(player.getName());
-				DebugManager.log(player.getUniqueId().toString());
-				DebugManager.log(Channel.getChannel(player.getUniqueId()).getName());
-				DebugManager.log(player.getServer().getInfo().getName());
-				DebugManager.log("< / END >");
 
 				// Let server know players channel preference
 				BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
