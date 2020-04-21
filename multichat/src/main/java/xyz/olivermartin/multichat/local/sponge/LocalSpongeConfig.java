@@ -9,9 +9,9 @@ import java.util.Map;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
+import xyz.olivermartin.multichat.common.config.ConfigStatus;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
-import xyz.olivermartin.multichat.local.common.config.LocalConfigStatus;
 
 public class LocalSpongeConfig extends LocalConfig {
 
@@ -22,16 +22,16 @@ public class LocalSpongeConfig extends LocalConfig {
 	}
 
 	@Override
-	protected LocalConfigStatus loadConfig() {
+	protected ConfigStatus loadConfig() {
 
 		ConfigurationLoader<ConfigurationNode> loader =
 				YAMLConfigurationLoader.builder().setFile(getFile()).build();
 
 		try {
 			this.config = loader.load();
-			return LocalConfigStatus.LOADED;
+			return ConfigStatus.LOADED;
 		} catch (IOException e) {
-			return LocalConfigStatus.FAILED;
+			return ConfigStatus.FAILED;
 		}
 
 	}

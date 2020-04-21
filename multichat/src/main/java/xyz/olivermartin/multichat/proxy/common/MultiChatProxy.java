@@ -2,6 +2,8 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
+
 /**
  * This is MultiChat's API running on the network proxy server
  * 
@@ -27,6 +29,7 @@ public class MultiChatProxy {
 	private File configDirectory;
 	private ProxyPlayerMetaStore playerMetaStore;
 	private ProxyPlayerManager playerManager;
+	private ProxyConfigManager configManager;
 
 	/* END ATTRIBUTES */
 
@@ -147,6 +150,29 @@ public class MultiChatProxy {
 	public ProxyPlayerManager getPlayerManager() {
 		if (this.playerManager == null) throw new IllegalStateException("No MultiChat proxy player manager has been registered");
 		return this.playerManager;
+	}
+
+	/**
+	 * Register the config manager to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param configManager The config manager to register to the API
+	 */
+	public void registerConfigManager(ProxyConfigManager configManager) {
+		this.configManager = configManager;
+	}
+
+	/**
+	 * Get the config manager being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy config manager
+	 */
+	public ProxyConfigManager getConfigManager() {
+		if (this.configManager == null) throw new IllegalStateException("No MultiChat proxy config manager has been registered");
+		return this.configManager;
 	}
 
 }

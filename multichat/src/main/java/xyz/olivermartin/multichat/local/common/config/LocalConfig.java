@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 
+import xyz.olivermartin.multichat.common.config.ConfigStatus;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.storage.LocalDatabaseCredentials;
 
@@ -50,8 +51,8 @@ public abstract class LocalConfig {
 		this.configPath = configPath;
 		this.fileName = fileName;
 		this.platform = platform;
-		LocalConfigStatus startupStatus = startupConfig();
-		ready = (startupStatus != LocalConfigStatus.FAILED);
+		ConfigStatus startupStatus = startupConfig();
+		ready = (startupStatus != ConfigStatus.FAILED);
 	}
 
 	public MultiChatLocalPlatform getPlatform() {
@@ -62,7 +63,7 @@ public abstract class LocalConfig {
 		return new File(configPath, fileName);
 	}
 
-	protected LocalConfigStatus startupConfig() {
+	protected ConfigStatus startupConfig() {
 
 		boolean createdNew = false;
 
@@ -75,19 +76,19 @@ public abstract class LocalConfig {
 				createdNew = true;
 			} 
 
-			LocalConfigStatus loadStatus = loadConfig();
-			if (loadStatus == LocalConfigStatus.FAILED) return LocalConfigStatus.FAILED;
+			ConfigStatus loadStatus = loadConfig();
+			if (loadStatus == ConfigStatus.FAILED) return ConfigStatus.FAILED;
 
 			setMemberAttributes();
 
 			if (createdNew) {
-				return LocalConfigStatus.CREATED;
+				return ConfigStatus.CREATED;
 			} else {
-				return LocalConfigStatus.LOADED;
+				return ConfigStatus.LOADED;
 			}
 
 		} catch (IOException e) {
-			return LocalConfigStatus.FAILED;
+			return ConfigStatus.FAILED;
 		}
 
 	}
@@ -106,7 +107,7 @@ public abstract class LocalConfig {
 	 * This should physically load the config from the file system into some kind of Configuration class depending on the platform
 	 * @return Status of loading config
 	 */
-	protected abstract LocalConfigStatus loadConfig();
+	protected abstract ConfigStatus loadConfig();
 
 	/**
 	 * This should set all the member attributes of this file according to the real file (or to a default value if not present)
@@ -160,9 +161,9 @@ public abstract class LocalConfig {
 	/**
 	 * Reload this configuration file (and reload all the member attributes)
 	 */
-	public LocalConfigStatus reload() {
+	public ConfigStatus reload() {
 
-		LocalConfigStatus startupStatus = startupConfig();
+		ConfigStatus startupStatus = startupConfig();
 		return startupStatus;
 
 	}

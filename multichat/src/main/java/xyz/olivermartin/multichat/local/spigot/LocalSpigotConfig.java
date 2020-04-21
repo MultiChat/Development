@@ -9,9 +9,9 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import xyz.olivermartin.multichat.common.config.ConfigStatus;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
-import xyz.olivermartin.multichat.local.common.config.LocalConfigStatus;
 
 public class LocalSpigotConfig extends LocalConfig {
 
@@ -26,9 +26,9 @@ public class LocalSpigotConfig extends LocalConfig {
 	}
 
 	@Override
-	protected LocalConfigStatus loadConfig() {
+	protected ConfigStatus loadConfig() {
 		this.config = YamlConfiguration.loadConfiguration(getFile());
-		return LocalConfigStatus.LOADED;
+		return ConfigStatus.LOADED;
 	}
 
 	@Override
