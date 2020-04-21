@@ -115,6 +115,4 @@ public abstract class ProxyJoinMessagesConfig extends ProxyConfig {
 		return privateWelcomeMessage;
 	}
 
-	// TODO Add Getters and Setters
-
 }
