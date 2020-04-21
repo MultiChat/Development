@@ -20,7 +20,15 @@ public class LocalConfigManager {
 	// Room to example by having: LocalJoinMessagesConfigHandler localJoinMessagesConfig;
 	// etc.
 
-	public LocalConfigManager() { /* EMPTY */ }
+	private MultiChatLocalPlatform platform;
+
+	public LocalConfigManager(MultiChatLocalPlatform platform) { 
+		this.platform = platform;
+	}
+
+	public MultiChatLocalPlatform getPlatform() {
+		return this.platform;
+	}
 
 	/**
 	 * Register the local config file with the Local Config Manager
@@ -31,7 +39,7 @@ public class LocalConfigManager {
 	 * @param fileName filename i.e. config.yml
 	 * @param configPath THE PATH WITHOUT THE FILE NAME
 	 */
-	public void registerLocalConfig(MultiChatLocalPlatform platform, String fileName, File configPath) {
+	public void registerLocalConfig(String fileName, File configPath) {
 
 		switch (platform) {
 		case SPIGOT:
@@ -41,7 +49,7 @@ public class LocalConfigManager {
 			localConfig = new LocalSpongeConfig(configPath, fileName);
 			break;
 		default:
-			throw new IllegalArgumentException("Could not register config because this type of platform is not allowed.");
+			throw new IllegalArgumentException("Could not register config because this type of platform (" + platform.toString() + ") is not allowed.");
 
 		}
 

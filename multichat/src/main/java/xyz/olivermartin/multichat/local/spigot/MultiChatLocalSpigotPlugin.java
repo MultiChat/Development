@@ -80,11 +80,11 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		}
 
 		// Register config manager
-		LocalConfigManager configMan = new LocalConfigManager();
+		LocalConfigManager configMan = new LocalConfigManager(platform);
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig(platform, "spigotconfig.yml", configDir);
+		configMan.registerLocalConfig("spigotconfig.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();

@@ -95,11 +95,11 @@ public class MultiChatLocalSpongePlugin {
 		}
 
 		// Register config manager
-		LocalConfigManager configMan = new LocalConfigManager();
+		LocalConfigManager configMan = new LocalConfigManager(platform);
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig(platform, "multichatsponge.yml", configDir);
+		configMan.registerLocalConfig("multichatsponge.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
