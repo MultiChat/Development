@@ -6,7 +6,12 @@ import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyMessagingServicePlayerMetaStore;
+import xyz.olivermartin.multichat.proxy.common.ProxyModuleManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyPlayerManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyPlayerMetaStore;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
+import xyz.olivermartin.multichat.proxy.common.modules.staffchat.StaffChatModule;
 
 public class MultiChatProxyBungeePlugin extends Plugin {
 
@@ -56,6 +61,22 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 		configManager.registerProxyJoinMessagesConfig("joinmessages.yml", configDir);
 		configManager.registerProxyChatControlConfig("chatcontrol.yml", configDir);
 		configManager.registerProxyMessagesConfig("messages.yml", configDir);
+
+		// REGISTER PLAYER META STORE
+		ProxyPlayerMetaStore metaStore = new ProxyMessagingServicePlayerMetaStore();
+		api.registerPlayerMetaStore(metaStore);
+
+		// REGISTER PLAYER MANAGER
+		ProxyPlayerManager playerManager = new ProxyPlayerManager();
+		api.registerPlayerManager(playerManager);
+
+		// REGISTER MODULE MANAGER
+		ProxyModuleManager moduleManager = new ProxyModuleManager();
+		api.registerModuleManager(moduleManager);
+		
+		// TODO IF ENABLED...
+		StaffChatModule staffChat = new StaffChatModule();
+		moduleManager.registerStaffChatModule(staffChat);
 
 		// TODO Check config version
 

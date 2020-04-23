@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.common.DataStoreMode;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.GenericDatabase;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
@@ -26,7 +27,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 	public LocalSQLNameManager(String databaseName) {
 
-		super(LocalNameManagerMode.SQL);
+		super(DataStoreMode.SQL);
 		connected = getDatabase(databaseName);
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Connection Staus: " + connected);
 

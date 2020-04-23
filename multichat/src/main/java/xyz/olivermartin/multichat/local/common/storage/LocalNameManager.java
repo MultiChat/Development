@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import xyz.olivermartin.multichat.common.DataStoreMode;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
 /**
@@ -19,17 +20,17 @@ import xyz.olivermartin.multichat.local.common.MultiChatLocal;
  */
 public abstract class LocalNameManager {
 
-	protected LocalNameManagerMode mode;
+	protected DataStoreMode mode;
 	protected List<UUID> online;
 
-	protected LocalNameManager(LocalNameManagerMode mode) {
+	protected LocalNameManager(DataStoreMode mode) {
 
 		this.mode = mode;
 		this.online = new ArrayList<UUID>();
 
 	}
 
-	public LocalNameManagerMode getMode() {
+	public DataStoreMode getMode() {
 		return this.mode;
 	}
 
@@ -89,13 +90,13 @@ public abstract class LocalNameManager {
 
 		nickname = nickname.toLowerCase();
 		nickname = stripAllFormattingCodes(nickname);
-		
+
 		Optional<UUID> uuid = getUUIDFromUnformattedNickname(nickname);
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNameManager] UUIDFromNickname: " + nickname);
 
 		return uuid;
-		
+
 	}
 
 	/**
@@ -222,9 +223,9 @@ public abstract class LocalNameManager {
 	 */
 	public boolean isOnline(UUID uuid) {
 		boolean result = online.contains(uuid);
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalNameManager] Is UUID (" + uuid.toString() + ") online? - " + result);
-		
+
 		return result;
 	}
 

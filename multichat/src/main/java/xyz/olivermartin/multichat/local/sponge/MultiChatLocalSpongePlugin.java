@@ -22,6 +22,7 @@ import org.spongepowered.api.text.Text;
 import com.google.inject.Inject;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
+import xyz.olivermartin.multichat.common.DataStoreMode;
 import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
@@ -36,7 +37,6 @@ import xyz.olivermartin.multichat.local.common.storage.LocalDatabaseSetupManager
 import xyz.olivermartin.multichat.local.common.storage.LocalFileNameManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalNameManager;
-import xyz.olivermartin.multichat.local.common.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.common.storage.LocalSQLNameManager;
 import xyz.olivermartin.multichat.local.sponge.commands.MultiChatLocalSpongeCommand;
 import xyz.olivermartin.multichat.local.sponge.commands.SpongeNickCommand;
@@ -136,7 +136,7 @@ public class MultiChatLocalSpongePlugin {
 		api.registerFileSystemManager(fileSystemManager);
 
 		// If we are using file based storage for name data, then register and load the nickname file into name manager
-		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+		if (nameManager.getMode() == DataStoreMode.FILE) {
 			fileSystemManager.registerNicknameFile(platform, "multichat_namedata", configDir, (LocalFileNameManager)nameManager);
 		}
 
@@ -299,7 +299,7 @@ public class MultiChatLocalSpongePlugin {
 		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ppxe"));
 		commManager.unregisterChannel("multichat:ppxe");
 
-		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
+		if (MultiChatLocal.getInstance().getNameManager().getMode() == DataStoreMode.SQL) {
 
 			try {
 				DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();

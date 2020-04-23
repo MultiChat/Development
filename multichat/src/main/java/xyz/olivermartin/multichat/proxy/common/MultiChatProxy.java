@@ -33,6 +33,7 @@ public class MultiChatProxy {
 	private ProxyConfigManager configManager;
 	private ProxyMessageManager messageManager;
 	private ProxyConsoleLogger consoleLogger;
+	private ProxyModuleManager moduleManager;
 
 	/* END ATTRIBUTES */
 
@@ -247,6 +248,29 @@ public class MultiChatProxy {
 	public ProxyConsoleLogger getConsoleLogger() {
 		if (this.consoleLogger == null) throw new IllegalStateException("No MultiChat proxy console logger has been registered");
 		return this.consoleLogger;
+	}
+
+	/**
+	 * Register the module manager to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param moduleManager The module manager to register to the API
+	 */
+	public void registerModuleManager(ProxyModuleManager moduleManager) {
+		this.moduleManager = moduleManager;
+	}
+
+	/**
+	 * Get the module manager being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy module manager
+	 */
+	public ProxyModuleManager getModuleManager() {
+		if (this.moduleManager == null) throw new IllegalStateException("No MultiChat proxy module manager has been registered");
+		return this.moduleManager;
 	}
 
 }

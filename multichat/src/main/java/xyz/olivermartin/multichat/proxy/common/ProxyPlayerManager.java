@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +28,10 @@ public class ProxyPlayerManager {
 
 	public boolean isOnline(UUID uuid) {
 		return playerMap.containsKey(uuid);
+	}
+
+	public Collection<MultiChatProxyPlayer> getOnlinePlayers() {
+		return playerMap.values();
 	}
 
 }

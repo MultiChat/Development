@@ -7,6 +7,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.common.DataStoreMode;
 import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
@@ -22,7 +23,6 @@ import xyz.olivermartin.multichat.local.common.storage.LocalDatabaseSetupManager
 import xyz.olivermartin.multichat.local.common.storage.LocalFileNameManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalNameManager;
-import xyz.olivermartin.multichat.local.common.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.common.storage.LocalSQLNameManager;
 import xyz.olivermartin.multichat.local.spigot.commands.MultiChatLocalSpigotCommand;
 import xyz.olivermartin.multichat.local.spigot.commands.SpigotNickCommand;
@@ -121,7 +121,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerFileSystemManager(fileSystemManager);
 
 		// If we are using file based storage for name data, then register and load the nickname file into name manager
-		if (nameManager.getMode() == LocalNameManagerMode.FILE) {
+		if (nameManager.getMode() == DataStoreMode.FILE) {
 			fileSystemManager.registerNicknameFile(platform, "namedata.dat", configDir, (LocalFileNameManager)nameManager);
 		}
 
@@ -220,7 +220,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
+		if (MultiChatLocal.getInstance().getNameManager().getMode() == DataStoreMode.SQL) {
 
 			try {
 				DatabaseManager.getInstance().getDatabase("multichatspigot.db").get().disconnectFromDatabase();

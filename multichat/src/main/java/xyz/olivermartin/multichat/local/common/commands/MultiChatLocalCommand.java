@@ -3,11 +3,11 @@ package xyz.olivermartin.multichat.local.common.commands;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.common.DataStoreMode;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.storage.LocalFileNameManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalFileSystemManager;
-import xyz.olivermartin.multichat.local.common.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.common.storage.LocalSQLNameManager;
 import xyz.olivermartin.multichat.local.spigot.LocalSpigotFileNameManager;
 
@@ -54,7 +54,7 @@ public abstract class MultiChatLocalCommand {
 		return true;
 
 	}
-	
+
 	private boolean debug(MultiChatLocalCommandSender sender) {
 
 		if (sender.hasPermission("multichatlocal.debug")) {
@@ -81,7 +81,7 @@ public abstract class MultiChatLocalCommand {
 
 		} else {
 
-			if (! (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL)) {
+			if (! (MultiChatLocal.getInstance().getNameManager().getMode() == DataStoreMode.SQL)) {
 				sender.sendBadMessage("This command can only be used in SQL mode!");
 				return true;
 			}
