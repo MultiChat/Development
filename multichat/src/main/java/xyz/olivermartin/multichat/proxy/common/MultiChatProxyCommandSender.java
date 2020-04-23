@@ -3,6 +3,8 @@ package xyz.olivermartin.multichat.proxy.common;
 public interface MultiChatProxyCommandSender {
 
 	public void sendPlainMessage(String message);
+	
+	public void sendDualMessage(String colouredPart, String plainPart);
 
 	public void sendColouredMessage(String message);
 

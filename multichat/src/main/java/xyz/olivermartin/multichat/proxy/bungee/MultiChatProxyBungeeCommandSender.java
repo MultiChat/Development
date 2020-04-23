@@ -64,4 +64,9 @@ public class MultiChatProxyBungeeCommandSender implements MultiChatProxyCommandS
 		return sender.getName();
 	}
 
+	@Override
+	public void sendDualMessage(String colouredPart, String plainPart) {
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',colouredPart) + plainPart));
+	}
+
 }

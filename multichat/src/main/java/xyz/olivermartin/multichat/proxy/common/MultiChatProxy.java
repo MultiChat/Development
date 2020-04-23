@@ -31,6 +31,7 @@ public class MultiChatProxy {
 	private ProxyPlayerManager playerManager;
 	private ProxyConfigManager configManager;
 	private ProxyMessageManager messageManager;
+	private ProxyConsoleLogger consoleLogger;
 
 	/* END ATTRIBUTES */
 
@@ -197,6 +198,29 @@ public class MultiChatProxy {
 	public ProxyMessageManager getMessageManager() {
 		if (this.messageManager == null) throw new IllegalStateException("No MultiChat proxy message manager has been registered");
 		return this.messageManager;
+	}
+
+	/**
+	 * Register the console logger to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param consoleLogger The console logger to register to the API
+	 */
+	public void registerConsoleLogger(ProxyConsoleLogger consoleLogger) {
+		this.consoleLogger = consoleLogger;
+	}
+
+	/**
+	 * Get the console logger being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy console logger
+	 */
+	public ProxyConsoleLogger getConsoleLogger() {
+		if (this.consoleLogger == null) throw new IllegalStateException("No MultiChat proxy console logger has been registered");
+		return this.consoleLogger;
 	}
 
 }
