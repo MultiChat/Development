@@ -14,6 +14,9 @@ import xyz.olivermartin.multichat.local.common.storage.LocalDatabaseCredentials;
 
 public abstract class LocalConfig {
 
+	// VERSION
+	private String version;
+
 	// SERVER SETTINGS
 	private String serverName;
 
@@ -53,6 +56,11 @@ public abstract class LocalConfig {
 		this.platform = platform;
 		ConfigStatus startupStatus = startupConfig();
 		ready = (startupStatus != ConfigStatus.FAILED);
+	}
+
+	public String getVersion() {
+		if (version == null) throw new IllegalStateException("No version number found in MultiChatLocal's Local Config!");
+		return version;
 	}
 
 	public MultiChatLocalPlatform getPlatform() {
@@ -113,6 +121,9 @@ public abstract class LocalConfig {
 	 * This should set all the member attributes of this file according to the real file (or to a default value if not present)
 	 */
 	private void setMemberAttributes() {
+
+		// Version
+		version = getString("version", null);
 
 		// Server
 		serverName = getString("server_name","SPIGOT_SERVER");

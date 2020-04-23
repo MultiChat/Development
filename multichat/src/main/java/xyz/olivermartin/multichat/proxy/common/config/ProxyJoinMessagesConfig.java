@@ -6,6 +6,9 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 
 public abstract class ProxyJoinMessagesConfig extends ProxyConfig {
 
+	// VERSION
+	private String version;
+	
 	// Join Messages
 	private boolean showJoinMessages;
 	private boolean showQuitMessages;
@@ -24,9 +27,18 @@ public abstract class ProxyJoinMessagesConfig extends ProxyConfig {
 	public ProxyJoinMessagesConfig(File configPath, String fileName, MultiChatProxyPlatform platform) {
 		super(configPath, fileName, platform);
 	}
+	
+	@Override
+	public String getVersion() {
+		if (version == null) throw new IllegalStateException("No version number found in MultiChatProxy's Join Messages Config!");
+		return version;
+	}
 
 	@Override
 	protected void setMemberAttributes() {
+		
+		// VERSION
+		version = getString("version", null);
 
 		// Join Messages
 		showJoinMessages = getBoolean("showjoin", true);

@@ -33,6 +33,8 @@ public abstract class ProxyConfig {
 	protected File getFile() {
 		return new File(configPath, fileName);
 	}
+	
+	protected abstract String getVersion();
 
 	protected ConfigStatus startupConfig() {
 

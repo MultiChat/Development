@@ -9,6 +9,9 @@ import xyz.olivermartin.multichat.proxy.common.RegexRule;
 
 public abstract class ProxyChatControlConfig extends ProxyConfig {
 
+	// VERSION
+	private String version;
+	
 	// REGEX RULES
 	private List<RegexRule> regexRules;
 	private boolean applyRulesToGlobalChat;
@@ -66,6 +69,12 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 	public ProxyChatControlConfig(File configPath, String fileName, MultiChatProxyPlatform platform) {
 		super(configPath, fileName, platform);
 	}
+	
+	@Override
+	public String getVersion() {
+		if (version == null) throw new IllegalStateException("No version number found in MultiChatProxy's Chat Control Config!");
+		return version;
+	}
 
 	protected abstract List<RegexRule> getRegexRulesFromConfig(String node);
 
@@ -73,6 +82,9 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 
 	@Override
 	protected void setMemberAttributes() {
+		
+		// VERSION
+		version = getString("version", null);
 
 		// REGEX RULES
 		regexRules = getRegexRulesFromConfig("regex_rules");

@@ -7,6 +7,9 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 
 public abstract class ProxyMainConfig extends ProxyConfig {
 
+	// VERSION
+	private String version;
+
 	// GENERAL
 	private boolean fetchSpigotDisplayNames;
 	private boolean setDisplayName;
@@ -61,9 +64,18 @@ public abstract class ProxyMainConfig extends ProxyConfig {
 	public ProxyMainConfig(File configPath, String fileName, MultiChatProxyPlatform platform) {
 		super(configPath, fileName, platform);
 	}
+	
+	@Override
+	public String getVersion() {
+		if (version == null) throw new IllegalStateException("No version number found in MultiChatProxy's Main Config!");
+		return version;
+	}
 
 	@Override
 	protected void setMemberAttributes() {
+
+		// VERSION
+		version = getString("version", null);
 
 		// GENERAL
 		fetchSpigotDisplayNames = getBoolean("fetch_spigot_display_names", true);
