@@ -30,6 +30,7 @@ public class MultiChatProxy {
 	private ProxyPlayerMetaStore playerMetaStore;
 	private ProxyPlayerManager playerManager;
 	private ProxyConfigManager configManager;
+	private ProxyMessageManager messageManager;
 
 	/* END ATTRIBUTES */
 
@@ -173,6 +174,29 @@ public class MultiChatProxy {
 	public ProxyConfigManager getConfigManager() {
 		if (this.configManager == null) throw new IllegalStateException("No MultiChat proxy config manager has been registered");
 		return this.configManager;
+	}
+
+	/**
+	 * Register the message manager to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param messageManager The message manager to register to the API
+	 */
+	public void registerMessageManager(ProxyMessageManager messageManager) {
+		this.messageManager = messageManager;
+	}
+
+	/**
+	 * Get the message manager being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy message manager
+	 */
+	public ProxyMessageManager getMessageManager() {
+		if (this.messageManager == null) throw new IllegalStateException("No MultiChat proxy message manager has been registered");
+		return this.messageManager;
 	}
 
 }
