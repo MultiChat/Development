@@ -7,6 +7,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
@@ -61,6 +62,10 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		// Register name
 		String pluginName = "MultiChatSpigot";
 		api.registerPluginName(pluginName);
+
+		// Register version
+		String pluginVersion = MultiChatInfo.LATEST_VERSION;
+		api.registerVersion(pluginVersion);
 
 		// Register config directory
 		File configDir = getDataFolder().getAbsoluteFile();

@@ -29,6 +29,7 @@ public class MultiChatLocal {
 
 	private MultiChatLocalPlatform platform;
 	private String pluginName;
+	private String version;
 	private File configDirectory;
 	private LocalNameManager nameManager;
 	private LocalConfigManager configManager;
@@ -84,12 +85,37 @@ public class MultiChatLocal {
 	 * Get the name of the MultiChatLocal plugin (i.e. MultiChatSpigot, MultiChatSponge ...)
 	 * 
 	 * <p>Will throw Illegal State Exception if one has not been registered</p>
-	 * s
+	 * 
 	 * @return The name of the MultiChatLocal plugin
 	 */
 	public String getPluginName() {
 		if (this.pluginName == null) throw new IllegalStateException("MultiChatLocal plugin name has not been registered");
 		return this.pluginName;
+	}
+
+	/**
+	 * Register the version of the MultiChatLocal plugin (i.e. 1.8.1)
+	 * 
+	 * <p>It is important that this matches the version in plugin.yml or equivalent!</p>
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param version The version of the MultiChatLocal plugin
+	 */
+	public void registerVersion(String version) {
+		this.version = version;
+	}
+
+	/**
+	 * Get the version of the MultiChatLocal plugin (i.e. 1.8.2 ...)
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The version of the MultiChatLocal plugin
+	 */
+	public String getVersion() {
+		if (this.version == null) throw new IllegalStateException("MultiChatLocal plugin version has not been registered");
+		return this.version;
 	}
 
 	/**

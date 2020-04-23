@@ -22,6 +22,7 @@ import org.spongepowered.api.text.Text;
 import com.google.inject.Inject;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
+import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
@@ -53,7 +54,7 @@ import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpon
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChannelListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerMetaListener;
 
-@Plugin(id = "multichat", name = "MultiChatSponge", version = "1.8.2", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChatSponge", version = MultiChatInfo.LATEST_VERSION, dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public class MultiChatLocalSpongePlugin {
 
 	@Inject
@@ -75,8 +76,12 @@ public class MultiChatLocalSpongePlugin {
 		api.registerPlatform(platform);
 
 		// Register name
-		String pluginName = "multichat"; // NOT SURE IF THIS SHOULD BE MultiChatSponge??
+		String pluginName = "multichat";
 		api.registerPluginName(pluginName);
+
+		// Register version
+		String pluginVersion = MultiChatInfo.LATEST_VERSION;
+		api.registerVersion(pluginVersion);
 
 		// Register config directory
 		File configDir = privateConfigDir.toFile();

@@ -26,6 +26,7 @@ public class MultiChatProxy {
 
 	private MultiChatProxyPlatform platform;
 	private String pluginName;
+	private String pluginVersion;
 	private File configDirectory;
 	private ProxyPlayerMetaStore playerMetaStore;
 	private ProxyPlayerManager playerManager;
@@ -83,6 +84,31 @@ public class MultiChatProxy {
 	public String getPluginName() {
 		if (this.pluginName == null) throw new IllegalStateException("MultiChatProxy plugin name has not been registered");
 		return this.pluginName;
+	}
+
+	/**
+	 * Register the version of the MultiChatProxy plugin (i.e. 1.8.2 ...)
+	 * 
+	 * <p>It is important that this matches the version in bungee.yml or equivalent!</p>
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param pluginVersion The name of the MultiChatProxy plugin
+	 */
+	public void registerPluginVersion(String pluginVersion) {
+		this.pluginVersion = pluginVersion;
+	}
+
+	/**
+	 * Get the version of the MultiChatProxy plugin (i.e. 1.8.2 ...)
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The version of the MultiChatProxy plugin
+	 */
+	public String getPluginVersion() {
+		if (this.pluginVersion == null) throw new IllegalStateException("MultiChatProxy plugin version has not been registered");
+		return this.pluginVersion;
 	}
 
 	/**
