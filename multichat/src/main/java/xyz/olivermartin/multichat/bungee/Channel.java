@@ -201,7 +201,7 @@ public class Channel {
 				);*/
 
 		// Trigger PostGlobalChatEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, message, format));
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
 
 		sendToConsole(sender,format,message);
 
