@@ -68,12 +68,14 @@
 
 	<dependencies>
 
-		<!-- <dependency>
-			<groupId>org.bstats</groupId>
-			<artifactId>bstats-bungeecord</artifactId>
-			<version>1.4</version>
-			<scope>compile</scope>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.bstats</groupId> <artifactId>bstats-bungeecord</artifactId> 
+			<version>1.4</version> <scope>compile</scope> </dependency> -->
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>2.0.1</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.xerial</groupId>
