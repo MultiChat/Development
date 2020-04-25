@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common.store;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,7 +8,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public class ProxyChannelsFileDataStore extends ProxyChannelsDataStore {
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+
+public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataStore implements ProxyChannelsDataStore {
+
+	public ProxyChannelsFileDataStore(MultiChatProxyPlatform platform, File path, String filename) {
+		super(platform, path, filename);
+	}
 
 	// MAP PLAYER UUIDS TO THE ID OF THEIR CHANNEL
 	private Map<UUID, String> currentChannels;
@@ -71,6 +78,34 @@ public class ProxyChannelsFileDataStore extends ProxyChannelsDataStore {
 		uuids.remove(uuid);
 		hiddenChannels.put(id.toLowerCase(), uuids);
 
+	}
+
+	/**
+	 * @return the currentChannels
+	 */
+	protected Map<UUID, String> getCurrentChannels() {
+		return currentChannels;
+	}
+
+	/**
+	 * @return the hiddenChannels
+	 */
+	protected Map<String, Set<UUID>> getHiddenChannels() {
+		return hiddenChannels;
+	}
+
+	/**
+	 * @param currentChannels the currentChannels to set
+	 */
+	protected void setCurrentChannels(Map<UUID, String> currentChannels) {
+		this.currentChannels = currentChannels;
+	}
+
+	/**
+	 * @param hiddenChannels the hiddenChannels to set
+	 */
+	protected void setHiddenChannels(Map<String, Set<UUID>> hiddenChannels) {
+		this.hiddenChannels = hiddenChannels;
 	}
 
 }

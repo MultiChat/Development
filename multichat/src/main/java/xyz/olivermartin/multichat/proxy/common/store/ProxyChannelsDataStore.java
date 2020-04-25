@@ -4,18 +4,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-public abstract class ProxyChannelsDataStore {
+public interface ProxyChannelsDataStore extends ProxyDataStore {
 
-	public abstract Optional<String> getCurrentChannel(UUID uuid);
+	public Optional<String> getCurrentChannel(UUID uuid);
 
-	public abstract void setCurrentChannel(UUID uuid, String id);
+	public void setCurrentChannel(UUID uuid, String id);
 
-	public abstract Set<UUID> getHiddenViewers(String id);
+	public Set<UUID> getHiddenViewers(String id);
 
-	public abstract boolean hasHiddenChannel(UUID uuid, String channelId);
+	public boolean hasHiddenChannel(UUID uuid, String channelId);
 
-	public abstract void hideChannel(UUID uuid, String id);
+	public void hideChannel(UUID uuid, String id);
 
-	public abstract void showChannel(UUID uuid, String id);
+	public void showChannel(UUID uuid, String id);
 
 }

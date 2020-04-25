@@ -2,7 +2,9 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.proxy.common.channels.ProxyChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
+import xyz.olivermartin.multichat.proxy.common.store.ProxyDataStoreManager;
 
 /**
  * This is MultiChat's API running on the network proxy server
@@ -34,6 +36,8 @@ public class MultiChatProxy {
 	private ProxyMessageManager messageManager;
 	private ProxyConsoleLogger consoleLogger;
 	private ProxyModuleManager moduleManager;
+	private ProxyDataStoreManager dataStoreManager;
+	private ProxyChannelManager channelManager;
 
 	/* END ATTRIBUTES */
 
@@ -271,6 +275,52 @@ public class MultiChatProxy {
 	public ProxyModuleManager getModuleManager() {
 		if (this.moduleManager == null) throw new IllegalStateException("No MultiChat proxy module manager has been registered");
 		return this.moduleManager;
+	}
+
+	/**
+	 * Register the data store manager to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param dataStoreManager The data store manager to register to the API
+	 */
+	public void registerDataStoreManager(ProxyDataStoreManager dataStoreManager) {
+		this.dataStoreManager = dataStoreManager;
+	}
+
+	/**
+	 * Get the data store manager being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy data store manager
+	 */
+	public ProxyDataStoreManager getDataStoreManager() {
+		if (this.dataStoreManager == null) throw new IllegalStateException("No MultiChat proxy data store manager has been registered");
+		return this.dataStoreManager;
+	}
+
+	/**
+	 * Register the channel manager to be used by MultiChatProxy
+	 * 
+	 * <p>Should be registered in onEnable()</p>
+	 * 
+	 * @param channelManager The channel manager to register to the API
+	 */
+	public void registerChannelManager(ProxyChannelManager channelManager) {
+		this.channelManager = channelManager;
+	}
+
+	/**
+	 * Get the channel manager being used by MultiChatProxy
+	 * 
+	 * <p>Will throw Illegal State Exception if one has not been registered</p>
+	 * 
+	 * @return The proxy channel manager
+	 */
+	public ProxyChannelManager getChannelManager() {
+		if (this.channelManager == null) throw new IllegalStateException("No MultiChat proxy channel manager has been registered");
+		return this.channelManager;
 	}
 
 }

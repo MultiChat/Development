@@ -10,8 +10,10 @@ import xyz.olivermartin.multichat.proxy.common.ProxyMessagingServicePlayerMetaSt
 import xyz.olivermartin.multichat.proxy.common.ProxyModuleManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyPlayerManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyPlayerMetaStore;
+import xyz.olivermartin.multichat.proxy.common.channels.ProxyChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
 import xyz.olivermartin.multichat.proxy.common.modules.staffchat.StaffChatModule;
+import xyz.olivermartin.multichat.proxy.common.store.ProxyFileDataStoreManager;
 
 public class MultiChatProxyBungeePlugin extends Plugin {
 
@@ -73,7 +75,7 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 		// REGISTER MODULE MANAGER
 		ProxyModuleManager moduleManager = new ProxyModuleManager();
 		api.registerModuleManager(moduleManager);
-		
+
 		// TODO IF ENABLED...
 		StaffChatModule staffChat = new StaffChatModule();
 		moduleManager.registerStaffChatModule(staffChat);
@@ -82,9 +84,15 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 
 		// TODO Copy the translations files using a file system manager
 
-		// TODO A datastore? Is this needed??
+		// TODO configure data store mode...
+		ProxyFileDataStoreManager fileDataStoreManager = new ProxyFileDataStoreManager(MultiChatProxyPlatform.BUNGEE);
+		fileDataStoreManager.registerChannelsFileDataStore(configDir, "channels.dat");
+		api.registerDataStoreManager(fileDataStoreManager);
 
 		// TODO load file based storage into the managers...
+
+		ProxyChannelManager channelManager = new ProxyChannelManager();
+		api.registerChannelManager(channelManager);
 
 		// TODO register listeners
 
