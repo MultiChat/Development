@@ -96,7 +96,6 @@ public class ChatControl {
 								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName)); 
 							}
 
-
 						}
 
 					}
