@@ -68,11 +68,21 @@
   </repositories>
   <dependencies>
     <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.27.2.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.spongepowered</groupId>
       <artifactId>spongeapi</artifactId>
       <version>7.1.0</version>
       <scope>provided</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>error_prone_annotations</artifactId>
           <groupId>com.google.errorprone</groupId>
@@ -161,6 +171,10 @@
           <artifactId>snakeyaml</artifactId>
           <groupId>org.yaml</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -194,6 +208,10 @@
           <artifactId>snakeyaml</artifactId>
           <groupId>org.yaml</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -218,6 +236,10 @@
           <artifactId>snakeyaml</artifactId>
           <groupId>org.yaml</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -237,6 +259,22 @@
       <artifactId>placeholderapi</artifactId>
       <version>2.9.2</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.rojo8399</groupId>
+      <artifactId>PlaceholderAPI</artifactId>
+      <version>master-SNAPSHOT</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>reflections</artifactId>
+          <groupId>org.reflections</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>configurate-hocon</artifactId>
+          <groupId>ninja.leaping.configurate</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>

@@ -139,6 +139,17 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
+		// New null pointer checks
+		if (player.getServer() == null) {
+			DebugManager.log("Player sending chat message has null server! Abandoning...");
+			return;
+		} else {
+			if (player.getServer().getInfo() == null) {
+				DebugManager.log("Player sending chat message has null server info! Abandoning...");
+				return;
+			}
+		}
+
 		// If player is bypassing MultiChat
 		if (mcbPlayers.contains(player.getUniqueId())) {
 			return;
