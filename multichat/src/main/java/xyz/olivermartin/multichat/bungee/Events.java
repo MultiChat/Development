@@ -330,11 +330,11 @@ public class Events implements Listener {
 
 			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+			/*if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 				if (player.getServer() != null) {
 					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 				}
-			}
+			}*/
 
 			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
