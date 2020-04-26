@@ -6,17 +6,15 @@ import java.sql.SQLException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class MySQLPooledDatabase extends GenericDatabase {
+public class MySQLPooledDatabase extends GenericPooledDatabase {
 
 	private static final String URL_PREFIX = "jdbc:mysql:";
 
 	private HikariDataSource ds;
 	private HikariConfig config;
-	private int poolSize;
 
 	public MySQLPooledDatabase(String url, String databaseName, String username, String password, int poolSize) throws SQLException {
-		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password);
-		this.poolSize = poolSize;
+		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password, poolSize);
 	}
 
 	@Override
@@ -39,7 +37,7 @@ public class MySQLPooledDatabase extends GenericDatabase {
 		config.setJdbcUrl(url);
 		config.setUsername(username);
 		config.setPassword(password);
-		config.setMaximumPoolSize(poolSize);
+		config.setMaximumPoolSize(getPoolSize());
 		ds = new HikariDataSource(config);
 		Connection conn = ds.getConnection();
 		conn.close();

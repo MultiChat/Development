@@ -33,10 +33,10 @@ public class DatabaseManager {
 
 	private DatabaseMode databaseMode = DatabaseMode.SQLite;
 
-	private Map<String, GenericDatabase> databases;
+	private Map<String, GenericPooledDatabase> databases;
 
 	private DatabaseManager() {
-		databases = new HashMap<String, GenericDatabase>();
+		databases = new HashMap<String, GenericPooledDatabase>();
 	}
 
 	////////////
@@ -46,11 +46,11 @@ public class DatabaseManager {
 		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
 		DatabaseManager.getInstance().createDatabase("multichat.db");
 
-		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
+		Optional<GenericPooledDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
 
 		if (odb.isPresent()) {
 
-			GenericDatabase db = odb.get();
+			GenericPooledDatabase db = odb.get();
 			UUID uuid1 = UUID.randomUUID();
 			UUID uuid2 = UUID.randomUUID();
 
@@ -212,7 +212,7 @@ public class DatabaseManager {
 		databaseMode = dbm;
 	}
 
-	public GenericDatabase createDatabase(String name) throws SQLException {
+	public GenericPooledDatabase createDatabase(String name) throws SQLException {
 		return createDatabase(name, name);
 	}
 
@@ -235,7 +235,7 @@ public class DatabaseManager {
 	 * Generic class to create a sqlite database
 	 * @throws SQLException 
 	 */
-	public GenericDatabase createDatabase(String databaseName, String fileName) throws SQLException {
+	public GenericPooledDatabase createDatabase(String databaseName, String fileName) throws SQLException {
 
 		if (!isReady()) throw new RuntimeException("MultiChat Database Manager Not Ready!");
 
@@ -261,7 +261,7 @@ public class DatabaseManager {
 
 	}
 
-	public Optional<GenericDatabase> getDatabase(String databaseName) {
+	public Optional<GenericPooledDatabase> getDatabase(String databaseName) {
 		if (databases.containsKey(databaseName.toLowerCase())) {
 			return Optional.of(databases.get(databaseName.toLowerCase()));
 		} else {
@@ -271,7 +271,7 @@ public class DatabaseManager {
 
 	public void removeDatabase(String databaseName) throws SQLException {
 		if (databases.containsKey(databaseName.toLowerCase())) {
-			GenericDatabase gdb = databases.get(databaseName.toLowerCase());
+			GenericPooledDatabase gdb = databases.get(databaseName.toLowerCase());
 			gdb.disconnectFromDatabase();
 			databases.remove(databaseName.toLowerCase());
 		}

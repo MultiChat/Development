@@ -7,17 +7,15 @@ import java.sql.SQLException;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class SQLitePooledDatabase extends GenericDatabase {
+public class SQLitePooledDatabase extends GenericPooledDatabase {
 
 	private static final String URL_PREFIX = "jdbc:sqlite:";
 
 	private HikariDataSource ds;
 	private HikariConfig config;
-	private int poolSize;
 
 	public SQLitePooledDatabase(File path, String filename, int poolSize) throws SQLException {
-		super(URL_PREFIX + path + File.separator + filename);
-		this.poolSize = poolSize;
+		super(URL_PREFIX + path + File.separator + filename, poolSize);
 	}
 
 	protected boolean setupDatabase(String url) throws SQLException {
@@ -37,7 +35,7 @@ public class SQLitePooledDatabase extends GenericDatabase {
 
 		config = new HikariConfig();
 		config.setJdbcUrl(url);
-		config.setMaximumPoolSize(poolSize);
+		config.setMaximumPoolSize(getPoolSize());
 		ds = new HikariDataSource(config);
 		Connection conn = ds.getConnection();
 		conn.close();

@@ -2,7 +2,7 @@ package xyz.olivermartin.multichat.common.database;
 
 import java.sql.SQLException;
 
-public abstract class GenericDatabase {
+public abstract class GenericPooledDatabase {
 
 	protected String url;
 	private boolean ready;
@@ -10,13 +10,17 @@ public abstract class GenericDatabase {
 	protected String username;
 	protected String password;
 
-	public GenericDatabase(String url) throws SQLException {
+	private int poolSize;
+
+	public GenericPooledDatabase(String url, int poolSize) throws SQLException {
 		this.url = url;
+		this.poolSize = poolSize;
 		ready = setupDatabase(url);
 	}
 
-	public GenericDatabase(String url, String user, String pass) throws SQLException {
+	public GenericPooledDatabase(String url, String user, String pass, int poolSize) throws SQLException {
 		this.url = url;
+		this.poolSize = poolSize;
 		this.username = user;
 		this.password = pass;
 		ready = setupDatabase(url);
@@ -24,6 +28,10 @@ public abstract class GenericDatabase {
 
 	public String getURL() {
 		return this.url;
+	}
+
+	public int getPoolSize() {
+		return this.poolSize;
 	}
 
 	public boolean isReady() {

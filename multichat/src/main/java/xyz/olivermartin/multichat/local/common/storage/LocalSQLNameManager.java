@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
-import xyz.olivermartin.multichat.common.database.GenericDatabase;
+import xyz.olivermartin.multichat.common.database.GenericPooledDatabase;
 import xyz.olivermartin.multichat.common.database.SimpleConnection;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
@@ -23,7 +23,7 @@ import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 public class LocalSQLNameManager extends LocalNameManager {
 
 	private boolean connected;
-	private GenericDatabase localDatabase;
+	private GenericPooledDatabase localDatabase;
 
 	public LocalSQLNameManager(String databaseName) {
 
@@ -35,7 +35,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 	private boolean getDatabase(String databaseName) {
 
-		Optional<GenericDatabase> ogdb = DatabaseManager.getInstance().getDatabase(databaseName);
+		Optional<GenericPooledDatabase> ogdb = DatabaseManager.getInstance().getDatabase(databaseName);
 		if (ogdb.isPresent()) {
 			localDatabase = ogdb.get();
 			return true;
