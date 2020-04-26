@@ -17,6 +17,7 @@ public class SQLitePooledDatabase extends GenericDatabase {
 
 	public SQLitePooledDatabase(File path, String filename, int poolSize) throws SQLException {
 		super(URL_PREFIX + path + File.separator + filename);
+		this.poolSize = poolSize;
 	}
 
 	protected boolean setupDatabase(String url) throws SQLException {

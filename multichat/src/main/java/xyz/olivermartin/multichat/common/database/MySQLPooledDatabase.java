@@ -16,6 +16,7 @@ public class MySQLPooledDatabase extends GenericDatabase {
 
 	public MySQLPooledDatabase(String url, String databaseName, String username, String password, int poolSize) throws SQLException {
 		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password);
+		this.poolSize = poolSize;
 	}
 
 	@Override
