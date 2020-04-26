@@ -52,7 +52,7 @@ public class LocalDatabaseSetupManager {
 
 				// SQLITE SETTINGS
 
-				DatabaseManager.getInstance().setMode(DatabaseMode.MySQL);
+				DatabaseManager.getInstance().setMode(DatabaseMode.SQLite);
 				DatabaseManager.getInstance().setPathSQLite(MultiChatLocal.getInstance().getConfigDirectory());
 
 				DatabaseManager.getInstance().createDatabase(databaseName);
