@@ -25,7 +25,7 @@ public class SimpleConnection {
 
 	protected void handleClose(Connection conn, PreparedStatement ps, ResultSet rs) {
 		try {
-			if (connection != null) conn.close();
+			if (conn != null) conn.close();
 			if (ps != null) ps.close();
 			if (rs != null) rs.close();
 		} catch (SQLException ignored) { /* EMPTY */ }
