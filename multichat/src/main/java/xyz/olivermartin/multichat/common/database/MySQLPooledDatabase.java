@@ -1,16 +1,20 @@
 package xyz.olivermartin.multichat.common.database;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class MySQLPooledDatabase extends GenericDatabase {
 
 	private static final String URL_PREFIX = "jdbc:mysql:";
 
-	private BasicDataSource ds;
+	private HikariDataSource ds;
+	private HikariConfig config;
+	private int poolSize;
 
-	public MySQLPooledDatabase(String url, String databaseName, String username, String password) throws SQLException {
+	public MySQLPooledDatabase(String url, String databaseName, String username, String password, int poolSize) throws SQLException {
 		super(URL_PREFIX + "//" + url + "/" + databaseName, username, password);
 	}
 
@@ -30,14 +34,14 @@ public class MySQLPooledDatabase extends GenericDatabase {
 	@Override
 	protected boolean connect() throws SQLException {
 
-		ds = new BasicDataSource();
-		ds.setUrl(url);
-		ds.setUsername(username);
-		ds.setPassword(password);
-		ds.setMinIdle(5);
-		ds.setMaxIdle(10);
-		ds.setMaxOpenPreparedStatements(100);
-		ds.getConnection();
+		config = new HikariConfig();
+		config.setJdbcUrl(url);
+		config.setUsername(username);
+		config.setPassword(password);
+		config.setMaximumPoolSize(poolSize);
+		ds = new HikariDataSource(config);
+		Connection conn = ds.getConnection();
+		conn.close();
 		return true;
 
 	}

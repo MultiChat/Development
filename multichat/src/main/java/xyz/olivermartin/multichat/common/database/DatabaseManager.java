@@ -29,6 +29,8 @@ public class DatabaseManager {
 	private String databaseUsernameMySQL;
 	private String databasePasswordMySQL;
 
+	private int defaultPoolSize = 10;
+
 	private DatabaseMode databaseMode = DatabaseMode.SQLite;
 
 	private Map<String, GenericDatabase> databases;
@@ -186,6 +188,10 @@ public class DatabaseManager {
 
 	////////////
 
+	public void setDefaultPoolSize(int defaultPoolSize) {
+		this.defaultPoolSize = defaultPoolSize;
+	}
+
 	public void setPathSQLite(File path) {
 		this.databasePathSQLite = path;
 	}
@@ -236,7 +242,7 @@ public class DatabaseManager {
 		switch (databaseMode) {
 		case MySQL:
 
-			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL));
+			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 
@@ -247,7 +253,7 @@ public class DatabaseManager {
 				databasePathSQLite.mkdirs();
 			}
 
-			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePathSQLite, fileName));
+			databases.put(databaseName.toLowerCase(), new SQLitePooledDatabase(databasePathSQLite, fileName, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 

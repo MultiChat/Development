@@ -1,17 +1,21 @@
 package xyz.olivermartin.multichat.common.database;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.apache.commons.dbcp2.BasicDataSource;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
-public class SQLiteDatabase extends GenericDatabase {
+public class SQLitePooledDatabase extends GenericDatabase {
 
 	private static final String URL_PREFIX = "jdbc:sqlite:";
 
-	private BasicDataSource ds;
+	private HikariDataSource ds;
+	private HikariConfig config;
+	private int poolSize;
 
-	public SQLiteDatabase(File path, String filename) throws SQLException {
+	public SQLitePooledDatabase(File path, String filename, int poolSize) throws SQLException {
 		super(URL_PREFIX + path + File.separator + filename);
 	}
 
@@ -30,13 +34,14 @@ public class SQLiteDatabase extends GenericDatabase {
 	@Override
 	protected boolean connect() throws SQLException {
 
-		ds = new BasicDataSource();
-		ds.setUrl(url);
-		ds.setMinIdle(5);
-		ds.setMaxIdle(10);
-		ds.setMaxOpenPreparedStatements(100);
-		ds.getConnection();
+		config = new HikariConfig();
+		config.setJdbcUrl(url);
+		config.setMaximumPoolSize(poolSize);
+		ds = new HikariDataSource(config);
+		Connection conn = ds.getConnection();
+		conn.close();
 		return true;
+
 	}
 
 	@Override
