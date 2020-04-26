@@ -21,7 +21,7 @@
           <relocations>
             <relocation>
               <pattern>com.zaxxer.hikari</pattern>
-              <shadedPattern>xyz.olivermartin.shaded</shadedPattern>
+              <shadedPattern>xyz.olivermartin.shadedlib.hikari</shadedPattern>
             </relocation>
           </relocations>
         </configuration>
