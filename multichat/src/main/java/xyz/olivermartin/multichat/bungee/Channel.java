@@ -318,8 +318,8 @@ public class Channel {
 		newFormat = newFormat.replace("%WORLD%", world);
 
 
-		newFormat = newFormat.replace("%MODE%", "Global");
-		newFormat = newFormat.replace("%M%", "G");
+		/*newFormat = newFormat.replace("%MODE%", "Global");
+		newFormat = newFormat.replace("%M%", "G");*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -353,7 +353,7 @@ public class Channel {
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
+		/*if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
@@ -361,7 +361,7 @@ public class Channel {
 		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}
+		}*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -392,8 +392,8 @@ public class Channel {
 		newFormat = newFormat.replace("%WORLD%", world);
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		newFormat = newFormat.replace("%MODE%", "Global");
-		newFormat = newFormat.replace("%M%", "G");
+		/*newFormat = newFormat.replace("%MODE%", "Global");
+		newFormat = newFormat.replace("%M%", "G");*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
