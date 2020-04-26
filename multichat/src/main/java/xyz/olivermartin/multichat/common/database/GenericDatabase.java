@@ -1,6 +1,5 @@
 package xyz.olivermartin.multichat.common.database;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class GenericDatabase {
@@ -31,25 +30,15 @@ public abstract class GenericDatabase {
 		return this.ready;
 	}
 
+	public abstract SimpleConnection getConnection() throws SQLException;
+
 	protected abstract boolean setupDatabase(String url) throws SQLException;
 
 	protected abstract void disconnect() throws SQLException;
 
 	protected abstract boolean connect() throws SQLException;
 
-	public abstract ResultSet safeQuery(String sqlTemplate, String... stringParameters) throws SQLException;
-
-	public abstract void safeUpdate(String sqlTemplate, String... stringParameters) throws SQLException;
-
-	public abstract void safeExecute(String sqlTemplate, String... stringParameters) throws SQLException;
-
-	//public abstract ResultSet query(String sql) throws SQLException;
-
-	//public abstract void update(String sql) throws SQLException;
-
-	//public abstract void execute(String sql) throws SQLException;
-
-	public void connectToDatabase() throws SQLException {
+	public void reconnectToDatabase() throws SQLException {
 		this.ready = connect();
 	}
 

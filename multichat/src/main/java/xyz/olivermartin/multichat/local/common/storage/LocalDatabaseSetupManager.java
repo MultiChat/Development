@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.DatabaseMode;
+import xyz.olivermartin.multichat.common.database.SimpleConnection;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
@@ -58,9 +59,10 @@ public class LocalDatabaseSetupManager {
 
 			}
 
-			DatabaseManager.getInstance().getDatabase(databaseName).get().connectToDatabase();
-			DatabaseManager.getInstance().getDatabase(databaseName).get().safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-			DatabaseManager.getInstance().getDatabase(databaseName).get().safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+			SimpleConnection conn = DatabaseManager.getInstance().getDatabase(databaseName).get().getConnection();
+			conn.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+			conn.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+			conn.closeAll();
 
 			return true;
 

@@ -1,6 +1,8 @@
 package xyz.olivermartin.multichat.common.database;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -50,33 +52,38 @@ public class DatabaseManager {
 			UUID uuid1 = UUID.randomUUID();
 			UUID uuid2 = UUID.randomUUID();
 
+			SimpleConnection conn = null;
+
 			try {
-				db.connectToDatabase();
-				db.safeExecute("DROP TABLE IF EXISTS name_data;");
-				db.safeExecute("DROP TABLE IF EXISTS nick_data;");
 
-				db.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-				db.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+				conn = db.getConnection();
 
-				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo410', 'revilo410');", uuid1.toString());
-				db.safeUpdate("INSERT INTO nick_data VALUES (?, '&3Revi', 'revi');", uuid1.toString());
-				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo510', 'revilo510');", uuid2.toString());
-				ResultSet results = db.safeQuery("SELECT * FROM name_data;");
+				//db.connectToDatabase();
+				conn.safeExecute("DROP TABLE IF EXISTS name_data;");
+				conn.safeExecute("DROP TABLE IF EXISTS nick_data;");
+
+				conn.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+				conn.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+
+				conn.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo410', 'revilo410');", uuid1.toString());
+				conn.safeUpdate("INSERT INTO nick_data VALUES (?, '&3Revi', 'revi');", uuid1.toString());
+				conn.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo510', 'revilo510');", uuid2.toString());
+				ResultSet results = conn.safeQuery("SELECT * FROM name_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM nick_data;");
+				results = conn.safeQuery("SELECT * FROM nick_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
+				results = conn.safeQuery("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
+				results = conn.safeQuery("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 					if (results.getString("f_nick") == null) {
@@ -86,18 +93,23 @@ public class DatabaseManager {
 					}
 				}
 
-				results = db.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid1.toString());
+				results = conn.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid1.toString());
 				while (results.next()) {
 					if (results.getString("f_nick") == null) {
 						System.out.println(results.getString("f_name"));
 					} else {
 						System.out.println(results.getString("f_nick"));
 					}
+
 				}
 
-				db.disconnectFromDatabase();
+				//db.disconnectFromDatabase();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+
+				if (conn != null) conn.closeAll();
+
 			}
 
 		}
@@ -224,7 +236,7 @@ public class DatabaseManager {
 		switch (databaseMode) {
 		case MySQL:
 
-			databases.put(databaseName.toLowerCase(), new MySQLDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL));
+			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL));
 
 			return databases.get(databaseName.toLowerCase());
 
@@ -257,6 +269,20 @@ public class DatabaseManager {
 			gdb.disconnectFromDatabase();
 			databases.remove(databaseName.toLowerCase());
 		}
+	}
+
+	public void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+		try {
+
+			if (conn != null) conn.close();
+			if (ps != null) ps.close();
+			if (rs != null) rs.close();
+
+		} catch (SQLException e) { /* EMPTY */ }
+	}
+
+	public void close(Connection conn, PreparedStatement ps) {
+		close(conn, ps, null);
 	}
 
 }
