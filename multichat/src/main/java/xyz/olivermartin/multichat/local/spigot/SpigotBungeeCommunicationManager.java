@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.messaging.PluginMessageRecipient;
 
 import xyz.olivermartin.multichat.local.common.LocalBungeeCommunicationManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
@@ -40,9 +39,7 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 		}
 
-		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
-
-		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+		Bukkit.getServer().sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
 
 		return true;
 
@@ -65,9 +62,7 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 		}
 
-		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
-
-		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+		Bukkit.getServer().sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
 
 		return true;
 	}
@@ -88,9 +83,7 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 		}
 
-		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
-
-		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+		Bukkit.getServer().sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
 
 		return true;
 
@@ -98,7 +91,7 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 	@Override
 	protected boolean sendUUIDAndStringAndString(String channel, UUID uuid, String value1, String value2) {
-		
+
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
 
@@ -114,12 +107,10 @@ public class SpigotBungeeCommunicationManager extends LocalBungeeCommunicationMa
 
 		}
 
-		if (Bukkit.getServer().getOnlinePlayers().size() < 1) return false;
-
-		((PluginMessageRecipient)Bukkit.getServer().getOnlinePlayers().toArray()[0]).sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
+		Bukkit.getServer().sendPluginMessage(Bukkit.getPluginManager().getPlugin(MultiChatLocal.getInstance().getPluginName()), channel, stream.toByteArray());
 
 		return true;
-		
+
 	}
 
 }
