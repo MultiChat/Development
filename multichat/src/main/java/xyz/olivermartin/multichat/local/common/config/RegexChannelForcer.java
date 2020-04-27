@@ -28,7 +28,7 @@ public class RegexChannelForcer {
 		String testMessage = messageFormat;
 
 		if (ignoreFormatCodes) {
-			testMessage = MultiChatLocal.getInstance().getNameManager().stripAllFormattingCodes(testMessage);
+			testMessage = MultiChatLocal.getInstance().getNameManager().stripAllFormattingCodesAndPreformattedText(testMessage);
 		}
 
 		return testMessage.matches(regex);
