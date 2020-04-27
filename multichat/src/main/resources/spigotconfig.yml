@@ -126,3 +126,44 @@ mysql_url: "" # For example "localhost:3306"
 mysql_database: "multichatspigot" # Put the name of your MySQL database here
 mysql_user: ""
 mysql_pass: ""
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Channel Control                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This section allows you to force messages matching a specific format into a certain channel
+# For example, if you had a Towny town channel in the format: [TC]
+# You could tell MultiChat to keep this local, even if the player is in global mode
+# This allows MultiChat to support Towny and other plugins without having to depend on them directly
+
+# Use regular expressions (regex) to match the channel format
+# Allowed channels are currently: local, global or current (for the player's currently selected channel)
+
+# The order matters, top has highest priority.
+# Credit to metzg for many of these examples...
+
+force_channel:
+  # Example to make Towny's town channel stay local
+  - regex: "^\[TC\]"
+    ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+    channel: "local"
+
+  # Example to make Towny's nation channel stay local
+  - regex: "^\[NC\]"
+    ignore_format_codes: true
+    channel: "local"
+
+  # Some other plugin
+  - regex: "^(.+) thinks: (.+)"
+    ignore_format_codes: true
+    channel: "current" # current is useful because we can stop processing other regexes here, instead of waiting until the end and defaulting
+
+  - regex: "^(.+) slaps (.+) with a trout" 
+    ignore_format_codes: true
+    channel: "local"
+
+  - regex: "^(.+) slaps (.+) loudly with a trout" 
+    ignore_format_codes: true
+    channel: "global"
