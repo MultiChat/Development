@@ -29,6 +29,9 @@ public class RegexChannelForcer {
 
 		if (ignoreFormatCodes) {
 			testMessage = MultiChatLocal.getInstance().getNameManager().stripAllFormattingCodesAndPreformattedText(testMessage);
+		} else {
+			// This makes life easier when doing the config file as only have to use & style colour codes
+			testMessage = testMessage.replace('§', '&');
 		}
 
 		return testMessage.matches(regex);
