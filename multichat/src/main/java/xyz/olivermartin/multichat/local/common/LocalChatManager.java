@@ -1,9 +1,13 @@
 package xyz.olivermartin.multichat.local.common;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
+import xyz.olivermartin.multichat.local.common.config.RegexChannelForcer;
 import xyz.olivermartin.multichat.local.common.storage.LocalDataStore;
 
 public abstract class LocalChatManager {
@@ -43,6 +47,23 @@ public abstract class LocalChatManager {
 
 	}
 
+	public void queueChatChannel(String playerName, String channel) {
+
+		if (MultiChatLocal.getInstance().getDataStore().chatQueues.containsKey(playerName)) {
+
+			Queue<String> chatQueue = MultiChatLocal.getInstance().getDataStore().chatQueues.get(playerName);
+			chatQueue.add(channel);
+
+		} else {
+
+			Queue<String> chatQueue = new LinkedList<String>();
+			chatQueue.add(channel);
+			MultiChatLocal.getInstance().getDataStore().chatQueues.put(playerName, chatQueue);
+
+		}
+
+	}
+
 	private String getChannelFromChatQueue(MultiChatLocalPlayer player, boolean pollQueue) {
 
 		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
@@ -72,7 +93,9 @@ public abstract class LocalChatManager {
 
 			MultiChatLocal.getInstance().getConsoleLogger().debug("It was: " + tempChannel);
 
-			if (tempChannel.startsWith("!SINGLE L MESSAGE!")) {
+			channel = tempChannel;
+
+			/*if (tempChannel.startsWith("!SINGLE L MESSAGE!")) {
 
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] This is a local (direct) message");
 				channel = "local";
@@ -82,7 +105,7 @@ public abstract class LocalChatManager {
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] This is a global (direct) message");
 				channel = "global";
 
-			}
+			}*/
 
 		} else {
 
@@ -203,6 +226,24 @@ public abstract class LocalChatManager {
 		} else {
 			return Optional.empty();
 		}
+
+	}
+
+	public String getRegexForcedChannel(String currentChannel, String messageFormat) {
+
+		List<RegexChannelForcer> regexChannelForcers =
+				MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getRegexChannelForcers();
+
+		String channel = currentChannel;
+
+		for (RegexChannelForcer rcf : regexChannelForcers) {
+			if (rcf.matchesRegex(messageFormat)) {
+				channel = rcf.getChannel();
+				break;
+			}
+		}
+
+		return channel;
 
 	}
 

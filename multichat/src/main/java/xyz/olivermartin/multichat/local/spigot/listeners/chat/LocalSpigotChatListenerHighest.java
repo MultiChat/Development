@@ -38,8 +38,13 @@ public class LocalSpigotChatListenerHighest implements Listener {
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - The resulting format was... " + mcce.getFormat());
 
 		String channel = chatManager.peekAtChatChannel(mcce.getPlayer());
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message before forcing is: " + channel);
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message is: " + channel);
+		// Deal with regex channel forcing...
+		channel = chatManager.getRegexForcedChannel(channel, mcce.getFormat());
+
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message after forcing is: " + channel);
 
 		// Deal with ignores and channel members
 

@@ -24,6 +24,9 @@ public class LocalSpigotChatListenerMonitor implements Listener {
 
 		String channel = chatManager.pollChatChannel(mcce.getPlayer());
 
+		// Deal with regex channel forcing...
+		channel = chatManager.getRegexForcedChannel(channel, mcce.getFormat());
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - If the message is cancelled, then we will end here...");
 
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT

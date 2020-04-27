@@ -1,8 +1,6 @@
 package xyz.olivermartin.multichat.local.common.listeners.communication;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
@@ -47,17 +45,10 @@ public abstract class LocalPlayerActionListener {
 
 		String message = command.substring("!SINGLE X MESSAGE!".length(), command.length());
 
-		if (MultiChatLocal.getInstance().getDataStore().chatQueues.containsKey(player.toLowerCase())) {
-
-			Queue<String> chatQueue = MultiChatLocal.getInstance().getDataStore().chatQueues.get(player.toLowerCase());
-			chatQueue.add(command);
-
+		if (command.startsWith("!SINGLE L MESSAGE!")) {
+			MultiChatLocal.getInstance().getChatManager().queueChatChannel(player, "local");
 		} else {
-
-			Queue<String> chatQueue = new LinkedList<String>();
-			chatQueue.add(command);
-			MultiChatLocal.getInstance().getDataStore().chatQueues.put(player.toLowerCase(), chatQueue);
-
+			MultiChatLocal.getInstance().getChatManager().queueChatChannel(player, "global");
 		}
 
 		sendChatAsPlayer(player, message);

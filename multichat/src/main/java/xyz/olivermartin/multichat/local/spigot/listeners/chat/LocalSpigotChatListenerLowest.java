@@ -27,8 +27,13 @@ public class LocalSpigotChatListenerLowest implements Listener {
 		MultiChatLocalPlayer player = mcce.getPlayer();
 		String channel = chatManager.peekAtChatChannel(player);
 		String format = mcce.getFormat();
+		
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Channel for this message before forcing is " + channel);
+		
+		// Deal with regex channel forcing...
+		channel = chatManager.getRegexForcedChannel(channel, format);
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Channel for this message is " + channel);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Channel for this message after forcing is " + channel);
 
 		if (!chatManager.isGlobalChatServer()) {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Not a global chat server, so setting channel to local!");
