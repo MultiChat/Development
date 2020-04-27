@@ -42,6 +42,9 @@ public class LocalSpongeChatListenerHighest {
 		String message = event.getRawMessage().toPlain();
 		String format = chatManager.getChannelFormat(channel);
 
+		// Deal with regex channel forcing...
+		channel = chatManager.getRegexForcedChannel(channel, format);
+
 		// Build chat format
 		format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(player.getUniqueId(), format);
 
