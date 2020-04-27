@@ -140,29 +140,30 @@ mysql_pass: ""
 
 # Use regular expressions (regex) to match the channel format
 # Allowed channels are currently: local, global or current (for the player's currently selected channel)
+# If ignore_format_code=true then format codes (&3 etc.) used in the chat format are filtered out before checking
 
 # The order matters, top has highest priority.
 # Credit to metzg for many of these examples...
 
 force_channel:
   # Example to make Towny's town channel stay local
-  - regex: '^\[TC\]'
-    ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  - regex: '^&f\[&3TC&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's nation channel stay local
-  - regex: '^\[NC\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&6NC&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's admin channel stay local
-  - regex: '^\[ADMIN\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&4ADMIN&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's mod channel stay local
-  - regex: '^\[MOD\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&9MOD&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Some other plugin

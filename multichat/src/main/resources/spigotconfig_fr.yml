@@ -165,23 +165,23 @@ mysql_pass: "" #Mot de passe
 
 force_channel:
   # Example to make Towny's town channel stay local
-  - regex: '^\[TC\]'
-    ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  - regex: '^&f\[&3TC&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's nation channel stay local
-  - regex: '^\[NC\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&6NC&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's admin channel stay local
-  - regex: '^\[ADMIN\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&4ADMIN&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Example to make Towny's mod channel stay local
-  - regex: '^\[MOD\]'
-    ignore_format_codes: true
+  - regex: '^&f\[&9MOD&f\].*'
+    ignore_format_codes: false
     channel: 'local'
 
   # Some other plugin
