@@ -49,16 +49,16 @@ public abstract class LocalChatManager {
 
 	public void queueChatChannel(String playerName, String channel) {
 
-		if (MultiChatLocal.getInstance().getDataStore().chatQueues.containsKey(playerName)) {
+		if (MultiChatLocal.getInstance().getDataStore().chatQueues.containsKey(playerName.toLowerCase())) {
 
-			Queue<String> chatQueue = MultiChatLocal.getInstance().getDataStore().chatQueues.get(playerName);
+			Queue<String> chatQueue = MultiChatLocal.getInstance().getDataStore().chatQueues.get(playerName.toLowerCase());
 			chatQueue.add(channel);
 
 		} else {
 
 			Queue<String> chatQueue = new LinkedList<String>();
 			chatQueue.add(channel);
-			MultiChatLocal.getInstance().getDataStore().chatQueues.put(playerName, chatQueue);
+			MultiChatLocal.getInstance().getDataStore().chatQueues.put(playerName.toLowerCase(), chatQueue);
 
 		}
 
