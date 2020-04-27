@@ -202,11 +202,19 @@ public abstract class LocalChatManager {
 
 			for (String key : config.getMultichatPlaceholders().keySet()) {
 
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Key = " + key);
+
 				String value = config.getMultichatPlaceholders().get(key);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Value = " + value);
+
 				value = MultiChatLocal.getInstance().getPlaceholderManager().processMultiChatPlaceholders(player.getUniqueId(), value);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed Value to get: " + value);
 
 				// If we are hooked with PAPI then use their placeholders!
 				value = processExternalPlaceholders(player, value);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
 
 				if (message.contains(key)) {
 					message = message.replace(key, value);
