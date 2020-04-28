@@ -144,55 +144,52 @@ mysql_pass: "" #Mot de passe
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                   Channel Control                    | #
+# |                  Contrôle de canal                   | #
 # +------------------------------------------------------+ #
 ############################################################
 
-#############################
-# TRANSLATIONS NEEDED TO FR #
-#############################
-
-# This section allows you to force messages matching a specific format into a certain channel
-# For example, if you had a Towny town channel in the format: [TC]
-# You could tell MultiChat to keep this local, even if the player is in global mode
-# This allows MultiChat to support Towny and other plugins without having to depend on them directly
-
-# Use regular expressions (regex) to match the channel format
-# Allowed channels are currently: local, global or current (for the player's currently selected channel)
-
-# The order matters, top has highest priority.
-# Credit to metzg for many of these examples...
+# Cette section vous permet de rediriger de force un message vers un canal selon son format.
+# 
+# Par exemple, si vous avez un canal de ville Towny au format: "[TC] ...",
+# vous pouvez dire à MultiChat de garder ce message en local, même si le joueur est en mode global.
+# Ceci permet à MultiChat de supporter Towny et d'autres plugins sans avoir à dépendre d'eux directement.
+# 
+# Utilisez des expressions régulières (regex) pour pouvoir détecter un format de message.
+# Canaux possibles à l'heure actuelle : local, global, ou current (pour le canal actuel du joueur)
+#
+# L'ordre définit la priorité : en haut = plus important
+# Merci à metzg pour ces exemples...
 
 force_channel:
-  # Example to make Towny's town channel stay local
+  # Towny: garder le canal de ville (town/tc) local
   - regex: '^&f\[&3TC&f\].*'
     ignore_format_codes: false
     channel: 'local'
 
-  # Example to make Towny's nation channel stay local
+  # Towny: garder le canal de nation (/nc) local
   - regex: '^&f\[&6NC&f\].*'
     ignore_format_codes: false
     channel: 'local'
 
-  # Example to make Towny's admin channel stay local
+  # Towny: garder le canal admin (/a) local
   - regex: '^&f\[&4ADMIN&f\].*'
     ignore_format_codes: false
     channel: 'local'
 
-  # Example to make Towny's mod channel stay local
+  # Towny: garder le canal modérateur (/m) local
   - regex: '^&f\[&9MOD&f\].*'
     ignore_format_codes: false
     channel: 'local'
 
-  # Some other plugin
-  - regex: '^(.+) thinks: (.+)'
+  # Un autre plugin...
+  - regex: '^(.+) pense: (.+)'
     ignore_format_codes: true
-    channel: 'current' # current is useful because we can stop processing other regexes here, instead of waiting until the end and defaulting
+    channel: 'current' # permet d'éviter de tester d'autres regexes moins prioritaires plutôt que de tout traiter jusqu'au comportement par défaut
 
-  - regex: '^(.+) slaps (.+) with a trout' 
+  - regex: '^(.+) gifle (.+) avec une truite' 
     ignore_format_codes: true
     channel: 'local'
 
-  - regex: '^(.+) slaps (.+) loudly with a trout' 
+  - regex: '^(.+) gifle (.+) avec une grosse truite' 
     ignore_format_codes: true
     channel: 'global'
