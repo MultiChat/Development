@@ -61,8 +61,26 @@ public class LocalSpongeConfig extends LocalConfig {
 
 	@Override
 	protected Map<String, String> getPlaceholdersMap(String rootConfigNode) {
+
 		Map<String,String> map = new HashMap<String,String>();
-		return map; // TODO This feature is currently unused in Sponge.
+
+		if (!config.getNode(rootConfigNode).isVirtual()) {
+
+			Map<Object, ? extends ConfigurationNode> configData = config.getNode(rootConfigNode).getChildrenMap();
+
+			for (Object key : configData.keySet()) {
+
+				String placeholder = key.toString();
+				String value = configData.get(key).getString();
+
+				map.put("{multichat_" + placeholder + "}", value);
+
+			}
+
+		}
+
+		return map;
+
 	}
 
 	@Override

@@ -64,7 +64,6 @@ override_all_multichat_formatting: false
 # Paramètre disponible : true ou false
 force_multichat_format: false
 
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Local                         | #
