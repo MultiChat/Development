@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.local.sponge.listeners.chat;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +25,9 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 		return this.channel;
 	}
 
-	public MultiChatMessageChannel(MultiChatLocalPlayer sender, Collection<MessageReceiver> recipients) {
+	public MultiChatMessageChannel(MultiChatLocalPlayer sender, Collection<MessageReceiver> originalRecipients) {
+
+		Set<MessageReceiver> recipients = new HashSet<MessageReceiver>(originalRecipients);
 
 		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
 
