@@ -76,11 +76,16 @@ public class LocalSpongeConfig extends LocalConfig {
 
 		if (!config.getNode(rootConfigNode).isVirtual()) {
 
+			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] Found the RegexChannelForcer node...");
+
 			List configData;
 
 			try {
 
 				configData = config.getNode(rootConfigNode).getList(new TypeToken<Object>() { /* EMPTY */ });
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] Has how many children?: " + configData.size());
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] RAW: " + configData.toString());
 
 				for (Object configItem : configData) {
 
@@ -89,6 +94,10 @@ public class LocalSpongeConfig extends LocalConfig {
 					String regex = String.valueOf(dictionary.get("regex"));
 					boolean ignoreFormatCodes = (Boolean)(dictionary.get("ignore_format_codes"));
 					String channel = String.valueOf(dictionary.get("channel"));
+
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] REGEX = " + regex);
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] IGNORE_FORMAT_CODES = " + ignoreFormatCodes);
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] CHANNEL = " + channel);
 
 					RegexChannelForcer regexChannelForcer = new RegexChannelForcer(regex, ignoreFormatCodes, channel);
 					regexChannelForcers.add(regexChannelForcer);
