@@ -44,6 +44,11 @@ public class LocalSpigotChatListenerLowest implements Listener {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Its local chat and we aren't setting the format for that, so return now!");
 			return;
 		}
+		
+		if (chatManager.isOverrideMultiChatFormat()) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - We are overriding MultiChat's formatting... So abandon here...");
+			return;
+		}
 
 		format = chatManager.getChannelFormat(channel);
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Got the format for this channel as:" + format);

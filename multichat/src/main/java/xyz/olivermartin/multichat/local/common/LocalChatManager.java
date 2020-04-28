@@ -15,6 +15,10 @@ public abstract class LocalChatManager {
 	public boolean isForceMultiChatFormat() {
 		return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isForceMultiChatFormat();
 	}
+	
+	public boolean isOverrideMultiChatFormat() {
+		return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isOverrideAllMultiChatFormatting();
+	}
 
 	public boolean isGlobalChatServer() {
 		return MultiChatLocal.getInstance().getDataStore().globalChatServer;

@@ -48,7 +48,6 @@ override_all_multichat_formatting: false
 # Setting this to true will try to override any stubborn plugins messing around with the chat format
 force_multichat_format: false
 
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Local                         | #
