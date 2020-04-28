@@ -183,6 +183,15 @@ force_channel:
     ignore_format_codes: false
     channel: 'local'
 
+  # Essentials
+  #- regex: '^\[L\].*'
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^\[Shout\].*'
+  #  ignore_format_codes: true
+  #  channel: 'global'
+
   # Un autre plugin...
   #- regex: '^(.+) pense: (.+)'
   #  ignore_format_codes: true

@@ -166,6 +166,16 @@ force_channel:
     ignore_format_codes: false
     channel: 'local'
 
+  # Make Essentials local (range) chat stay local...
+  #- regex: '^\[L\].*'
+  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  channel: 'local'
+
+  # Make Essentials SHOUT go global
+  #- regex: '^\[Shout\].*'
+  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  channel: 'global'
+
   # Some other plugin
   #- regex: '^(.+) thinks: (.+)'
   #  ignore_format_codes: true
