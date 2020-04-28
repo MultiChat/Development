@@ -26,7 +26,7 @@ public class MultiChatLocalSpongePlayerChatEvent implements MultiChatLocalPlayer
 
 	@Override
 	public MultiChatLocalPlayer getPlayer() {
-		return this.getPlayer();
+		return this.player;
 	}
 
 	@Override
