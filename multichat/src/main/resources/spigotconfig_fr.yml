@@ -12,12 +12,14 @@ version: "1.9"   #
 ##################
 
 # French Translation by Nogapra - Thank you !
+# Channel Control translations by Metzg
 # Pour utiliser ce fichier, renommer en 'spigotconfig.yml'.
 
 #1. Global
 #2. Local
 #3. Placeholders MultiChat
 #4. Surnom MultiChat
+#5. Contrôle de canal
 
 # Specify the name of this server here for the %SERVER% placeholder
 server_name: "SERVER_NAME"
@@ -182,14 +184,14 @@ force_channel:
     channel: 'local'
 
   # Un autre plugin...
-  - regex: '^(.+) pense: (.+)'
-    ignore_format_codes: true
-    channel: 'current' # permet d'éviter de tester d'autres regexes moins prioritaires plutôt que de tout traiter jusqu'au comportement par défaut
+  #- regex: '^(.+) pense: (.+)'
+  #  ignore_format_codes: true
+  #  channel: 'current' # permet d'éviter de tester d'autres regexes moins prioritaires plutôt que de tout traiter jusqu'au comportement par défaut
 
-  - regex: '^(.+) gifle (.+) avec une truite' 
-    ignore_format_codes: true
-    channel: 'local'
+  #- regex: '^(.+) gifle (.+) avec une truite' 
+  #  ignore_format_codes: true
+  #  channel: 'local'
 
-  - regex: '^(.+) gifle (.+) avec une grosse truite' 
-    ignore_format_codes: true
-    channel: 'global'
+  #- regex: '^(.+) gifle (.+) avec une grosse truite' 
+  #  ignore_format_codes: true
+  #  channel: 'global'
