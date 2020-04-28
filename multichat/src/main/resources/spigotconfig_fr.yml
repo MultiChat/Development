@@ -22,7 +22,7 @@ version: "1.9"   #
 #5. Contrôle de canal
 
 # Specify the name of this server here for the %SERVER% placeholder
-server_name: "SERVER_NAME"
+server_name: "SPIGOT_SERVER"
 
 ############################################################
 # +------------------------------------------------------+ #
