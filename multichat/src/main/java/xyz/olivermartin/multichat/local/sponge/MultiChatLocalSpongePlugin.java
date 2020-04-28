@@ -47,6 +47,8 @@ import xyz.olivermartin.multichat.local.sponge.listeners.LocalSpongeLoginLogoutL
 import xyz.olivermartin.multichat.local.sponge.listeners.LocalSpongeWorldChangeListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.SpongeGameReloadEvent;
 import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerHighest;
+import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerLowest;
+import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerMonitor;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeCastListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeIgnoreListener;
@@ -162,6 +164,8 @@ public class MultiChatLocalSpongePlugin {
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeWorldChangeListener());
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeLoginLogoutListener());
 		Sponge.getEventManager().registerListeners(this, new LocalSpongeChatListenerHighest());
+		Sponge.getEventManager().registerListeners(this, new LocalSpongeChatListenerLowest());
+		Sponge.getEventManager().registerListeners(this, new LocalSpongeChatListenerMonitor());
 
 		Sponge.getEventManager().registerListeners(this, new SpongeGameReloadEvent());
 

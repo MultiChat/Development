@@ -6,12 +6,12 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.message.MessageChannelEvent;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.serializer.TextSerializers;
 
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
+import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
+import xyz.olivermartin.multichat.local.common.listeners.chat.MultiChatLocalPlayerChatEvent;
 import xyz.olivermartin.multichat.local.sponge.MultiChatLocalSpongePlayer;
 
 public class LocalSpongeChatListenerHighest {
@@ -19,10 +19,8 @@ public class LocalSpongeChatListenerHighest {
 	@Listener(order=Order.LAST)
 	public void onChat(MessageChannelEvent.Chat event) {
 
-		if (event.isCancelled()) {
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Chat event cancelled!");
-			return;
-		}
+		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
+		if (event.isCancelled()) return;
 
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
 
@@ -30,65 +28,85 @@ public class LocalSpongeChatListenerHighest {
 
 		if (!playerOptional.isPresent()) return;
 
-		Player player = playerOptional.get();
+		Player spongePlayer = playerOptional.get();
 
-		MultiChatLocalPlayer mclp = new MultiChatLocalSpongePlayer(player);
+		MultiChatLocalPlayer player = new MultiChatLocalSpongePlayer(spongePlayer);
 
-		MultiChatMessageChannel messageChannel = new MultiChatMessageChannel(mclp);
+		MultiChatLocalPlayerChatEvent mcce = new MultiChatLocalSpongePlayerChatEvent(event, player);
 
-		event.setChannel(messageChannel);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now is where the fun starts... Welcome to the highest level!");
 
-		String channel = messageChannel.getMultiChatChannelName();
-		String message = event.getRawMessage().toPlain();
-		String format = chatManager.getChannelFormat(channel);
-
-		// Deal with regex channel forcing...
-		channel = chatManager.getRegexForcedChannel(channel, format);
-
-		// Build chat format
-		format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(player.getUniqueId(), format);
-
-		format = chatManager.processMultiChatConfigPlaceholders(mclp, format);
-
-		format = chatManager.processExternalPlaceholders(mclp, format);
-
-		Text toSendMessage;
-		Text toSendFormat;
-
-		// Deal with coloured chat
-		if (chatManager.canChatInColour(mclp.getUniqueId())) {
-			toSendMessage = TextSerializers.FORMATTING_CODE.deserialize(message);
-		} else {
-			toSendMessage = Text.of(message);
+		if (chatManager.canChatInColour(mcce.getPlayer().getUniqueId())) {
+			mcce.setMessage(chatManager.translateColourCodes(mcce.getMessage()));
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours and set back in the event as: " + mcce.getMessage());
 		}
 
-		toSendFormat = TextSerializers.FORMATTING_CODE.deserialize(format);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we will process MultiChat placeholders!");
 
-		event.getFormatter().setBody(toSendMessage);
-		event.getFormatter().setHeader(toSendFormat);
-		// event.setMessage(toSend)...
+		mcce.setFormat(chatManager.processMultiChatConfigPlaceholders(mcce.getPlayer(), mcce.getFormat()));
 
-		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
-		if (chatManager.isGlobalChatServer()) {
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - The resulting format was... " + mcce.getFormat());
 
-			// Lets send Bungee the latest info!
-			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(mclp.getUniqueId());
+		String channel = chatManager.peekAtChatChannel(mcce.getPlayer());
 
-			if (channel.equals("local")) return;
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message before forcing is: " + channel);
 
-			// TODO Somehow use the Sponge format so that other plugins can edit it (instead of just the global format here and the .toPlain)
-			// None of this is ideal, as event.getMessage() actually returns the WHOLE message that would be sent including name etc.
-			MultiChatLocal.getInstance().getConsoleLogger().debug("We need to send the message to bungeecord!");
-			MultiChatLocal.getInstance().getConsoleLogger().debug("Data to send is: ");
-			MultiChatLocal.getInstance().getConsoleLogger().debug("PLAYER:" + player.getName());
+		// Deal with regex channel forcing...
+		channel = chatManager.getRegexForcedChannel(channel, mcce.getFormat());
 
-			String proxyMessage = TextSerializers.formattingCode('§').serialize(event.getFormatter().getBody().toText());
-			String proxyFormat = TextSerializers.formattingCode('§').serialize(event.getFormatter().getHeader().toText());
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message after forcing is: " + channel);
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("MESSAGE:" + proxyMessage);
-			MultiChatLocal.getInstance().getConsoleLogger().debug("FORMAT: " + proxyFormat.replace("%", "%%") + "... followed by the message");
+		// Deal with ignores and channel members
 
-			MultiChatLocal.getInstance().getProxyCommunicationManager().sendChatMessage(player.getUniqueId(), proxyMessage, proxyFormat.replace("%", "%%"));
+		Optional<LocalPseudoChannel> opChannelObject = chatManager.getChannelObject(channel);
+
+		if (opChannelObject.isPresent()) {
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Do we have a channel object to match that name? Yes!");
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we are attempting to remove ignored players from the recipient list of the message, and making sure only people who are meant to see the channel (as specified in the channel object), can see it!");
+
+			mcce.removeIgnoredPlayersAndNonChannelMembersFromRecipients(opChannelObject.get());
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - And BAM! That was handled by the local platform implementation!");
+
+		} else {
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We didn't find a channel object to match that name... Probably not good!");
+
+		}
+
+		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into local chat, so at this point we are returning! Bye!");
+			return;
+		}
+
+		if (chatManager.isForceMultiChatFormat()) {
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - OKAYYY! We are forcing our format! All other plugins shall now crumble!");
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Currently it is starting out as... " + mcce.getFormat());
+
+			String format;
+
+			format = chatManager.getChannelFormat(channel);
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Got the format for this channel as:" + format);
+
+			// Build chat format
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Rebuilding the chat format...");
+			format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(mcce.getPlayer().getUniqueId(), format);
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we have: " + format);
+
+			format = chatManager.processExternalPlaceholders(mcce.getPlayer(), format);
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Processed external placeholders to get: " + format);
+
+			format = format.replace("%", "%%");
+
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Did some magic to get..." + format);
+
+			mcce.setFormat(chatManager.translateColourCodes(format));
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - FORMAT HAS BEEN SET AS: " + mcce.getFormat());
 
 		}
 
