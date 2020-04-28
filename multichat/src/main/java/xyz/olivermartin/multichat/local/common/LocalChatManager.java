@@ -15,7 +15,7 @@ public abstract class LocalChatManager {
 	public boolean isForceMultiChatFormat() {
 		return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isForceMultiChatFormat();
 	}
-	
+
 	public boolean isOverrideMultiChatFormat() {
 		return MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isOverrideAllMultiChatFormatting();
 	}
@@ -217,6 +217,9 @@ public abstract class LocalChatManager {
 				// If we are hooked with PAPI then use their placeholders!
 				value = processExternalPlaceholders(player, value);
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
+
+				value = translateColourCodes(value);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Translated colour codes to get: " + value);
 
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
 
