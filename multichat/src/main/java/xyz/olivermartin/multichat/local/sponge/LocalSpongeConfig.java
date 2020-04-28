@@ -80,7 +80,7 @@ public class LocalSpongeConfig extends LocalConfig {
 
 			try {
 
-				configData = config.getNode(rootConfigNode).getList(new TypeToken<Map>() { /* EMPTY */ });
+				configData = config.getNode(rootConfigNode).getList(new TypeToken<Object>() { /* EMPTY */ });
 
 				for (Object configItem : configData) {
 
