@@ -197,6 +197,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:chat")) {
 
+			ev.setCancelled(true);
+
 			DebugManager.log("{multichat:chat} Got a plugin message");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
@@ -244,6 +246,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:nick")) {
 
+			ev.setCancelled(true);
+
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
 
@@ -281,6 +285,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:prefix")) {
+
+			ev.setCancelled(true);
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -320,6 +326,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:suffix")) {
 
+			ev.setCancelled(true);
+
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
 
@@ -357,6 +365,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:dn")) {
+
+			ev.setCancelled(true);
 
 			DebugManager.log("[multichat:dn] Got an incoming channel message!");
 
@@ -397,6 +407,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:world")) {
+
+			ev.setCancelled(true);
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -442,6 +454,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:pxe")) {
 
+			ev.setCancelled(true);
+
 			DebugManager.log("[multichat:pxe] Got an incoming pexecute message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
@@ -460,6 +474,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:ppxe")) {
+
+			ev.setCancelled(true);
 
 			DebugManager.log("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
 
