@@ -98,7 +98,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(platform, configMan.getLocalConfig().isMySQL());
 
 			if (ldsm.isConnected()) {
-				nameManager = new LocalSQLNameManager("multichatspigot.db");
+				nameManager = new LocalSQLNameManager("multichatlocal.db");
 			} else {
 				consoleLogger.log("Could not connect to database! Using file based storage instead...");
 				nameManager = new LocalSpigotFileNameManager();
