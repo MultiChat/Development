@@ -1,4 +1,4 @@
-name: multichat
+name: MultiChat
 version: 1.9
 author: Revilo410
 main: xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlugin
