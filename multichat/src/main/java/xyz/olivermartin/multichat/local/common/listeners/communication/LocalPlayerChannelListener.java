@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.local.common.listeners.communication;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,16 +27,25 @@ public abstract class LocalPlayerChannelListener {
 			MultiChatLocalPlayer player = opPlayer.get();
 
 			String channelName = message.readUTF();
-			MultiChatLocal.getInstance().getDataStore().playerChannels.put(player.getUniqueId(), channelName);
+			Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
+			synchronized (playerChannels) {
+				playerChannels.put(player.getUniqueId(), channelName);
+			}
 
 			boolean colour = message.readBoolean();
-			MultiChatLocal.getInstance().getDataStore().colourMap.put(player.getUniqueId(), colour);
+			Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
+			synchronized (colourMap) {
+				colourMap.put(player.getUniqueId(), colour);
+			}
 
 			boolean whitelistMembers = message.readBoolean();
 			List<UUID> channelMembers = (List<UUID>) message.readObject();
 
 			LocalPseudoChannel channelObject = new LocalPseudoChannel(channelName, channelMembers, whitelistMembers);
-			MultiChatLocal.getInstance().getDataStore().channelObjects.put(channelName, channelObject);
+			Map<String, LocalPseudoChannel> channelObjects = MultiChatLocal.getInstance().getDataStore().getChannelObjects();
+			synchronized (channelObjects) {
+				channelObjects.put(channelName, channelObject);
+			}
 
 			return true;
 

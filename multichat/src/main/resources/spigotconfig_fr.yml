@@ -22,7 +22,7 @@ version: "1.9"   #
 #5. Contrôle de canal
 
 # Specify the name of this server here for the %SERVER% placeholder
-server_name: "SERVER_NAME"
+server_name: "SPIGOT_SERVER"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -63,7 +63,6 @@ override_all_multichat_formatting: false
 # Définir ce paramètre sur true essaiera de prendre le contrôle malgré un plugin de formatage de chat récalcitrant.
 # Paramètre disponible : true ou false
 force_multichat_format: false
-
 
 ############################################################
 # +------------------------------------------------------+ #

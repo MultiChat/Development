@@ -8,13 +8,13 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
-import xyz.olivermartin.multichat.local.common.listeners.chat.LocalChatListenerHighest;
+import xyz.olivermartin.multichat.local.common.listeners.chat.LocalChatListenerMonitor;
 import xyz.olivermartin.multichat.local.common.listeners.chat.MultiChatLocalPlayerChatEvent;
 import xyz.olivermartin.multichat.local.sponge.MultiChatLocalSpongePlayer;
 
-public class LocalSpongeChatListenerHighest extends LocalChatListenerHighest {
+public class LocalSpongeChatListenerMonitor extends LocalChatListenerMonitor {
 
-	@Listener(order=Order.LAST)
+	@Listener(order=Order.POST)
 	public void onChat(MessageChannelEvent.Chat event) {
 
 		Optional<Player> playerOptional = event.getCause().<Player>first(Player.class);

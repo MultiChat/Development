@@ -12,7 +12,7 @@ version: "1.9"   #
 ##################
 
 # Specify the name of this server here for the %SERVER% placeholder
-server_name: "SPONGE"
+server_name: "SPONGE_SERVER"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -34,10 +34,19 @@ override_global_format: false
 # %NICK% = The nickname of the sender
 # %SERVER% = The server of the sender
 # %WORLD% = The world of the sender
-# %MODE% = The chat mode of the player, "Global" or "Local", %M% will do "G" or "L"
 #
 # Will display as [FORMAT] [MESSAGE]
 override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
+
+# If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
+# This means that if a plugin such as Towny manages the chat format locally, then this will be used instead.
+# MultiChat will still send the message to all the other servers.
+# 
+# NOTE: THIS IS DONE ON A BEST EFFORT BASIS! (MultiChat is a chat formatting plugin so is designed to format the chat!)
+override_all_multichat_formatting: false
+
+# Setting this to true will try to override any stubborn plugins messing around with the chat format
+force_multichat_format: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -45,7 +54,10 @@ override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 # +------------------------------------------------------+ #
 ############################################################
 
-# The local chat format for this server
+# Should MultiChat set the format of the local chat? (Leaving this at false lets other plugins handle the chat)
+set_local_format: true
+
+# The local chat format to set if MultiChat is to manage the format
 # 
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
@@ -58,6 +70,21 @@ override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 #
 # Will display as [FORMAT] [MESSAGE]
 local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                MultiChat Placeholders                | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This setting lets you use multichat variables in other plugins!
+# For example, if you use essentials chat for your local chat, but wanted to use a multichat nickname.
+# You can specify the {multichat_nickname} placeholder as defined below. MultiChat will parse it as usual.
+# Essentials doesn't support placeholder API by default, but you can still use PAPI placeholders by making one below!
+# {multichat_papi_displayname} will be replaced using the example below and parsed by multichat.
+multichat_placeholders:
+  nickname: "%NICK%"
+  papi_displayname: "%player_displayname%"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -98,3 +125,65 @@ mysql_url: "" # For example "localhost:3306"
 mysql_database: "" # Put the name of your MySQL database here
 mysql_user: ""
 mysql_pass: ""
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Channel Control                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This section allows you to force messages matching a specific format into a certain channel
+# For example, if you had a Towny town channel in the format: [TC]
+# You could tell MultiChat to keep this local, even if the player is in global mode
+# This allows MultiChat to support Towny and other plugins without having to depend on them directly
+
+# Use regular expressions (regex) to match the channel format
+# Allowed channels are currently: local, global or current (for the player's currently selected channel)
+# If ignore_format_code=true then format codes (&3 etc.) used in the chat format are filtered out before checking
+
+# The order matters, top has highest priority.
+# Credit to metzg for many of these examples...
+
+force_channel:
+  # Example to make Towny's town channel stay local
+  - regex: '^&f\[&3TC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Example to make Towny's nation channel stay local
+  - regex: '^&f\[&6NC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Example to make Towny's admin channel stay local
+  - regex: '^&f\[&4ADMIN&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Example to make Towny's mod channel stay local
+  - regex: '^&f\[&9MOD&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Make Essentials local (range) chat stay local...
+  #- regex: '^\[L\].*'
+  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  channel: 'local'
+
+  # Make Essentials SHOUT go global
+  #- regex: '^\[Shout\].*'
+  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  channel: 'global'
+
+  # Some other plugin
+  #- regex: '^(.+) thinks: (.+)'
+  #  ignore_format_codes: true
+  #  channel: 'current' # current is useful because we can stop processing other regexes here, instead of waiting until the end and defaulting
+
+  #- regex: '^(.+) slaps (.+) with a trout' 
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^(.+) slaps (.+) loudly with a trout' 
+  #  ignore_format_codes: true
+  #  channel: 'global'

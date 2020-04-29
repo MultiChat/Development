@@ -7,11 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.reflect.TypeToken;
-
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 import ninja.leaping.configurate.yaml.YAMLConfigurationLoader;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
@@ -64,11 +61,28 @@ public class LocalSpongeConfig extends LocalConfig {
 
 	@Override
 	protected Map<String, String> getPlaceholdersMap(String rootConfigNode) {
+
 		Map<String,String> map = new HashMap<String,String>();
-		return map; // TODO This feature is currently unused in Sponge.
+
+		if (!config.getNode(rootConfigNode).isVirtual()) {
+
+			Map<Object, ? extends ConfigurationNode> configData = config.getNode(rootConfigNode).getChildrenMap();
+
+			for (Object key : configData.keySet()) {
+
+				String placeholder = key.toString();
+				String value = configData.get(key).getString();
+
+				map.put("{multichat_" + placeholder + "}", value);
+
+			}
+
+		}
+
+		return map;
+
 	}
 
-	@SuppressWarnings({ "serial", "rawtypes" })
 	@Override
 	protected List<RegexChannelForcer> getRegexChannelForcers(String rootConfigNode) {
 
@@ -76,29 +90,20 @@ public class LocalSpongeConfig extends LocalConfig {
 
 		if (!config.getNode(rootConfigNode).isVirtual()) {
 
-			List configData;
+			List<? extends ConfigurationNode> configData = config.getNode(rootConfigNode).getChildrenList();
 
-			try {
+			for (ConfigurationNode configItem : configData) {
 
-				configData = config.getNode(rootConfigNode).getList(new TypeToken<Map>() { /* EMPTY */ });
+				String regex = configItem.getNode("regex").getString();
+				boolean ignoreFormatCodes = configItem.getNode("ignore_format_codes").getBoolean();
+				String channel = configItem.getNode("channel").getString();
 
-				for (Object configItem : configData) {
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] REGEX = " + regex);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] IGNORE_FORMAT_CODES = " + ignoreFormatCodes);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSpongeConfig] CHANNEL = " + channel);
 
-					Map dictionary = (Map) configItem;
-
-					String regex = String.valueOf(dictionary.get("regex"));
-					boolean ignoreFormatCodes = (Boolean)(dictionary.get("ignore_format_codes"));
-					String channel = String.valueOf(dictionary.get("channel"));
-
-					RegexChannelForcer regexChannelForcer = new RegexChannelForcer(regex, ignoreFormatCodes, channel);
-					regexChannelForcers.add(regexChannelForcer);
-
-				}
-
-			} catch (ObjectMappingException e) {
-
-				/* EMPTY */
-				MultiChatLocal.getInstance().getConsoleLogger().debug("Could not load RegexChannelForcers...");
+				RegexChannelForcer regexChannelForcer = new RegexChannelForcer(regex, ignoreFormatCodes, channel);
+				regexChannelForcers.add(regexChannelForcer);
 
 			}
 

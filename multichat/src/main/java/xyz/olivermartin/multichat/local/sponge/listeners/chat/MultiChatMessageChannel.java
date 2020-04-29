@@ -1,13 +1,16 @@
 package xyz.olivermartin.multichat.local.sponge.listeners.chat;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
@@ -23,7 +26,9 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 		return this.channel;
 	}
 
-	public MultiChatMessageChannel(MultiChatLocalPlayer sender) {
+	public MultiChatMessageChannel(MultiChatLocalPlayer sender, Collection<MessageReceiver> originalRecipients) {
+
+		Set<MessageReceiver> recipients = new HashSet<MessageReceiver>(originalRecipients);
 
 		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
 
@@ -31,13 +36,13 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 
 		logger.debug("Before starting, this channel has " + getMembers().size() + " members!");
 
-		Set<Player> onlinePlayers = new HashSet<Player>(Sponge.getServer().getOnlinePlayers());
+		//Set<Player> onlinePlayers = new HashSet<Player>(Sponge.getServer().getOnlinePlayers());
 
-		logger.debug("How many online players? ... " + onlinePlayers.size());
+		logger.debug("How many recipients already? ... " + recipients.size());
 
-		Iterator<Player> it = onlinePlayers.iterator();
+		Iterator<MessageReceiver> it = recipients.iterator();
 
-		this.channel = MultiChatLocal.getInstance().getChatManager().pollChatChannel(sender); // TODO Should this be poll?
+		this.channel = MultiChatLocal.getInstance().getChatManager().peekAtChatChannel(sender);
 		Optional<LocalPseudoChannel> opChannelObject = MultiChatLocal.getInstance().getChatManager().getChannelObject(channel);
 
 		logger.debug("Channel is : " + channel);
@@ -51,38 +56,47 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 
 			while (it.hasNext()) {
 
-				Player p = it.next();
+				MessageReceiver p = it.next();
 
-				logger.debug("...Analysing player : " + p.getName());
+				if (p instanceof Player) {
 
-				ignoredPlayers = MultiChatLocal.getInstance().getDataStore().ignoreMap.get(p.getUniqueId());
+					Player p2 = (Player)p;
 
-				if (ignoredPlayers == null) {
-					logger.debug("...Their ignore map was null. They don't ignore anyone");
-				} else {
-					logger.debug("...They ignore " + ignoredPlayers.size() + " players.");
-				}
+					Map<UUID, Set<UUID>> ignoreMap = MultiChatLocal.getInstance().getDataStore().getIgnoreMap();
+					synchronized (ignoreMap) {
+						ignoredPlayers = ignoreMap.get(p2.getUniqueId());
 
-				if ( (channelObject.whitelistMembers && channelObject.members.contains(p.getUniqueId()))
-						|| (!channelObject.whitelistMembers && !channelObject.members.contains(p.getUniqueId()))) {
+						if (ignoredPlayers == null) {
+							logger.debug("...Their ignore map was null. They don't ignore anyone");
+						} else {
+							logger.debug("...They ignore " + ignoredPlayers.size() + " players.");
+						}
 
-					logger.debug("...They are part of this pseudochannel object!");
+						if ( (channelObject.whitelistMembers && channelObject.members.contains(p2.getUniqueId()))
+								|| (!channelObject.whitelistMembers && !channelObject.members.contains(p2.getUniqueId()))) {
 
-					if (ignoredPlayers != null) {
-						if (ignoredPlayers.contains(sender.getUniqueId())) {
-							logger.debug("...Do they ignore the sender (" + sender.getName() + ")? --> YES");
+							logger.debug("...They are part of this pseudochannel object!");
+
+							if (ignoredPlayers != null) {
+								if (ignoredPlayers.contains(sender.getUniqueId())) {
+									logger.debug("...Do they ignore the sender (" + sender.getName() + ")? --> YES");
+									it.remove();
+								}
+							}
+						} else {
 							it.remove();
 						}
+
 					}
-				} else {
-					it.remove();
+
 				}
+
 			}
 
 		}
 
-		for (Player p : onlinePlayers) {
-			logger.debug("...Adding player " + p.getName() + " to recipients list...");
+		for (MessageReceiver p : recipients) {
+			//logger.debug("...Adding player " + p.getName() + " to recipients list...");
 			addMember(p);
 		}
 		addMember(Sponge.getServer().getConsole());
