@@ -6,7 +6,6 @@ import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.DatabaseMode;
 import xyz.olivermartin.multichat.common.database.SimpleConnection;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
-import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
 public class LocalDatabaseSetupManager {
 
@@ -14,16 +13,9 @@ public class LocalDatabaseSetupManager {
 	private boolean useMySQL;
 	private boolean connected;
 
-	public LocalDatabaseSetupManager(MultiChatLocalPlatform platform, boolean useMySQL) {
-
-		if (platform == MultiChatLocalPlatform.SPIGOT) {
-			databaseName = "multichatspigot.db";
-		} else {
-			databaseName = "multichatsponge.db";
-		}
+	public LocalDatabaseSetupManager(String databaseName, boolean useMySQL) {
 
 		this.useMySQL = useMySQL;
-
 		connected = setupDatabase();
 
 	}

@@ -113,10 +113,11 @@ public class MultiChatLocalSpongePlugin {
 
 		if (configMan.getLocalConfig().isNicknameSQL()) {
 
-			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(platform, configMan.getLocalConfig().isMySQL());
+			String databaseName = "multichatlocal.db";
+			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(databaseName, configMan.getLocalConfig().isMySQL());
 
 			if (ldsm.isConnected()) {
-				nameManager = new LocalSQLNameManager("multichatlocal.db");
+				nameManager = new LocalSQLNameManager(databaseName);
 			} else {
 				consoleLogger.log("Could not connect to database! Using file based storage instead...");
 				nameManager = new LocalSpongeFileNameManager();
