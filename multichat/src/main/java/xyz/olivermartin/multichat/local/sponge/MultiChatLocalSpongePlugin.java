@@ -102,7 +102,7 @@ public class MultiChatLocalSpongePlugin {
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig(platform, "multichatsponge.yml", configDir);
+		configMan.registerLocalConfig(platform, "localconfig.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
@@ -139,7 +139,7 @@ public class MultiChatLocalSpongePlugin {
 		}
 
 		// Copy translations files...
-		fileSystemManager.createResource("multichatsponge_fr.yml", translationsDir);
+		fileSystemManager.createResource("localconfig_fr.yml", translationsDir);
 
 		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpongeMetaManager();

@@ -84,7 +84,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig(platform, "spigotconfig.yml", configDir);
+		configMan.registerLocalConfig(platform, "localconfig.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
@@ -121,7 +121,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		}
 
 		// Copy translations files...
-		fileSystemManager.createResource("spigotconfig_fr.yml", translationsDir);
+		fileSystemManager.createResource("localconfig_fr.yml", translationsDir);
 
 		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpigotMetaManager();
