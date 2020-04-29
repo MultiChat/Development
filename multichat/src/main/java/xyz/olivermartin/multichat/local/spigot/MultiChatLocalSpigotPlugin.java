@@ -59,7 +59,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerPlatform(platform);
 
 		// Register name
-		String pluginName = "MultiChatSpigot";
+		String pluginName = "multichat";
 		api.registerPluginName(pluginName);
 
 		// Register config directory
