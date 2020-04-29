@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.local.sponge.listeners.chat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -61,27 +62,31 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 
 					Player p2 = (Player)p;
 
-					ignoredPlayers = MultiChatLocal.getInstance().getDataStore().ignoreMap.get(p2.getUniqueId());
+					Map<UUID, Set<UUID>> ignoreMap = MultiChatLocal.getInstance().getDataStore().getIgnoreMap();
+					synchronized (ignoreMap) {
+						ignoredPlayers = ignoreMap.get(p2.getUniqueId());
 
-					if (ignoredPlayers == null) {
-						logger.debug("...Their ignore map was null. They don't ignore anyone");
-					} else {
-						logger.debug("...They ignore " + ignoredPlayers.size() + " players.");
-					}
-
-					if ( (channelObject.whitelistMembers && channelObject.members.contains(p2.getUniqueId()))
-							|| (!channelObject.whitelistMembers && !channelObject.members.contains(p2.getUniqueId()))) {
-
-						logger.debug("...They are part of this pseudochannel object!");
-
-						if (ignoredPlayers != null) {
-							if (ignoredPlayers.contains(sender.getUniqueId())) {
-								logger.debug("...Do they ignore the sender (" + sender.getName() + ")? --> YES");
-								it.remove();
-							}
+						if (ignoredPlayers == null) {
+							logger.debug("...Their ignore map was null. They don't ignore anyone");
+						} else {
+							logger.debug("...They ignore " + ignoredPlayers.size() + " players.");
 						}
-					} else {
-						it.remove();
+
+						if ( (channelObject.whitelistMembers && channelObject.members.contains(p2.getUniqueId()))
+								|| (!channelObject.whitelistMembers && !channelObject.members.contains(p2.getUniqueId()))) {
+
+							logger.debug("...They are part of this pseudochannel object!");
+
+							if (ignoredPlayers != null) {
+								if (ignoredPlayers.contains(sender.getUniqueId())) {
+									logger.debug("...Do they ignore the sender (" + sender.getName() + ")? --> YES");
+									it.remove();
+								}
+							}
+						} else {
+							it.remove();
+						}
+
 					}
 
 				}

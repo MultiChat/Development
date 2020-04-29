@@ -5,7 +5,7 @@
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.9-snapshot.20.4.27.1</version>
+	<version>1.9-snapshot.20.4.29</version>
 
 	<repositories>
 

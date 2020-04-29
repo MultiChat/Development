@@ -82,9 +82,9 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 		Player player = opPlayer.get();
 
 		// If MultiChat is setting the display name...
-		if (MultiChatLocal.getInstance().getDataStore().setDisplayName) {
+		if (MultiChatLocal.getInstance().getDataStore().isSetDisplayName()) {
 
-			String displayNameFormat = MultiChatLocal.getInstance().getDataStore().displayNameFormatLastVal;
+			String displayNameFormat = MultiChatLocal.getInstance().getDataStore().getDisplayNameFormatLastVal();
 
 			// TODO This stuff could be refactored as it is duplicated between Spigot and Sponge
 			displayNameFormat = displayNameFormat.replaceAll("%NICK%", getNick(uuid));

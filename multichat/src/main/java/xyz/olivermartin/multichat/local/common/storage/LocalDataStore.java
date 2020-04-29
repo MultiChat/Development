@@ -21,46 +21,172 @@ public class LocalDataStore {
 	/**
 	 * Should MultiChatLocal set the display name of players?
 	 */
-	public boolean setDisplayName = false;
+	private boolean setDisplayName = false;
 
 	/**
 	 * The format for MultiChatLocal to use if it is setting display names.
 	 */
-	public String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
+	private String displayNameFormatLastVal = "%PREFIX%%NICK%%SUFFIX%";
 
 	/**
 	 * Is global chat enabled for this server?
 	 */
-	public boolean globalChatServer = false;
+	private boolean globalChatServer = false;
 
 	/**
 	 * The format to be used for Global chat received from the proxy
 	 */
-	public String globalChatFormat = "&f%DISPLAYNAME%&f: ";
+	private String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
 	/**
 	 * Chat Queues to handle the local global hack
 	 */
-	public Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
+	private Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 
 	/**
 	 * What channel is each player speaking in?
 	 */
-	public Map<UUID, String> playerChannels = new HashMap<UUID, String>();
+	private Map<UUID, String> playerChannels = new HashMap<UUID, String>();
 
 	/**
 	 * Which players can chat using colours
 	 */
-	public Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
+	private Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	/**
 	 * List of channels with their members
 	 */
-	public Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
+	private Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
 
 	/**
 	 * Map of who players ignore
 	 */
-	public Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+	private Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+
+	/**
+	 * @return the setDisplayName
+	 */
+	public synchronized boolean isSetDisplayName() {
+		return setDisplayName;
+	}
+
+	/**
+	 * @return the displayNameFormatLastVal
+	 */
+	public synchronized String getDisplayNameFormatLastVal() {
+		return displayNameFormatLastVal;
+	}
+
+	/**
+	 * @return the globalChatServer
+	 */
+	public synchronized boolean isGlobalChatServer() {
+		return globalChatServer;
+	}
+
+	/**
+	 * @return the globalChatFormat
+	 */
+	public synchronized String getGlobalChatFormat() {
+		return globalChatFormat;
+	}
+
+	/**
+	 * @return the chatQueues
+	 */
+	public synchronized Map<String, Queue<String>> getChatQueues() {
+		return chatQueues;
+	}
+
+	/**
+	 * @return the playerChannels
+	 */
+	public synchronized Map<UUID, String> getPlayerChannels() {
+		return playerChannels;
+	}
+
+	/**
+	 * @return the colourMap
+	 */
+	public synchronized Map<UUID, Boolean> getColourMap() {
+		return colourMap;
+	}
+
+	/**
+	 * @return the channelObjects
+	 */
+	public synchronized Map<String, LocalPseudoChannel> getChannelObjects() {
+		return channelObjects;
+	}
+
+	/**
+	 * @return the ignoreMap
+	 */
+	public synchronized Map<UUID, Set<UUID>> getIgnoreMap() {
+		return ignoreMap;
+	}
+
+	/**
+	 * @param setDisplayName the setDisplayName to set
+	 */
+	public synchronized void setSetDisplayName(boolean setDisplayName) {
+		this.setDisplayName = setDisplayName;
+	}
+
+	/**
+	 * @param displayNameFormatLastVal the displayNameFormatLastVal to set
+	 */
+	public synchronized void setDisplayNameFormatLastVal(String displayNameFormatLastVal) {
+		this.displayNameFormatLastVal = displayNameFormatLastVal;
+	}
+
+	/**
+	 * @param globalChatServer the globalChatServer to set
+	 */
+	public synchronized void setGlobalChatServer(boolean globalChatServer) {
+		this.globalChatServer = globalChatServer;
+	}
+
+	/**
+	 * @param globalChatFormat the globalChatFormat to set
+	 */
+	public synchronized void setGlobalChatFormat(String globalChatFormat) {
+		this.globalChatFormat = globalChatFormat;
+	}
+
+	/**
+	 * @param chatQueues the chatQueues to set
+	 */
+	public synchronized void setChatQueues(Map<String, Queue<String>> chatQueues) {
+		this.chatQueues = chatQueues;
+	}
+
+	/**
+	 * @param playerChannels the playerChannels to set
+	 */
+	public synchronized void setPlayerChannels(Map<UUID, String> playerChannels) {
+		this.playerChannels = playerChannels;
+	}
+
+	/**
+	 * @param colourMap the colourMap to set
+	 */
+	public synchronized void setColourMap(Map<UUID, Boolean> colourMap) {
+		this.colourMap = colourMap;
+	}
+
+	/**
+	 * @param channelObjects the channelObjects to set
+	 */
+	public synchronized void setChannelObjects(Map<String, LocalPseudoChannel> channelObjects) {
+		this.channelObjects = channelObjects;
+	}
+
+	/**
+	 * @param ignoreMap the ignoreMap to set
+	 */
+	public synchronized void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
+		this.ignoreMap = ignoreMap;
+	}
 
 }

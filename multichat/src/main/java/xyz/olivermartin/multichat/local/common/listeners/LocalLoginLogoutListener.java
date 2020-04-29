@@ -1,5 +1,8 @@
 package xyz.olivermartin.multichat.local.common.listeners;
 
+import java.util.Map;
+import java.util.UUID;
+
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 
@@ -11,12 +14,18 @@ public abstract class LocalLoginLogoutListener {
 
 		MultiChatLocal.getInstance().getNameManager().registerPlayer(player.getUniqueId(), player.getName());
 
-		if (!MultiChatLocal.getInstance().getDataStore().playerChannels.containsKey(player.getUniqueId())) {
-			MultiChatLocal.getInstance().getDataStore().playerChannels.put(player.getUniqueId(), "global");
+		Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
+		synchronized (playerChannels) {
+			if (!playerChannels.containsKey(player.getUniqueId())) {
+				playerChannels.put(player.getUniqueId(), "global");
+			}
 		}
 
-		if (!MultiChatLocal.getInstance().getDataStore().colourMap.containsKey(player.getUniqueId())) {
-			MultiChatLocal.getInstance().getDataStore().colourMap.put(player.getUniqueId(), false);
+		Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
+		synchronized (colourMap) {
+			if (!colourMap.containsKey(player.getUniqueId())) {
+				colourMap.put(player.getUniqueId(), false);
+			}
 		}
 
 		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(player.getUniqueId());
@@ -26,8 +35,16 @@ public abstract class LocalLoginLogoutListener {
 	protected void handleLogoutEvent(MultiChatLocalPlayer player) {
 
 		MultiChatLocal.getInstance().getNameManager().unregisterPlayer(player.getUniqueId());
-		MultiChatLocal.getInstance().getDataStore().playerChannels.remove(player.getUniqueId());
-		MultiChatLocal.getInstance().getDataStore().colourMap.remove(player.getUniqueId());
+
+		Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
+		synchronized (playerChannels) {
+			playerChannels.remove(player.getUniqueId());
+		}
+
+		Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
+		synchronized (colourMap) {
+			colourMap.remove(player.getUniqueId());
+		}
 
 	}
 
