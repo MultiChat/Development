@@ -87,6 +87,10 @@ public class ChatModeManager {
 
 	public void loadData(Map<UUID, Boolean> data) {
 		this.globalPlayers = data;
+		if (this.globalPlayers == null) {
+			DebugManager.log("The global players data loaded was null... So made a new map!");
+			globalPlayers = new HashMap<UUID, Boolean>();
+		}
 	}
 
 	public boolean isGlobal(UUID uuid) {

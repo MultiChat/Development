@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.local.spigot.listeners.chat;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -76,26 +77,30 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 
 			Player p = it.next();
 
-			ignoredPlayers = MultiChatLocal.getInstance().getDataStore().ignoreMap.get(p.getUniqueId());
+			Map<UUID, Set<UUID>> ignoreMap = MultiChatLocal.getInstance().getDataStore().getIgnoreMap();
+			synchronized (ignoreMap) {
+				ignoredPlayers = ignoreMap.get(p.getUniqueId());
 
-			if ( (channel.whitelistMembers && channel.members.contains(p.getUniqueId())) || (!channel.whitelistMembers && !channel.members.contains(p.getUniqueId()))) {
+				if ( (channel.whitelistMembers && channel.members.contains(p.getUniqueId())) || (!channel.whitelistMembers && !channel.members.contains(p.getUniqueId()))) {
 
-				// Then this player is okay!
-				if (ignoredPlayers != null) {
+					// Then this player is okay!
+					if (ignoredPlayers != null) {
 
-					if (ignoredPlayers.contains(event.getPlayer().getUniqueId())) {
+						if (ignoredPlayers.contains(event.getPlayer().getUniqueId())) {
 
-						MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to ignore...");
-						it.remove();
+							MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to ignore...");
+							it.remove();
+
+						}
 
 					}
 
+				} else {
+
+					MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to not being a channel member");
+					it.remove();
+
 				}
-
-			} else {
-
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removed a recipient due to not being a channel member");
-				it.remove();
 
 			}
 		}

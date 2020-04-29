@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.local.spigot;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import xyz.olivermartin.multichat.common.config.ConfigStatus;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
+import xyz.olivermartin.multichat.local.common.config.RegexChannelForcer;
 
 public class LocalSpigotConfig extends LocalConfig {
 
@@ -62,6 +64,32 @@ public class LocalSpigotConfig extends LocalConfig {
 
 		}
 		return map;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	protected List<RegexChannelForcer> getRegexChannelForcers(String rootConfigNode) {
+
+		List<RegexChannelForcer> regexChannelForcers = new ArrayList<RegexChannelForcer>();
+		List configData = config.getList(rootConfigNode);
+
+		if (configData != null) {
+			for (Object configItem : configData) {
+
+				Map dictionary = (Map) configItem;
+
+				String regex = String.valueOf(dictionary.get("regex"));
+				boolean ignoreFormatCodes = (Boolean)(dictionary.get("ignore_format_codes"));
+				String channel = String.valueOf(dictionary.get("channel"));
+
+				RegexChannelForcer regexChannelForcer = new RegexChannelForcer(regex, ignoreFormatCodes, channel);
+				regexChannelForcers.add(regexChannelForcer);
+
+			}
+		}
+
+		return regexChannelForcers;
+
 	}
 
 }

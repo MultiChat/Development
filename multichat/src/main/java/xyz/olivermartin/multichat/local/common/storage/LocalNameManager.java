@@ -251,6 +251,24 @@ public abstract class LocalNameManager {
 
 	}
 
+	/*
+	 * Remove all colour / format codes from a string (using the special § char)
+	 */
+	public String stripAllFormattingCodesAndPreformattedText(String input) {
+
+		input = stripAllFormattingCodes(input);
+
+		char COLOR_CHAR = '§';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
+
+		if (input == null) {
+			return null;
+		}
+
+		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
+
+	}
+
 	/**
 	 * @param input
 	 * @return True if the input contains colour codes (e.g. '&a')

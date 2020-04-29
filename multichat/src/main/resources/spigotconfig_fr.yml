@@ -8,19 +8,21 @@
 
 ##################
 # NE PAS EDITER  #
-version: "1.8.2" #
+version: "1.9"   #
 ##################
 
 # French Translation by Nogapra - Thank you !
+# Channel Control translations by Metzg
 # Pour utiliser ce fichier, renommer en 'spigotconfig.yml'.
 
 #1. Global
 #2. Local
 #3. Placeholders MultiChat
 #4. Surnom MultiChat
+#5. Contrôle de canal
 
 # Specify the name of this server here for the %SERVER% placeholder
-server_name: "SERVER_NAME"
+server_name: "SPIGOT_SERVER"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -61,7 +63,6 @@ override_all_multichat_formatting: false
 # Définir ce paramètre sur true essaiera de prendre le contrôle malgré un plugin de formatage de chat récalcitrant.
 # Paramètre disponible : true ou false
 force_multichat_format: false
-
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -141,3 +142,64 @@ mysql_url: "" # Adresse IP ou web de la base de données et le port TCP (ex : "l
 mysql_database: "multichatspigot" # Nom de la base de données
 mysql_user: "" #Utilistateur base de données
 mysql_pass: "" #Mot de passe
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Contrôle de canal                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Cette section vous permet de rediriger de force un message vers un canal selon son format.
+# 
+# Par exemple, si vous avez un canal de ville Towny au format: "[TC] ...",
+# vous pouvez dire à MultiChat de garder ce message en local, même si le joueur est en mode global.
+# Ceci permet à MultiChat de supporter Towny et d'autres plugins sans avoir à dépendre d'eux directement.
+# 
+# Utilisez des expressions régulières (regex) pour pouvoir détecter un format de message.
+# Canaux possibles à l'heure actuelle : local, global, ou current (pour le canal actuel du joueur)
+#
+# L'ordre définit la priorité : en haut = plus important
+# Merci à metzg pour ces exemples...
+
+force_channel:
+  # Towny: garder le canal de ville (town/tc) local
+  - regex: '^&f\[&3TC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal de nation (/nc) local
+  - regex: '^&f\[&6NC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal admin (/a) local
+  - regex: '^&f\[&4ADMIN&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal modérateur (/m) local
+  - regex: '^&f\[&9MOD&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Essentials
+  #- regex: '^\[L\].*'
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^\[Shout\].*'
+  #  ignore_format_codes: true
+  #  channel: 'global'
+
+  # Un autre plugin...
+  #- regex: '^(.+) pense: (.+)'
+  #  ignore_format_codes: true
+  #  channel: 'current' # permet d'éviter de tester d'autres regexes moins prioritaires plutôt que de tout traiter jusqu'au comportement par défaut
+
+  #- regex: '^(.+) gifle (.+) avec une truite' 
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^(.+) gifle (.+) avec une grosse truite' 
+  #  ignore_format_codes: true
+  #  channel: 'global'

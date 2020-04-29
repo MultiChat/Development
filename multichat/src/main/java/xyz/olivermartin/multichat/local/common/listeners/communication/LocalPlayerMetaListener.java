@@ -31,8 +31,8 @@ public abstract class LocalPlayerMetaListener {
 
 			displayNameFormat = message.readUTF();
 
-			MultiChatLocal.getInstance().getDataStore().setDisplayName = setDisplayName;
-			MultiChatLocal.getInstance().getDataStore().displayNameFormatLastVal = displayNameFormat;
+			MultiChatLocal.getInstance().getDataStore().setSetDisplayName(setDisplayName);
+			MultiChatLocal.getInstance().getDataStore().setDisplayNameFormatLastVal(displayNameFormat);
 
 			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(player.getUniqueId());
 
@@ -40,9 +40,9 @@ public abstract class LocalPlayerMetaListener {
 				globalChat = true;
 			}
 
-			MultiChatLocal.getInstance().getDataStore().globalChatServer = globalChat;
+			MultiChatLocal.getInstance().getDataStore().setGlobalChatServer(globalChat);
 
-			MultiChatLocal.getInstance().getDataStore().globalChatFormat = message.readUTF();
+			MultiChatLocal.getInstance().getDataStore().setGlobalChatFormat(message.readUTF());
 
 			return true;
 

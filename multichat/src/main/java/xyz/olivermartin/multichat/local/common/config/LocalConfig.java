@@ -43,6 +43,8 @@ public abstract class LocalConfig {
 	private boolean nicknameSQL;
 	private boolean mySQL;
 
+	// CHANNEL CONTROL SETTINGS
+	private List<RegexChannelForcer> regexChannelForcers;
 
 	// FILE SETTINGS
 	private File configPath;
@@ -157,6 +159,9 @@ public abstract class LocalConfig {
 				getString("mysql_user",""),
 				getString("mysql_pass",""));
 
+		// CHANNEL CONTROL
+		regexChannelForcers = getRegexChannelForcers("force_channel");
+
 	}
 
 	protected abstract String getString(String configNode, String defaultValue);
@@ -168,6 +173,8 @@ public abstract class LocalConfig {
 	protected abstract List<String> getStringList(String configNode);
 
 	protected abstract Map<String,String> getPlaceholdersMap(String rootConfigNode);
+
+	protected abstract List<RegexChannelForcer> getRegexChannelForcers(String rootConfigNode);
 
 	/**
 	 * Reload this configuration file (and reload all the member attributes)
@@ -290,4 +297,12 @@ public abstract class LocalConfig {
 	public boolean isMySQL() {
 		return mySQL;
 	}
+
+	/**
+	 * @return the regex channel forcers
+	 */
+	public List<RegexChannelForcer> getRegexChannelForcers() {
+		return this.regexChannelForcers;
+	}
+
 }

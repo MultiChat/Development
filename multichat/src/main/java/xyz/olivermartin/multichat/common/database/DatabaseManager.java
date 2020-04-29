@@ -1,6 +1,8 @@
 package xyz.olivermartin.multichat.common.database;
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -27,12 +29,14 @@ public class DatabaseManager {
 	private String databaseUsernameMySQL;
 	private String databasePasswordMySQL;
 
+	private int defaultPoolSize = 10;
+
 	private DatabaseMode databaseMode = DatabaseMode.SQLite;
 
-	private Map<String, GenericDatabase> databases;
+	private Map<String, GenericPooledDatabase> databases;
 
 	private DatabaseManager() {
-		databases = new HashMap<String, GenericDatabase>();
+		databases = new HashMap<String, GenericPooledDatabase>();
 	}
 
 	////////////
@@ -42,41 +46,46 @@ public class DatabaseManager {
 		DatabaseManager.getInstance().setPathSQLite(new File("C:\\multichat\\db\\"));
 		DatabaseManager.getInstance().createDatabase("multichat.db");
 
-		Optional<GenericDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
+		Optional<GenericPooledDatabase> odb = DatabaseManager.getInstance().getDatabase("multichat.db");
 
 		if (odb.isPresent()) {
 
-			GenericDatabase db = odb.get();
+			GenericPooledDatabase db = odb.get();
 			UUID uuid1 = UUID.randomUUID();
 			UUID uuid2 = UUID.randomUUID();
 
+			SimpleConnection conn = null;
+
 			try {
-				db.connectToDatabase();
-				db.safeExecute("DROP TABLE IF EXISTS name_data;");
-				db.safeExecute("DROP TABLE IF EXISTS nick_data;");
 
-				db.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
-				db.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+				conn = db.getConnection();
 
-				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo410', 'revilo410');", uuid1.toString());
-				db.safeUpdate("INSERT INTO nick_data VALUES (?, '&3Revi', 'revi');", uuid1.toString());
-				db.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo510', 'revilo510');", uuid2.toString());
-				ResultSet results = db.safeQuery("SELECT * FROM name_data;");
+				//db.connectToDatabase();
+				conn.safeExecute("DROP TABLE IF EXISTS name_data;");
+				conn.safeExecute("DROP TABLE IF EXISTS nick_data;");
+
+				conn.safeUpdate("CREATE TABLE IF NOT EXISTS name_data(id VARCHAR(128), f_name VARCHAR(255), u_name VARCHAR(255), PRIMARY KEY (id));");
+				conn.safeUpdate("CREATE TABLE IF NOT EXISTS nick_data(id VARCHAR(128), u_nick VARCHAR(255), f_nick VARCHAR(255), PRIMARY KEY (id));");
+
+				conn.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo410', 'revilo410');", uuid1.toString());
+				conn.safeUpdate("INSERT INTO nick_data VALUES (?, '&3Revi', 'revi');", uuid1.toString());
+				conn.safeUpdate("INSERT INTO name_data VALUES (?, 'Revilo510', 'revilo510');", uuid2.toString());
+				ResultSet results = conn.safeQuery("SELECT * FROM name_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM nick_data;");
+				results = conn.safeQuery("SELECT * FROM nick_data;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
+				results = conn.safeQuery("SELECT * FROM name_data INNER JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 				}
 
-				results = db.safeQuery("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
+				results = conn.safeQuery("SELECT * FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id;");
 				while (results.next()) {
 					System.out.println(results.getString("id"));
 					if (results.getString("f_nick") == null) {
@@ -86,18 +95,23 @@ public class DatabaseManager {
 					}
 				}
 
-				results = db.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid1.toString());
+				results = conn.safeQuery("SELECT f_name, f_nick FROM name_data LEFT JOIN nick_data ON name_data.id = nick_data.id WHERE name_data.id = ?;", uuid1.toString());
 				while (results.next()) {
 					if (results.getString("f_nick") == null) {
 						System.out.println(results.getString("f_name"));
 					} else {
 						System.out.println(results.getString("f_nick"));
 					}
+
 				}
 
-				db.disconnectFromDatabase();
+				//db.disconnectFromDatabase();
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally {
+
+				if (conn != null) conn.closeAll();
+
 			}
 
 		}
@@ -174,6 +188,10 @@ public class DatabaseManager {
 
 	////////////
 
+	public void setDefaultPoolSize(int defaultPoolSize) {
+		this.defaultPoolSize = defaultPoolSize;
+	}
+
 	public void setPathSQLite(File path) {
 		this.databasePathSQLite = path;
 	}
@@ -194,7 +212,7 @@ public class DatabaseManager {
 		databaseMode = dbm;
 	}
 
-	public GenericDatabase createDatabase(String name) throws SQLException {
+	public GenericPooledDatabase createDatabase(String name) throws SQLException {
 		return createDatabase(name, name);
 	}
 
@@ -217,14 +235,14 @@ public class DatabaseManager {
 	 * Generic class to create a sqlite database
 	 * @throws SQLException 
 	 */
-	public GenericDatabase createDatabase(String databaseName, String fileName) throws SQLException {
+	public GenericPooledDatabase createDatabase(String databaseName, String fileName) throws SQLException {
 
 		if (!isReady()) throw new RuntimeException("MultiChat Database Manager Not Ready!");
 
 		switch (databaseMode) {
 		case MySQL:
 
-			databases.put(databaseName.toLowerCase(), new MySQLDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL));
+			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 
@@ -235,7 +253,7 @@ public class DatabaseManager {
 				databasePathSQLite.mkdirs();
 			}
 
-			databases.put(databaseName.toLowerCase(), new SQLiteDatabase(databasePathSQLite, fileName));
+			databases.put(databaseName.toLowerCase(), new SQLitePooledDatabase(databasePathSQLite, fileName, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 
@@ -243,7 +261,7 @@ public class DatabaseManager {
 
 	}
 
-	public Optional<GenericDatabase> getDatabase(String databaseName) {
+	public Optional<GenericPooledDatabase> getDatabase(String databaseName) {
 		if (databases.containsKey(databaseName.toLowerCase())) {
 			return Optional.of(databases.get(databaseName.toLowerCase()));
 		} else {
@@ -253,10 +271,24 @@ public class DatabaseManager {
 
 	public void removeDatabase(String databaseName) throws SQLException {
 		if (databases.containsKey(databaseName.toLowerCase())) {
-			GenericDatabase gdb = databases.get(databaseName.toLowerCase());
+			GenericPooledDatabase gdb = databases.get(databaseName.toLowerCase());
 			gdb.disconnectFromDatabase();
 			databases.remove(databaseName.toLowerCase());
 		}
+	}
+
+	public void close(Connection conn, PreparedStatement ps, ResultSet rs) {
+		try {
+
+			if (conn != null) conn.close();
+			if (ps != null) ps.close();
+			if (rs != null) rs.close();
+
+		} catch (SQLException e) { /* EMPTY */ }
+	}
+
+	public void close(Connection conn, PreparedStatement ps) {
+		close(conn, ps, null);
 	}
 
 }

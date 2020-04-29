@@ -139,6 +139,17 @@ public class Events implements Listener {
 
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
+		// New null pointer checks
+		if (player.getServer() == null) {
+			DebugManager.log("Player sending chat message has null server! Abandoning...");
+			return;
+		} else {
+			if (player.getServer().getInfo() == null) {
+				DebugManager.log("Player sending chat message has null server info! Abandoning...");
+				return;
+			}
+		}
+
 		// If player is bypassing MultiChat
 		if (mcbPlayers.contains(player.getUniqueId())) {
 			return;
@@ -319,11 +330,11 @@ public class Events implements Listener {
 
 			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+			/*if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 				if (player.getServer() != null) {
 					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 				}
-			}
+			}*/
 
 			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
 
