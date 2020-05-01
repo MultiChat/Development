@@ -16,6 +16,7 @@ public class LocalDatabaseSetupManager {
 	public LocalDatabaseSetupManager(String databaseName, boolean useMySQL) {
 
 		this.useMySQL = useMySQL;
+		this.databaseName = databaseName;
 		connected = setupDatabase();
 
 	}
