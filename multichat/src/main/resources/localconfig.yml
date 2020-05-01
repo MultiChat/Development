@@ -1,6 +1,6 @@
 ############################################################
 # +------------------------------------------------------+ #
-# |                   MultiChatSponge                    | #
+# |                    MultiChatLocal                    | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -11,8 +11,14 @@
 version: "1.9"   #
 ##################
 
+# 1. Global Chat Settings
+# 2. Local Chat Settings
+# 3. MultiChat Placeholders
+# 4. MultiChat Nicknames
+# 5. Channel Control (Support for Towny etc.)
+
 # Specify the name of this server here for the %SERVER% placeholder
-server_name: "SPONGE_SERVER"
+server_name: "UNNAMED_SERVER"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -38,7 +44,7 @@ override_global_format: false
 # Will display as [FORMAT] [MESSAGE]
 override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
 
-# If the setting below is set to true, then regardless of the settings above, MultiChat will NOT touch the chat format.
+# If the setting below is set to true, then regardless of the settings above, MultiChat will NOT set the chat format.
 # This means that if a plugin such as Towny manages the chat format locally, then this will be used instead.
 # MultiChat will still send the message to all the other servers.
 # 
@@ -93,6 +99,7 @@ multichat_placeholders:
 ############################################################
 
 # Players will be blocked from using any nicknames on this list!
+# Can override with permission: multichatlocal.nick.blacklist
 # Regular expressions can be used
 # (?i) is the regular expression term to ignore case
 nickname_blacklist:
@@ -167,12 +174,12 @@ force_channel:
 
   # Make Essentials local (range) chat stay local...
   #- regex: '^\[L\].*'
-  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  ignore_format_codes: true
   #  channel: 'local'
 
   # Make Essentials SHOUT go global
   #- regex: '^\[Shout\].*'
-  #  ignore_format_codes: true # Any format codes (&3 etc.) used in the chat format are filtered out before checking
+  #  ignore_format_codes: true
   #  channel: 'global'
 
   # Some other plugin

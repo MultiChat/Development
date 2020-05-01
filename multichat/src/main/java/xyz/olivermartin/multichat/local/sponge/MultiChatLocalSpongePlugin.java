@@ -107,7 +107,7 @@ public class MultiChatLocalSpongePlugin {
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig("multichatsponge.yml", configDir);
+		configMan.registerLocalConfig("localconfig.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
@@ -118,10 +118,11 @@ public class MultiChatLocalSpongePlugin {
 
 		if (configMan.getLocalConfig().isNicknameSQL()) {
 
-			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(platform, configMan.getLocalConfig().isMySQL());
+			String databaseName = "multichatlocal.db";
+			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(databaseName, configMan.getLocalConfig().isMySQL());
 
 			if (ldsm.isConnected()) {
-				nameManager = new LocalSQLNameManager("multichatsponge.db");
+				nameManager = new LocalSQLNameManager(databaseName);
 			} else {
 				consoleLogger.log("Could not connect to database! Using file based storage instead...");
 				nameManager = new LocalSpongeFileNameManager();
@@ -140,11 +141,11 @@ public class MultiChatLocalSpongePlugin {
 
 		// If we are using file based storage for name data, then register and load the nickname file into name manager
 		if (nameManager.getMode() == DataStoreMode.FILE) {
-			fileSystemManager.registerNicknameFile(platform, "multichat_namedata", configDir, (LocalFileNameManager)nameManager);
+			fileSystemManager.registerNicknameFile(platform, "namedata.dat", configDir, (LocalFileNameManager)nameManager);
 		}
 
 		// Copy translations files...
-		fileSystemManager.createResource("multichatsponge_fr.yml", translationsDir);
+		fileSystemManager.createResource("localconfig_fr.yml", translationsDir);
 
 		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpongeMetaManager();

@@ -60,7 +60,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerPlatform(platform);
 
 		// Register name
-		String pluginName = "MultiChatSpigot";
+		String pluginName = "multichat";
 		api.registerPluginName(pluginName);
 
 		// Register version
@@ -89,7 +89,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		api.registerConfigManager(configMan);
 
 		// Register config files
-		configMan.registerLocalConfig("spigotconfig.yml", configDir);
+		configMan.registerLocalConfig("localconfig.yml", configDir);
 
 		// Register data store
 		LocalDataStore dataStore = new LocalDataStore();
@@ -100,10 +100,11 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		if (configMan.getLocalConfig().isNicknameSQL()) {
 
-			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(platform, configMan.getLocalConfig().isMySQL());
+			String databaseName = "multichatlocal.db";
+			LocalDatabaseSetupManager ldsm = new LocalDatabaseSetupManager(databaseName, configMan.getLocalConfig().isMySQL());
 
 			if (ldsm.isConnected()) {
-				nameManager = new LocalSQLNameManager("multichatspigot.db");
+				nameManager = new LocalSQLNameManager(databaseName);
 			} else {
 				consoleLogger.log("Could not connect to database! Using file based storage instead...");
 				nameManager = new LocalSpigotFileNameManager();
@@ -126,7 +127,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		}
 
 		// Copy translations files...
-		fileSystemManager.createResource("spigotconfig_fr.yml", translationsDir);
+		fileSystemManager.createResource("localconfig_fr.yml", translationsDir);
 
 		// Register meta manager
 		LocalMetaManager metaManager = new LocalSpigotMetaManager();
