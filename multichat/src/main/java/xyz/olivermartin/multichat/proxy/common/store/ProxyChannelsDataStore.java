@@ -10,6 +10,8 @@ public interface ProxyChannelsDataStore extends ProxyDataStore {
 
 	public void setCurrentChannel(UUID uuid, String id);
 
+
+
 	public Set<UUID> getHiddenViewers(String id);
 
 	public boolean hasHiddenChannel(UUID uuid, String channelId);
@@ -17,5 +19,15 @@ public interface ProxyChannelsDataStore extends ProxyDataStore {
 	public void hideChannel(UUID uuid, String id);
 
 	public void showChannel(UUID uuid, String id);
+
+
+
+	public void addToJoinedChannelList(UUID uuid, String id);
+
+	public void removeFromJoinedChannelList(UUID uuid, String id);
+
+	public Set<UUID> getJoinedChannelList(String id);
+
+	public boolean isInJoinedChannelList(UUID uuid, String id);
 
 }

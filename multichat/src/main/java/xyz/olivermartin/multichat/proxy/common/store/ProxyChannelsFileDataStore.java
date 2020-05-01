@@ -22,6 +22,9 @@ public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataSt
 	// MAP CHANNEL ID TO LIST OF PLAYERS WHO HAVE HIDDEN IT
 	private Map<String, Set<UUID>> hiddenChannels;
 
+	// MAP JOINABLE CHANNEL ID TO LIST OF PLAYERS IN WHITELIST / BLACKLIST
+	private Map<String, Set<UUID>> joinedChannels;
+
 	@Override
 	public Optional<String> getCurrentChannel(UUID uuid) {
 		if (currentChannels.containsKey(uuid)) return Optional.of(currentChannels.get(uuid));
@@ -106,6 +109,57 @@ public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataSt
 	 */
 	protected void setHiddenChannels(Map<String, Set<UUID>> hiddenChannels) {
 		this.hiddenChannels = hiddenChannels;
+	}
+
+	@Override
+	public void addToJoinedChannelList(UUID uuid, String id) {
+
+		Set<UUID> uuids;
+
+		if (this.joinedChannels.containsKey(id.toLowerCase())) {
+			uuids = joinedChannels.get(id.toLowerCase());
+		} else {
+			uuids = new HashSet<UUID>();
+		}
+
+		uuids.add(uuid);
+		this.joinedChannels.put(id.toLowerCase(), uuids);
+	}
+
+	@Override
+	public void removeFromJoinedChannelList(UUID uuid, String id) {
+
+		Set<UUID> uuids;
+
+		if (this.joinedChannels.containsKey(id.toLowerCase())) {
+			uuids = joinedChannels.get(id.toLowerCase());
+		} else {
+			return;
+		}
+
+		uuids.remove(uuid);
+		this.joinedChannels.put(id.toLowerCase(), uuids);
+
+	}
+
+	@Override
+	public Set<UUID> getJoinedChannelList(String id) {
+		if (joinedChannels.containsKey(id.toLowerCase())) return joinedChannels.get(id.toLowerCase());
+		return Collections.emptySet();
+	}
+
+	@Override
+	public boolean isInJoinedChannelList(UUID uuid, String id) {
+
+		Set<UUID> uuids;
+
+		if (this.joinedChannels.containsKey(id.toLowerCase())) {
+			uuids = joinedChannels.get(id.toLowerCase());
+		} else {
+			return false;
+		}
+
+		return uuids.contains(uuid);
 	}
 
 }
