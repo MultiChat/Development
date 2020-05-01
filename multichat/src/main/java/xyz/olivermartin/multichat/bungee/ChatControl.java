@@ -58,6 +58,8 @@ public class ChatControl {
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 		boolean cancel = false;
 
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(playerName);
+
 		if (config.contains("apply_rules_to." + chatType)) {
 			if (config.getBoolean("apply_rules_to." + chatType)) {
 
@@ -66,6 +68,19 @@ public class ChatControl {
 				if (rules != null) {
 					for (Object rule : rules) {
 						Map dictionary = (Map) rule;
+
+						if (pp != null) {
+							if (dictionary.containsKey("permission")) {
+								String permission = String.valueOf(dictionary.get("permission"));
+								if (permission.startsWith("!")) {
+									permission = permission.substring(1);
+									if (pp.hasPermission(permission)) continue;
+								} else {
+									if (!pp.hasPermission(permission)) continue;
+								}
+							}
+						}
+
 						input = input.replaceAll(String.valueOf( dictionary.get("look_for")), String.valueOf(dictionary.get("replace_with") ));
 					}
 				}
@@ -83,6 +98,18 @@ public class ChatControl {
 						Map dictionary = (Map) action;
 
 						if (input.matches(String.valueOf(dictionary.get("look_for")))) {
+
+							if (pp != null) {
+								if (dictionary.containsKey("permission")) {
+									String permission = String.valueOf(dictionary.get("permission"));
+									if (permission.startsWith("!")) {
+										permission = permission.substring(1);
+										if (pp.hasPermission(permission)) continue;
+									} else {
+										if (!pp.hasPermission(permission)) continue;
+									}
+								}
+							}
 
 							if ((Boolean) dictionary.get("cancel")) {
 								cancel = true;
