@@ -197,6 +197,7 @@ ignorecommand:
 # Si la valeur est true, alors seuls les joueurs avec la permission  Multichat.chat.Link seront en mesure d’envoyer des liens.
 # Paramétrage disponible : true ou false
 link_control: false
+link_regex: '((https|http):\/\/)?(www\.)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.)+[a-zA-Z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)'
 
 # Remplacer les liens / URL dans les message par :
 link_removal_message: "[Lien WEB supprimé]"
