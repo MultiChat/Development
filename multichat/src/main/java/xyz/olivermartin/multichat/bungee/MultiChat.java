@@ -317,6 +317,9 @@ public class MultiChat extends Plugin implements Listener {
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
 				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+				if (chatcontrolYML.contains("link_regex")) {
+					ChatControl.linkRegex = chatcontrolYML.getString("link_regex");
+				}
 			}
 
 			if (configYML.contains("privacy_settings")) {

@@ -6,6 +6,7 @@ MultiChat in general only supports the latest version of the plugin. However, we
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.9     | :white_check_mark: |
 | 1.8.1   | :white_check_mark: |
 | 1.8     | :x:                |
 | 1.7.5   | :white_check_mark: |

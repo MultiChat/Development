@@ -122,6 +122,9 @@ public class MultiChatCommand extends Command {
 					if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_control")) {
 						ChatControl.controlLinks = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getBoolean("link_control");
 						ChatControl.linkMessage = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_removal_message");
+						if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_regex")) {
+							ChatControl.linkRegex = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_regex");
+						}
 					}
 
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("privacy_settings")) {
