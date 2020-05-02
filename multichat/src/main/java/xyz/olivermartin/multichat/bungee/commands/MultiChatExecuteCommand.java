@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.regex.PatternSyntaxException;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -65,27 +67,35 @@ public class MultiChatExecuteCommand extends Command {
 					message = message + arg + " ";
 				}
 			}
-			
+
 			message = message.trim();
 
-			for (ServerInfo s : ProxyServer.getInstance().getServers().values()) {
+			try {
 
-				if (s.getName().matches(server)) {
+				for (ServerInfo s : ProxyServer.getInstance().getServers().values()) {
 
-					if (playerFlag) {
-						for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-							if (p.getName().matches(player)) {
-								BungeeComm.sendPlayerCommandMessage(message, p.getName(), s);
+					if (s.getName().matches(server)) {
+
+						if (playerFlag) {
+							for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+								if (p.getName().matches(player)) {
+									BungeeComm.sendPlayerCommandMessage(message, p.getName(), s);
+								}
 							}
+						} else {
+							BungeeComm.sendCommandMessage(message, s);
 						}
-					} else {
-						BungeeComm.sendCommandMessage(message, s);
 					}
+
 				}
 
-			}
+				MessageManager.sendMessage(sender, "command_execute_sent");
 
-			MessageManager.sendMessage(sender, "command_execute_sent");
+			} catch (PatternSyntaxException e) {
+
+				MessageManager.sendMessage(sender, "command_execute_regex");
+
+			}
 
 		}
 	}

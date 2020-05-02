@@ -37,11 +37,13 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.8.1";
+	public static final String LATEST_VERSION = "1.9";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.8.2",
+			"1.8.1",
 			"1.8",
 			"1.7.5",
 			"1.7.4",
@@ -315,6 +317,9 @@ public class MultiChat extends Plugin implements Listener {
 			if (chatcontrolYML.contains("link_control")) {
 				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
 				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
+				if (chatcontrolYML.contains("link_regex")) {
+					ChatControl.linkRegex = chatcontrolYML.getString("link_regex");
+				}
 			}
 
 			if (configYML.contains("privacy_settings")) {

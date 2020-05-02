@@ -25,8 +25,9 @@ public class ChatControl {
 	private static Set<UUID> mutedPlayers;
 	private static Map<UUID, Set<UUID>> ignoreMap;
 	private static Map<UUID, PlayerSpamInfo> spamMap;
-	
+
 	public static boolean controlLinks = false;
+	public static String linkRegex = "((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)";
 	public static String linkMessage = "[LINK REMOVED]";
 
 	public static Set<UUID> getMutedPlayers() {
@@ -57,6 +58,8 @@ public class ChatControl {
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 		boolean cancel = false;
 
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(playerName);
+
 		if (config.contains("apply_rules_to." + chatType)) {
 			if (config.getBoolean("apply_rules_to." + chatType)) {
 
@@ -65,6 +68,19 @@ public class ChatControl {
 				if (rules != null) {
 					for (Object rule : rules) {
 						Map dictionary = (Map) rule;
+
+						if (pp != null) {
+							if (dictionary.containsKey("permission")) {
+								String permission = String.valueOf(dictionary.get("permission"));
+								if (permission.startsWith("!")) {
+									permission = permission.substring(1);
+									if (pp.hasPermission(permission)) continue;
+								} else {
+									if (!pp.hasPermission(permission)) continue;
+								}
+							}
+						}
+
 						input = input.replaceAll(String.valueOf( dictionary.get("look_for")), String.valueOf(dictionary.get("replace_with") ));
 					}
 				}
@@ -83,6 +99,18 @@ public class ChatControl {
 
 						if (input.matches(String.valueOf(dictionary.get("look_for")))) {
 
+							if (pp != null) {
+								if (dictionary.containsKey("permission")) {
+									String permission = String.valueOf(dictionary.get("permission"));
+									if (permission.startsWith("!")) {
+										permission = permission.substring(1);
+										if (pp.hasPermission(permission)) continue;
+									} else {
+										if (!pp.hasPermission(permission)) continue;
+									}
+								}
+							}
+
 							if ((Boolean) dictionary.get("cancel")) {
 								cancel = true;
 							}
@@ -95,7 +123,6 @@ public class ChatControl {
 							} else {
 								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName)); 
 							}
-
 
 						}
 
@@ -283,10 +310,11 @@ public class ChatControl {
 		}
 
 	}
-	
+
 	public static String replaceLinks(String message) {
 		if (!controlLinks) return message;
-		return message.replaceAll("((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", linkMessage);
+		return message.replaceAll(linkRegex, linkMessage);
+		//return message.replaceAll("((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", linkMessage);
 	}
 
 	public static void spamPardonPlayer(UUID uuid) {
@@ -298,23 +326,23 @@ public class ChatControl {
 	 * @return true if the player is spamming and the message should be blocked
 	 */
 	public static boolean handleSpam(ProxiedPlayer player, String message, String chatType) {
-		
+
 		DebugManager.log(player.getName() + " - checking for spam...");
 
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-		
+
 		if (player.hasPermission("multichat.spam.bypass")) return false;
-		
+
 		DebugManager.log(player.getName() + " - does not have bypass perm...");
 
 		if (!config.getBoolean("anti_spam")) return false;
-		
+
 		DebugManager.log(player.getName() + " - anti spam IS enabled...");
 
 		if (!config.contains("apply_anti_spam_to." + chatType)) return false;
 
 		if (!config.getBoolean("apply_anti_spam_to." + chatType)) return false;
-		
+
 		DebugManager.log(player.getName() + " - anti spam IS enabled for " + chatType + "...");
 
 		if (!spamMap.containsKey(player.getUniqueId())) spamMap.put(player.getUniqueId(), new PlayerSpamInfo());
@@ -324,21 +352,21 @@ public class ChatControl {
 		boolean spam = spamInfo.checkSpam(message);
 
 		if (spam) {
-			
+
 			DebugManager.log(player.getName() + " - PLAYER IS SPAMMING!");
 
 			MessageManager.sendSpecialMessage(player, "anti_spam_cooldown", String.valueOf(spamInfo.getCooldownSeconds()));
-			
+
 			DebugManager.log(player.getName() + " - sent cooldown message to player...");
 
 			if (spamInfo.getSpamTriggerCount() >= config.getInt("anti_spam_trigger")) {
-				
+
 				DebugManager.log(player.getName() + " - they have set off the trigger...");
 
 				spamInfo.resetSpamTriggerCount();
 
 				if (config.getBoolean("anti_spam_action")) {
-					
+
 					DebugManager.log(player.getName() + " - trigger IS enabled...");
 
 					if (config.getBoolean("anti_spam_spigot")) {
@@ -353,7 +381,7 @@ public class ChatControl {
 			}
 
 		}
-		
+
 		DebugManager.log(player.getName() + " - returning " + spam);
 
 		return spam;

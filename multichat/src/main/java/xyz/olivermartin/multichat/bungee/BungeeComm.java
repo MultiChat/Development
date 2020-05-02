@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.PatternSyntaxException;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -166,9 +167,6 @@ public class BungeeComm implements Listener {
 			oout.writeBoolean(channelObject.isWhitelistMembers());
 			oout.writeObject(channelObject.getMembers());
 
-
-
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -199,6 +197,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:chat")) {
 
+			ev.setCancelled(true);
+
 			DebugManager.log("{multichat:chat} Got a plugin message");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
@@ -221,7 +221,7 @@ public class BungeeComm implements Listener {
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) {
-					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message...");
+					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message... (Is IP-Forwarding on?)");
 					return;
 				}
 
@@ -245,6 +245,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:nick")) {
+
+			ev.setCancelled(true);
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -284,6 +286,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:prefix")) {
 
+			ev.setCancelled(true);
+
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
 
@@ -322,6 +326,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:suffix")) {
 
+			ev.setCancelled(true);
+
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
 
@@ -359,6 +365,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:dn")) {
+
+			ev.setCancelled(true);
 
 			DebugManager.log("[multichat:dn] Got an incoming channel message!");
 
@@ -399,6 +407,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:world")) {
+
+			ev.setCancelled(true);
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -444,6 +454,8 @@ public class BungeeComm implements Listener {
 
 		if (ev.getTag().equals("multichat:pxe")) {
 
+			ev.setCancelled(true);
+
 			DebugManager.log("[multichat:pxe] Got an incoming pexecute message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
@@ -462,6 +474,8 @@ public class BungeeComm implements Listener {
 		}
 
 		if (ev.getTag().equals("multichat:ppxe")) {
+
+			ev.setCancelled(true);
 
 			DebugManager.log("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
 
@@ -488,6 +502,8 @@ public class BungeeComm implements Listener {
 
 			} catch (IOException e) {
 				e.printStackTrace();
+			} catch (PatternSyntaxException e2) {
+				MessageManager.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
 			}
 
 		}

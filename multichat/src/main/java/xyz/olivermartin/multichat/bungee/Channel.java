@@ -86,7 +86,7 @@ public class Channel {
 			return !this.members.contains(player);
 		}
 	}
-	
+
 	public void removeMember(UUID player) {
 		this.members.remove(player);
 	}
@@ -132,13 +132,11 @@ public class Channel {
 	}
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format) {
-		
+
 		DebugManager.log("CHANNEL #" + getName() + ": Got a message for the channel");
 		DebugManager.log("CHANNEL #" + getName() + ": SENDER = " + sender.getName());
 		DebugManager.log("CHANNEL #" + getName() + ": MESSAGE = " + message);
 		DebugManager.log("CHANNEL #" + getName() + ": FORMAT = " + format);
-
-		// Set<String> players = new HashSet<String>();
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
@@ -146,59 +144,32 @@ public class Channel {
 
 				synchronized (receiver) {
 
-					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-							//TODO hiding & showing channels
-							/*if ( (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())
-									&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(!ChatModeManager.getInstance().isGlobal(receiver.getUniqueId())
-											&& sender.getServer().getInfo().getName().equals(receiver.getServer().getInfo().getName())) ||
-									(ChatModeManager.getInstance().isGlobal(sender.getUniqueId()) && ChatModeManager.getInstance().isGlobal(receiver.getUniqueId()))) {*/
+					if (sender.getServer() != null && receiver.getServer() != null) {
 
-							if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-								if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-									receiver.sendMessage(buildFormat(sender,receiver,format,message));
+						if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
+							if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
+
+								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+										receiver.sendMessage(buildFormat(sender,receiver,format,message));
+									} else {
+										// If they are on the same server, this message will already have been displayed locally.
+									}
 								} else {
-									// players.add(receiver.getName());
+									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 								}
-							} else {
-								ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+
 							}
 
-							//}
 						}
 
 					}
 
 				}
 
-			} else {
-				
-				DebugManager.log("NULL POINTER WAS DETECTED CHECKS!");
-				DebugManager.log("< START >");
-				DebugManager.log(sender != null ? sender.getName() : "SENDER NULL");
-				DebugManager.log(receiver != null ? receiver.getUniqueId().toString() : "RECEIVER NULL");
-				DebugManager.log("< / END >");
-				
 			}
-		}
 
-		/*String playerString;
-		if (local) {
-			playerString = playerList;
-		} else {
-			playerString = MultiChatUtil.getStringFromCollection(players);
 		}
-
-		String newFormat = buildSpigotFormat(sender,format,message);
-		BungeeComm.sendChatMessage(
-				sender.getName(),
-				newFormat,
-				message, 
-				(sender.hasPermission("multichat.chat.color") || sender.hasPermission("multichat.chat.colour")),
-				playerString,
-				sender.getServer().getInfo()
-				);*/
 
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
@@ -210,13 +181,16 @@ public class Channel {
 	public void sendMessage(String message, CommandSender sender) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-			if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-				if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
-					//TODO hiding & showing streams
+			if (receiver != null && sender != null) {
+				if (receiver.getServer() != null) {
+					if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
+						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
+							//TODO hiding & showing streams
 
-					receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+							receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
 
-
+						}
+					}
 				}
 			}
 		}
@@ -344,8 +318,8 @@ public class Channel {
 		newFormat = newFormat.replace("%WORLD%", world);
 
 
-		newFormat = newFormat.replace("%MODE%", "Global");
-		newFormat = newFormat.replace("%M%", "G");
+		/*newFormat = newFormat.replace("%MODE%", "Global");
+		newFormat = newFormat.replace("%M%", "G");*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -379,7 +353,7 @@ public class Channel {
 		newFormat = newFormat.replace("%SERVERT%", "CONSOLE");
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
+		/*if (!ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Local");
 			newFormat = newFormat.replace("%M%", "L");
 		}
@@ -387,7 +361,7 @@ public class Channel {
 		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}
+		}*/
 
 		newFormat = newFormat + "%MESSAGE%";
 
@@ -418,8 +392,8 @@ public class Channel {
 		newFormat = newFormat.replace("%WORLD%", world);
 		newFormat = newFormat.replace("%WORLDT%", "CONSOLE");
 
-		newFormat = newFormat.replace("%MODE%", "Global");
-		newFormat = newFormat.replace("%M%", "G");
+		/*newFormat = newFormat.replace("%MODE%", "Global");
+		newFormat = newFormat.replace("%M%", "G");*/
 
 		newFormat = newFormat + "%MESSAGE%";
 

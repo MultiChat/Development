@@ -8,7 +8,7 @@
 
 ##################
 # NE PAS EDITER  #
-version: "1.8.1" #
+version: "1.9"   #
 ##################
 
 # French Translation by Nogapra - Thank you !
@@ -35,6 +35,7 @@ regex_rules:
 # Exemple de règle pour remplacer [bold] par le code de format %l pour faire du texte en gras
 - look_for: '\[bold\]'
   replace_with: "&l"
+  permission: "multichat.regexrules.bold" # Permission (est facultatif)
 # Exemple de règle pour remplacer [italic] par le code de format %o pour faire du texte en italique
 - look_for: '\[italic\]'
   replace_with: "&o"
@@ -68,6 +69,11 @@ regex_actions:
 - look_for: 'kickmeplzrightnow'
   command: "kick %PLAYER% Vous l'avez demandé !"
   cancel: false
+  spigot: true
+- look_for: 'thisisabadword'
+  command: "kick %PLAYER% You are now allowed to say that here!"
+  permission: "!multichat.chat.badwords" # !... --> Autorisation de contourner l'action (est facultatif)
+  cancel: true
   spigot: true
 
 # Dans quels types de chat les action de regex doivent t'elles être appliquées ?
@@ -197,6 +203,7 @@ ignorecommand:
 # Si la valeur est true, alors seuls les joueurs avec la permission  Multichat.chat.Link seront en mesure d’envoyer des liens.
 # Paramétrage disponible : true ou false
 link_control: false
+link_regex: '((https|http):\/\/)?(www\.)?([-a-zA-Z0-9@:%._\+~#=]{2,256}\.)+[a-zA-Z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)'
 
 # Remplacer les liens / URL dans les message par :
 link_removal_message: "[Lien WEB supprimé]"

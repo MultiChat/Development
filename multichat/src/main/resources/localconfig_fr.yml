@@ -1,0 +1,205 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                    MultiChatLocal                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+##################
+# NE PAS EDITER  #
+version: "1.9"   #
+##################
+
+# French Translation by Nogapra - Thank you !
+# Channel Control translations by Metzg
+# Pour utiliser ce fichier, renommer en 'spigotconfig.yml'.
+
+# 1. Global
+# 2. Local
+# 3. Placeholders MultiChat
+# 4. Surnom MultiChat
+# 5. Contrôle de canal
+
+# Specify the name of this server here for the %SERVER% placeholder
+server_name: "UNNAMED_SERVER"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Global                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Définie si ce serveur utilise un format différent pour le chat global que celui attribué
+# dans le dossier plugins du serveur BungeeCoord ?
+# (Utile si vous souhaitez utiliser des Placeholders locaux qui ne peuvent être présents que sur un seul serveur).
+# Paramètre disponible : true ou false
+override_global_format: false
+
+# Format à utiliser pour le chat global si le paramètre ci-dessus est défini sur true.
+# 
+# Utiliser les codes couleur Minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur.
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur.
+# %PREFIX% = Le préfixe de l’expéditeur.
+# %SUFFIX% = Le suffixe de l’expéditeur.
+# %NICK% = Le surnom de l’expéditeur.
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
+#
+# S’affichera en tant que [FORMAT] [MESSAGE]
+override_global_format_format: "&5[&dG&5] &f%DISPLAYNAME%&f: "
+
+# Si le paramètre ci-dessous est défini sur true, alors quels que soient les paramètres ci-dessus, 
+# MultiChat ne touchera pas le format de chat.
+# Cela signifie que si un plugin tel que Towny gère le format de chat localement, alors ce sera utilisé à la place.
+# MultiChat enverra toujours le message à tous les autres serveurs.
+# 
+# NOTE : CECI EST FAIT SUR UNE BASE DU MEILLEUR EFFORT !
+#(MultiChat est un plugin de formatage de chat est donc conçu pour formater le chat!)
+# Paramètre disponible : true ou false
+override_all_multichat_formatting: false
+
+# Définir ce paramètre sur true essaiera de prendre le contrôle malgré un plugin de formatage de chat récalcitrant.
+# Paramètre disponible : true ou false
+force_multichat_format: false
+
+############################################################
+# +------------------------------------------------------+ #
+# |                        Local                         | #
+# +------------------------------------------------------+ #
+############################################################
+
+# MultiChat doit-il définir le format du chat local ? (Laisser cela à false permet à d’autres plugins de gérer le chat)
+# Paramètre disponible : true ou false
+set_local_format: true
+
+#Utiliser les codes couleur Minecraft standard '&X' COLOUR/FORMAT CODES.
+# %NAME% = Le nom de l’expéditeur.
+# %DISPLAYNAME% = Le nom d'affichage de l’expéditeur.
+# %PREFIX% = Le préfixe de l’expéditeur.
+# %SUFFIX% = Le suffixe de l’expéditeur.
+# %NICK% = Le surnom de l’expéditeur.
+# %SERVER% = Le serveur de l’expéditeur.
+# %WORLD% = Le monde de l’expéditeur.
+#
+# S’affichera en tant que [FORMAT] [MESSAGE]
+local_chat_format: "&3[&bL&3] &f%DISPLAYNAME%&f: &7"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                 Placeholders MultiChat               | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Ce paramètre vous permet d’utiliser des variables discussion dans d’autres plugins!
+# Par exemple, si vous utilisez le chat Essentials pour votre chat local, mais que vous vouliez utiliser un Pseudo de multichat.
+# Vous pouvez spécifier le PlaceHolder {multichat_nickname} comme défini ci-dessous. MultiChat l’analysera comme d’habitude.
+# Essentials ne prend pas en charge l’API de Placeholder par défaut,
+# mais vous pouvez toujours utiliser les PlaceHolder PAPI en en paramétrant un ci-dessous!
+# {multichat_papi_displayname} will be replaced using the example below and parsed by multichat.
+multichat_placeholders:
+  nickname: "%NICK%"
+  papi_displayname: "%player_displayname%"
+
+############################################################
+# +------------------------------------------------------+ #
+# |                   Surnom MultiChat                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Les joueurs ne pourront se renommer avec un surnom de cette liste !
+# (?i) est le regex pour ignorer le cas.
+nickname_blacklist:
+- "(?i)Notch"
+- "(?i)Jeb"
+#- "[1234567890]+.*" # <-- Exemple pour bloquer les surnoms commençant par un nombre !
+
+# Un préfixe doit-il être affiché avant les surnoms pour les différencier des vrais noms ?
+# Paramètre disponible : true ou false
+show_nickname_prefix: false
+
+# Que doit être affiché avant le surnom ?
+nickname_prefix: "~"
+
+# Nombre de caratères maximal d'un surnom
+nickname_length_limit: 20
+
+# Nombre de caratère minimal d'un surnom
+nickname_length_min: 3
+
+# Faut-il compter les codes de formatage tels que &3 dans le nombre de caractères du surnom ?
+nickname_length_limit_formatting: false
+
+# MultiChat devrait-il utiliser un sytème de base données (MySQL ou SQLite) pour stocker les surnoms au lieu du system de fichier standard?
+# (PLEASE NOTE THE SERVER MUST BE RESTARTED FOR THIS TO TAKE EFFECT)
+nickname_sql: false
+
+# Si l’option ci-dessus est true, MultiChat utilisera SQLite par défaut.
+# Définissez l'option ci-dessous à true si vous préférez utiliser MySQL.
+mysql: false
+mysql_url: "" # Adresse IP ou web de la base de données et le port TCP (ex : "localhost:3306")
+mysql_database: "" # Nom de la base de données
+mysql_user: "" #Utilistateur base de données
+mysql_pass: "" #Mot de passe
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Contrôle de canal                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Cette section vous permet de rediriger de force un message vers un canal selon son format.
+# 
+# Par exemple, si vous avez un canal de ville Towny au format: "[TC] ...",
+# vous pouvez dire à MultiChat de garder ce message en local, même si le joueur est en mode global.
+# Ceci permet à MultiChat de supporter Towny et d'autres plugins sans avoir à dépendre d'eux directement.
+# 
+# Utilisez des expressions régulières (regex) pour pouvoir détecter un format de message.
+# Canaux possibles à l'heure actuelle : local, global, ou current (pour le canal actuel du joueur)
+#
+# L'ordre définit la priorité : en haut = plus important
+# Merci à metzg pour ces exemples...
+
+force_channel:
+  # Towny: garder le canal de ville (town/tc) local
+  - regex: '^&f\[&3TC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal de nation (/nc) local
+  - regex: '^&f\[&6NC&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal admin (/a) local
+  - regex: '^&f\[&4ADMIN&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Towny: garder le canal modérateur (/m) local
+  - regex: '^&f\[&9MOD&f\].*'
+    ignore_format_codes: false
+    channel: 'local'
+
+  # Essentials
+  #- regex: '^\[L\].*'
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^\[Shout\].*'
+  #  ignore_format_codes: true
+  #  channel: 'global'
+
+  # Un autre plugin...
+  #- regex: '^(.+) pense: (.+)'
+  #  ignore_format_codes: true
+  #  channel: 'current' # permet d'éviter de tester d'autres regexes moins prioritaires plutôt que de tout traiter jusqu'au comportement par défaut
+
+  #- regex: '^(.+) gifle (.+) avec une truite' 
+  #  ignore_format_codes: true
+  #  channel: 'local'
+
+  #- regex: '^(.+) gifle (.+) avec une grosse truite' 
+  #  ignore_format_codes: true
+  #  channel: 'global'

@@ -276,6 +276,7 @@ public class MessageManager {
 				+ "By default the command will be executed by console, you can instead make players execute the command using the -p flag\n"
 				+ "By default the command will be executed on all servers, you can limit which servers using the -s flag.");
 		defaultMessages.put("command_execute_sent", "&2The command has been sent");
+		defaultMessages.put("command_execute_regex", "&cThe regex specified was invalid");
 
 		defaultMessages.put("command_reply_usage", "&bUsage: /r <message>");
 		defaultMessages.put("command_reply_desc", "&bReply to the person who you private messaged most recently");
