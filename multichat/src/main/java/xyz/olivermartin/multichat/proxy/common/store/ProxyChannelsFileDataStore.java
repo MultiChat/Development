@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlayer;
 
 public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataStore implements ProxyChannelsDataStore {
 
@@ -26,9 +27,24 @@ public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataSt
 	private Map<String, Set<UUID>> joinedChannels;
 
 	@Override
-	public Optional<String> getCurrentChannel(UUID uuid) {
+	public Optional<String> getAbstractedCurrentChannel(UUID uuid) {
 		if (currentChannels.containsKey(uuid)) return Optional.of(currentChannels.get(uuid));
 		return Optional.empty();
+	}
+
+	@Override
+	public Optional<String> getCorrectCurrentChannel(MultiChatProxyPlayer player) {
+		if (currentChannels.containsKey(player.getUniqueId())) {
+			String channelId = currentChannels.get(player.getUniqueId());
+			if (channelId.equalsIgnoreCase("local")) {
+				String playerServer = player.getServer().toLowerCase();
+				return Optional.of(channelId + ":" + playerServer);
+			} else {
+				return Optional.of(channelId);
+			}
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	@Override
