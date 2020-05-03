@@ -7,15 +7,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
-import xyz.olivermartin.multichat.proxy.common.store.ProxyChannelsFileDataStore;
+import xyz.olivermartin.multichat.proxy.common.store.ProxyNameFileDataStore;
 
-public class ProxyBungeeChannelsFileDataStore extends ProxyChannelsFileDataStore{
+public class ProxyBungeeNameFileDataStore extends ProxyNameFileDataStore {
 
-	public ProxyBungeeChannelsFileDataStore(File path, String filename) {
+	public ProxyBungeeNameFileDataStore(File path, String filename) {
 		super(MultiChatProxyPlatform.BUNGEE, path, filename);
 	}
 
@@ -31,15 +30,11 @@ public class ProxyBungeeChannelsFileDataStore extends ProxyChannelsFileDataStore
 
 			ObjectInputStream in = new ObjectInputStream(fileInputStream);
 
-			Map<UUID, String> currentChannels = (Map<UUID, String>) in.readObject();
-			Map<String, Set<UUID>> hiddenChannels = (Map<String, Set<UUID>>) in.readObject();
-			Map<String, Set<UUID>> joinedChannels = (Map<String, Set<UUID>>) in.readObject();
+			Map<UUID, String> lastNames = (Map<UUID, String>) in.readObject();
 
 			in.close();
 
-			setCurrentChannels(currentChannels);
-			setHiddenChannels(hiddenChannels);
-			setJoinedChannels(joinedChannels);
+			setLastNames(lastNames);
 
 			fileInputStream.close();
 
@@ -64,9 +59,7 @@ public class ProxyBungeeChannelsFileDataStore extends ProxyChannelsFileDataStore
 
 			ObjectOutputStream out = new ObjectOutputStream(fileOutputStream);
 
-			out.writeObject(getCurrentChannels());
-			out.writeObject(getHiddenChannels());
-			out.writeObject(getJoinedChannels());
+			out.writeObject(getLastNames());
 
 			out.close();
 

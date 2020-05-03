@@ -54,6 +54,13 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 			translationsDir.mkdirs();
 		}
 
+		// REGISTER DATA STORE DIRECTORY
+		File dataStoreDir = new File(configDir.toString() + File.separator + "data");
+		if (!dataStoreDir.exists()) {
+			getLogger().info("Creating data store directory for MultiChat!");
+			dataStoreDir.mkdirs();
+		}
+
 		// REGISTER CONFIG MANAGER
 		ProxyConfigManager configManager = new ProxyConfigManager(platform);
 		MultiChatProxy.getInstance().registerConfigManager(configManager);
@@ -86,10 +93,8 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 
 		// TODO configure data store mode...
 		ProxyFileDataStoreManager fileDataStoreManager = new ProxyFileDataStoreManager(MultiChatProxyPlatform.BUNGEE);
-		fileDataStoreManager.registerChannelsFileDataStore(configDir, "channels.dat");
+		fileDataStoreManager.registerChannelsFileDataStore(dataStoreDir, "channels_data_store.dat");
 		api.registerDataStoreManager(fileDataStoreManager);
-
-		// TODO load file based storage into the managers...
 
 		ProxyChannelManager channelManager = new ProxyChannelManager();
 		api.registerChannelManager(channelManager);

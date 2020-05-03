@@ -114,6 +114,13 @@ public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataSt
 	}
 
 	/**
+	 * @return the hiddenChannels
+	 */
+	protected Map<String, Set<UUID>> getJoinedChannels() {
+		return joinedChannels;
+	}
+
+	/**
 	 * @param currentChannels the currentChannels to set
 	 */
 	protected void setCurrentChannels(Map<UUID, String> currentChannels) {
@@ -125,6 +132,13 @@ public abstract class ProxyChannelsFileDataStore extends ProxyAbstractFileDataSt
 	 */
 	protected void setHiddenChannels(Map<String, Set<UUID>> hiddenChannels) {
 		this.hiddenChannels = hiddenChannels;
+	}
+
+	/**
+	 * @param hiddenChannels the hiddenChannels to set
+	 */
+	protected void setJoinedChannels(Map<String, Set<UUID>> joinedChannels) {
+		this.joinedChannels = joinedChannels;
 	}
 
 	@Override
