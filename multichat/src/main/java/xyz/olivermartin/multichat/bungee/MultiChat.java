@@ -28,8 +28,10 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.proxy.bungee.Metrics;
+import xyz.olivermartin.multichat.proxy.bungee.ProxyBungeeConsoleLogger;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyConsoleLogger;
 import xyz.olivermartin.multichat.proxy.common.ProxyMessageManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyChatControlConfig;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
@@ -273,6 +275,10 @@ public class MultiChat extends Plugin implements Listener {
 		ProxyMessageManager messageManager = new ProxyMessageManager(configManager.getProxyMessagesConfig());
 		api.registerMessageManager(messageManager);
 
+		// REGISTER CONSOLE LOGGER
+		ProxyConsoleLogger consoleLogger = new ProxyBungeeConsoleLogger(messageManager);
+		api.registerConsoleLogger(consoleLogger);
+
 		// TODO Register the translations!
 
 		ProxyMainConfig mainConfig = configManager.getProxyMainConfig();
@@ -327,10 +333,6 @@ public class MultiChat extends Plugin implements Listener {
 			ChatControl.controlLinks = chatControlConfig.isLinkControl();
 			ChatControl.linkMessage = chatControlConfig.getLinkRemovalMessage();
 			ChatControl.linkRegex = chatControlConfig.getLinkControlRegex();
-
-			logPMs = mainConfig.isLogPrivateMessaging();
-			logStaffChat = mainConfig.isLogStaffChat();
-			logGroupChat = mainConfig.isLogGroupChat();
 
 			// Set default channel
 			defaultChannel = mainConfig.getDefaultChannel();

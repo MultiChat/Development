@@ -6,6 +6,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.common.MultiChatInfo;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyConsoleLogger;
 import xyz.olivermartin.multichat.proxy.common.ProxyMessageManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyMessagingServicePlayerMetaStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyModuleManager;
@@ -75,6 +76,10 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 		// REGISTER MESSAGE MANAGER
 		ProxyMessageManager messageManager = new ProxyMessageManager(configManager.getProxyMessagesConfig());
 		api.registerMessageManager(messageManager);
+		
+		// REGISTER CONSOLE LOGGER
+		ProxyConsoleLogger consoleLogger = new ProxyBungeeConsoleLogger(messageManager);
+		api.registerConsoleLogger(consoleLogger);
 
 		// REGISTER PLAYER META STORE
 		ProxyPlayerMetaStore metaStore = new ProxyMessagingServicePlayerMetaStore();

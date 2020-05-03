@@ -16,8 +16,10 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.proxy.bungee.MultiChatProxyBungeeCommandSender;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyMainConfig;
 
 /**
  * Bungee Communication Manager
@@ -38,27 +40,19 @@ public class BungeeComm implements Listener {
 			out.writeUTF(message);
 
 			// Should display name be set?
-			Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
-			if (configYML.contains("set_display_name")) {
-				if (configYML.getBoolean("set_display_name")) {
-					out.writeUTF("T");
-				} else {
-					out.writeUTF("F");
-				}
-			} else {
+			ProxyMainConfig mainConfig = MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig();
+			if (mainConfig.isSetDisplayName()) {
 				out.writeUTF("T");
+			} else {
+				out.writeUTF("F");
 			}
 
 			// Display name format
-			if (configYML.contains("display_name_format")) {
-				out.writeUTF(configYML.getString("display_name_format"));
-			} else {
-				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
-			}
+			out.writeUTF(mainConfig.getDisplayNameFormat());
 
 			// Is this server a global chat server?
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
-					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName())) {
+			if (mainConfig.isUseGlobalChat()
+					&& !mainConfig.getNoGlobal().contains(server.getName())) {
 				out.writeUTF("T");
 			} else {
 				out.writeUTF("F");
@@ -173,7 +167,7 @@ public class BungeeComm implements Listener {
 
 		server.sendData("multichat:ch", stream.toByteArray());
 
-		DebugManager.log("Sent message on multichat:ch channel!");
+		MultiChatProxy.getInstance().getConsoleLogger().debug("Sent message on multichat:ch channel!");
 
 	}
 
@@ -199,7 +193,7 @@ public class BungeeComm implements Listener {
 
 			ev.setCancelled(true);
 
-			DebugManager.log("{multichat:chat} Got a plugin message");
+			MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Got a plugin message");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -207,35 +201,35 @@ public class BungeeComm implements Listener {
 			try {
 
 				UUID uuid = UUID.fromString(in.readUTF());
-				DebugManager.log("{multichat:chat} UUID = " + uuid);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} UUID = " + uuid);
 				String message = in.readUTF();
-				DebugManager.log("{multichat:chat} Message = " + message);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Message = " + message);
 				String format = in.readUTF();
 
-				DebugManager.log("{multichat:chat} Format (before removal of double chars) = " + format);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Format (before removal of double chars) = " + format);
 
 				format = format.replace("%%","%");
 
-				DebugManager.log("{multichat:chat} Format = " + format);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Format = " + format);
 
 				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
 				if (player == null) {
-					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message... (Is IP-Forwarding on?)");
+					MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Could not get player! Abandoning chat message... (Is IP-Forwarding on?)");
 					return;
 				}
 
-				DebugManager.log("{multichat:chat} Got player successfully! Name = " + player.getName());
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Got player successfully! Name = " + player.getName());
 
 				//synchronized (player) {
 
-				DebugManager.log("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
 				Channel.getGlobalChannel().sendMessage(player, message, format);
 
 				//}
 
 			} catch (IOException e) {
-				DebugManager.log("{multichat:chat} ERROR READING PLUGIN MESSAGE");
+				MultiChatProxy.getInstance().getConsoleLogger().debug("{multichat:chat} ERROR READING PLUGIN MESSAGE");
 				e.printStackTrace();
 			}
 
@@ -368,7 +362,7 @@ public class BungeeComm implements Listener {
 
 			ev.setCancelled(true);
 
-			DebugManager.log("[multichat:dn] Got an incoming channel message!");
+			MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:dn] Got an incoming channel message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -383,15 +377,15 @@ public class BungeeComm implements Listener {
 
 				synchronized (player) {
 
-					DebugManager.log("[multichat:dn] Player exists!");
+					MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:dn] Player exists!");
 
 					Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
 
 					if (opm.isPresent()) {
 
-						DebugManager.log("[multichat:dn] Player meta exists!");
+						MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:dn] Player meta exists!");
 
-						DebugManager.log("[multichat:dn] The displayname received is: " + spigotDisplayName);
+						MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:dn] The displayname received is: " + spigotDisplayName);
 
 						opm.get().spigotDisplayName = spigotDisplayName;
 						PlayerMetaManager.getInstance().updateDisplayName(uuid);
@@ -413,7 +407,7 @@ public class BungeeComm implements Listener {
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
 
-			DebugManager.log("[multichat:world] Got an incoming channel message!");
+			MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:world] Got an incoming channel message!");
 
 			try {
 
@@ -423,7 +417,7 @@ public class BungeeComm implements Listener {
 
 				if (player == null) return;
 
-				DebugManager.log("[multichat:world] Player is online!");
+				MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:world] Player is online!");
 
 				synchronized (player) {
 
@@ -435,11 +429,11 @@ public class BungeeComm implements Listener {
 
 					if (opm.isPresent()) {
 
-						DebugManager.log("[multichat:world] Got their meta data correctly");
+						MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:world] Got their meta data correctly");
 
 						opm.get().world = world;
 
-						DebugManager.log("[multichat:world] Set their world to: " + world);
+						MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:world] Set their world to: " + world);
 
 					}
 
@@ -456,7 +450,7 @@ public class BungeeComm implements Listener {
 
 			ev.setCancelled(true);
 
-			DebugManager.log("[multichat:pxe] Got an incoming pexecute message!");
+			MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:pxe] Got an incoming pexecute message!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -464,7 +458,7 @@ public class BungeeComm implements Listener {
 			try {
 
 				String command = in.readUTF();
-				DebugManager.log("[multichat:pxe] Command is: " + command);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:pxe] Command is: " + command);
 				ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), command);
 
 			} catch (IOException e) {
@@ -477,7 +471,7 @@ public class BungeeComm implements Listener {
 
 			ev.setCancelled(true);
 
-			DebugManager.log("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
+			MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
 
 			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
 			DataInputStream in = new DataInputStream(stream);
@@ -487,8 +481,8 @@ public class BungeeComm implements Listener {
 				String command = in.readUTF();
 				String playerRegex = in.readUTF();
 
-				DebugManager.log("[multichat:ppxe] Command is: " + command);
-				DebugManager.log("[multichat:ppxe] Player regex is: " + playerRegex);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:ppxe] Command is: " + command);
+				MultiChatProxy.getInstance().getConsoleLogger().debug("[multichat:ppxe] Player regex is: " + playerRegex);
 
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
 
@@ -503,7 +497,7 @@ public class BungeeComm implements Listener {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (PatternSyntaxException e2) {
-				MessageManager.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
+				MultiChatProxy.getInstance().getMessageManager().sendMessage(new MultiChatProxyBungeeCommandSender(ProxyServer.getInstance().getConsole()), "command_execute_regex");
 			}
 
 		}

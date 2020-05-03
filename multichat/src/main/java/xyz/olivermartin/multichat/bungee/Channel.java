@@ -15,6 +15,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * Channel
@@ -133,10 +134,10 @@ public class Channel {
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format) {
 
-		DebugManager.log("CHANNEL #" + getName() + ": Got a message for the channel");
-		DebugManager.log("CHANNEL #" + getName() + ": SENDER = " + sender.getName());
-		DebugManager.log("CHANNEL #" + getName() + ": MESSAGE = " + message);
-		DebugManager.log("CHANNEL #" + getName() + ": FORMAT = " + format);
+		MultiChatProxy.getInstance().getConsoleLogger().debug("CHANNEL #" + getName() + ": Got a message for the channel");
+		MultiChatProxy.getInstance().getConsoleLogger().debug("CHANNEL #" + getName() + ": SENDER = " + sender.getName());
+		MultiChatProxy.getInstance().getConsoleLogger().debug("CHANNEL #" + getName() + ": MESSAGE = " + message);
+		MultiChatProxy.getInstance().getConsoleLogger().debug("CHANNEL #" + getName() + ": FORMAT = " + format);
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 

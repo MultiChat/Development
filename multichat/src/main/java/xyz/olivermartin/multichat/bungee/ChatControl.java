@@ -13,6 +13,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyChatControlConfig;
 
 public class ChatControl {
 
@@ -55,7 +57,7 @@ public class ChatControl {
 	@SuppressWarnings("rawtypes")
 	public static Optional<String>applyChatRules(String input, String chatType, String playerName) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		ProxyChatControlConfig config = MultiChatProxy.getInstance().getConfigManager().getProxyChatControlConfig();
 		boolean cancel = false;
 
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(playerName);
