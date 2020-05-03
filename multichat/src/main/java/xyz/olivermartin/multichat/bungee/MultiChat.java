@@ -26,6 +26,14 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.common.MultiChatInfo;
+import xyz.olivermartin.multichat.proxy.bungee.Metrics;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyMessageManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyChatControlConfig;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyMainConfig;
 
 
 /**
@@ -36,38 +44,6 @@ import net.md_5.bungee.event.EventHandler;
  *
  */
 public class MultiChat extends Plugin implements Listener {
-
-	public static final String LATEST_VERSION = "2.0";
-
-	public static final String[] ALLOWED_VERSIONS = new String[] {
-
-			LATEST_VERSION,
-			"1.9",
-			"1.8.2",
-			"1.8.1",
-			"1.8",
-			"1.7.5",
-			"1.7.4",
-			"1.7.3",
-			"1.7.2",
-			"1.7.1",
-			"1.7",
-			"1.6.2",
-			"1.6.1",
-			"1.6",
-			"1.5.2",
-			"1.5.1",
-			"1.5",
-			"1.4.2",
-			"1.4.1",
-			"1.4",
-			"1.3.4",
-			"1.3.3",
-			"1.3.2",
-			"1.3.1",
-			"1.3"
-
-	};
 
 	public static Map<UUID, TChatInfo> modchatpreferences = new HashMap<UUID, TChatInfo>();
 	public static Map<UUID, TChatInfo> adminchatpreferences = new HashMap<UUID, TChatInfo>();
@@ -130,7 +106,7 @@ public class MultiChat extends Plugin implements Listener {
 
 			public void run() {
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+				if (MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig().isFetchSpigotDisplayNames()) {
 
 					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
@@ -167,7 +143,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig().isFetchSpigotDisplayNames()) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -185,7 +161,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig().isFetchSpigotDisplayNames()) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -204,7 +180,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig().isFetchSpigotDisplayNames()) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -223,7 +199,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig().isFetchSpigotDisplayNames()) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
@@ -240,42 +216,74 @@ public class MultiChat extends Plugin implements Listener {
 
 	public void onEnable() {
 
-		instance = this;
-
+		// BSTATS METRICS
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
 
-		configDir = getDataFolder();
+		// GET API
+		MultiChatProxy api = MultiChatProxy.getInstance();
+
+		// REGISTER PLATFORM
+		MultiChatProxyPlatform platform = MultiChatProxyPlatform.BUNGEE;
+		api.registerPlatform(platform);
+
+		// REGISTER NAME
+		String pluginName = "MultiChat";
+		api.registerPluginName(pluginName);
+
+		// REGISTER VERSION
+		String pluginVersion = MultiChatInfo.LATEST_VERSION;
+		api.registerPluginVersion(pluginVersion);
+
+		instance = this; // TODO REMOVE :( !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+		// REGISTER CONFIG DIRECTORY
+		File configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
-			System.out.println("[MultiChat] Creating plugin directory!");
+			getLogger().info("Creating plugin directory for MultiChat!");
 			getDataFolder().mkdirs();
 		}
+		api.registerConfigDirectory(configDir);
 
-		String translationsDir = configDir.toString() + File.separator + "translations";
-		if (!new File(translationsDir).exists()) {
-			System.out.println("[MultiChat] Creating translations directory!");
-			new File(translationsDir).mkdirs();
+		// REGISTER TRANSLATIONS DIRECTORY
+		File translationsDir = new File(configDir.toString() + File.separator + "translations");
+		if (!translationsDir.exists()) {
+			getLogger().info("Creating translations directory for MultiChat!");
+			translationsDir.mkdirs();
 		}
 
-		ConfigManager.getInstance().registerHandler("config.yml", configDir);
-		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDir);
-		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
-		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
+		// REGISTER DATA STORE DIRECTORY
+		File dataStoreDir = new File(configDir.toString() + File.separator + "data");
+		if (!dataStoreDir.exists()) {
+			getLogger().info("Creating data store directory for MultiChat!");
+			dataStoreDir.mkdirs();
+		}
 
-		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("config_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("chatcontrol_fr.yml", new File(translationsDir));
+		// REGISTER CONFIG MANAGER
+		ProxyConfigManager configManager = new ProxyConfigManager(platform);
+		MultiChatProxy.getInstance().registerConfigManager(configManager);
 
-		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
-		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		// REGISTER CONFIG FILES
+		configManager.registerProxyMainConfig("config.yml", configDir);
+		configManager.registerProxyJoinMessagesConfig("joinmessages.yml", configDir);
+		configManager.registerProxyChatControlConfig("chatcontrol.yml", configDir);
+		configManager.registerProxyMessagesConfig("messages.yml", configDir);
 
-		configversion = configYML.getString("version");
+		// REGISTER MESSAGE MANAGER
+		ProxyMessageManager messageManager = new ProxyMessageManager(configManager.getProxyMessagesConfig());
+		api.registerMessageManager(messageManager);
 
-		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
+		// TODO Register the translations!
+
+		ProxyMainConfig mainConfig = configManager.getProxyMainConfig();
+		mainConfig.getVersion();
+
+		configversion = mainConfig.getVersion(); // TODO Set properly in API
+
+		if (Arrays.asList(MultiChatInfo.ALLOWED_VERSIONS).contains(configversion)) {
 
 			// TODO - Remove for future versions!
-			if (!configversion.equals(LATEST_VERSION))  {
+			if (!configversion.equals(MultiChatInfo.LATEST_VERSION))  {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
 				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
@@ -306,7 +314,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new BungeeComm());
 
 			// Register commands
-			registerCommands(configYML, chatcontrolYML);
+			registerCommands();
 
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
@@ -315,30 +323,25 @@ public class MultiChat extends Plugin implements Listener {
 			UUIDNameManager.Startup();
 
 			// Set up chat control stuff
-			if (chatcontrolYML.contains("link_control")) {
-				ChatControl.controlLinks = chatcontrolYML.getBoolean("link_control");
-				ChatControl.linkMessage = chatcontrolYML.getString("link_removal_message");
-				if (chatcontrolYML.contains("link_regex")) {
-					ChatControl.linkRegex = chatcontrolYML.getString("link_regex");
-				}
-			}
+			ProxyChatControlConfig chatControlConfig = configManager.getProxyChatControlConfig();
+			ChatControl.controlLinks = chatControlConfig.isLinkControl();
+			ChatControl.linkMessage = chatControlConfig.getLinkRemovalMessage();
+			ChatControl.linkRegex = chatControlConfig.getLinkControlRegex();
 
-			if (configYML.contains("privacy_settings")) {
-				logPMs = configYML.getSection("privacy_settings").getBoolean("log_pms");
-				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
-				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
-			}
+			logPMs = mainConfig.isLogPrivateMessaging();
+			logStaffChat = mainConfig.isLogStaffChat();
+			logGroupChat = mainConfig.isLogGroupChat();
 
 			// Set default channel
-			defaultChannel = configYML.getString("default_channel");
-			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
+			defaultChannel = mainConfig.getDefaultChannel();
+			forceChannelOnJoin = mainConfig.isForceChannelOnJoin();
 
 			// Set up global chat
 			GlobalChannel channel = Channel.getGlobalChannel();
-			channel.setFormat(configYML.getString("globalformat"));
+			channel.setFormat(mainConfig.getGlobalFormat());
 
 			// Add all appropriate servers to this hardcoded global chat stream
-			for (String server : configYML.getStringList("no_global")) {
+			for (String server : mainConfig.getNoGlobal()) {
 				channel.addServer(server);
 			}
 
@@ -371,7 +374,10 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public void registerCommands(Configuration configYML, Configuration chatcontrolYML) {
+	public void registerCommands() {
+
+		ProxyMainConfig mainConfig = MultiChatProxy.getInstance().getConfigManager().getProxyMainConfig();
+		ProxyChatControlConfig chatControlConfig = MultiChatProxy.getInstance().getConfigManager().getProxyChatControlConfig();
 
 		// Register main commands
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getAcc());
@@ -395,30 +401,26 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getIgnore());
 
 		// Register PM commands
-		if (configYML.getBoolean("pm")) {
+		if (mainConfig.isUsePrivateMessaging()) {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getMsg());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getReply());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getSocialspy());
 		}
 
 		// Register global chat commands
-		if (configYML.getBoolean("global")) {
+		if (mainConfig.isUseGlobalChat()) {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getChannel());
 		}
 
 		// Register staff list command /staff
-		if (configYML.contains("staff_list")) {
-			if (configYML.getBoolean("staff_list")) {
-				getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
-			}
-		} else {
+		if (mainConfig.isAllowStaffList()) {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getStafflist());
 		}
 
 		// Register mute command
-		if (chatcontrolYML.getBoolean("mute")) {
+		if (chatControlConfig.isMute()) {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getMute());
 		}
 
@@ -627,9 +629,9 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveIgnore() {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		ProxyChatControlConfig chatControlConfig = MultiChatProxy.getInstance().getConfigManager().getProxyChatControlConfig();
 
-		if (config.getBoolean("session_ignore")) return;
+		if (chatControlConfig.isSessionIgnore()) return;
 
 		try {
 			File file = new File(configDir, "Ignore.dat");
@@ -853,9 +855,9 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static Map<UUID, Set<UUID>> loadIgnore() {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		ProxyChatControlConfig chatControlConfig = MultiChatProxy.getInstance().getConfigManager().getProxyChatControlConfig();
 
-		if (config.getBoolean("session_ignore")) return new HashMap<UUID, Set<UUID>>();
+		if (chatControlConfig.isSessionIgnore()) return new HashMap<UUID, Set<UUID>>();
 
 		Map<UUID, Set<UUID>> result = null;
 

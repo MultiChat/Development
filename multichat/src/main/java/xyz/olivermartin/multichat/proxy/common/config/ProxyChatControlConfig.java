@@ -11,7 +11,7 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 
 	// VERSION
 	private String version;
-	
+
 	// REGEX RULES
 	private List<RegexRule> regexRules;
 	private boolean applyRulesToGlobalChat;
@@ -65,11 +65,12 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 	// LINKS
 	private boolean linkControl;
 	private String linkRemovalMessage;
+	private String linkControlRegex;
 
 	public ProxyChatControlConfig(File configPath, String fileName, MultiChatProxyPlatform platform) {
 		super(configPath, fileName, platform);
 	}
-	
+
 	@Override
 	public String getVersion() {
 		if (version == null) throw new IllegalStateException("No version number found in MultiChatProxy's Chat Control Config!");
@@ -82,7 +83,7 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 
 	@Override
 	protected void setMemberAttributes() {
-		
+
 		// VERSION
 		version = getString("version", null);
 
@@ -139,6 +140,7 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 		// LINKS
 		linkControl = getBoolean("link_control", false);
 		linkRemovalMessage = getString("link_removal_message", "[LINK REMOVED]");
+		linkControlRegex = getString("link_regex", "((https|http):\\/\\/)?(www\\.)?([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.)+[a-zA-Z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
 
 	}
 
@@ -434,6 +436,13 @@ public abstract class ProxyChatControlConfig extends ProxyConfig {
 	 */
 	public String getLinkRemovalMessage() {
 		return linkRemovalMessage;
+	}
+
+	/**
+	 * @return the linkControlRegex
+	 */
+	public String getLinkControlRegex() {
+		return linkControlRegex;
 	}
 
 }
