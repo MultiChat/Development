@@ -11,6 +11,7 @@ public abstract class ProxyDataStoreManager {
 	private DataStoreMode mode;
 
 	private ProxyChannelsDataStore channelsDataStore;
+	private ProxyNameDataStore nameDataStore;
 
 	public ProxyDataStoreManager(MultiChatProxyPlatform platform, DataStoreMode mode) {
 		this.platform = platform;
@@ -31,6 +32,15 @@ public abstract class ProxyDataStoreManager {
 
 	public Optional<ProxyChannelsDataStore> getChannelsDataStore() {
 		if (channelsDataStore != null) return Optional.of(channelsDataStore);
+		return Optional.empty();
+	}
+
+	protected void registerNameDataStore(ProxyNameDataStore nameDataStore) {
+		this.nameDataStore = nameDataStore;
+	}
+
+	public Optional<ProxyNameDataStore> getNameDataStore() {
+		if (nameDataStore != null) return Optional.of(nameDataStore);
 		return Optional.empty();
 	}
 

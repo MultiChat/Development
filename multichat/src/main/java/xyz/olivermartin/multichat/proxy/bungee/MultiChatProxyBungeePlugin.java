@@ -94,6 +94,7 @@ public class MultiChatProxyBungeePlugin extends Plugin {
 		// TODO configure data store mode...
 		ProxyFileDataStoreManager fileDataStoreManager = new ProxyFileDataStoreManager(MultiChatProxyPlatform.BUNGEE);
 		fileDataStoreManager.registerChannelsFileDataStore(dataStoreDir, "channels_data_store.dat");
+		fileDataStoreManager.registerNameFileDataStore(dataStoreDir, "name_data_store.dat");
 		api.registerDataStoreManager(fileDataStoreManager);
 
 		ProxyChannelManager channelManager = new ProxyChannelManager();
