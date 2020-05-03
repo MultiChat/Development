@@ -11,7 +11,6 @@ public class LocalChannel extends AbstractChannel {
 
 	public LocalChannel(String id, String name, String server) {
 		super(id, name, ChannelType.LOCAL);
-		this.server = server;
 	}
 
 	public String getServer() {
@@ -20,7 +19,7 @@ public class LocalChannel extends AbstractChannel {
 
 	@Override
 	protected boolean isPermittedToSendMessage(MultiChatProxyPlayer sender) {
-		return sender.getServer().equalsIgnoreCase(server);
+		return sender.getServer().equalsIgnoreCase(getServer());
 	}
 
 	@Override
@@ -31,6 +30,11 @@ public class LocalChannel extends AbstractChannel {
 	@Override
 	protected Collection<MultiChatProxyPlayer> removeNonPermittedViewers(
 			Collection<MultiChatProxyPlayer> currentViewers) {
+		return removeDifferentServer(currentViewers);
+	}
+
+	protected Collection<MultiChatProxyPlayer> removeDifferentServer(Collection<MultiChatProxyPlayer> currentViewers) {
+
 		Iterator<MultiChatProxyPlayer> it = currentViewers.iterator();
 
 		while (it.hasNext()) {
@@ -41,6 +45,7 @@ public class LocalChannel extends AbstractChannel {
 		}
 
 		return currentViewers;
+
 	}
 
 }

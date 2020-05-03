@@ -6,6 +6,7 @@ import java.util.Iterator;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlayer;
 import xyz.olivermartin.multichat.proxy.common.ProxyPlayerManager;
+import xyz.olivermartin.multichat.proxy.common.store.ProxyChannelsDataStore;
 
 public abstract class AbstractChannel implements Channel {
 
@@ -45,7 +46,15 @@ public abstract class AbstractChannel implements Channel {
 
 	protected Collection<MultiChatProxyPlayer> removeHiddenViewers(Collection<MultiChatProxyPlayer> currentViewers) {
 
-		// TODO !
+		Iterator<MultiChatProxyPlayer> it = currentViewers.iterator();
+		ProxyChannelsDataStore channelsDataStore = MultiChatProxy.getInstance().getDataStoreManager().getChannelsDataStore().get();
+
+		while (it.hasNext()) {
+			MultiChatProxyPlayer viewer = it.next();
+			if (channelsDataStore.hasHiddenChannel(viewer.getUniqueId(), getId())) {
+				it.remove();
+			}
+		}
 
 		return currentViewers;
 
@@ -82,10 +91,14 @@ public abstract class AbstractChannel implements Channel {
 		Collection<MultiChatProxyPlayer> onlinePlayers = playerManager.getOnlinePlayers();
 
 		onlinePlayers = removeNonPermittedViewers(onlinePlayers);
+		
+		// TODO Remove ignored players
 
 		onlinePlayers = removeHiddenViewers(onlinePlayers);
 
 		onlinePlayers = removeSameServer(onlinePlayers, player);
+		
+		// TODO Add staff members with spy on
 
 		for (MultiChatProxyPlayer p : onlinePlayers) {
 			// Plain message means the formatting should already be done...
@@ -107,8 +120,12 @@ public abstract class AbstractChannel implements Channel {
 		Collection<MultiChatProxyPlayer> onlinePlayers = playerManager.getOnlinePlayers();
 
 		onlinePlayers = removeNonPermittedViewers(onlinePlayers);
+		
+		// TODO Remove ignored players
 
 		onlinePlayers = removeHiddenViewers(onlinePlayers);
+		
+		// TODO Add staff members with spy on
 
 		for (MultiChatProxyPlayer p : onlinePlayers) {
 			// Plain message means the formatting should already be done...
