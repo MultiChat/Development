@@ -305,7 +305,7 @@ public class MultiChatLocalSpongePlugin {
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 
 			try {
-				DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+				DatabaseManager.getInstance().getDatabase("multichatlocal.db").get().disconnectFromDatabase();
 			} catch (SQLException e) {
 				MultiChatLocal.getInstance().getConsoleLogger().log("Error when disconnecting from database!");
 			}
