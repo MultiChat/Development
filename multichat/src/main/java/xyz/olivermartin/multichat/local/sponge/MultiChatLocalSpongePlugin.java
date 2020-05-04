@@ -56,7 +56,7 @@ import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpon
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChannelListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerMetaListener;
 
-@Plugin(id = "multichat", name = "MultiChat", version = "1.9", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChat", version = "1.9.1", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public class MultiChatLocalSpongePlugin {
 
 	@Inject
@@ -305,7 +305,7 @@ public class MultiChatLocalSpongePlugin {
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 
 			try {
-				DatabaseManager.getInstance().getDatabase("multichatsponge.db").get().disconnectFromDatabase();
+				DatabaseManager.getInstance().getDatabase("multichatlocal.db").get().disconnectFromDatabase();
 			} catch (SQLException e) {
 				MultiChatLocal.getInstance().getConsoleLogger().log("Error when disconnecting from database!");
 			}
