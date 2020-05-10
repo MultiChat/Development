@@ -270,3 +270,8 @@ privacy_settings:
     log_pms: true
     log_staffchat: true
     log_groupchat: true
+
+# PremiumVanish
+premium_vanish:
+    prevent_message: true # Bloquer l'utilisation de la commande /msg
+    prevent_staff_list: true # Masquer de la liste /staff
