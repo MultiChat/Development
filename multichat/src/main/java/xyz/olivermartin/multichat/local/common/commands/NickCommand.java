@@ -55,9 +55,46 @@ public abstract class NickCommand {
 			return false;
 		}
 
-		if (lnm.containsFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format"))) {
-			sender.sendBadMessage("You do not have permission to use nicknames with format codes!");
-			return false;
+		if (lnm.containsFormatCodes(proposedNick)) {
+
+			// If the nickname has ANY format codes...
+
+			if (!sender.hasPermission("multichatlocal.nick.format")) {
+
+				// If they don't have the permission for ALL format codes, then we will check individually...
+
+				if (lnm.containsBoldFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.bold"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with bold format codes!");
+					return false;
+				}
+
+				if (lnm.containsItalicFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.italic"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with italic format codes!");
+					return false;
+				}
+
+				if (lnm.containsUnderlineFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.underline"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with underline format codes!");
+					return false;
+				}
+
+				if (lnm.containsStrikethroughFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.strikethrough"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with strikethrough format codes!");
+					return false;
+				}
+
+				if (lnm.containsObfuscatedFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.obfuscated"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with obfuscated format codes!");
+					return false;
+				}
+
+				if (lnm.containsResetFormatCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.format.reset"))) {
+					sender.sendBadMessage("You do not have permission to use nicknames with reset format codes!");
+					return false;
+				}
+
+			}
+
 		}
 
 		if (!simpleNickname.matcher(proposedNick).matches() && !(sender.hasPermission("multichatlocal.nick.special"))) {
