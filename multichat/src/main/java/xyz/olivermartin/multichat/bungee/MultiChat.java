@@ -94,6 +94,8 @@ public class MultiChat extends Plugin implements Listener {
 	private static MultiChat instance;
 
 	public static boolean premiumVanish = false;
+	public static boolean hideVanishedStaffInMsg = true;
+	public static boolean hideVanishedStaffInStaffList = true;
 
 	public static MultiChat getInstance() {
 		return instance;
@@ -363,6 +365,12 @@ public class MultiChat extends Plugin implements Listener {
 			// Manage premiumVanish dependency
 			if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 				premiumVanish = true;
+
+				if (configYML.contains("premium_vanish")) {
+					hideVanishedStaffInMsg = configYML.getBoolean("premium_vanish.prevent_message");
+					hideVanishedStaffInStaffList = configYML.getBoolean("premium_vanish.prevent_staff_list");
+				}
+
 			}
 
 		} else {
