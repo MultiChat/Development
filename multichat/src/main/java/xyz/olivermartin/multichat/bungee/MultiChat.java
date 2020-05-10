@@ -93,6 +93,8 @@ public class MultiChat extends Plugin implements Listener {
 
 	private static MultiChat instance;
 
+	public static boolean premiumVanish = false;
+
 	public static MultiChat getInstance() {
 		return instance;
 	}
@@ -357,6 +359,11 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Fetch display names of all players
 			fetchDisplayNames();
+
+			// Manage premiumVanish dependency
+			if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
+				premiumVanish = true;
+			}
 
 		} else {
 			getLogger().info("Config incorrect version! Please repair or delete it!");
