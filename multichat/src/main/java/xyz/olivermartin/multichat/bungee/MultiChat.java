@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.1";
+	public static final String LATEST_VERSION = "1.9.2";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.1",
 			"1.9",
 			"1.8.2",
 			"1.8.1",
@@ -92,6 +93,10 @@ public class MultiChat extends Plugin implements Listener {
 
 	private static MultiChat instance;
 
+	public static boolean premiumVanish = false;
+	public static boolean hideVanishedStaffInMsg = true;
+	public static boolean hideVanishedStaffInStaffList = true;
+
 	public static MultiChat getInstance() {
 		return instance;
 	}
@@ -132,9 +137,10 @@ public class MultiChat extends Plugin implements Listener {
 
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 					}
 
 				}
@@ -170,7 +176,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 				} catch (NullPointerException ex) { /* EMPTY */ }
@@ -188,7 +196,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 				}
@@ -207,7 +217,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 
@@ -226,7 +238,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 
@@ -347,6 +361,17 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Fetch display names of all players
 			fetchDisplayNames();
+
+			// Manage premiumVanish dependency
+			if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
+				premiumVanish = true;
+
+				if (configYML.contains("premium_vanish")) {
+					hideVanishedStaffInMsg = configYML.getBoolean("premium_vanish.prevent_message");
+					hideVanishedStaffInStaffList = configYML.getBoolean("premium_vanish.prevent_staff_list");
+				}
+
+			}
 
 		} else {
 			getLogger().info("Config incorrect version! Please repair or delete it!");

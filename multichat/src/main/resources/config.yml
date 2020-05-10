@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.1" #
+version: "1.9.2" #
 ##################
 
 # 1. General
@@ -265,3 +265,8 @@ privacy_settings:
     log_pms: true
     log_staffchat: true
     log_groupchat: true
+
+# Settings for PremiumVanish
+premium_vanish:
+    prevent_message: true # Prevent players being able to /msg vanished staff
+    prevent_staff_list: true # Prevent vanished staff showing up in /staff

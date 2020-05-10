@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -15,6 +16,7 @@ import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
 
@@ -54,24 +56,39 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if ((sender instanceof ProxiedPlayer)) {
 
-						ProxiedPlayer player = (ProxiedPlayer)sender;
-						toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
+						boolean permittedToMessage = true;
 
-						if (toggleresult == true) {
+						if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInMsg) {
+							if (BungeeVanishAPI.isInvisible(target) && !sender.hasPermission("multichat.chat.msg.vanished")) {
+								permittedToMessage = false;
+							}
+						}
 
-							Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+						if (permittedToMessage) {
 
-							if (config.contains("toggle_pm") ? config.getBoolean("toggle_pm") == false : false) {
+							ProxiedPlayer player = (ProxiedPlayer)sender;
+							toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
 
-								toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
-								MessageManager.sendMessage(sender, "command_msg_no_toggle");
+							if (toggleresult == true) {
+
+								Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+
+								if (config.contains("toggle_pm") ? config.getBoolean("toggle_pm") == false : false) {
+
+									toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
+									MessageManager.sendMessage(sender, "command_msg_no_toggle");
+
+								} else {
+									MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+								}
 
 							} else {
-								MessageManager.sendSpecialMessage(sender, "command_msg_toggle_on", target.getName());
+								MessageManager.sendMessage(sender, "command_msg_toggle_off");
 							}
 
 						} else {
-							MessageManager.sendMessage(sender, "command_msg_toggle_off");
+							// Vanished staff member
+							MessageManager.sendMessage(sender, "command_msg_not_online");
 						}
 
 					} else {
@@ -120,30 +137,45 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					boolean permittedToMessage = true;
 
-						BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
-						BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
-
+					if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInMsg) {
+						if (BungeeVanishAPI.isInvisible(target) && !sender.hasPermission("multichat.chat.msg.vanished")) {
+							permittedToMessage = false;
+						}
 					}
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (permittedToMessage) {
 
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
-								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
-								return;
+							BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+							BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
+
+						}
+
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+
+							if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+
+								if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
+									ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+									return;
+								}
+
+								PrivateMessageManager.getInstance().sendMessage(message, (ProxiedPlayer)sender, target);
+
+							} else {
+								MessageManager.sendMessage(sender, "command_msg_disabled_target");
 							}
 
-							PrivateMessageManager.getInstance().sendMessage(message, (ProxiedPlayer)sender, target);
-
 						} else {
-							MessageManager.sendMessage(sender, "command_msg_disabled_target");
+							MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 						}
 
 					} else {
-						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+						// Vanished staff member
+						MessageManager.sendMessage(sender, "command_msg_not_online");
 					}
 
 				} else if (args[0].equalsIgnoreCase("console")) {
@@ -214,9 +246,17 @@ public class MsgCommand extends Command implements TabExecutor {
 			for ( ProxiedPlayer player : ProxyServer.getInstance().getPlayers() ) {
 
 				if ( player.getName().toLowerCase().startsWith( search ) ) {
+
 					if (!Events.hiddenStaff.contains(player.getUniqueId())) {
-						matches.add( player.getName() );
+						if (MultiChat.premiumVanish) {
+							if (!BungeeVanishAPI.isInvisible(player)) {
+								matches.add(player.getName());
+							}
+						} else {
+							matches.add(player.getName());
+						}
 					}
+
 				}
 
 			}

@@ -18,7 +18,11 @@ public class MultiChatUtil {
 		String message = "";
 		for (String arg : args) {
 			if (counter >= start && counter <= end) {
-				message = message + arg + " ";
+				if (counter != end) {
+					message = message + arg + " ";
+				} else {
+					message = message + arg;
+				}
 			}
 			counter++;
 		}
