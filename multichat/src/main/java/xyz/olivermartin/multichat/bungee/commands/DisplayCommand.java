@@ -6,7 +6,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
@@ -45,9 +47,15 @@ public class DisplayCommand extends Command {
 	public static void displayMessage(String message) {
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
+		Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-			onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+			if (onlineplayer.getServer() != null) {
+				if (!config.getStringList("no_global").contains(
+						onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				}
+			}
 		}
 
 		// Trigger PostBroadcastEvent
