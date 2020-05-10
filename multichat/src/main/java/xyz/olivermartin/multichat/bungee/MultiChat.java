@@ -133,9 +133,10 @@ public class MultiChat extends Plugin implements Listener {
 
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-					getProxy();
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 					}
 
 				}
@@ -171,7 +172,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 				} catch (NullPointerException ex) { /* EMPTY */ }
@@ -189,7 +192,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 				}
@@ -208,7 +213,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 
@@ -227,7 +234,9 @@ public class MultiChat extends Plugin implements Listener {
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
-						BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						if (player.getServer() != null) {
+							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+						}
 
 					}
 
