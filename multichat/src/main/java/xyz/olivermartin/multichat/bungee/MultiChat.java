@@ -365,6 +365,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Manage premiumVanish dependency
 			if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 				premiumVanish = true;
+				System.out.println("[MultiChat] Hooked with PremiumVanish!");
 
 				if (configYML.contains("premium_vanish")) {
 					hideVanishedStaffInMsg = configYML.getBoolean("premium_vanish.prevent_message");
