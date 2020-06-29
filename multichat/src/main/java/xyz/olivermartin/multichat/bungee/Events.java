@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
+import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -499,9 +500,10 @@ public class Events implements Listener {
 				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
 			}
 
+			boolean networkSilence = !player.hasPermission("multichat.staff.silentjoin") && !(MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player));
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-				if (!player.hasPermission("multichat.staff.silentjoin")) {
+				if (networkSilence) {
 
 					if (firstJoin && broadcastWelcome) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));

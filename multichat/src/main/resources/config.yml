@@ -270,3 +270,4 @@ privacy_settings:
 premium_vanish:
     prevent_message: true # Prevent players being able to /msg vanished staff
     prevent_staff_list: true # Prevent vanished staff showing up in /staff
+    silence_join: true # Prevent vanished players sending the public join message (Sends the silent join one instead)

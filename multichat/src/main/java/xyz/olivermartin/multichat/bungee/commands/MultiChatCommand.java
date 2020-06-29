@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Channel;
@@ -142,6 +143,19 @@ public class MultiChatCommand extends Command {
 
 					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
 						Channel.getGlobalChannel().addServer(server);
+					}
+
+					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
+						MultiChat.premiumVanish = true;
+
+						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("premium_vanish")) {
+							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_message");
+							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
+							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_join");
+						}
+
+					} else {
+						MultiChat.premiumVanish = false;
 					}
 
 					MessageManager.sendMessage(sender, "command_multichat_reload_completed");
