@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.olivermartin.multichat</groupId>
   <artifactId>multichat</artifactId>
-  <version>1.9.2</version>
+  <version>1.9.3</version>
   <build>
     <plugins>
       <plugin>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
-      <version>1.15-SNAPSHOT</version>
+      <version>1.16-R0.2-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -184,7 +184,7 @@
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
-      <version>1.15-SNAPSHOT</version>
+      <version>1.16-R0.2-SNAPSHOT</version>
       <type>javadoc</type>
       <scope>provided</scope>
       <exclusions>
@@ -221,7 +221,7 @@
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.15.1-R0.1-SNAPSHOT</version>
+      <version>1.16.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
