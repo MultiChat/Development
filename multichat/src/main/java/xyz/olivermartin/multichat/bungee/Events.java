@@ -293,14 +293,14 @@ public class Events implements Listener {
 
 		/* MULTICHAT HEX CODE PRE-PROCESSOR! */
 
-		if (player.hasPermission("multichat.chat.color") 
+		/*if (player.hasPermission("multichat.chat.color") 
 				|| player.hasPermission("multichat.chat.color.rgb")
 				|| player.hasPermission("multichat.chat.colour")
 				|| player.hasPermission("multichat.chat.colour.rgb")) {
 			String msg = event.getMessage();
 			msg = msg.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
 			event.setMessage(msg);
-		}
+		}*/
 		
 		/* END PRE-PROCESSOR */
 
