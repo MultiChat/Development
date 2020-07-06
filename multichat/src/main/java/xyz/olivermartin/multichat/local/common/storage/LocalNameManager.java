@@ -240,7 +240,7 @@ public abstract class LocalNameManager {
 	public String stripAllFormattingCodes(String input) {
 
 		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-ORX]");
 
 		if (input == null) {
 			return null;
@@ -258,7 +258,7 @@ public abstract class LocalNameManager {
 		input = stripAllFormattingCodes(input);
 
 		char COLOR_CHAR = '§';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-OR]");
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-ORX]");
 
 		if (input == null) {
 			return null;
@@ -275,7 +275,24 @@ public abstract class LocalNameManager {
 	public boolean containsColorCodes(String input) {
 
 		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-F]");
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FX]");
+
+		if (input == null) {
+			return false;
+		}
+
+		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
+
+	}
+
+	/**
+	 * @param input
+	 * @return True if the input contains hex colour codes (e.g. '&x...')
+	 */
+	public boolean containsHexColorCodes(String input) {
+
+		char COLOR_CHAR = '&';
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[X]");
 
 		if (input == null) {
 			return false;
