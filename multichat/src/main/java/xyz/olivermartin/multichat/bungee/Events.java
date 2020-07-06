@@ -298,7 +298,7 @@ public class Events implements Listener {
 				|| player.hasPermission("multichat.chat.colour")
 				|| player.hasPermission("multichat.chat.colour.rgb")) {
 			String msg = event.getMessage();
-			msg.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
+			msg = msg.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
 			event.setMessage(msg);
 		}
 		
