@@ -10,8 +10,9 @@ import xyz.olivermartin.multichat.local.common.storage.LocalNameManager;
 
 public abstract class NickCommand {
 
-	private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
-
+	//private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
+	private static final Pattern simpleNickname = Pattern.compile("^([a-zA-Z0-9_]|(?i)(\\&[0-9A-FL-ORX]))+$");
+	
 	public boolean executeNickCommand(MultiChatLocalPlayer targetPlayer, MultiChatLocalPlayer sender, String proposedNick) {
 
 		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
