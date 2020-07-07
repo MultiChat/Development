@@ -203,6 +203,11 @@ public abstract class LocalChatManager {
 
 	}
 
+	public String reformatRGB(String message) {
+		// Translate RGB codes
+		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
+	}
+
 	public abstract String translateColourCodes(String message);
 
 	public abstract String processExternalPlaceholders(MultiChatLocalPlayer player, String message);

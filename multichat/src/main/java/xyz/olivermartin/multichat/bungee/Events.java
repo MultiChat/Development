@@ -405,7 +405,7 @@ public class Events implements Listener {
 		//TODO? }
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onLogin(PostLoginEvent event) {
 
 		ProxiedPlayer player = event.getPlayer();

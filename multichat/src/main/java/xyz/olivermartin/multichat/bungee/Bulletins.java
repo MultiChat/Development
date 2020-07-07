@@ -72,7 +72,7 @@ public class Bulletins {
 
 	public static void addBulletin(String message) {
 		synchronized (bulletin) {
-			bulletin.add(message);
+			bulletin.add(MultiChatUtil.reformatRGB(message));
 		}
 	}
 

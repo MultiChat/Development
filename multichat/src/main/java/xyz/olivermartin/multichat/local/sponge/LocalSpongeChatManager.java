@@ -16,6 +16,7 @@ public class LocalSpongeChatManager extends LocalChatManager {
 
 	@Override
 	public String translateColourCodes(String message) {
+		message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
 		return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
 	}
 

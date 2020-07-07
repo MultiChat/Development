@@ -95,6 +95,8 @@ public class GCCommand extends Command {
 
 		ChatManipulation chatfix = new ChatManipulation();
 
+		message = MultiChatUtil.reformatRGB(message);
+
 		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(playerName);
 		if (potentialPlayer != null) {
 			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "group_chats")) {

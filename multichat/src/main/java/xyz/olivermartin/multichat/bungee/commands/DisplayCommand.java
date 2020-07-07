@@ -47,6 +47,7 @@ public class DisplayCommand extends Command {
 	public static void displayMessage(String message) {
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
+		message = MultiChatUtil.reformatRGB(message);
 		Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

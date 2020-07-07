@@ -14,6 +14,8 @@ public abstract class NickCommand {
 
 	public boolean executeNickCommand(MultiChatLocalPlayer targetPlayer, MultiChatLocalPlayer sender, String proposedNick) {
 
+		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
+
 		UUID targetUUID = targetPlayer.getUniqueId();
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();

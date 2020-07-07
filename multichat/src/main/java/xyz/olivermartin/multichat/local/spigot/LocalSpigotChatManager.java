@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
+import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.spigot.hooks.LocalSpigotPAPIHook;
 
@@ -12,6 +13,7 @@ public class LocalSpigotChatManager extends LocalChatManager {
 
 	@Override
 	public String translateColourCodes(String message) {
+		message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
 		return ChatColor.translateAlternateColorCodes('&', message);
 	}
 

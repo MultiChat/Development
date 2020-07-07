@@ -19,6 +19,8 @@ import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
 public class StaffChatManager {
 
 	public void sendModMessage(String username, String displayname, String server, String message) {
+		
+		message = MultiChatUtil.reformatRGB(message);
 
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
@@ -68,6 +70,8 @@ public class StaffChatManager {
 	}
 
 	public void sendAdminMessage(String username, String displayname, String server, String message) {
+		
+		message = MultiChatUtil.reformatRGB(message);
 
 		String original = message;
 		ChatManipulation chatfix = new ChatManipulation();

@@ -29,6 +29,8 @@ public class PrivateMessageManager {
 	}
 
 	public void sendMessage(String message, ProxiedPlayer sender, ProxiedPlayer target) {
+		
+		message = MultiChatUtil.reformatRGB(message);
 
 		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
@@ -72,6 +74,8 @@ public class PrivateMessageManager {
 	}
 
 	public void sendMessageConsoleTarget(String message, ProxiedPlayer sender) {
+		
+		message = MultiChatUtil.reformatRGB(message);
 
 		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
@@ -111,6 +115,8 @@ public class PrivateMessageManager {
 	}
 
 	public void sendMessageConsoleSender(String message, ProxiedPlayer target) {
+		
+		message = MultiChatUtil.reformatRGB(message);
 
 		CommandSender sender = ProxyServer.getInstance().getConsole();
 
