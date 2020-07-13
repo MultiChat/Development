@@ -128,12 +128,20 @@ public class GCCommand extends Command {
 
 				if (potentialPlayer != null) {
 					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+						}
 					} else {
 						ChatControl.sendIgnoreNotifications(onlineplayer, potentialPlayer, "group_chats");
 					}
 				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+					} else {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					}
 				}
 
 			}

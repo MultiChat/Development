@@ -187,7 +187,11 @@ public class Channel {
 						if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 							//TODO hiding & showing streams
 
-							receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+							if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+								receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+							} else {
+								receiver.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+							}
 
 						}
 					}
