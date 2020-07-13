@@ -275,3 +275,10 @@ privacy_settings:
 premium_vanish:
     prevent_message: true # Bloquer l'utilisation de la commande /msg
     prevent_staff_list: true # Masquer de la liste /staff
+
+# Legacy (PRE-1.16) Servers
+# Listing servers here will mark them as 'LEGACY' servers
+# RGB colour codes will be approximated to their nearest value (i.e. &a, &b and so on)
+# This prevents them displaying in chat as &x...
+legacy_servers:
+- MyOldLegacyServerHere

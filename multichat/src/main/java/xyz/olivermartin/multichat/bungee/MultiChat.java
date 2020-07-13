@@ -97,6 +97,8 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean premiumVanish = false;
 	public static boolean hideVanishedStaffInMsg = true;
 	public static boolean hideVanishedStaffInStaffList = true;
+	
+	public static List<String> legacyServers = new ArrayList<String>();
 
 	public static MultiChat getInstance() {
 		return instance;
@@ -342,6 +344,11 @@ public class MultiChat extends Plugin implements Listener {
 				logPMs = configYML.getSection("privacy_settings").getBoolean("log_pms");
 				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
 				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
+			}
+			
+			// Legacy servers for RGB approximation
+			if (configYML.contains("legacy_servers")) {
+				legacyServers = configYML.getStringList("legacy_servers");
 			}
 
 			// Set default channel

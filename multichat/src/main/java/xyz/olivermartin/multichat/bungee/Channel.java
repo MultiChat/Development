@@ -202,7 +202,7 @@ public class Channel {
 
 	}
 
-	public String buildSpigotFormat(ProxiedPlayer sender, String format, String message) {
+	/*public String buildSpigotFormat(ProxiedPlayer sender, String format, String message) {
 
 		String newFormat = format;
 
@@ -228,13 +228,13 @@ public class Channel {
 		if (ChatModeManager.getInstance().isGlobal(sender.getUniqueId())) {
 			newFormat = newFormat.replace("%MODE%", "Global");
 			newFormat = newFormat.replace("%M%", "G");
-		}*/
+		}
 
 		newFormat = newFormat + "%MESSAGE%";
 
 		return newFormat;
 
-	}
+	}*/
 
 	public BaseComponent[] buildFormat(ProxiedPlayer sender, ProxiedPlayer receiver, String format, String message) {
 
@@ -283,11 +283,17 @@ public class Channel {
 		if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
 
 			newFormat = newFormat.replace("%MESSAGE%", message);
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				newFormat = MultiChatUtil.approximateHexCodes(newFormat);
+			}
 			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat));
 
 		} else {
 
 			newFormat = newFormat.replace("%MESSAGE%", "");
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				newFormat = MultiChatUtil.approximateHexCodes(newFormat);
+			}
 			toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat) + message);
 		}
 
@@ -326,6 +332,9 @@ public class Channel {
 		BaseComponent[] toSend;
 
 		newFormat = newFormat.replace("%MESSAGE%", message);
+		if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			newFormat = MultiChatUtil.approximateHexCodes(newFormat);
+		}
 		toSend = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', newFormat));
 
 		return toSend;
