@@ -12,7 +12,7 @@ public abstract class NickCommand {
 
 	//private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
 	private static final Pattern simpleNickname = Pattern.compile("^([a-zA-Z0-9_]|(?i)(\\&[0-9A-FL-ORX]))+$");
-	
+
 	public boolean executeNickCommand(MultiChatLocalPlayer targetPlayer, MultiChatLocalPlayer sender, String proposedNick) {
 
 		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
@@ -53,8 +53,13 @@ public abstract class NickCommand {
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
 
-		if (lnm.containsColorCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour"))) {
-			sender.sendBadMessage("You do not have permission to use nicknames with color codes!");
+		if (lnm.containsRGBColorCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
+			sender.sendBadMessage("You do not have permission to use nicknames with rgb color codes!");
+			return false;
+		}
+
+		if (lnm.containsSimpleColorCodes(proposedNick) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.simple") || sender.hasPermission("multichatlocal.nick.colour.simple") ||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
+			sender.sendBadMessage("You do not have permission to use nicknames with simple color codes!");
 			return false;
 		}
 

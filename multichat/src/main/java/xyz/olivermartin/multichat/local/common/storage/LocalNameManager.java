@@ -272,10 +272,10 @@ public abstract class LocalNameManager {
 	 * @param input
 	 * @return True if the input contains colour codes (e.g. '&a')
 	 */
-	public boolean containsColorCodes(String input) {
+	public boolean containsSimpleColorCodes(String input) {
 
 		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FX]");
+		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-F]");
 
 		if (input == null) {
 			return false;
@@ -289,7 +289,7 @@ public abstract class LocalNameManager {
 	 * @param input
 	 * @return True if the input contains hex colour codes (e.g. '&x...')
 	 */
-	public boolean containsHexColorCodes(String input) {
+	public boolean containsRGBColorCodes(String input) {
 
 		char COLOR_CHAR = '&';
 		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[X]");
