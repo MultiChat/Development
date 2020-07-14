@@ -54,6 +54,11 @@ public class LocalDataStore {
 	private Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
 
 	/**
+	 * Which players can chat using rgb colours
+	 */
+	private Map<UUID, Boolean> rgbMap = new HashMap<UUID, Boolean>();
+
+	/**
 	 * List of channels with their members
 	 */
 	private Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
@@ -110,6 +115,13 @@ public class LocalDataStore {
 	 */
 	public synchronized Map<UUID, Boolean> getColourMap() {
 		return colourMap;
+	}
+
+	/**
+	 * @return the rgbMap
+	 */
+	public synchronized Map<UUID, Boolean> getRGBMap() {
+		return rgbMap;
 	}
 
 	/**

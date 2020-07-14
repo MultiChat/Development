@@ -150,7 +150,7 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour) {
+	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour, boolean rgb) {
 
 		sendIgnoreMap(server);
 
@@ -164,6 +164,7 @@ public class BungeeComm implements Listener {
 			// Channel part
 			oout.writeUTF(channel);
 			oout.writeBoolean(colour);
+			oout.writeBoolean(rgb);
 			oout.writeBoolean(channelObject.isWhitelistMembers());
 			oout.writeObject(channelObject.getMembers());
 
