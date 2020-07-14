@@ -16,11 +16,17 @@ import xyz.olivermartin.multichat.local.sponge.hooks.LocalSpongePAPIHook;
 public class LocalSpongeChatManager extends LocalChatManager {
 
 	@Override
-	public String translateColourCodes(String message) {
-		message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
-		message = message.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
-		message = MultiChatUtil.approximateHexCodes(message);
-		return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
+	public String translateColourCodes(String message, boolean rgb) {
+
+		if (rgb) {
+			message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
+			message = message.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
+			message = MultiChatUtil.approximateHexCodes(message);
+			return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
+		} else {
+			return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
+		}
+
 	}
 
 	@Override

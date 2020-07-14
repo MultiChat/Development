@@ -21,10 +21,17 @@ public abstract class LocalLoginLogoutListener {
 			}
 		}
 
-		Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
-		synchronized (colourMap) {
-			if (!colourMap.containsKey(player.getUniqueId())) {
-				colourMap.put(player.getUniqueId(), false);
+		Map<UUID, Boolean> simpleColourMap = MultiChatLocal.getInstance().getDataStore().getSimpleColourMap();
+		synchronized (simpleColourMap) {
+			if (!simpleColourMap.containsKey(player.getUniqueId())) {
+				simpleColourMap.put(player.getUniqueId(), false);
+			}
+		}
+
+		Map<UUID, Boolean> rgbColourMap = MultiChatLocal.getInstance().getDataStore().getRGBColourMap();
+		synchronized (rgbColourMap) {
+			if (!rgbColourMap.containsKey(player.getUniqueId())) {
+				rgbColourMap.put(player.getUniqueId(), false);
 			}
 		}
 
@@ -41,10 +48,16 @@ public abstract class LocalLoginLogoutListener {
 			playerChannels.remove(player.getUniqueId());
 		}
 
-		Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
-		synchronized (colourMap) {
-			colourMap.remove(player.getUniqueId());
+		Map<UUID, Boolean> simpleColourMap = MultiChatLocal.getInstance().getDataStore().getSimpleColourMap();
+		synchronized (simpleColourMap) {
+			simpleColourMap.remove(player.getUniqueId());
 		}
+
+		Map<UUID, Boolean> rgbColourMap = MultiChatLocal.getInstance().getDataStore().getRGBColourMap();
+		synchronized (rgbColourMap) {
+			rgbColourMap.remove(player.getUniqueId());
+		}
+
 
 	}
 

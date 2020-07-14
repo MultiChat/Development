@@ -34,13 +34,13 @@ public abstract class LocalPlayerChannelListener {
 
 			boolean colour = message.readBoolean();
 			boolean rgb = message.readBoolean();
-			Map<UUID, Boolean> colourMap = MultiChatLocal.getInstance().getDataStore().getColourMap();
-			Map<UUID, Boolean> rgbMap = MultiChatLocal.getInstance().getDataStore().getRGBMap();
-			synchronized (colourMap) {
-				colourMap.put(player.getUniqueId(), colour);
+			Map<UUID, Boolean> simpleColourMap = MultiChatLocal.getInstance().getDataStore().getSimpleColourMap();
+			Map<UUID, Boolean> rgbColourMap = MultiChatLocal.getInstance().getDataStore().getRGBColourMap();
+			synchronized (simpleColourMap) {
+				simpleColourMap.put(player.getUniqueId(), colour);
 			}
-			synchronized (rgbMap) {
-				rgbMap.put(player.getUniqueId(), rgb);
+			synchronized (rgbColourMap) {
+				rgbColourMap.put(player.getUniqueId(), rgb);
 			}
 
 			boolean whitelistMembers = message.readBoolean();

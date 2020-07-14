@@ -174,26 +174,55 @@ public abstract class LocalChatManager {
 
 	}
 
-	public boolean canChatInColour(UUID uuid) {
+	public boolean canChatInSimpleColour(UUID uuid) {
 
 		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
-		Map<UUID, Boolean> colourMap = store.getColourMap();
+		Map<UUID, Boolean> colourMap = store.getSimpleColourMap();
 
 		synchronized (colourMap) {
 
 			if (colourMap.containsKey(uuid)) {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player is in the colour map!");
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player is in the simple colour map!");
 
 				boolean colour = colourMap.get(uuid);
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Can they use colours? --> " + colour);
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Can they use simple colours? --> " + colour);
 
 				return colour;
 
 			} else {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player was NOT in the colour map! That probably isn't good!");
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player was NOT in the simple colour map! That probably isn't good!");
+
+				return false;
+
+			}
+
+		}
+
+	}
+
+	public boolean canChatInRGBColour(UUID uuid) {
+
+		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
+		Map<UUID, Boolean> colourMap = store.getRGBColourMap();
+
+		synchronized (colourMap) {
+
+			if (colourMap.containsKey(uuid)) {
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player is in the rgb colour map!");
+
+				boolean colour = colourMap.get(uuid);
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Can they use rgb colours? --> " + colour);
+
+				return colour;
+
+			} else {
+
+				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player was NOT in the rgb colour map! That probably isn't good!");
 
 				return false;
 
@@ -208,7 +237,7 @@ public abstract class LocalChatManager {
 		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
 	}
 
-	public abstract String translateColourCodes(String message);
+	public abstract String translateColourCodes(String message, boolean rgb);
 
 	public abstract String processExternalPlaceholders(MultiChatLocalPlayer player, String message);
 
@@ -232,7 +261,7 @@ public abstract class LocalChatManager {
 				value = processExternalPlaceholders(player, value);
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
 
-				value = translateColourCodes(value);
+				value = translateColourCodes(value, true);
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Translated colour codes to get: " + value);
 
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
