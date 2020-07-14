@@ -22,7 +22,7 @@ public abstract class LocalChatListenerHighest {
 			event.setMessage(chatManager.translateColourCodes(event.getMessage(),true));
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (RGB) and set back in the event as: " + event.getMessage());
 		} else if (chatManager.canChatInSimpleColour(event.getPlayer().getUniqueId())) {
-			event.setMessage(chatManager.translateColourCodes(event.getMessage(),true));
+			event.setMessage(chatManager.translateColourCodes(event.getMessage(),false));
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (SIMPLE ONLY) and set back in the event as: " + event.getMessage());
 		}
 
