@@ -233,8 +233,28 @@ public abstract class LocalChatManager {
 	}
 
 	public String reformatRGB(String message) {
+
 		// Translate RGB codes
-		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
+		message = message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
+
+		String transformedMessage = "";
+		char lastChar = 'a';
+
+		// Transform codes to lowercase for better compatibility with Essentials etc.
+		for (char c : message.toCharArray()) {
+
+			if (lastChar == '&') {
+				if (String.valueOf(c).matches("(?i)([0-9A-FX])")) {
+					c = Character.toLowerCase(c);
+				}
+			}
+
+			transformedMessage = transformedMessage + c;
+			lastChar = c;
+		}
+
+		return transformedMessage;
+
 	}
 
 	public abstract String translateColourCodes(String message, boolean rgb);
