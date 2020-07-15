@@ -15,8 +15,9 @@ import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import xyz.olivermartin.multichat.bungee.GroupManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * The Group Command
@@ -35,6 +36,8 @@ public class GroupCommand extends Command implements TabExecutor {
 
 	public void execute(CommandSender sender, String[] args) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		if ((args.length < 1) || ((args.length == 1) && (args[0].toLowerCase().equals("help")))) {
 
 			GroupManager groupman = new GroupManager();
@@ -49,17 +52,17 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if ((sender instanceof ProxiedPlayer)) {
 
-					if (MultiChat.groupchats.containsKey(args[0].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[0].toLowerCase())) {
 
-						TGroupChatInfo groupInfo = (TGroupChatInfo) MultiChat.groupchats.get(args[0].toLowerCase());
+						TGroupChatInfo groupInfo = (TGroupChatInfo) ds.getGroupChats().get(args[0].toLowerCase());
 						ProxiedPlayer player = (ProxiedPlayer) sender;
 
 						if (groupInfo.existsMember(player.getUniqueId())) {
 
-							String viewedchat = (String)MultiChat.viewedchats.get(player.getUniqueId());
+							String viewedchat = (String)ds.getViewedChats().get(player.getUniqueId());
 							viewedchat = args[0].toLowerCase();
-							MultiChat.viewedchats.remove(player.getUniqueId());
-							MultiChat.viewedchats.put(player.getUniqueId(), viewedchat);
+							ds.getViewedChats().remove(player.getUniqueId());
+							ds.getViewedChats().put(player.getUniqueId(), viewedchat);
 
 							MessageManager.sendSpecialMessage(sender, "command_group_selected", args[0].toUpperCase());
 
@@ -92,12 +95,12 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if ((args[0].toLowerCase().equals("list")) || (args[0].toLowerCase().equals("members"))) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						TGroupChatInfo groupChatInfo = new TGroupChatInfo();
 						ProxiedPlayer player = (ProxiedPlayer) sender;
 
-						groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+						groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 						if ((groupChatInfo.existsMember(player.getUniqueId())) || (sender.hasPermission("multichat.staff.spy"))) {
 
@@ -134,16 +137,16 @@ public class GroupCommand extends Command implements TabExecutor {
 
 						if (player.hasPermission("multichat.staff.spy")) {
 
-							if (MultiChat.allspy.contains(player.getUniqueId())) {
+							if (ds.getAllSpy().contains(player.getUniqueId())) {
 
-								MultiChat.allspy.remove(player.getUniqueId());
+								ds.getAllSpy().remove(player.getUniqueId());
 								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_1");
 								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_2");
 								MessageManager.sendMessage(sender, "command_group_spy_all_disabled_3");
 
 							} else {
 
-								MultiChat.allspy.add(player.getUniqueId());
+								ds.getAllSpy().add(player.getUniqueId());
 								MessageManager.sendMessage(sender, "command_group_spy_all_enabled");
 							}
 
@@ -153,24 +156,24 @@ public class GroupCommand extends Command implements TabExecutor {
 
 					} else if (player.hasPermission("multichat.staff.spy"))	{
 
-						if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+						if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
-							TGroupChatInfo groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+							TGroupChatInfo groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 							if (!groupChatInfo.existsMember(player.getUniqueId())) {
 
 								if (groupChatInfo.existsViewer(player.getUniqueId())) {
 
 									groupChatInfo.delViewer(player.getUniqueId());
-									MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
-									MultiChat.groupchats.put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
+									ds.getGroupChats().remove(groupChatInfo.getName().toLowerCase());
+									ds.getGroupChats().put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
 									MessageManager.sendSpecialMessage(sender, "command_group_spy_off", groupChatInfo.getName().toUpperCase());
 
 								} else {
 
 									groupChatInfo.addViewer(player.getUniqueId());
-									MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
-									MultiChat.groupchats.put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
+									ds.getGroupChats().remove(groupChatInfo.getName().toLowerCase());
+									ds.getGroupChats().put(groupChatInfo.getName().toLowerCase(), groupChatInfo);
 									MessageManager.sendSpecialMessage(sender, "command_group_spy_on", groupChatInfo.getName().toUpperCase());
 
 								}
@@ -213,7 +216,7 @@ public class GroupCommand extends Command implements TabExecutor {
 
 						if (args[1].length() <= 20) {
 
-							if (!MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+							if (!ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 								GroupManager groupman = new GroupManager();
 
@@ -242,7 +245,7 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if (args[0].toLowerCase().equals("join")) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						GroupManager groupman = new GroupManager();
 						ProxiedPlayer player = (ProxiedPlayer)sender;
@@ -264,7 +267,7 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if ((args[0].toLowerCase().equals("quit")) || (args[0].toLowerCase().equals("leave"))) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						GroupManager groupman = new GroupManager();
 
@@ -279,9 +282,9 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if (args[0].toLowerCase().equals("formal")) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
-						TGroupChatInfo groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+						TGroupChatInfo groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 						if (!groupChatInfo.getFormal()) {
 
@@ -290,8 +293,8 @@ public class GroupCommand extends Command implements TabExecutor {
 							if (groupChatInfo.getAdmins().contains(player.getUniqueId())) {
 
 								groupChatInfo.setFormal(true);
-								MultiChat.groupchats.remove(groupChatInfo.getName());
-								MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+								ds.getGroupChats().remove(groupChatInfo.getName());
+								ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 								GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_formal"), "&lINFO", groupChatInfo);
 
 							} else {
@@ -311,20 +314,20 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if (args[0].toLowerCase().equals("delete")) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
-						TGroupChatInfo groupChatInfo = (TGroupChatInfo) MultiChat.groupchats.get(args[1].toLowerCase());
+						TGroupChatInfo groupChatInfo = (TGroupChatInfo) ds.getGroupChats().get(args[1].toLowerCase());
 						ProxiedPlayer player = (ProxiedPlayer) sender;
 
 						if (groupChatInfo.getAdmins().contains(player.getUniqueId())) {
 
 							for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-								if ((MultiChat.viewedchats.get(onlineplayer.getUniqueId()) != null) && 
-										(((String)MultiChat.viewedchats.get(onlineplayer.getUniqueId())).toLowerCase().equals(groupChatInfo.getName().toLowerCase()))) {
+								if ((ds.getViewedChats().get(onlineplayer.getUniqueId()) != null) && 
+										(((String)ds.getViewedChats().get(onlineplayer.getUniqueId())).toLowerCase().equals(groupChatInfo.getName().toLowerCase()))) {
 
-									MultiChat.viewedchats.remove(onlineplayer.getUniqueId());
-									MultiChat.viewedchats.put(onlineplayer.getUniqueId(), null);
+									ds.getViewedChats().remove(onlineplayer.getUniqueId());
+									ds.getViewedChats().put(onlineplayer.getUniqueId(), null);
 
 								}
 							}
@@ -332,7 +335,7 @@ public class GroupCommand extends Command implements TabExecutor {
 							GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_deleted"), "&lINFO", groupChatInfo);
 							GCCommand.sendMessage(MessageManager.getMessage("groups_info_goodbye"), "&lINFO", groupChatInfo);
 
-							MultiChat.groupchats.remove(groupChatInfo.getName().toLowerCase());
+							ds.getGroupChats().remove(groupChatInfo.getName().toLowerCase());
 
 							groupChatInfo = null;
 
@@ -366,7 +369,7 @@ public class GroupCommand extends Command implements TabExecutor {
 
 						if ((args[1].length() <= 20) && (args[2].length() <= 20)) {
 
-							if (!MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+							if (!ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 								GroupManager groupman = new GroupManager();
 
@@ -394,7 +397,7 @@ public class GroupCommand extends Command implements TabExecutor {
 				}
 
 				if (args[0].toLowerCase().equals("join")) {
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						GroupManager groupman = new GroupManager();
 						ProxiedPlayer player = (ProxiedPlayer)sender;
@@ -418,12 +421,12 @@ public class GroupCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer player = (ProxiedPlayer) sender;
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						if (ProxyServer.getInstance().getPlayer(args[2].toLowerCase()) != null) {
 
 							ProxiedPlayer newplayer = ProxyServer.getInstance().getPlayer(args[2].toLowerCase());
-							TGroupChatInfo groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+							TGroupChatInfo groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 							if (!groupChatInfo.getFormal()) {
 
@@ -434,8 +437,8 @@ public class GroupCommand extends Command implements TabExecutor {
 										groupChatInfo.addAdmin(newplayer.getUniqueId());
 										groupChatInfo.delAdmin(player.getUniqueId());
 
-										MultiChat.groupchats.remove(groupChatInfo.getName());
-										MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+										ds.getGroupChats().remove(groupChatInfo.getName());
+										ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 										GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_transfer") + newplayer.getName(), "&lINFO", groupChatInfo);
 
@@ -465,13 +468,13 @@ public class GroupCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer player = (ProxiedPlayer)sender;
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						if (ProxyServer.getInstance().getPlayer(args[2].toLowerCase()) != null) {
 
 							ProxiedPlayer newplayer = ProxyServer.getInstance().getPlayer(args[2].toLowerCase());
 
-							TGroupChatInfo groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+							TGroupChatInfo groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 							if (groupChatInfo.getFormal() == true) {
 
@@ -483,8 +486,8 @@ public class GroupCommand extends Command implements TabExecutor {
 
 											groupChatInfo.addAdmin(newplayer.getUniqueId());
 
-											MultiChat.groupchats.remove(groupChatInfo.getName());
-											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+											ds.getGroupChats().remove(groupChatInfo.getName());
+											ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_promoted") + newplayer.getName(), "&lINFO", groupChatInfo);
 
@@ -494,8 +497,8 @@ public class GroupCommand extends Command implements TabExecutor {
 
 												groupChatInfo.delAdmin(player.getUniqueId());
 
-												MultiChat.groupchats.remove(groupChatInfo.getName());
-												MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+												ds.getGroupChats().remove(groupChatInfo.getName());
+												ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 												GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_step_down"), "&lINFO", groupChatInfo);
 
@@ -535,12 +538,12 @@ public class GroupCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer player = (ProxiedPlayer) sender;
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						if (ProxyServer.getInstance().getPlayer(args[2].toLowerCase()) != null) {
 
 							ProxiedPlayer newPlayer = ProxyServer.getInstance().getPlayer(args[2].toLowerCase());
-							TGroupChatInfo groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+							TGroupChatInfo groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 							if (groupChatInfo.getFormal() == true) {
 
@@ -557,14 +560,14 @@ public class GroupCommand extends Command implements TabExecutor {
 												groupChatInfo.delMember(newPlayer.getUniqueId());
 												groupChatInfo.delViewer(newPlayer.getUniqueId());
 
-												MultiChat.viewedchats.remove(newPlayer.getUniqueId());
-												MultiChat.viewedchats.put(newPlayer.getUniqueId(), null);
+												ds.getViewedChats().remove(newPlayer.getUniqueId());
+												ds.getViewedChats().put(newPlayer.getUniqueId(), null);
 
 												GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_kick") + newPlayer.getName(), "&lINFO", groupChatInfo);
 											}
 
-											MultiChat.groupchats.remove(groupChatInfo.getName());
-											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+											ds.getGroupChats().remove(groupChatInfo.getName());
+											ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_ban") + newPlayer.getName(), "&lINFO", groupChatInfo);
 
@@ -575,8 +578,8 @@ public class GroupCommand extends Command implements TabExecutor {
 
 											groupChatInfo.delBanned(newPlayer.getUniqueId());
 
-											MultiChat.groupchats.remove(groupChatInfo.getName());
-											MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+											ds.getGroupChats().remove(groupChatInfo.getName());
+											ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 											GCCommand.sendMessage(sender.getName() + MessageManager.getMessage("groups_info_unban") + newPlayer.getName(), "&lINFO", groupChatInfo);
 
@@ -612,12 +615,12 @@ public class GroupCommand extends Command implements TabExecutor {
 
 				if ((args[0].toLowerCase().equals("color")) || (args[0].toLowerCase().equals("colour"))) {
 
-					if (MultiChat.groupchats.containsKey(args[1].toLowerCase())) {
+					if (ds.getGroupChats().containsKey(args[1].toLowerCase())) {
 
 						TGroupChatInfo groupChatInfo = new TGroupChatInfo();
 						ProxiedPlayer player = (ProxiedPlayer) sender;
 
-						groupChatInfo = (TGroupChatInfo)MultiChat.groupchats.get(args[1].toLowerCase());
+						groupChatInfo = (TGroupChatInfo)ds.getGroupChats().get(args[1].toLowerCase());
 
 						if (((groupChatInfo.existsMember(player.getUniqueId()))
 								&& (!groupChatInfo.getFormal())) || (groupChatInfo.existsAdmin(player.getUniqueId()))) {
@@ -635,12 +638,12 @@ public class GroupCommand extends Command implements TabExecutor {
 										|| (args[3].equals("2")) || (args[3].equals("3")) || (args[3].equals("4")) || (args[3].equals("5"))
 										|| (args[3].equals("6")) || (args[3].equals("7")) || (args[3].equals("8")) || (args[3].equals("9"))) {
 
-									MultiChat.groupchats.remove(groupChatInfo.getName());
+									ds.getGroupChats().remove(groupChatInfo.getName());
 
 									groupChatInfo.setChatColor(args[2].charAt(0));
 									groupChatInfo.setNameColor(args[3].charAt(0));
 
-									MultiChat.groupchats.put(groupChatInfo.getName(), groupChatInfo);
+									ds.getGroupChats().put(groupChatInfo.getName(), groupChatInfo);
 
 									GCCommand.sendMessage(MessageManager.getMessage("groups_info_colors") + sender.getName(), "&lINFO", groupChatInfo);
 

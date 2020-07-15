@@ -10,9 +10,10 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Reply Command
@@ -28,6 +29,8 @@ public class ReplyCommand extends Command {
 	}
 
 	public void execute(CommandSender sender, String[] args) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		if (args.length < 1) {
 
@@ -57,11 +60,11 @@ public class ReplyCommand extends Command {
 				return;
 			}
 
-			if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+			if (ds.getLastMsg().containsKey(((ProxiedPlayer)sender).getUniqueId())) {
 
-				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId())) != null) {
+				if (ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get(((ProxiedPlayer)sender).getUniqueId())) != null) {
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId()));
+					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get(((ProxiedPlayer)sender).getUniqueId()));
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
@@ -82,7 +85,7 @@ public class ReplyCommand extends Command {
 						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 					}
 
-				} else if ( MultiChat.lastmsg.get( ((ProxiedPlayer)sender ).getUniqueId()).equals(new UUID(0L, 0L)) ) {
+				} else if ( ds.getLastMsg().get( ((ProxiedPlayer)sender ).getUniqueId()).equals(new UUID(0L, 0L)) ) {
 
 					// Console target stuff
 
@@ -110,11 +113,11 @@ public class ReplyCommand extends Command {
 
 			String message = MultiChatUtil.getMessageFromArgs(args);
 
-			if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
+			if (ds.getLastMsg().containsKey(new UUID(0L,0L))) {
 
-				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L)))) != null) {
+				if (ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get((new UUID(0L,0L)))) != null) {
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L))));
+					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get((new UUID(0L,0L))));
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
 

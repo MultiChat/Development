@@ -73,15 +73,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	};
 
-	public static Map<UUID, TChatInfo> modchatpreferences = new HashMap<UUID, TChatInfo>();
-	public static Map<UUID, TChatInfo> adminchatpreferences = new HashMap<UUID, TChatInfo>();
-	public static Map<String, TGroupChatInfo> groupchats = new HashMap<String, TGroupChatInfo>();
-
-	public static Map<UUID, String> viewedchats = new HashMap<UUID, String>();
-	public static Map<UUID, UUID> lastmsg = new HashMap<UUID, UUID>();
-	public static List<UUID> allspy = new ArrayList<UUID>();
-	public static List<UUID> socialspy = new ArrayList<UUID>();
-
 	public static File configDir;
 	public static String configversion;
 
@@ -550,11 +541,13 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveChatInfo() {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "StaffChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(modchatpreferences);
+			out.writeObject(ds.getModChatPreferences());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the mod chat info file!");
@@ -565,7 +558,7 @@ public class MultiChat extends Plugin implements Listener {
 			File file = new File(configDir, "AdminChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(adminchatpreferences);
+			out.writeObject(ds.getAdminChatPreferences());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the admin chat info file!");
@@ -576,11 +569,13 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveGroupChatInfo() {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "GroupChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(groupchats);
+			out.writeObject(ds.getGroupChats());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the group chat info file!");
@@ -606,11 +601,13 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveGroupSpyInfo() {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "GroupSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(allspy);
+			out.writeObject(ds.getAllSpy());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the group spy info file!");
@@ -621,11 +618,13 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveSocialSpyInfo() {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "SocialSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(socialspy);
+			out.writeObject(ds.getSocialSpy());
 			out.close();
 		} catch (IOException e)	{
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the social spy info file!");
@@ -915,6 +914,8 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void Startup() {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		System.out.println("[MultiChat] Starting load routine for data files");
 
 		File f = new File(configDir, "StaffChatInfo.dat");
@@ -922,8 +923,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f.exists()) && (!f.isDirectory()) && (f2.exists()) && (!f2.isDirectory())) {
 
-			modchatpreferences.putAll(loadModChatInfo());
-			adminchatpreferences.putAll(loadAdminChatInfo());
+			ds.setModChatPreferences(loadModChatInfo());
+			ds.setAdminChatPreferences(loadAdminChatInfo());
 
 		} else {
 
@@ -939,7 +940,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f3.exists()) && (!f3.isDirectory())) {
 
-			groupchats.putAll(loadGroupChatInfo());
+			ds.setGroupChats(loadGroupChatInfo());
 
 		} else {
 
@@ -955,7 +956,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f4.exists()) && (!f4.isDirectory())) {
 
-			allspy = loadGroupSpyInfo();
+			ds.setAllSpy(loadGroupSpyInfo());
 
 		} else {
 
@@ -987,7 +988,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f6.exists()) && (!f6.isDirectory())) {
 
-			socialspy = loadSocialSpyInfo();
+			ds.setSocialSpy(loadSocialSpyInfo());
 
 		} else {
 

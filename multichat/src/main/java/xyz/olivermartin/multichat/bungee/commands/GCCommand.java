@@ -18,6 +18,8 @@ import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Group Chat Messaging Command
@@ -35,6 +37,8 @@ public class GCCommand extends Command {
 	}
 
 	public void execute(CommandSender sender, String[] args) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		if (args.length < 1) {
 
@@ -58,13 +62,13 @@ public class GCCommand extends Command {
 
 			ProxiedPlayer player = (ProxiedPlayer)sender;
 
-			if (MultiChat.viewedchats.get(player.getUniqueId()) != null) {
+			if (ds.getViewedChats().get(player.getUniqueId()) != null) {
 
-				String groupName = (String)MultiChat.viewedchats.get(player.getUniqueId());
+				String groupName = (String)ds.getViewedChats().get(player.getUniqueId());
 
-				if (MultiChat.groupchats.containsKey(groupName)) {
+				if (ds.getGroupChats().containsKey(groupName)) {
 
-					TGroupChatInfo groupInfo = (TGroupChatInfo) MultiChat.groupchats.get(groupName);
+					TGroupChatInfo groupInfo = (TGroupChatInfo) ds.getGroupChats().get(groupName);
 
 					String message = MultiChatUtil.getMessageFromArgs(args);
 
@@ -92,6 +96,8 @@ public class GCCommand extends Command {
 	}
 
 	public static void sendMessage(String message, String playerName, TGroupChatInfo groupInfo) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		ChatManipulation chatfix = new ChatManipulation();
 
@@ -124,7 +130,7 @@ public class GCCommand extends Command {
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-			if (((groupInfo.existsViewer(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.group"))) || ((MultiChat.allspy.contains(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.staff.spy")))) {
+			if (((groupInfo.existsViewer(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.group"))) || ((ds.getAllSpy().contains(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.staff.spy")))) {
 
 				if (potentialPlayer != null) {
 					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {

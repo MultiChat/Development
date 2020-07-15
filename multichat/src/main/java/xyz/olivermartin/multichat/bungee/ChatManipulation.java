@@ -6,6 +6,8 @@ import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * LEGACY ** TO BE REMOVED ** Chat Manipulation Class
@@ -43,10 +45,10 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
-		
+
 		messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
 		messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
-		
+
 		return messageFormat;
 
 	}
@@ -73,10 +75,10 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		messageFormat = messageFormat.replace("%SERVERT%", "CONSOLE");
-		
+
 		messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
 		messageFormat = messageFormat.replace("%WORLDT%", "CONSOLE");
-		
+
 		return messageFormat;
 
 	}
@@ -103,44 +105,50 @@ public class ChatManipulation {
 
 		messageFormat = messageFormat.replace("%SERVER%", "CONSOLE");
 		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
-		
+
 		messageFormat = messageFormat.replace("%WORLD%", "CONSOLE");
 		messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
-		
+
 		return messageFormat;
 
 	}
 
 	public String replaceModChatVars(String messageFormat, String playername, String displayname, String server, String message, ProxiedPlayer target) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", displayname);
 		messageFormat = messageFormat.replace("%NAME%", playername);
 		messageFormat = messageFormat.replace("%SERVER%", server);
 		messageFormat = messageFormat.replace("%MESSAGE%", message);
-		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)MultiChat.modchatpreferences.get(target.getUniqueId())).getChatColor());
-		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)MultiChat.modchatpreferences.get(target.getUniqueId())).getNameColor());
+		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)ds.getModChatPreferences().get(target.getUniqueId())).getChatColor());
+		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)ds.getModChatPreferences().get(target.getUniqueId())).getNameColor());
 		return messageFormat;
 
 	}
 
 	public String replaceAdminChatVars(String messageFormat, String playername, String displayname, String server, String message, ProxiedPlayer target) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		messageFormat = messageFormat.replace("%DISPLAYNAME%",displayname);
 		messageFormat = messageFormat.replace("%NAME%", playername);
 		messageFormat = messageFormat.replace("%SERVER%", server);
 		messageFormat = messageFormat.replace("%MESSAGE%", message);
-		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)MultiChat.adminchatpreferences.get(target.getUniqueId())).getChatColor());
-		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)MultiChat.adminchatpreferences.get(target.getUniqueId())).getNameColor());
+		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)ds.getAdminChatPreferences().get(target.getUniqueId())).getChatColor());
+		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)ds.getAdminChatPreferences().get(target.getUniqueId())).getNameColor());
 		return messageFormat;
 
 	}
 
 	public String replaceGroupChatVars(String messageFormat, String sendername, String message, String groupName) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		messageFormat = messageFormat.replace("%NAME%", sendername);
 		messageFormat = messageFormat.replace("%MESSAGE%", message);
-		messageFormat = messageFormat.replace("%CC%", "&" + ((TGroupChatInfo)MultiChat.groupchats.get(groupName)).getChatColor());
-		messageFormat = messageFormat.replace("%NC%", "&" + ((TGroupChatInfo)MultiChat.groupchats.get(groupName)).getNameColor());
+		messageFormat = messageFormat.replace("%CC%", "&" + ((TGroupChatInfo)ds.getGroupChats().get(groupName)).getChatColor());
+		messageFormat = messageFormat.replace("%NC%", "&" + ((TGroupChatInfo)ds.getGroupChats().get(groupName)).getNameColor());
 		messageFormat = messageFormat.replace("%GROUPNAME%", groupName.toUpperCase());
 		return messageFormat;
 

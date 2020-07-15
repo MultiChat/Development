@@ -29,6 +29,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Events Manager
@@ -139,6 +140,7 @@ public class Events implements Listener {
 	@EventHandler(priority=64)
 	public void onChat(ChatEvent event) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
 		// New null pointer checks
@@ -203,13 +205,13 @@ public class Events implements Listener {
 
 				event.setCancelled(true);
 
-				if (MultiChat.viewedchats.get(player.getUniqueId()) != null) {
+				if (ds.getViewedChats().get(player.getUniqueId()) != null) {
 
-					String chatName = ((String)MultiChat.viewedchats.get(player.getUniqueId())).toLowerCase();
+					String chatName = ((String)ds.getViewedChats().get(player.getUniqueId())).toLowerCase();
 
-					if (MultiChat.groupchats.containsKey(chatName)) {
+					if (ds.getGroupChats().containsKey(chatName)) {
 
-						TGroupChatInfo chatInfo = (TGroupChatInfo)MultiChat.groupchats.get(chatName);
+						TGroupChatInfo chatInfo = (TGroupChatInfo)ds.getGroupChats().get(chatName);
 						String playerName = player.getName();
 
 						if ((chatInfo.getFormal() == true)
@@ -414,39 +416,41 @@ public class Events implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onLogin(PostLoginEvent event) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
 		boolean firstJoin = false;
 
 		if (player.hasPermission("multichat.staff.mod")) {
 
-			if (!MultiChat.modchatpreferences.containsKey(uuid)) {
+			if (!ds.getModChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
 				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
 				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
-				MultiChat.modchatpreferences.put(uuid, chatinfo);
+				ds.getModChatPreferences().put(uuid, chatinfo);
 
 			}
 		}
 
 		if (player.hasPermission("multichat.staff.admin")) {
 
-			if (!MultiChat.adminchatpreferences.containsKey(uuid)) {
+			if (!ds.getAdminChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
 				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
 				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
-				MultiChat.adminchatpreferences.put(uuid, chatinfo);
+				ds.getAdminChatPreferences().put(uuid, chatinfo);
 
 			}
 		}
 
 		PlayerMetaManager.getInstance().registerPlayer(uuid, event.getPlayer().getName());
 
-		if (!MultiChat.viewedchats.containsKey(uuid)) {
+		if (!ds.getViewedChats().containsKey(uuid)) {
 
-			MultiChat.viewedchats.put(uuid, null);
+			ds.getViewedChats().put(uuid, null);
 			ConsoleManager.log("Registered player " + player.getName());
 
 		}
@@ -554,6 +558,8 @@ public class Events implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onLogout(PlayerDisconnectEvent event) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = event.getPlayer().getUniqueId();
 
@@ -588,8 +594,8 @@ public class Events implements Listener {
 		Channel.removePlayer(player.getUniqueId());
 		///
 
-		if (MultiChat.viewedchats.containsKey(uuid)) {
-			MultiChat.viewedchats.remove(uuid);
+		if (ds.getViewedChats().containsKey(uuid)) {
+			ds.getViewedChats().remove(uuid);
 		}
 
 		PlayerMetaManager.getInstance().unregisterPlayer(uuid);

@@ -7,6 +7,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 public class PrivateMessageManager {
 
@@ -29,6 +31,8 @@ public class PrivateMessageManager {
 	}
 
 	public void sendMessage(String message, ProxiedPlayer sender, ProxiedPlayer target) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		message = MultiChatUtil.reformatRGB(message);
 
@@ -54,7 +58,7 @@ public class PrivateMessageManager {
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
 					&& (onlineplayer.getUniqueId() != sender.getUniqueId())
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")
@@ -70,23 +74,25 @@ public class PrivateMessageManager {
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(sender.getUniqueId())) {
-			MultiChat.lastmsg.remove(sender.getUniqueId());
+		if (ds.getLastMsg().containsKey(sender.getUniqueId())) {
+			ds.getLastMsg().remove(sender.getUniqueId());
 		}
 
-		MultiChat.lastmsg.put(sender.getUniqueId(), target.getUniqueId());
+		ds.getLastMsg().put(sender.getUniqueId(), target.getUniqueId());
 
-		if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-			MultiChat.lastmsg.remove(target.getUniqueId());
+		if (ds.getLastMsg().containsKey(target.getUniqueId())) {
+			ds.getLastMsg().remove(target.getUniqueId());
 		}
 
-		MultiChat.lastmsg.put(target.getUniqueId(), sender.getUniqueId());
+		ds.getLastMsg().put(target.getUniqueId(), sender.getUniqueId());
 
 		ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
 
 	}
 
 	public void sendMessageConsoleTarget(String message, ProxiedPlayer sender) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		message = MultiChatUtil.reformatRGB(message);
 
@@ -108,7 +114,7 @@ public class PrivateMessageManager {
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
 					&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
@@ -121,21 +127,23 @@ public class PrivateMessageManager {
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
-			MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
+		if (ds.getLastMsg().containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+			ds.getLastMsg().remove(((ProxiedPlayer)sender).getUniqueId());
 		}
 
-		MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
+		ds.getLastMsg().put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
 
-		if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-			MultiChat.lastmsg.remove(new UUID(0L, 0L));
+		if (ds.getLastMsg().containsKey(new UUID(0L, 0L))) {
+			ds.getLastMsg().remove(new UUID(0L, 0L));
 		}
 
-		MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+		ds.getLastMsg().put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
 
 	}
 
 	public void sendMessageConsoleSender(String message, ProxiedPlayer target) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		message = MultiChatUtil.reformatRGB(message);
 
@@ -159,7 +167,7 @@ public class PrivateMessageManager {
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(target.hasPermission("multichat.staff.spy.bypass")))) {
 
@@ -172,17 +180,17 @@ public class PrivateMessageManager {
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-			MultiChat.lastmsg.remove(new UUID(0L, 0L));
+		if (ds.getLastMsg().containsKey(new UUID(0L, 0L))) {
+			ds.getLastMsg().remove(new UUID(0L, 0L));
 		}
 
-		MultiChat.lastmsg.put(new UUID(0L, 0L), target.getUniqueId());
+		ds.getLastMsg().put(new UUID(0L, 0L), target.getUniqueId());
 
-		if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-			MultiChat.lastmsg.remove(target.getUniqueId());
+		if (ds.getLastMsg().containsKey(target.getUniqueId())) {
+			ds.getLastMsg().remove(target.getUniqueId());
 		}
 
-		MultiChat.lastmsg.put(target.getUniqueId(), new UUID(0L, 0L));
+		ds.getLastMsg().put(target.getUniqueId(), new UUID(0L, 0L));
 
 	}
 

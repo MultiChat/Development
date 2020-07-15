@@ -6,7 +6,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Mod-Chat Colour Command
@@ -24,6 +25,8 @@ public class MCCCommand extends Command {
 	}
 
 	public void execute(CommandSender sender, String[] args) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		if (args.length != 2) {
 
@@ -51,12 +54,12 @@ public class MCCCommand extends Command {
 						|| (args[1].equals("2")) || (args[1].equals("3")) || (args[1].equals("4")) || (args[1].equals("5"))
 						|| (args[1].equals("6")) || (args[1].equals("7")) || (args[1].equals("8")) || (args[1].equals("9"))) {
 
-					MultiChat.modchatpreferences.remove(player.getUniqueId());
+					ds.getModChatPreferences().remove(player.getUniqueId());
 
 					chatinfo.setChatColor(args[0].charAt(0));
 					chatinfo.setNameColor(args[1].charAt(0));
 
-					MultiChat.modchatpreferences.put(player.getUniqueId(), chatinfo);
+					ds.getModChatPreferences().put(player.getUniqueId(), chatinfo);
 
 					MessageManager.sendMessage(sender, "command_mcc_updated");
 
