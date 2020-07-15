@@ -19,15 +19,28 @@ import com.olivermartin410.plugins.TGroupChatInfo;
  */
 public class ProxyDataStore {
 
+	// Is global chat frozen?
 	private boolean chatFrozen = false;
 
+	// Mod chat colours
 	private Map<UUID, TChatInfo> modChatPreferences = new HashMap<UUID, TChatInfo>();
+
+	// Admin chat colours
 	private Map<UUID, TChatInfo> adminChatPreferences = new HashMap<UUID, TChatInfo>();
+
+	// Group chats
 	private Map<String, TGroupChatInfo> groupChats = new HashMap<String, TGroupChatInfo>();
 
+	// Which players are viewing which group chats
 	private Map<UUID, String> viewedChats = new HashMap<UUID, String>();
+
+	// The last person a player has messaged
 	private Map<UUID, UUID> lastMsg = new HashMap<UUID, UUID>();
+
+	// Who is spying on all groups?
 	private List<UUID> allSpy = new ArrayList<UUID>();
+
+	// Who has social spy on?
 	private List<UUID> socialSpy = new ArrayList<UUID>();
 
 	public synchronized boolean isChatFrozen() {
