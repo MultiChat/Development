@@ -71,7 +71,7 @@ public class ChannelCommand extends Command {
 						return;
 					}
 					if (operand.equals("local")) {
-						
+
 						if (!ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
 							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
 							return;
@@ -86,7 +86,7 @@ public class ChannelCommand extends Command {
 						}
 
 					} else if (operand.equals("global")) {
-						
+
 						if (ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
 							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
 							return;
@@ -142,7 +142,7 @@ public class ChannelCommand extends Command {
 
 				// Update local channel info
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-					BungeeComm.sendPlayerChannelMessage(p.getName(), Channel.getChannel(p.getUniqueId()).getName(), Channel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")));
+					BungeeComm.sendPlayerChannelMessage(p.getName(), Channel.getChannel(p.getUniqueId()).getName(), Channel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
 				}
 
 			}

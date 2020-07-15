@@ -145,7 +145,8 @@ public abstract class LocalConfig {
 		LocalDatabaseCredentials.getInstance().updateValues(getString("mysql_url",""),
 				getString("mysql_database",""),
 				getString("mysql_user",""),
-				getString("mysql_pass",""));
+				getString("mysql_pass",""),
+				getStringList("mysql_flags"));
 
 		// CHANNEL CONTROL
 		regexChannelForcers = getRegexChannelForcers("force_channel");

@@ -20,6 +20,8 @@ public class StaffChatManager {
 
 	public void sendModMessage(String username, String displayname, String server, String message) {
 
+		message = MultiChatUtil.reformatRGB(message);
+
 		ChatManipulation chatfix = new ChatManipulation();
 		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
 		String original = message;
@@ -49,7 +51,11 @@ public class StaffChatManager {
 				}
 
 				message = chatfix.replaceModChatVars(messageFormat, username, displayname, server, original, onlineplayer);
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				}
 
 			}
 		}
@@ -68,6 +74,8 @@ public class StaffChatManager {
 	}
 
 	public void sendAdminMessage(String username, String displayname, String server, String message) {
+
+		message = MultiChatUtil.reformatRGB(message);
 
 		String original = message;
 		ChatManipulation chatfix = new ChatManipulation();
@@ -98,7 +106,11 @@ public class StaffChatManager {
 				}
 
 				message = chatfix.replaceAdminChatVars(messageFormat, username, displayname, server, original, onlineplayer);
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+				}
 
 			}
 		}

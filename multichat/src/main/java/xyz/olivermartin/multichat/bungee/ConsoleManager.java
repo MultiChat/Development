@@ -79,7 +79,7 @@ public class ConsoleManager {
 
 	private static void logToConsole(String message, String unformattedMessage) {
 		BaseComponent[] first = TextComponent.fromLegacyText(
-				ChatColor.translateAlternateColorCodes('&', MessageManager.getMessage("console_main_prefix") + message));
+				ChatColor.translateAlternateColorCodes('&', MessageManager.getMessage("console_main_prefix") + MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(message))));
 
 		BaseComponent[] second = TextComponent.fromLegacyText(unformattedMessage);
 

@@ -8,7 +8,7 @@
 
 ##################
 # NE PAS EDITER  #
-version: "1.9.2" #
+version: "1.9.3" #
 ##################
 
 # French Translation by Nogapra - Thank you !
@@ -142,6 +142,11 @@ mysql_url: "" # Adresse IP ou web de la base de données et le port TCP (ex : "l
 mysql_database: "" # Nom de la base de données
 mysql_user: "" #Utilistateur base de données
 mysql_pass: "" #Mot de passe
+
+# Advanced database settings
+mysql_flags: []
+#- useSSL=false
+#- autoReconnect=true
 
 ############################################################
 # +------------------------------------------------------+ #

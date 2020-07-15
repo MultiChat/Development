@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.2";
+	public static final String LATEST_VERSION = "1.9.3";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.2",
 			"1.9.1",
 			"1.9",
 			"1.8.2",
@@ -96,6 +97,8 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean premiumVanish = false;
 	public static boolean hideVanishedStaffInMsg = true;
 	public static boolean hideVanishedStaffInStaffList = true;
+	
+	public static List<String> legacyServers = new ArrayList<String>();
 
 	public static MultiChat getInstance() {
 		return instance;
@@ -342,6 +345,11 @@ public class MultiChat extends Plugin implements Listener {
 				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
 				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
 			}
+			
+			// Legacy servers for RGB approximation
+			if (configYML.contains("legacy_servers")) {
+				legacyServers = configYML.getStringList("legacy_servers");
+			}
 
 			// Set default channel
 			defaultChannel = configYML.getString("default_channel");
@@ -365,6 +373,7 @@ public class MultiChat extends Plugin implements Listener {
 			// Manage premiumVanish dependency
 			if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 				premiumVanish = true;
+				System.out.println("[MultiChat] Hooked with PremiumVanish!");
 
 				if (configYML.contains("premium_vanish")) {
 					hideVanishedStaffInMsg = configYML.getBoolean("premium_vanish.prevent_message");

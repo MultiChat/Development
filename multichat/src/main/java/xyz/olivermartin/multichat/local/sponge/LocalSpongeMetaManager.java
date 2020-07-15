@@ -8,6 +8,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
+import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalMetaManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
@@ -23,7 +24,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("prefix").isPresent()) {
-				return player.getOption("prefix").get();
+				return MultiChatUtil.approximateHexCodes(player.getOption("prefix").get());
 			} else {
 				return "";
 			}
@@ -44,7 +45,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("suffix").isPresent()) {
-				return player.getOption("suffix").get();
+				return MultiChatUtil.approximateHexCodes(player.getOption("suffix").get());
 			} else {
 				return "";
 			}
@@ -91,7 +92,9 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", player.getName());
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", getPrefix(uuid));
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", getSuffix(uuid));
-			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r])", "§");
+			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
+			
+			displayNameFormat = MultiChatUtil.approximateHexCodes(displayNameFormat);
 
 			// TODO Sponge doesn't seem to like this... So we tend to work around it by sending back our original string
 			player.offer(Keys.DISPLAY_NAME,Text.of(displayNameFormat));

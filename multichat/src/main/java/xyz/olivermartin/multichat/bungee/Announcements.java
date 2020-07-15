@@ -38,9 +38,13 @@ public class Announcements {
 					message = ChatControl.applyChatRules(message, "announcements", "").get();
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+						}
 					}
-					
+
 					// Trigger PostBroadcastEvent
 					ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("announcement", message));
 				}
@@ -88,7 +92,7 @@ public class Announcements {
 
 		if (!announcements.containsKey(name.toLowerCase())) {
 
-			announcements.put(name.toLowerCase(), message);
+			announcements.put(name.toLowerCase(), MultiChatUtil.reformatRGB(message));
 			return true;
 
 		} else {
@@ -132,9 +136,13 @@ public class Announcements {
 			message = ChatControl.applyChatRules(message, "announcements", "").get();
 
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+				}
 			}
-			
+
 			// Trigger PostBroadcastEvent
 			ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("announcement", message));
 
