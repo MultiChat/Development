@@ -20,10 +20,18 @@ public class MultiChatProxy {
 
 	/* END STATIC */
 
-	// TODO Add attributes
+	private ProxyDataStore dataStore;
 
 	/* END ATTRIBUTES */
 
 	private MultiChatProxy() { /* EMPTY */ }
+
+	public ProxyDataStore getDataStore() {
+		return this.dataStore;
+	}
+
+	public void registerDataStore(ProxyDataStore dataStore) {
+		this.dataStore = dataStore;
+	}
 
 }

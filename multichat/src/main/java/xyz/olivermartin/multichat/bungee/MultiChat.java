@@ -26,6 +26,8 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 
 /**
@@ -83,8 +85,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static File configDir;
 	public static String configversion;
 
-	public static boolean frozen;
-
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
@@ -98,7 +98,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInMsg = true;
 	public static boolean hideVanishedStaffInStaffList = true;
 	public static boolean hideVanishedStaffInJoin = true;
-	
+
 	public static List<String> legacyServers = new ArrayList<String>();
 
 	public static MultiChat getInstance() {
@@ -263,6 +263,9 @@ public class MultiChat extends Plugin implements Listener {
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
 
+		ProxyDataStore dataStore = new ProxyDataStore();
+		MultiChatProxy.getInstance().registerDataStore(dataStore);
+
 		configDir = getDataFolder();
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] Creating plugin directory!");
@@ -346,7 +349,7 @@ public class MultiChat extends Plugin implements Listener {
 				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
 				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
 			}
-			
+
 			// Legacy servers for RGB approximation
 			if (configYML.contains("legacy_servers")) {
 				legacyServers = configYML.getStringList("legacy_servers");

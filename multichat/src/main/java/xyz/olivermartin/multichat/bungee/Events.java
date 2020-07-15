@@ -28,6 +28,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * Events Manager
@@ -350,7 +351,7 @@ public class Events implements Listener {
 				}
 			}*/
 
-			if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+			if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
 
 				String message = event.getMessage();
 
@@ -494,12 +495,12 @@ public class Events implements Listener {
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
-			
+
 			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
 			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
 				return;
 			}
-			
+
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
@@ -521,7 +522,7 @@ public class Events implements Listener {
 			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("private_welcome")) {
 				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
 			}
-			
+
 			boolean broadcastJoin = !player.hasPermission("multichat.staff.silentjoin");
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 

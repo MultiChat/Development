@@ -13,8 +13,8 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * Global Command
@@ -53,7 +53,7 @@ public class GlobalCommand extends Command {
 							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 
-						if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+						if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
 
 							if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
 								MessageManager.sendMessage(player, "mute_cannot_send_message");
@@ -80,7 +80,7 @@ public class GlobalCommand extends Command {
 							if (!player.hasPermission("multichat.chat.link")) {
 								message = ChatControl.replaceLinks(message);
 							}
-							
+
 							// If they had this channel hidden, then unhide it...
 							Channel global = Channel.getGlobalChannel();
 							if (!global.isMember(player.getUniqueId())) {
