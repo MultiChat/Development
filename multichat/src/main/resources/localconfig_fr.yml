@@ -144,8 +144,9 @@ mysql_user: "" #Utilistateur base de données
 mysql_pass: "" #Mot de passe
 
 # Advanced database settings
-mysql_use_ssl: true 
-mysql_auto_reconnect: true
+mysql_flags: []
+#- useSSL=false
+#- autoReconnect=true
 
 ############################################################
 # +------------------------------------------------------+ #

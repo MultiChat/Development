@@ -146,8 +146,7 @@ public abstract class LocalConfig {
 				getString("mysql_database",""),
 				getString("mysql_user",""),
 				getString("mysql_pass",""),
-				getBoolean("mysql_use_ssl", true),
-				getBoolean("mysql_auto_reconnect", true));
+				getStringList("mysql_flags"));
 
 		// CHANNEL CONTROL
 		regexChannelForcers = getRegexChannelForcers("force_channel");

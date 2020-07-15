@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.local.common.storage;
 
+import java.util.List;
+
 public class LocalDatabaseCredentials {
 
 	private static LocalDatabaseCredentials instance;
@@ -22,16 +24,14 @@ public class LocalDatabaseCredentials {
 	private String database;
 	private String user;
 	private String password;
-	private boolean useSSL;
-	private boolean autoReconnect;
+	private List<String> flags;
 
-	public void updateValues(String url, String database, String user, String password, boolean useSSL, boolean autoReconnect) {
+	public void updateValues(String url, String database, String user, String password, List<String> flags) {
 		this.url = url;
 		this.database = database;
 		this.user = user;
 		this.password = password;
-		this.useSSL = useSSL;
-		this.autoReconnect = autoReconnect;
+		this.flags = flags;
 	}
 
 	public String getURL() {
@@ -50,12 +50,8 @@ public class LocalDatabaseCredentials {
 		return this.password;
 	}
 
-	public boolean getUseSSL() {
-		return this.useSSL;
-	}
-
-	public boolean getAutoReconnect() {
-		return this.autoReconnect;
+	public List<String> getFlags() {
+		return this.flags;
 	}
 
 }
