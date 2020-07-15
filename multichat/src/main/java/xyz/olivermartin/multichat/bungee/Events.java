@@ -632,6 +632,15 @@ public class Events implements Listener {
 
 				try {
 					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
+
+					// LEGACY SERVER HACK
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers").contains(event.getPlayer().getServer().getInfo().getName())) {
+						DebugManager.log("Player: " + event.getPlayer().getName() + ", switching to server: " + event.getPlayer().getServer().getInfo().getName() + ", is a LEGACY server!");
+						BungeeComm.sendCommandMessage("!!!LEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
+					} else {
+						BungeeComm.sendCommandMessage("!!!NOTLEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
+					}
+
 				}
 
 				catch (NullPointerException ex) { /* EMPTY */ }

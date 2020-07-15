@@ -69,6 +69,11 @@ public class LocalDataStore {
 	private Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 
 	/**
+	 * IS THIS A LEGACY SERVER THAT NEEDS RGB CODE APPROX.?
+	 */
+	private boolean legacy = false;
+
+	/**
 	 * @return the setDisplayName
 	 */
 	public synchronized boolean isSetDisplayName() {
@@ -139,6 +144,13 @@ public class LocalDataStore {
 	}
 
 	/**
+	 * @return the legacy
+	 */
+	public synchronized boolean isLegacy() {
+		return legacy;
+	}
+
+	/**
 	 * @param setDisplayName the setDisplayName to set
 	 */
 	public synchronized void setSetDisplayName(boolean setDisplayName) {
@@ -206,6 +218,13 @@ public class LocalDataStore {
 	 */
 	public synchronized void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
 		this.ignoreMap = ignoreMap;
+	}
+
+	/**
+	 * @param legach the legacy to set
+	 */
+	public synchronized void setLegacy(boolean legacy) {
+		this.legacy = legacy;
 	}
 
 }
