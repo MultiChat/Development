@@ -249,27 +249,11 @@ public class DatabaseManager {
 		case MySQL:
 
 			String databaseFlagsString = "";
-			int counter = 0;
 
 			if (databaseFlagsMySQL != null) {
-
 				if (databaseFlagsMySQL.size() > 0) {
-
-					for (String flag : databaseFlagsMySQL) {
-
-						if (counter == 0) {
-							databaseFlagsString += "?";
-						} else {
-							databaseFlagsString += "&";
-						}
-
-						databaseFlagsString += flag;
-						counter++;
-
-					}
-
+					databaseFlagsString = "?" + String.join("&", databaseFlagsMySQL);
 				}
-
 			}
 
 			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName + databaseFlagsString, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
