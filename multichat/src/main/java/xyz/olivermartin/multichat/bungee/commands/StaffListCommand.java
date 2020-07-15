@@ -9,6 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 
@@ -34,10 +35,14 @@ public class StaffListCommand extends Command {
 		boolean onServer = false;
 
 		MessageManager.sendMessage(sender, "command_stafflist_list");
+		
+		DebugManager.log("[StaffList] Player: " + sender.getName() + " is the command sender!");
 
 		for (Iterator<String> localIterator1 = ProxyServer.getInstance().getServers().keySet().iterator(); localIterator1.hasNext();) {
 
 			server = (String)localIterator1.next();
+			
+			DebugManager.log("[StaffList] First Server: " + server);
 
 			if (!ProxyServer.getInstance().getServerInfo(server).getPlayers().isEmpty()) {
 
@@ -46,11 +51,21 @@ public class StaffListCommand extends Command {
 				for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
 
 					if ((onlineplayer2.hasPermission("multichat.staff"))) {
+						
+						DebugManager.log("[StaffList] Found a staff member: " + onlineplayer2.getName());
 
 						boolean showInList = true;
+						
+						DebugManager.log("[StaffList] Are we hooked to PremiumVanish: " + MultiChat.premiumVanish);
+						DebugManager.log("[StaffList] Are we hiding vanished players as set in config?: " + MultiChat.hideVanishedStaffInStaffList);
 
 						if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInStaffList) {
+							
+							DebugManager.log("[StaffList] Is staff invisible: " + BungeeVanishAPI.isInvisible(onlineplayer2));
+							DebugManager.log("[StaffList] Can player see vanished staff?: " + sender.hasPermission("multichat.staff.list.vanished"));
+							
 							if (BungeeVanishAPI.isInvisible(onlineplayer2) && !sender.hasPermission("multichat.staff.list.vanished")) {
+								DebugManager.log("[StaffList] This staff member will be hidden from list!");
 								showInList = false;
 							}
 						}

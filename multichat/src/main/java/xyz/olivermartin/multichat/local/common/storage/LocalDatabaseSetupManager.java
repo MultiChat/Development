@@ -38,7 +38,7 @@ public class LocalDatabaseSetupManager {
 				DatabaseManager.getInstance().setURLMySQL(LocalDatabaseCredentials.getInstance().getURL());
 				DatabaseManager.getInstance().setUsernameMySQL(LocalDatabaseCredentials.getInstance().getUser());
 				DatabaseManager.getInstance().setPasswordMySQL(LocalDatabaseCredentials.getInstance().getPassword());
-
+				DatabaseManager.getInstance().setFlagsMySQL(LocalDatabaseCredentials.getInstance().getFlags());
 				DatabaseManager.getInstance().createDatabase(databaseName, LocalDatabaseCredentials.getInstance().getDatabase());
 
 			} else {

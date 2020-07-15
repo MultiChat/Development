@@ -11,6 +11,7 @@ import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
@@ -47,13 +48,18 @@ public class DisplayCommand extends Command {
 	public static void displayMessage(String message) {
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
+		message = MultiChatUtil.reformatRGB(message);
 		Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			if (onlineplayer.getServer() != null) {
 				if (!config.getStringList("no_global").contains(
 						onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+					} else {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					}
 				}
 			}
 		}

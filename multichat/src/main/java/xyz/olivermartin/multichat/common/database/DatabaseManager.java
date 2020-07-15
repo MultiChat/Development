@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +29,7 @@ public class DatabaseManager {
 	private String databaseURLMySQL;
 	private String databaseUsernameMySQL;
 	private String databasePasswordMySQL;
+	private List<String> databaseFlagsMySQL;
 
 	private int defaultPoolSize = 10;
 
@@ -208,6 +210,10 @@ public class DatabaseManager {
 		this.databasePasswordMySQL = pass;
 	}
 
+	public void setFlagsMySQL(List<String> flags) {
+		this.databaseFlagsMySQL = flags;
+	}
+
 	public void setMode(DatabaseMode dbm) {
 		databaseMode = dbm;
 	}
@@ -242,7 +248,13 @@ public class DatabaseManager {
 		switch (databaseMode) {
 		case MySQL:
 
-			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
+			String databaseFlagsString = "";
+
+			if (databaseFlagsMySQL != null && databaseFlagsMySQL.size() > 0) {
+					databaseFlagsString = "?" + String.join("&", databaseFlagsMySQL);
+			}
+
+			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName + databaseFlagsString, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 

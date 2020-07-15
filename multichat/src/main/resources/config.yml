@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.2" #
+version: "1.9.3" #
 ##################
 
 # 1. General
@@ -271,3 +271,10 @@ premium_vanish:
     prevent_message: true # Prevent players being able to /msg vanished staff
     prevent_staff_list: true # Prevent vanished staff showing up in /staff
     silence_join: true # Prevent vanished players sending a join message
+
+# Legacy (PRE-1.16) Servers
+# Listing servers here will mark them as 'LEGACY' servers
+# RGB colour codes will be approximated to their nearest value (i.e. &a, &b and so on)
+# This prevents them displaying in chat as &x...
+legacy_servers:
+- MyOldLegacyServerHere

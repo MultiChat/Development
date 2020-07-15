@@ -22,7 +22,7 @@ public class CastControl {
 	}
 
 	public static void addCast(String castName, String castFormat) {
-		castList.put(castName.toLowerCase(), castFormat);
+		castList.put(castName.toLowerCase(), MultiChatUtil.reformatRGB(castFormat));
 	}
 
 	public static void removeCast(String castName) {

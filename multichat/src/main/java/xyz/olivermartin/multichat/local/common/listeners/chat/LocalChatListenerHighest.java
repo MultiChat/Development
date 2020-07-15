@@ -18,9 +18,12 @@ public abstract class LocalChatListenerHighest {
 
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
 
-		if (chatManager.canChatInColour(event.getPlayer().getUniqueId())) {
-			event.setMessage(chatManager.translateColourCodes(event.getMessage()));
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours and set back in the event as: " + event.getMessage());
+		if (chatManager.canChatInRGBColour(event.getPlayer().getUniqueId())) {
+			event.setMessage(chatManager.translateColourCodes(event.getMessage(),true));
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (RGB) and set back in the event as: " + event.getMessage());
+		} else if (chatManager.canChatInSimpleColour(event.getPlayer().getUniqueId())) {
+			event.setMessage(chatManager.translateColourCodes(event.getMessage(),false));
+			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (SIMPLE ONLY) and set back in the event as: " + event.getMessage());
 		}
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we will process MultiChat placeholders!");
@@ -96,7 +99,7 @@ public abstract class LocalChatListenerHighest {
 
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Did some magic to get..." + format);
 
-			event.setFormat(chatManager.translateColourCodes(format));
+			event.setFormat(chatManager.translateColourCodes(format, true));
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - FORMAT HAS BEEN SET AS: " + event.getFormat());
 
 		}

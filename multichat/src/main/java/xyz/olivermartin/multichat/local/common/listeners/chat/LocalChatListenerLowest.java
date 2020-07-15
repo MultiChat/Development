@@ -67,7 +67,7 @@ public abstract class LocalChatListenerLowest {
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Did some magic formatting to end up as: " + format);
 
-		event.setFormat(chatManager.translateColourCodes(format));
+		event.setFormat(chatManager.translateColourCodes(format, true));
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Set the format of the message. Finished processing at the lowest level!");
 

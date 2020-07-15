@@ -30,15 +30,25 @@ public class PrivateMessageManager {
 
 	public void sendMessage(String message, ProxiedPlayer sender, ProxiedPlayer target) {
 
+		message = MultiChatUtil.reformatRGB(message);
+
 		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 		String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, sender, target);
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
+			sender.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+		} else {
+			sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		}
 
 		finalmessage = chatfix.replaceMsgVars(messageinformat, message, sender, target);
-		target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
+			target.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+		} else {
+			target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		}
 
 		finalmessage = chatfix.replaceMsgVars(messagespyformat, message, sender, target);
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
@@ -50,7 +60,12 @@ public class PrivateMessageManager {
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")
 							|| target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				}
+
 			}
 
 		}
@@ -73,12 +88,18 @@ public class PrivateMessageManager {
 
 	public void sendMessageConsoleTarget(String message, ProxiedPlayer sender) {
 
+		message = MultiChatUtil.reformatRGB(message);
+
 		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
 		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
 		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
 
 		String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
+			sender.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+		} else {
+			sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		}
 
 		finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
 		ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
@@ -91,7 +112,11 @@ public class PrivateMessageManager {
 					&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				}
 			}
 
 		}
@@ -112,6 +137,8 @@ public class PrivateMessageManager {
 
 	public void sendMessageConsoleSender(String message, ProxiedPlayer target) {
 
+		message = MultiChatUtil.reformatRGB(message);
+
 		CommandSender sender = ProxyServer.getInstance().getConsole();
 
 		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
@@ -122,7 +149,11 @@ public class PrivateMessageManager {
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
 
 		finalmessage = chatfix.replaceMsgConsoleSenderVars(messageinformat, message, target);
-		target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
+			target.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+		} else {
+			target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		}
 
 		finalmessage = chatfix.replaceMsgConsoleSenderVars(messagespyformat, message, target);
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
@@ -132,7 +163,11 @@ public class PrivateMessageManager {
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
+				} else {
+					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+				}
 			}
 
 		}

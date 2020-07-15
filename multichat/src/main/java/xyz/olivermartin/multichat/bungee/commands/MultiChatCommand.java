@@ -134,6 +134,11 @@ public class MultiChatCommand extends Command {
 						MultiChat.logGroupChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_groupchat");
 					}
 
+					// Legacy servers for RGB approximation
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("legacy_servers")) {
+						MultiChat.legacyServers = ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers");
+					}
+
 					// Set default channel
 					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
 					MultiChat.forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");

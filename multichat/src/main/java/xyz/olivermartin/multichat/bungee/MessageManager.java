@@ -410,17 +410,17 @@ public class MessageManager {
 
 	public static void sendMessage(CommandSender sender, String id) {
 		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + getMessage(id))));
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)))));
 	}
 
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
 		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + getMessage(id).replaceAll("%SPECIAL%", special))));
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special))));
 	}
 
 	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {
 		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', getMessage(id).replaceAll("%SPECIAL%", special))));
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special))));
 	}
 
 	private static void updatePrefix() {

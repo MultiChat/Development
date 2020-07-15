@@ -51,7 +51,12 @@ public class LocalDataStore {
 	/**
 	 * Which players can chat using colours
 	 */
-	private Map<UUID, Boolean> colourMap = new HashMap<UUID, Boolean>();
+	private Map<UUID, Boolean> simpleColourMap = new HashMap<UUID, Boolean>();
+
+	/**
+	 * Which players can chat using rgb colours
+	 */
+	private Map<UUID, Boolean> rgbColourMap = new HashMap<UUID, Boolean>();
 
 	/**
 	 * List of channels with their members
@@ -62,6 +67,11 @@ public class LocalDataStore {
 	 * Map of who players ignore
 	 */
 	private Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
+
+	/**
+	 * IS THIS A LEGACY SERVER THAT NEEDS RGB CODE APPROX.?
+	 */
+	private boolean legacy = false;
 
 	/**
 	 * @return the setDisplayName
@@ -108,8 +118,15 @@ public class LocalDataStore {
 	/**
 	 * @return the colourMap
 	 */
-	public synchronized Map<UUID, Boolean> getColourMap() {
-		return colourMap;
+	public synchronized Map<UUID, Boolean> getSimpleColourMap() {
+		return simpleColourMap;
+	}
+
+	/**
+	 * @return the rgbMap
+	 */
+	public synchronized Map<UUID, Boolean> getRGBColourMap() {
+		return rgbColourMap;
 	}
 
 	/**
@@ -124,6 +141,13 @@ public class LocalDataStore {
 	 */
 	public synchronized Map<UUID, Set<UUID>> getIgnoreMap() {
 		return ignoreMap;
+	}
+
+	/**
+	 * @return the legacy
+	 */
+	public synchronized boolean isLegacy() {
+		return legacy;
 	}
 
 	/**
@@ -171,8 +195,15 @@ public class LocalDataStore {
 	/**
 	 * @param colourMap the colourMap to set
 	 */
-	public synchronized void setColourMap(Map<UUID, Boolean> colourMap) {
-		this.colourMap = colourMap;
+	public synchronized void setSimpleColourMap(Map<UUID, Boolean> simpleColourMap) {
+		this.simpleColourMap = simpleColourMap;
+	}
+
+	/**
+	 * @param colourMap the colourMap to set
+	 */
+	public synchronized void setRGBColourMap(Map<UUID, Boolean> rgbColourMap) {
+		this.rgbColourMap = rgbColourMap;
 	}
 
 	/**
@@ -187,6 +218,13 @@ public class LocalDataStore {
 	 */
 	public synchronized void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
 		this.ignoreMap = ignoreMap;
+	}
+
+	/**
+	 * @param legach the legacy to set
+	 */
+	public synchronized void setLegacy(boolean legacy) {
+		this.legacy = legacy;
 	}
 
 }

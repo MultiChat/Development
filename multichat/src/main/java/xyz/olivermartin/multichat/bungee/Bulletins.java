@@ -72,7 +72,7 @@ public class Bulletins {
 
 	public static void addBulletin(String message) {
 		synchronized (bulletin) {
-			bulletin.add(message);
+			bulletin.add(MultiChatUtil.reformatRGB(message));
 		}
 	}
 
@@ -111,7 +111,11 @@ public class Bulletins {
 					message = ChatControl.applyChatRules(message, "bulletins", "").get();
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+						}
 					}
 					
 					// Trigger PostBroadcastEvent

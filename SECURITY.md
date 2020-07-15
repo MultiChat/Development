@@ -2,15 +2,12 @@
 
 ## Supported Versions
 
-MultiChat in general only supports the latest version of the plugin. However, we will offer security updates to version 1.7.5 if required. Please note version 1.7.4 and lower is NOT supported. Additionally, while version 1.8.1 is the recommended version, version 1.8 is NOT supported as it contained security vulnerabilities.
+MultiChat in general only supports the latest version of the plugin. Please note version 1.9.1 and lower are no longer supported.
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 1.9     | :white_check_mark: |
-| 1.8.1   | :white_check_mark: |
-| 1.8     | :x:                |
-| 1.7.5   | :white_check_mark: |
-| < 1.7.5 | :x:                |
+| 1.9.2   | :white_check_mark: |
+| < 1.9.2 | :x:                |
 
 ## Reporting a Vulnerability
 
