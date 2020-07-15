@@ -145,7 +145,9 @@ public abstract class LocalConfig {
 		LocalDatabaseCredentials.getInstance().updateValues(getString("mysql_url",""),
 				getString("mysql_database",""),
 				getString("mysql_user",""),
-				getString("mysql_pass",""));
+				getString("mysql_pass",""),
+				getBoolean("mysql_use_ssl", true),
+				getBoolean("mysql_auto_reconnect", true));
 
 		// CHANNEL CONTROL
 		regexChannelForcers = getRegexChannelForcers("force_channel");

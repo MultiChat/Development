@@ -28,6 +28,8 @@ public class DatabaseManager {
 	private String databaseURLMySQL;
 	private String databaseUsernameMySQL;
 	private String databasePasswordMySQL;
+	private boolean databaseUseSSLMySQL;
+	private boolean databaseAutoReconnectMySQL;
 
 	private int defaultPoolSize = 10;
 
@@ -208,6 +210,14 @@ public class DatabaseManager {
 		this.databasePasswordMySQL = pass;
 	}
 
+	public void setUseSSLMySQL(boolean useSSL) {
+		this.databaseUseSSLMySQL = useSSL;
+	}
+
+	public void setAutoReconnectSQL(boolean autoReconnect) {
+		this.databaseAutoReconnectMySQL = autoReconnect;
+	}
+
 	public void setMode(DatabaseMode dbm) {
 		databaseMode = dbm;
 	}
@@ -242,7 +252,7 @@ public class DatabaseManager {
 		switch (databaseMode) {
 		case MySQL:
 
-			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName, databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
+			databases.put(databaseName.toLowerCase(), new MySQLPooledDatabase(databaseURLMySQL, fileName + "?autoReconnect=" + String.valueOf(databaseAutoReconnectMySQL) + "&useSSL=" + String.valueOf(databaseUseSSLMySQL), databaseUsernameMySQL, databasePasswordMySQL, defaultPoolSize));
 
 			return databases.get(databaseName.toLowerCase());
 

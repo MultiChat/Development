@@ -38,6 +38,8 @@ public class LocalDatabaseSetupManager {
 				DatabaseManager.getInstance().setURLMySQL(LocalDatabaseCredentials.getInstance().getURL());
 				DatabaseManager.getInstance().setUsernameMySQL(LocalDatabaseCredentials.getInstance().getUser());
 				DatabaseManager.getInstance().setPasswordMySQL(LocalDatabaseCredentials.getInstance().getPassword());
+				DatabaseManager.getInstance().setUseSSLMySQL(LocalDatabaseCredentials.getInstance().getUseSSL());
+				DatabaseManager.getInstance().setAutoReconnectSQL(LocalDatabaseCredentials.getInstance().getAutoReconnect());
 
 				DatabaseManager.getInstance().createDatabase(databaseName, LocalDatabaseCredentials.getInstance().getDatabase());
 

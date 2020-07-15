@@ -133,6 +133,10 @@ mysql_database: "" # Put the name of your MySQL database here
 mysql_user: ""
 mysql_pass: ""
 
+# Advanced database settings
+mysql_use_ssl: true 
+mysql_auto_reconnect: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   Channel Control                    | #
