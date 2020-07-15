@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
+import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -493,7 +494,12 @@ public class Events implements Listener {
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
-
+			
+			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
+			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
+				return;
+			}
+			
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
 			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
@@ -515,10 +521,11 @@ public class Events implements Listener {
 			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("private_welcome")) {
 				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
 			}
-
+			
+			boolean broadcastJoin = !player.hasPermission("multichat.staff.silentjoin");
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-				if (!player.hasPermission("multichat.staff.silentjoin")) {
+				if (broadcastJoin) {
 
 					if (firstJoin && broadcastWelcome) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));

@@ -150,16 +150,17 @@ public class MultiChatCommand extends Command {
 						Channel.getGlobalChannel().addServer(server);
 					}
 
-					// Manage premiumVanish dependency
 					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 						MultiChat.premiumVanish = true;
-						System.out.println("[MultiChat] Hooked with PremiumVanish!");
 
 						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("premium_vanish")) {
-							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("premium_vanish.prevent_message");
-							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("premium_vanish.prevent_staff_list");
+							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_message");
+							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
+							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_join");
 						}
 
+					} else {
+						MultiChat.premiumVanish = false;
 					}
 
 					MessageManager.sendMessage(sender, "command_multichat_reload_completed");
