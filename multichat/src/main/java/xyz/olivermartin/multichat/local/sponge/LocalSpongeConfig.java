@@ -56,7 +56,7 @@ public class LocalSpongeConfig extends LocalConfig {
 
 	@Override
 	protected List<String> getStringList(String configNode) {
-		return config.getNode(configNode).getList(value -> value.toString());
+		return config.getNode(configNode).getList(value -> value.toString(), new ArrayList<String>());
 	}
 
 	@Override
