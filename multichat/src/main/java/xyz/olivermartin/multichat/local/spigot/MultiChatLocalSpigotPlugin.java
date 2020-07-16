@@ -7,6 +7,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.chat.Chat;
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
@@ -169,12 +170,12 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:chat");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:dn");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick");
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:pxe");
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:prefix"); // TODO LEGACY
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:suffix"); // TODO LEGACY
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:dn"); // TODO LEGACY
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:world"); // TODO LEGACY
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:nick"); // TODO LEGACY
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:pxe"); 
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:ppxe");
 
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", new LocalSpigotPlayerMetaListener());
@@ -183,6 +184,9 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:pact", new LocalSpigotPlayerActionListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", new LocalSpigotPlayerChannelListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", new LocalSpigotIgnoreListener());
+		
+		// New channels
+		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerMeta());
 
 	}
 

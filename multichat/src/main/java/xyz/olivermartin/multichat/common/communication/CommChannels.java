@@ -8,7 +8,7 @@ public class CommChannels {
 	private static String prefix = "multichat:";
 
 	// Player meta communication (prefix, suffix, displayname etc.)
-	private static String playerMeta = "pmeta"; // NOT REGISTERED ANYWHERE
+	private static String playerMeta = "pmeta"; // Bungee listener is implemented & registered
 
 	// Chat messages sent by players
 	private static String playerChat = "pchat"; // NOT REGISTERED ANYWHERE

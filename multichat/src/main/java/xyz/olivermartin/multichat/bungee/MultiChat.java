@@ -26,8 +26,10 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 
 
 /**
@@ -302,20 +304,19 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, this);
 
 			// Register communication channels and appropriate listeners
-			getProxy().registerChannel("multichat:comm");
-			getProxy().registerChannel("multichat:prefix");
-			getProxy().registerChannel("multichat:suffix");
-			getProxy().registerChannel("multichat:dn");
-			getProxy().registerChannel("multichat:nick");
-			getProxy().registerChannel("multichat:world");
-			getProxy().registerChannel("multichat:act");
-			getProxy().registerChannel("multichat:pact");
-			getProxy().registerChannel("multichat:chat");
-			getProxy().registerChannel("multichat:ch");
-			getProxy().registerChannel("multichat:ignore");
-			getProxy().registerChannel("multichat:pxe");
-			getProxy().registerChannel("multichat:ppxe");
-			getProxy().getPluginManager().registerListener(this, new BungeeComm());
+			getProxy().registerChannel("multichat:comm"); // TODO LEGACY
+			getProxy().registerChannel("multichat:act"); // TODO LEGACY
+			getProxy().registerChannel("multichat:pact"); // TODO LEGACY
+			getProxy().registerChannel("multichat:chat"); // TODO LEGACY
+			getProxy().registerChannel("multichat:ch"); // TODO LEGACY
+			getProxy().registerChannel("multichat:ignore"); // TODO LEGACY
+			getProxy().registerChannel("multichat:pxe"); // TODO LEGACY
+			getProxy().registerChannel("multichat:ppxe"); // TODO LEGACY
+			getProxy().getPluginManager().registerListener(this, new BungeeComm()); // TODO LEGACY
+
+			// New communication channels
+			getProxy().registerChannel(CommChannels.getPlayerMeta());
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener());
 
 			// Register commands
 			registerCommands(configYML, chatcontrolYML);

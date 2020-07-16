@@ -22,6 +22,7 @@ import org.spongepowered.api.text.Text;
 import com.google.inject.Inject;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
@@ -240,7 +241,7 @@ public class MultiChatLocalSpongePlugin {
 		ChannelBinding.RawDataChannel playerActionChannel = channelRegistrar.createRawChannel(this, "multichat:pact");
 		commManager.registerChannel("multichat:pact", playerActionChannel);
 
-		ChannelBinding.RawDataChannel prefixChannel = channelRegistrar.createRawChannel(this, "multichat:prefix");
+		/*ChannelBinding.RawDataChannel prefixChannel = channelRegistrar.createRawChannel(this, "multichat:prefix");
 		commManager.registerChannel("multichat:prefix", prefixChannel);
 		ChannelBinding.RawDataChannel suffixChannel = channelRegistrar.createRawChannel(this, "multichat:suffix");
 		commManager.registerChannel("multichat:suffix", suffixChannel);
@@ -249,7 +250,7 @@ public class MultiChatLocalSpongePlugin {
 		ChannelBinding.RawDataChannel worldChannel = channelRegistrar.createRawChannel(this, "multichat:world");
 		commManager.registerChannel("multichat:world", worldChannel);
 		ChannelBinding.RawDataChannel nickChannel = channelRegistrar.createRawChannel(this, "multichat:nick");
-		commManager.registerChannel("multichat:nick", nickChannel);
+		commManager.registerChannel("multichat:nick", nickChannel);*/ // TODO LEGACY
 		ChannelBinding.RawDataChannel channelChannel = channelRegistrar.createRawChannel(this, "multichat:ch");
 		commManager.registerChannel("multichat:ch", channelChannel);
 		ChannelBinding.RawDataChannel ignoreChannel = channelRegistrar.createRawChannel(this, "multichat:ignore");
@@ -267,6 +268,10 @@ public class MultiChatLocalSpongePlugin {
 
 		actionChannel.addListener(Platform.Type.SERVER, new LocalSpongeActionListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerActionListener());
+
+		// New channels
+		ChannelBinding.RawDataChannel playerMetaChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerMeta());
+		commManager.registerChannel(CommChannels.getPlayerMeta(), playerMetaChannel);
 
 	}
 
