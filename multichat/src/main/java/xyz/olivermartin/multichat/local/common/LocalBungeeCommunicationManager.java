@@ -13,9 +13,6 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
  */
 public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunicationManager {
 
-	protected final String pxeChannel = "multichat:pxe";
-	protected final String ppxeChannel = "multichat:ppxe";
-
 	protected LocalBungeeCommunicationManager(MultiChatLocalPlatform localPlatform) {
 		super(localPlatform, MultiChatProxyPlatform.BUNGEE);
 	}
@@ -37,12 +34,12 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 
 	@Override
 	public void sendProxyExecuteMessage(String command) {
-		sendString(pxeChannel, command);
+		sendString(CommChannels.getServerAction(), command);
 	}
 
 	@Override
 	public void sendProxyExecutePlayerMessage(String command, String player) {
-		sendStringAndString(ppxeChannel, command, player);
+		sendStringAndString(CommChannels.getPlayerAction(), command, player);
 	}
 
 	@Override

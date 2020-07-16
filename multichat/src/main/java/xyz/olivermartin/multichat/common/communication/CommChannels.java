@@ -23,10 +23,10 @@ public class CommChannels {
 	private static String serverData = "sdata"; // NOT REGISTERED ANYWHERE
 
 	// Actions for the server console (mce/pxe)
-	private static String serverAction = "sact"; // NOT REGISTERED ANYWHERE
+	private static String serverAction = "sact"; // Bungee listener is implemented & registered
 
 	// Actions for players (mce players, ppxe)
-	private static String playerAction = "pact"; // NOT REGISTERED ANYWHERE
+	private static String playerAction = "pact"; // Bungee listener is implemented & registered
 
 	/**
 	 * Gets the channel id used for: 
