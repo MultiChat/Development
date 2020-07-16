@@ -5,16 +5,17 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalCastListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalServerChatListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.SpigotBungeeMessage;
 
-public class LocalSpigotCastListener extends LocalCastListener implements PluginMessageListener {
+public class LocalSpigotServerChatListener extends LocalServerChatListener implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals("multichat:chat")) return;
+		if (!channel.equals(CommChannels.getServerChat())) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 

@@ -29,6 +29,7 @@ import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 
 
@@ -308,7 +309,6 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:comm"); // TODO LEGACY
 			getProxy().registerChannel("multichat:act"); // TODO LEGACY
 			getProxy().registerChannel("multichat:pact"); // TODO LEGACY
-			getProxy().registerChannel("multichat:chat"); // TODO LEGACY
 			getProxy().registerChannel("multichat:ch"); // TODO LEGACY
 			getProxy().registerChannel("multichat:ignore"); // TODO LEGACY
 			getProxy().registerChannel("multichat:pxe"); // TODO LEGACY
@@ -317,7 +317,10 @@ public class MultiChat extends Plugin implements Listener {
 
 			// New communication channels
 			getProxy().registerChannel(CommChannels.getPlayerMeta());
+			getProxy().registerChannel(CommChannels.getPlayerChat());
+			getProxy().registerChannel(CommChannels.getServerChat());
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener());
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener());
 
 			// Register commands
 			registerCommands(configYML, chatcontrolYML);

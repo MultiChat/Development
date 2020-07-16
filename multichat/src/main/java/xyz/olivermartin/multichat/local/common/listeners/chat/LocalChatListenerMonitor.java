@@ -74,7 +74,7 @@ public abstract class LocalChatListenerMonitor {
 
 		}
 
-		MultiChatLocal.getInstance().getProxyCommunicationManager().sendChatMessage(event.getPlayer().getUniqueId(), proxyMessage, proxyFormat);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), "global", proxyMessage, proxyFormat);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Aaaaand we sent it to the proxy! ALL DONE.");
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - UUID: " + event.getPlayer().getUniqueId());

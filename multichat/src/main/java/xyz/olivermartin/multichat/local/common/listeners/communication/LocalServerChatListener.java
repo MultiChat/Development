@@ -5,12 +5,16 @@ import java.io.IOException;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
 
-public abstract class LocalCastListener {
+public abstract class LocalServerChatListener {
 
 	protected boolean handleMessage(LocalBungeeMessage message) {
 
 		try {
 
+			// This is currently only used for casts
+
+			@SuppressWarnings("unused")
+			String channel = message.readUTF(); // TODO THIS NEEDS WORK
 			String castMessage = message.readUTF();
 			broadcastRawMessageToChat(castMessage);
 			return true;

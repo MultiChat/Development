@@ -6,7 +6,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.UUID;
 import java.util.regex.PatternSyntaxException;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -17,6 +16,7 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 
 /**
  * Bungee Communication Manager
@@ -111,7 +111,7 @@ public class BungeeComm implements Listener {
 
 	}
 
-	public static void sendChatMessage(String message, ServerInfo server) {
+	public static void sendServerChatMessage(String channel, String message, ServerInfo server) {
 
 		// This has been repurposed to send casts to local chat streams!
 
@@ -121,6 +121,7 @@ public class BungeeComm implements Listener {
 
 		try {
 			// message part
+			out.writeUTF(channel);
 			out.writeUTF(message);
 
 
@@ -128,7 +129,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:chat", stream.toByteArray());
+		server.sendData(CommChannels.getServerChat(), stream.toByteArray());
 
 	}
 
@@ -180,7 +181,7 @@ public class BungeeComm implements Listener {
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:dn") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick") || ev.getTag().equals("multichat:pxe") || ev.getTag().equals("multichat:ppxe")) ) {
+		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:pxe") || ev.getTag().equals("multichat:ppxe")) ) {
 			return;
 		}
 
@@ -191,55 +192,6 @@ public class BungeeComm implements Listener {
 		if (ev.getTag().equals("multichat:comm")) {
 
 			// TODO Remove - legacy
-			return;
-
-		}
-
-		if (ev.getTag().equals("multichat:chat")) {
-
-			ev.setCancelled(true);
-
-			DebugManager.log("{multichat:chat} Got a plugin message");
-
-			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
-			DataInputStream in = new DataInputStream(stream);
-
-			try {
-
-				UUID uuid = UUID.fromString(in.readUTF());
-				DebugManager.log("{multichat:chat} UUID = " + uuid);
-				String message = in.readUTF();
-				DebugManager.log("{multichat:chat} Message = " + message);
-				String format = in.readUTF();
-
-				DebugManager.log("{multichat:chat} Format (before removal of double chars) = " + format);
-
-				format = format.replace("%%","%");
-
-				DebugManager.log("{multichat:chat} Format = " + format);
-
-				ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
-
-				if (player == null) {
-					DebugManager.log("{multichat:chat} Could not get player! Abandoning chat message... (Is IP-Forwarding on?)");
-					return;
-				}
-
-				DebugManager.log("{multichat:chat} Got player successfully! Name = " + player.getName());
-
-				//synchronized (player) {
-
-				DebugManager.log("{multichat:chat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
-				Channel.getGlobalChannel().sendMessage(player, message, format);
-
-				//}
-
-			} catch (IOException e) {
-				DebugManager.log("{multichat:chat} ERROR READING PLUGIN MESSAGE");
-				e.printStackTrace();
-			}
-
-
 			return;
 
 		}

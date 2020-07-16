@@ -19,14 +19,14 @@ public class LocalChannel extends Channel {
 
 	@Override
 	public void sendMessage(String message, CommandSender sender) {
-		
+
 		DebugManager.log("LocalChannel wants to send a cast message!");
-		
+
 		// Use this to relay CASTS to local chat!
 		if (sender instanceof ProxiedPlayer) {
-			BungeeComm.sendChatMessage(message, ((ProxiedPlayer)sender).getServer().getInfo());
+			BungeeComm.sendServerChatMessage("local", message, ((ProxiedPlayer)sender).getServer().getInfo());
 		}
-		
+
 	}
 
 }

@@ -11,7 +11,7 @@ public class CommChannels {
 	private static String playerMeta = "pmeta"; // Bungee listener is implemented & registered
 
 	// Chat messages sent by players
-	private static String playerChat = "pchat"; // NOT REGISTERED ANYWHERE
+	private static String playerChat = "pchat"; // Bungee listener is implemented & registered
 
 	// Chat messages sent by non-player objects (casts, announcements etc.)
 	private static String serverChat = "schat"; // NOT REGISTERED ANYWHERE

@@ -44,6 +44,6 @@ public abstract class LocalProxyCommunicationManager {
 
 	public abstract void sendProxyExecutePlayerMessage(String command, String player);
 
-	public abstract void sendChatMessage(UUID uuid, String message, String format);
+	public abstract void sendPlayerChatMessage(UUID uuid, String channel, String message, String format);
 
 }
