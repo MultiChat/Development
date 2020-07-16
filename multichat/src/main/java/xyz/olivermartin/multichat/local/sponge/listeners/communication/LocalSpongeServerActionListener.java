@@ -7,10 +7,10 @@ import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
 
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalActionListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalServerActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.SpongeBungeeMessage;
 
-public class LocalSpongeActionListener extends LocalActionListener implements RawDataListener {
+public class LocalSpongeServerActionListener extends LocalServerActionListener implements RawDataListener {
 
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {

@@ -1,16 +1,11 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.regex.PatternSyntaxException;
 
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -88,7 +83,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:act", stream.toByteArray());
+		server.sendData(CommChannels.getServerAction(), stream.toByteArray());
 
 	}
 
@@ -107,7 +102,7 @@ public class BungeeComm implements Listener {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:pact", stream.toByteArray());
+		server.sendData(CommChannels.getPlayerAction(), stream.toByteArray());
 
 	}
 
@@ -181,7 +176,7 @@ public class BungeeComm implements Listener {
 	@EventHandler
 	public static void onPluginMessage(PluginMessageEvent ev) {
 
-		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:pxe") || ev.getTag().equals("multichat:ppxe")) ) {
+		if (! (ev.getTag().equals("multichat:comm") )) {
 			return;
 		}
 
@@ -193,62 +188,6 @@ public class BungeeComm implements Listener {
 
 			// TODO Remove - legacy
 			return;
-
-		}
-
-		if (ev.getTag().equals("multichat:pxe")) {
-
-			ev.setCancelled(true);
-
-			DebugManager.log("[multichat:pxe] Got an incoming pexecute message!");
-
-			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
-			DataInputStream in = new DataInputStream(stream);
-
-			try {
-
-				String command = in.readUTF();
-				DebugManager.log("[multichat:pxe] Command is: " + command);
-				ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), command);
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-		if (ev.getTag().equals("multichat:ppxe")) {
-
-			ev.setCancelled(true);
-
-			DebugManager.log("[multichat:ppxe] Got an incoming pexecute message (for a player)!");
-
-			ByteArrayInputStream stream = new ByteArrayInputStream(ev.getData());
-			DataInputStream in = new DataInputStream(stream);
-
-			try {
-
-				String command = in.readUTF();
-				String playerRegex = in.readUTF();
-
-				DebugManager.log("[multichat:ppxe] Command is: " + command);
-				DebugManager.log("[multichat:ppxe] Player regex is: " + playerRegex);
-
-				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-
-					if (p.getName().matches(playerRegex)) {
-
-						ProxyServer.getInstance().getPluginManager().dispatchCommand(p, command);
-
-					}
-
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (PatternSyntaxException e2) {
-				MessageManager.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
-			}
 
 		}
 

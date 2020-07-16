@@ -5,7 +5,7 @@ import java.io.IOException;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
 
-public abstract class LocalActionListener {
+public abstract class LocalServerActionListener {
 
 	protected abstract void executeCommandAsConsole(String command);
 
