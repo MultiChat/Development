@@ -8,7 +8,7 @@ import java.util.UUID;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
 
-public class LocalServerDataListener {
+public abstract class LocalServerDataListener {
 
 	@SuppressWarnings("unchecked")
 	protected boolean handleMessage(LocalBungeeObjectMessage message) {
@@ -88,6 +88,7 @@ public class LocalServerDataListener {
 
 		} catch (IOException e) {
 
+			e.printStackTrace();
 			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred trying to read local server data message from Bungeecord, is the server lagging?");
 			return false;
 

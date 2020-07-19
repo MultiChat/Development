@@ -24,6 +24,8 @@ public class ProxyLocalCommunicationManager {
 
 	public static void sendGlobalServerData(ServerInfo server) {
 
+		DebugManager.log("About to send to multichat:sdata on the global id");
+
 		/*
 		 * This is for the sdata channel id: global
 		 * 
@@ -47,6 +49,7 @@ public class ProxyLocalCommunicationManager {
 			out.writeUTF("global");
 			out.writeBoolean(globalChatServer);
 			out.writeUTF(globalChatFormat);
+			out.flush();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -54,9 +57,13 @@ public class ProxyLocalCommunicationManager {
 
 		server.sendData(CommChannels.getServerData(), stream.toByteArray());
 
+		DebugManager.log("Completed send on multichat:sdata on the global id");
+
 	}
 
 	public static void sendDisplayNameServerData(ServerInfo server) {
+
+		DebugManager.log("About to send to multichat:sdata on the dn id");
 
 		/*
 		 * This is for the sdata channel id: dn
@@ -81,6 +88,9 @@ public class ProxyLocalCommunicationManager {
 			out.writeUTF("dn");
 			out.writeBoolean(setDisplayName);
 			out.writeUTF(displayNameFormat);
+			out.flush();
+
+			DebugManager.log("setDisplayName = " + setDisplayName);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -88,9 +98,13 @@ public class ProxyLocalCommunicationManager {
 
 		server.sendData(CommChannels.getServerData(), stream.toByteArray());
 
+		DebugManager.log("Completed send to multichat:sdata on the dn id");
+
 	}
 
 	public static void sendIgnoreServerData(ServerInfo server) {
+
+		DebugManager.log("About to send to multichat:sdata on the ignore id");
 
 		/*
 		 * This is for the sdata channel id: ignore
@@ -109,6 +123,7 @@ public class ProxyLocalCommunicationManager {
 			ObjectOutputStream oout = new ObjectOutputStream(stream);
 			oout.writeUTF("ignore");
 			oout.writeObject(ChatControl.getIgnoreMap());
+			oout.flush();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -116,9 +131,13 @@ public class ProxyLocalCommunicationManager {
 
 		server.sendData(CommChannels.getServerData(), stream.toByteArray());
 
+		DebugManager.log("Completed send to multichat:sdata on the ignore id");
+
 	}
 
 	public static void sendLegacyServerData(ServerInfo server) {
+
+		DebugManager.log("About to send to multichat:sdata on the legacy id");
 
 		/*
 		 * This is for the sdata channel id: legacy
@@ -134,14 +153,18 @@ public class ProxyLocalCommunicationManager {
 
 		try {
 
+			ObjectOutputStream out = new ObjectOutputStream(stream);
+
 			boolean isLegacy =
 					ConfigManager.getInstance().getHandler("config.yml").getConfig()
 					.getStringList("legacy_servers")
 					.contains(server.getName());
 
-			ObjectOutputStream oout = new ObjectOutputStream(stream);
-			oout.writeUTF("legacy");
-			oout.writeBoolean(isLegacy);
+			DebugManager.log("isLegacy = " + isLegacy);
+
+			out.writeUTF("legacy");
+			out.writeBoolean(isLegacy);
+			out.flush();
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -149,9 +172,15 @@ public class ProxyLocalCommunicationManager {
 
 		server.sendData(CommChannels.getServerData(), stream.toByteArray());
 
+		DebugManager.log("Completed send to multichat:sdata on the legacy id");
+
 	}
 
 	public static void sendUpdatePlayerMetaRequestMessage(String playerName, ServerInfo server) {
+
+		DebugManager.log("About to send update player meta request!");
+		sendDisplayNameServerData(server);
+		sendGlobalServerData(server);
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(stream);
@@ -166,6 +195,7 @@ public class ProxyLocalCommunicationManager {
 		}
 
 		server.sendData(CommChannels.getPlayerMeta(), stream.toByteArray());
+		DebugManager.log("Request sent!");
 
 	}
 
