@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.bungee;
+package xyz.olivermartin.multichat.proxy.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -6,21 +6,21 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.api.connection.Server;
-import net.md_5.bungee.api.event.PluginMessageEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
+import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 
 /**
- * Bungee Communication Manager
- * <p>Manages all plug-in messaging channels on the BungeeCord side</p>
+ * Proxy -> Local communication manager
+ * <p>Manages all plugin messaging channels on the BungeeCord side</p>
  * 
  * @author Oliver Martin (Revilo410)
  *
  */
-public class BungeeComm implements Listener {
+public class ProxyLocalCommunicationManager {
 
 	public static void sendMessage(String message, ServerInfo server) {
 
@@ -192,23 +192,4 @@ public class BungeeComm implements Listener {
 
 	}
 
-	@EventHandler
-	public static void onPluginMessage(PluginMessageEvent ev) {
-
-		if (! (ev.getTag().equals("multichat:comm") )) {
-			return;
-		}
-
-		if (!(ev.getSender() instanceof Server)) {
-			return;
-		}
-
-		if (ev.getTag().equals("multichat:comm")) {
-
-			// TODO Remove - legacy
-			return;
-
-		}
-
-	}
 }

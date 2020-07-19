@@ -11,7 +11,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 import net.md_5.bungee.config.Configuration;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
@@ -19,6 +18,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 /**
  * Message Command
@@ -149,8 +149,8 @@ public class MsgCommand extends Command implements TabExecutor {
 
 						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-							BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
-							BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
 
 						}
 
@@ -184,7 +184,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-						BungeeComm.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+						ProxyLocalCommunicationManager.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 
 					}
 
@@ -214,7 +214,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-						BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
+						ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
 
 					}
 

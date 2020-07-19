@@ -5,7 +5,6 @@ import java.util.Optional;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
@@ -15,6 +14,7 @@ import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 /**
  * Local Chat Command
@@ -46,7 +46,7 @@ public class LocalCommand extends Command {
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 				}
 
 				if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
@@ -85,11 +85,11 @@ public class LocalCommand extends Command {
 					}
 
 					// Let server know players channel preference
-					BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 					// Message passes through to spigot here
 					// Send message directly to local chat...
-					BungeeComm.sendPlayerDirectChatMessage("local", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
+					ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("local", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
 					if (Events.hiddenStaff.contains(player.getUniqueId())) {
 						Events.hiddenStaff.remove(player.getUniqueId());

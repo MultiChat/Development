@@ -7,9 +7,9 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 /**
  * Execute Command
@@ -79,11 +79,11 @@ public class MultiChatExecuteCommand extends Command {
 						if (playerFlag) {
 							for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
 								if (p.getName().matches(player)) {
-									BungeeComm.sendPlayerCommandMessage(message, p.getName(), s);
+									ProxyLocalCommunicationManager.sendPlayerCommandMessage(message, p.getName(), s);
 								}
 							}
 						} else {
-							BungeeComm.sendCommandMessage(message, s);
+							ProxyLocalCommunicationManager.sendCommandMessage(message, s);
 						}
 					}
 

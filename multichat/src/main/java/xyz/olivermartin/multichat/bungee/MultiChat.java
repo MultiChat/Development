@@ -29,6 +29,7 @@ import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
@@ -140,7 +141,7 @@ public class MultiChat extends Plugin implements Listener {
 
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 					}
 
@@ -178,7 +179,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -198,7 +199,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -219,7 +220,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -240,7 +241,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -311,7 +312,6 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel("multichat:comm"); // TODO LEGACY
 			getProxy().registerChannel("multichat:ch"); // TODO LEGACY
 			getProxy().registerChannel("multichat:ignore"); // TODO LEGACY
-			getProxy().getPluginManager().registerListener(this, new BungeeComm()); // TODO LEGACY
 
 			// New communication channels
 			getProxy().registerChannel(CommChannels.getPlayerMeta());

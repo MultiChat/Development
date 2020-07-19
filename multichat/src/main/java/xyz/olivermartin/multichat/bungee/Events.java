@@ -30,6 +30,7 @@ import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 /**
  * Events Manager
@@ -162,7 +163,7 @@ public class Events implements Listener {
 		///
 		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 			if (player.getServer() != null) {
-				BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+				ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
 			}
 		}
 		///
@@ -266,8 +267,8 @@ public class Events implements Listener {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId()));
 
-					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
-					BungeeComm.sendMessage(target.getName(), target.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
 
@@ -395,7 +396,7 @@ public class Events implements Listener {
 				DebugManager.log("Does player have rgb colour permission? " + (player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 				// Let server know players channel preference
-				BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+				ProxyLocalCommunicationManager.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 				// Message passes through to spigot here
 
@@ -645,14 +646,14 @@ public class Events implements Listener {
 			public void run() {
 
 				try {
-					BungeeComm.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerChannelMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
 
 					// LEGACY SERVER HACK
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers").contains(event.getPlayer().getServer().getInfo().getName())) {
 						DebugManager.log("Player: " + event.getPlayer().getName() + ", switching to server: " + event.getPlayer().getServer().getInfo().getName() + ", is a LEGACY server!");
-						BungeeComm.sendCommandMessage("!!!LEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
+						ProxyLocalCommunicationManager.sendCommandMessage("!!!LEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
 					} else {
-						BungeeComm.sendCommandMessage("!!!NOTLEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
+						ProxyLocalCommunicationManager.sendCommandMessage("!!!NOTLEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
 					}
 
 				}
