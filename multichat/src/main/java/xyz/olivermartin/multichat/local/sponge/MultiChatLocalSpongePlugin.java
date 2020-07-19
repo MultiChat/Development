@@ -50,13 +50,13 @@ import xyz.olivermartin.multichat.local.sponge.listeners.SpongeGameReloadEvent;
 import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerHighest;
 import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerLowest;
 import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatListenerMonitor;
-import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeIgnoreListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChatListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerDataListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerMetaListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeServerActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeServerChatListener;
+import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeServerDataListener;
 
 @Plugin(id = "multichat", name = "MultiChat", version = "1.10", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public class MultiChatLocalSpongePlugin {
@@ -232,15 +232,6 @@ public class MultiChatLocalSpongePlugin {
 
 		ChannelRegistrar channelRegistrar = Sponge.getGame().getChannelRegistrar();
 
-		ChannelBinding.RawDataChannel commChannel = channelRegistrar.createRawChannel(this, "multichat:comm");
-		commManager.registerChannel("multichat:comm", commChannel);
-
-		ChannelBinding.RawDataChannel ignoreChannel = channelRegistrar.createRawChannel(this, "multichat:ignore");
-		commManager.registerChannel("multichat:ignore", ignoreChannel);
-
-		commChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerMetaListener());
-		ignoreChannel.addListener(Platform.Type.SERVER, new LocalSpongeIgnoreListener());
-
 		// New channels
 		ChannelBinding.RawDataChannel playerMetaChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerMeta());
 		commManager.registerChannel(CommChannels.getPlayerMeta(), playerMetaChannel);
@@ -260,11 +251,16 @@ public class MultiChatLocalSpongePlugin {
 		ChannelBinding.RawDataChannel playerDataChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerData());
 		commManager.registerChannel(CommChannels.getPlayerData(), playerDataChannel);
 
+		ChannelBinding.RawDataChannel serverDataChannel = channelRegistrar.createRawChannel(this, CommChannels.getServerData());
+		commManager.registerChannel(CommChannels.getServerData(), serverDataChannel);
+
 		serverChatChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerChatListener());
 		serverActionChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerActionListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerActionListener());
 		playerChatChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerChatListener());
 		playerDataChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerDataListener());
+		serverDataChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerDataListener());
+		playerMetaChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerMetaListener());
 
 	}
 
@@ -272,11 +268,6 @@ public class MultiChatLocalSpongePlugin {
 	public void onServerStop(GameStoppingServerEvent event) {
 
 		SpongeBungeeCommunicationManager commManager = (SpongeBungeeCommunicationManager)MultiChatLocal.getInstance().getProxyCommunicationManager();
-
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:comm"));
-		commManager.unregisterChannel("multichat:comm");
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ignore"));
-		commManager.unregisterChannel("multichat:ignore");
 
 		// New channels
 		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerMeta()));
@@ -296,6 +287,9 @@ public class MultiChatLocalSpongePlugin {
 
 		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerData()));
 		commManager.unregisterChannel(CommChannels.getPlayerData());
+
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getServerData()));
+		commManager.unregisterChannel(CommChannels.getServerData());
 
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 

@@ -22,50 +22,150 @@ import xyz.olivermartin.multichat.common.communication.CommChannels;
  */
 public class ProxyLocalCommunicationManager {
 
-	public static void sendMessage(String message, ServerInfo server) {
+	public static void sendGlobalServerData(ServerInfo server) {
+
+		/*
+		 * This is for the sdata channel id: global
+		 * 
+		 * Other ids are:
+		 * - global = Global chat info
+		 * - ignore = ignore map info
+		 * - dn = display name info
+		 * - legacy = legacy server info
+		 */
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(stream);
 
 		try {
-			// Players name
-			out.writeUTF(message);
 
-			// Should display name be set?
-			Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
-			if (configYML.contains("set_display_name")) {
-				if (configYML.getBoolean("set_display_name")) {
-					out.writeUTF("T");
-				} else {
-					out.writeUTF("F");
-				}
-			} else {
-				out.writeUTF("T");
-			}
+			ObjectOutputStream out = new ObjectOutputStream(stream);
 
-			// Display name format
-			if (configYML.contains("display_name_format")) {
-				out.writeUTF(configYML.getString("display_name_format"));
-			} else {
-				out.writeUTF("%PREFIX%%NICK%%SUFFIX%");
-			}
+			boolean globalChatServer = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
+					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName());
+			String globalChatFormat = Channel.getGlobalChannel().getFormat();
 
-			// Is this server a global chat server?
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
-					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName())) {
-				out.writeUTF("T");
-			} else {
-				out.writeUTF("F");
-			}
-
-			// Send the global format
-			out.writeUTF(Channel.getGlobalChannel().getFormat());
+			out.writeUTF("global");
+			out.writeBoolean(globalChatServer);
+			out.writeUTF(globalChatFormat);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:comm", stream.toByteArray());
+		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+
+	}
+
+	public static void sendDisplayNameServerData(ServerInfo server) {
+
+		/*
+		 * This is for the sdata channel id: dn
+		 * 
+		 * Other ids are:
+		 * - global = Global chat info
+		 * - ignore = ignore map info
+		 * - dn = display name info
+		 * - legacy = legacy server info
+		 */
+
+		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		try {
+
+			ObjectOutputStream out = new ObjectOutputStream(stream);
+
+			boolean setDisplayName = configYML.getBoolean("set_display_name", true);
+			String displayNameFormat = configYML.getString("display_name_format", "%PREFIX%%NICK%%SUFFIX%");
+
+			out.writeUTF("dn");
+			out.writeBoolean(setDisplayName);
+			out.writeUTF(displayNameFormat);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+
+	}
+
+	public static void sendIgnoreServerData(ServerInfo server) {
+
+		/*
+		 * This is for the sdata channel id: ignore
+		 * 
+		 * Other ids are:
+		 * - global = Global chat info
+		 * - ignore = ignore map info
+		 * - dn = display name info
+		 * - legacy = legacy server info
+		 */
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		try {
+
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+			oout.writeUTF("ignore");
+			oout.writeObject(ChatControl.getIgnoreMap());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+
+	}
+
+	public static void sendLegacyServerData(ServerInfo server) {
+
+		/*
+		 * This is for the sdata channel id: legacy
+		 * 
+		 * Other ids are:
+		 * - global = Global chat info
+		 * - ignore = ignore map info
+		 * - dn = display name info
+		 * - legacy = legacy server info
+		 */
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+
+		try {
+
+			boolean isLegacy =
+					ConfigManager.getInstance().getHandler("config.yml").getConfig()
+					.getStringList("legacy_servers")
+					.contains(server.getName());
+
+			ObjectOutputStream oout = new ObjectOutputStream(stream);
+			oout.writeUTF("legacy");
+			oout.writeBoolean(isLegacy);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+
+	}
+
+	public static void sendUpdatePlayerMetaRequestMessage(String playerName, ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+
+			// Command
+			out.writeUTF(playerName);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CommChannels.getPlayerMeta(), stream.toByteArray());
 
 	}
 
@@ -147,26 +247,9 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendIgnoreMap(ServerInfo server) {
-
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		//DataOutputStream out = new DataOutputStream(stream);
-		try {
-			ObjectOutputStream oout = new ObjectOutputStream(stream);
-
-			oout.writeObject(ChatControl.getIgnoreMap());
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		server.sendData("multichat:ignore", stream.toByteArray());
-
-	}
-
 	public static void sendPlayerDataMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour, boolean rgb) {
 
-		sendIgnoreMap(server);
+		sendIgnoreServerData(server);
 
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		//DataOutputStream out = new DataOutputStream(stream);

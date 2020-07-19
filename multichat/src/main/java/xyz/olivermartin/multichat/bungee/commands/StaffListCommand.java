@@ -35,13 +35,13 @@ public class StaffListCommand extends Command {
 		boolean onServer = false;
 
 		MessageManager.sendMessage(sender, "command_stafflist_list");
-		
+
 		DebugManager.log("[StaffList] Player: " + sender.getName() + " is the command sender!");
 
 		for (Iterator<String> localIterator1 = ProxyServer.getInstance().getServers().keySet().iterator(); localIterator1.hasNext();) {
 
 			server = (String)localIterator1.next();
-			
+
 			DebugManager.log("[StaffList] First Server: " + server);
 
 			if (!ProxyServer.getInstance().getServerInfo(server).getPlayers().isEmpty()) {
@@ -51,19 +51,19 @@ public class StaffListCommand extends Command {
 				for (ProxiedPlayer onlineplayer2 : ProxyServer.getInstance().getPlayers()) {
 
 					if ((onlineplayer2.hasPermission("multichat.staff"))) {
-						
+
 						DebugManager.log("[StaffList] Found a staff member: " + onlineplayer2.getName());
 
 						boolean showInList = true;
-						
+
 						DebugManager.log("[StaffList] Are we hooked to PremiumVanish: " + MultiChat.premiumVanish);
 						DebugManager.log("[StaffList] Are we hiding vanished players as set in config?: " + MultiChat.hideVanishedStaffInStaffList);
 
 						if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInStaffList) {
-							
+
 							DebugManager.log("[StaffList] Is staff invisible: " + BungeeVanishAPI.isInvisible(onlineplayer2));
 							DebugManager.log("[StaffList] Can player see vanished staff?: " + sender.hasPermission("multichat.staff.list.vanished"));
-							
+
 							if (BungeeVanishAPI.isInvisible(onlineplayer2) && !sender.hasPermission("multichat.staff.list.vanished")) {
 								DebugManager.log("[StaffList] This staff member will be hidden from list!");
 								showInList = false;
@@ -75,7 +75,7 @@ public class StaffListCommand extends Command {
 							if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
 
 								if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-									ProxyLocalCommunicationManager.sendMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
+									ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 								}
 
 								staff = true;

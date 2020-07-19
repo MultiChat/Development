@@ -36,13 +36,13 @@ import xyz.olivermartin.multichat.local.spigot.listeners.LocalSpigotWorldChangeL
 import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatListenerHighest;
 import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatListenerLowest;
 import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatListenerMonitor;
-import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotIgnoreListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerChatListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerDataListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerChatListener;
+import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerDataListener;
 
 public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
@@ -169,12 +169,6 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 	private void registerCommunicationChannels() {
 
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
-
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", new LocalSpigotPlayerMetaListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", new LocalSpigotIgnoreListener());
-
-		// New channels
 		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerMeta());
 		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerChat());
 		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerAction());
@@ -184,6 +178,8 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerAction(), new LocalSpigotPlayerActionListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerChat(), new LocalSpigotPlayerChatListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerData(), new LocalSpigotPlayerDataListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerData(), new LocalSpigotServerDataListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerMeta(), new LocalSpigotPlayerMetaListener());
 
 	}
 

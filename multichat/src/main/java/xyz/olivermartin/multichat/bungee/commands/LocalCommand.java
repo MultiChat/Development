@@ -46,7 +46,7 @@ public class LocalCommand extends Command {
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 
 				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-					ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 				}
 
 				if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {

@@ -163,7 +163,7 @@ public class Events implements Listener {
 		///
 		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 			if (player.getServer() != null) {
-				ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+				ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 			}
 		}
 		///
@@ -267,8 +267,8 @@ public class Events implements Listener {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)PMToggle.get(player.getUniqueId()));
 
-					ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
-					ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
+					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(player.getServer().getInfo().getName())) {
 
@@ -644,21 +644,8 @@ public class Events implements Listener {
 		ProxyServer.getInstance().getScheduler().schedule(MultiChat.getInstance(), new Runnable() {
 
 			public void run() {
-
-				try {
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
-
-					// LEGACY SERVER HACK
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers").contains(event.getPlayer().getServer().getInfo().getName())) {
-						DebugManager.log("Player: " + event.getPlayer().getName() + ", switching to server: " + event.getPlayer().getServer().getInfo().getName() + ", is a LEGACY server!");
-						ProxyLocalCommunicationManager.sendCommandMessage("!!!LEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
-					} else {
-						ProxyLocalCommunicationManager.sendCommandMessage("!!!NOTLEGACYSERVER!!!", event.getPlayer().getServer().getInfo());
-					}
-
-				}
-
-				catch (NullPointerException ex) { /* EMPTY */ }
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
+				ProxyLocalCommunicationManager.sendLegacyServerData(event.getPlayer().getServer().getInfo());
 			}
 
 		}, 500L, TimeUnit.MILLISECONDS);

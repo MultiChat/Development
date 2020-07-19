@@ -31,7 +31,7 @@ public class IgnoreCommand extends Command {
 				ProxiedPlayer target = ProxyServer.getInstance().getPlayer(username);
 
 				if (target != null) {
-					
+
 					if (target.getName().equals(sender.getName())) {
 						MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
 						return;
@@ -49,8 +49,8 @@ public class IgnoreCommand extends Command {
 						ChatControl.unignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
 						MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
 					}
-					
-					ProxyLocalCommunicationManager.sendIgnoreMap(((ProxiedPlayer) sender).getServer().getInfo());
+
+					ProxyLocalCommunicationManager.sendIgnoreServerData(((ProxiedPlayer) sender).getServer().getInfo());
 
 				} else {
 

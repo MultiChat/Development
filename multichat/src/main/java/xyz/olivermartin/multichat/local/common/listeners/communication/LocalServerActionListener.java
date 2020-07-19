@@ -14,13 +14,6 @@ public abstract class LocalServerActionListener {
 		try {
 
 			String command = message.readUTF();
-
-			// HANDLE LEGACY SERVER HACK
-			if (isHackedMessage(command)) {
-				handleHackedMessage(command);
-				return true;
-			}
-
 			executeCommandAsConsole(command);
 			return true;
 
@@ -29,20 +22,6 @@ public abstract class LocalServerActionListener {
 			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred trying to read local action message from Bungeecord, is the server lagging?");
 			return false;
 
-		}
-
-	}
-
-	private boolean isHackedMessage(String command) {
-		return (command.equals("!!!LEGACYSERVER!!!") || command.equals("!!!NOTLEGACYSERVER!!!"));
-	}
-
-	private void handleHackedMessage(String command) {
-
-		if (command.equals("!!!LEGACYSERVER!!!")) {
-			MultiChatLocal.getInstance().getDataStore().setLegacy(true);
-		} else {
-			MultiChatLocal.getInstance().getDataStore().setLegacy(false);
 		}
 
 	}

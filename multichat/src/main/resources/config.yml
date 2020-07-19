@@ -273,6 +273,9 @@ premium_vanish:
     silence_join: true # Prevent vanished players sending a join message
 
 # Legacy (PRE-1.16) Servers
+#
+# Please note: If you use any Sponge servers then they will need to be listed here!
+#
 # Listing servers here will mark them as 'LEGACY' servers
 # RGB colour codes will be approximated to their nearest value (i.e. &a, &b and so on)
 # This prevents them displaying in chat as &x...

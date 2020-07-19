@@ -149,8 +149,8 @@ public class MsgCommand extends Command implements TabExecutor {
 
 						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-							ProxyLocalCommunicationManager.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
-							ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 						}
 
@@ -184,7 +184,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-						ProxyLocalCommunicationManager.sendMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 
 					}
 
@@ -214,7 +214,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
 
-						ProxyLocalCommunicationManager.sendMessage(target.getName(), target.getServer().getInfo());
+						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 					}
 

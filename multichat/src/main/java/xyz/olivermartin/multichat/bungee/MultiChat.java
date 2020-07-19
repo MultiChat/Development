@@ -141,7 +141,7 @@ public class MultiChat extends Plugin implements Listener {
 
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 					}
 
@@ -179,7 +179,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -199,7 +199,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -220,7 +220,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -241,7 +241,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -308,21 +308,18 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);
 
-			// Register communication channels and appropriate listeners
-			getProxy().registerChannel("multichat:comm"); // TODO LEGACY
-			getProxy().registerChannel("multichat:ignore"); // TODO LEGACY
-
-			// New communication channels
-			getProxy().registerChannel(CommChannels.getPlayerMeta());
-			getProxy().registerChannel(CommChannels.getPlayerChat());
-			getProxy().registerChannel(CommChannels.getServerChat());
-			getProxy().registerChannel(CommChannels.getPlayerAction());
-			getProxy().registerChannel(CommChannels.getServerAction());
-			getProxy().registerChannel(CommChannels.getPlayerData());
-			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener());
-			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener());
-			getProxy().getPluginManager().registerListener(this, new ProxyPlayerActionListener());
-			getProxy().getPluginManager().registerListener(this, new ProxyServerActionListener());
+			// Communication Channels
+			getProxy().registerChannel(CommChannels.getPlayerMeta()); // pmeta
+			getProxy().registerChannel(CommChannels.getPlayerChat()); // pchat
+			getProxy().registerChannel(CommChannels.getServerChat()); // schat
+			getProxy().registerChannel(CommChannels.getPlayerAction()); // pact
+			getProxy().registerChannel(CommChannels.getServerAction()); // sact
+			getProxy().registerChannel(CommChannels.getPlayerData()); // pdata
+			getProxy().registerChannel(CommChannels.getServerData()); // sdata
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener()); // list - pmeta
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener()); // list - pchat
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerActionListener()); // list - pact
+			getProxy().getPluginManager().registerListener(this, new ProxyServerActionListener()); // list - sact
 
 			// Register commands
 			registerCommands(configYML, chatcontrolYML);
