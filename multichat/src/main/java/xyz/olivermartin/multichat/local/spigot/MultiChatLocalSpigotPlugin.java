@@ -38,8 +38,8 @@ import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatLis
 import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatListenerMonitor;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotIgnoreListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerActionListener;
-import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerChannelListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerChatListener;
+import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerDataListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerChatListener;
@@ -172,7 +172,6 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "multichat:comm");
 
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:comm", new LocalSpigotPlayerMetaListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ch", new LocalSpigotPlayerChannelListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, "multichat:ignore", new LocalSpigotIgnoreListener());
 
 		// New channels
@@ -184,6 +183,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerAction(), new LocalSpigotServerActionListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerAction(), new LocalSpigotPlayerActionListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerChat(), new LocalSpigotPlayerChatListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerData(), new LocalSpigotPlayerDataListener());
 
 	}
 

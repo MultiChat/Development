@@ -164,7 +164,7 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendPlayerChannelMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour, boolean rgb) {
+	public static void sendPlayerDataMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour, boolean rgb) {
 
 		sendIgnoreMap(server);
 
@@ -186,9 +186,9 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData("multichat:ch", stream.toByteArray());
+		server.sendData(CommChannels.getPlayerData(), stream.toByteArray());
 
-		DebugManager.log("Sent message on multichat:ch channel!");
+		DebugManager.log("Sent message on multichat:pdata channel!");
 
 	}
 

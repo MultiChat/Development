@@ -310,7 +310,6 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Register communication channels and appropriate listeners
 			getProxy().registerChannel("multichat:comm"); // TODO LEGACY
-			getProxy().registerChannel("multichat:ch"); // TODO LEGACY
 			getProxy().registerChannel("multichat:ignore"); // TODO LEGACY
 
 			// New communication channels
@@ -319,6 +318,7 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().registerChannel(CommChannels.getServerChat());
 			getProxy().registerChannel(CommChannels.getPlayerAction());
 			getProxy().registerChannel(CommChannels.getServerAction());
+			getProxy().registerChannel(CommChannels.getPlayerData());
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener());
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener());
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerActionListener());

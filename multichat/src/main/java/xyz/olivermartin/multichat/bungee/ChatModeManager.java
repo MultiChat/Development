@@ -45,7 +45,7 @@ public class ChatModeManager {
 			MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
 		}
 
-		ProxyLocalCommunicationManager.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 
@@ -66,7 +66,7 @@ public class ChatModeManager {
 			MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
 		}
 
-		ProxyLocalCommunicationManager.sendPlayerChannelMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 
