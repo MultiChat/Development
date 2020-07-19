@@ -53,6 +53,7 @@ import xyz.olivermartin.multichat.local.sponge.listeners.chat.LocalSpongeChatLis
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeIgnoreListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChannelListener;
+import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChatListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerMetaListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeServerActionListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongeServerChatListener;
@@ -262,6 +263,7 @@ public class MultiChatLocalSpongePlugin {
 		serverChatChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerChatListener());
 		serverActionChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerActionListener());
 		playerActionChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerActionListener());
+		playerChatChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerChatListener());
 
 	}
 

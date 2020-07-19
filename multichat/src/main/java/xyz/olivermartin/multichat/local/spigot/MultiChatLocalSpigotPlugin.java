@@ -39,6 +39,7 @@ import xyz.olivermartin.multichat.local.spigot.listeners.chat.LocalSpigotChatLis
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotIgnoreListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerChannelListener;
+import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerChatListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotPlayerMetaListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.communication.LocalSpigotServerChatListener;
@@ -182,6 +183,7 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerChat(), new LocalSpigotServerChatListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerAction(), new LocalSpigotServerActionListener());
 		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerAction(), new LocalSpigotPlayerActionListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerChat(), new LocalSpigotPlayerChatListener());
 
 	}
 

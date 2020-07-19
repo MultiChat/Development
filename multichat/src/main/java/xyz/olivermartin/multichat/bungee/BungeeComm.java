@@ -106,6 +106,25 @@ public class BungeeComm implements Listener {
 
 	}
 
+	public static void sendPlayerDirectChatMessage(String channel, String player, String chatMessage, ServerInfo server) {
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(stream);
+
+		try {
+
+			out.writeUTF(channel);
+			out.writeUTF(player);
+			out.writeUTF(chatMessage);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		server.sendData(CommChannels.getPlayerChat(), stream.toByteArray());
+
+	}
+
 	public static void sendServerChatMessage(String channel, String message, ServerInfo server) {
 
 		// This has been repurposed to send casts to local chat streams!

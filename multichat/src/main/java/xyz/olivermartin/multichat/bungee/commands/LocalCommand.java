@@ -89,8 +89,7 @@ public class LocalCommand extends Command {
 
 					// Message passes through to spigot here
 					// Send message directly to local chat...
-
-					BungeeComm.sendPlayerCommandMessage("!SINGLE L MESSAGE!" + message, sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+					BungeeComm.sendPlayerDirectChatMessage("local", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
 					if (Events.hiddenStaff.contains(player.getUniqueId())) {
 						Events.hiddenStaff.remove(player.getUniqueId());

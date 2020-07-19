@@ -94,8 +94,7 @@ public class GlobalCommand extends Command {
 							// Message passes through to spigot here
 
 							// Send message directly to global chat...
-
-							BungeeComm.sendPlayerCommandMessage("!SINGLE G MESSAGE!" + message, sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+							BungeeComm.sendPlayerDirectChatMessage("global", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
 							if (Events.hiddenStaff.contains(player.getUniqueId())) {
 								Events.hiddenStaff.remove(player.getUniqueId());
