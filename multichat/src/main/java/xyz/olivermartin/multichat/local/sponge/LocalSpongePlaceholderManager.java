@@ -16,7 +16,7 @@ public class LocalSpongePlaceholderManager extends LocalPlaceholderManager {
 	public String buildChatFormat(UUID uuid, String format) {
 		// Reformat any hex codes in the format
 		format = MultiChatUtil.reformatRGB(format);
-		format = processMultiChatPlaceholders(uuid, format).replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
+		format = processMultiChatPlaceholders(uuid, format).replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
 		format = MultiChatUtil.approximateHexCodes(format);
 		return format;
 	}
