@@ -2,6 +2,8 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.io.File;
 
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
+
 /**
  * This is MultiChat's API running on the network proxy server
  * 
@@ -25,6 +27,7 @@ public class MultiChatProxy {
 	private MultiChatProxyPlatform platform;
 	private File configDirectory;
 	private ProxyDataStore dataStore;
+	private ProxyFileStoreManager fileStoreManager;
 
 	/* END ATTRIBUTES */
 
@@ -52,6 +55,14 @@ public class MultiChatProxy {
 
 	public void registerDataStore(ProxyDataStore dataStore) {
 		this.dataStore = dataStore;
+	}
+
+	public ProxyFileStoreManager getFileStoreManager() {
+		return this.fileStoreManager;
+	}
+
+	public void registerFileStoreManager(ProxyFileStoreManager fileStoreManager) {
+		this.fileStoreManager = fileStoreManager;
 	}
 
 }

@@ -35,6 +35,8 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyAnnouncementsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 
 
 /**
@@ -82,15 +84,15 @@ public class MultiChat extends Plugin implements Listener {
 	};
 
 	public static String configversion;
+	private static MultiChat instance;
 
+	// Config values
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
 	public static boolean logPMs = true;
 	public static boolean logStaffChat = true;
 	public static boolean logGroupChat = true;
-
-	private static MultiChat instance;
 
 	public static boolean premiumVanish = false;
 	public static boolean hideVanishedStaffInMsg = true;
@@ -111,12 +113,14 @@ public class MultiChat extends Plugin implements Listener {
 
 				getLogger().info("Commencing backup!");
 
+				MultiChatProxy.getInstance().getFileStoreManager().save();
+
 				saveChatInfo();
 				saveGroupChatInfo();
 				saveGroupSpyInfo();
 				saveGlobalChatInfo();
 				saveSocialSpyInfo();
-				saveAnnouncements();
+				// TODO Legacy saveAnnouncements();
 				saveBulletins();
 				saveCasts();
 				saveMute();
@@ -331,6 +335,13 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
 			// Run start-up routines
+			ProxyFileStoreManager fileStoreManager = new ProxyFileStoreManager();
+
+			fileStoreManager.registerFileStore("announcements.dat",
+					new ProxyAnnouncementsFileStore("Announcements.dat", configDirectory));
+
+			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
+
 			Startup();
 			UUIDNameManager.Startup();
 
@@ -395,12 +406,14 @@ public class MultiChat extends Plugin implements Listener {
 
 		getLogger().info("Thankyou for using MultiChat. Disabling...");
 
+		MultiChatProxy.getInstance().getFileStoreManager().save();
+
 		saveChatInfo();
 		saveGroupChatInfo();
 		saveGroupSpyInfo();
 		saveGlobalChatInfo();
 		saveSocialSpyInfo();
-		saveAnnouncements();
+		// TODO Legacy saveAnnouncements();
 		saveBulletins();
 		saveCasts();
 		saveMute();
@@ -511,23 +524,6 @@ public class MultiChat extends Plugin implements Listener {
 		// UnRegister mute command
 		if (chatcontrolYML.getBoolean("mute")) {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
-		}
-
-	}
-
-	public static void saveAnnouncements() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try {
-			File file = new File(configDir, "Announcements.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(Announcements.getAnnouncementList());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the announcements file!");
-			e.printStackTrace();
 		}
 
 	}
@@ -750,27 +746,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Load Error] An error has occured reading the bulletins file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<String, String> loadAnnouncements() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		HashMap<String, String> result = null;
-
-		try {
-			File file = new File(configDir, "Announcements.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<String, String>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the announcements file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -1031,22 +1006,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Enabling Social Spy! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveGroupSpyInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f7 = new File(configDir, "Announcements.dat");
-
-		if ((f7.exists()) && (!f7.isDirectory())) {
-
-			Announcements.loadAnnouncementList((loadAnnouncements()));
-
-		} else {
-
-			System.out.println("[MultiChat] Some announcements files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveAnnouncements();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
