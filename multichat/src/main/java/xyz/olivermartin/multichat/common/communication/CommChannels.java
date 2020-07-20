@@ -36,8 +36,7 @@ public class CommChannels {
 	 * <p>
 	 * This channel communicates the following from PROXY -> LOCAL:
 	 * <ul>
-	 * 	<li>If the server should set the display name</li>
-	 *  <li>What the display name format is</li>
+	 *  <li>Requests for player meta to be updated on proxy</li>
 	 * </ul>
 	 * </p>
 	 * <p>
@@ -115,6 +114,7 @@ public class CommChannels {
 	 * <ul>
 	 * 	<li>Player colour permissions</li>
 	 *  <li>Player currently selected channels</li>
+	 *  <li>Lists of channel members</li>
 	 * </ul>
 	 * </p>
 	 * <p>
@@ -139,10 +139,11 @@ public class CommChannels {
 	 * This channel communicates the following from PROXY -> LOCAL:
 	 * <ul>
 	 * 	<li>Player ignore map</li>
-	 *  <li>Channel member lists</li>
 	 *  <li>Global chat format</li>
 	 *  <li>If this server is a 'global chat server'</li>
 	 *  <li>If this server is a legacy server</li>
+	 * 	<li>If the server should set the display name</li>
+	 *  <li>What the display name format is</li>
 	 * </ul>
 	 * </p>
 	 * <p>
