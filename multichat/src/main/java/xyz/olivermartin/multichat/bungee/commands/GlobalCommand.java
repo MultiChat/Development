@@ -5,7 +5,6 @@ import java.util.Optional;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
@@ -13,8 +12,9 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 /**
  * Global Command
@@ -50,10 +50,10 @@ public class GlobalCommand extends Command {
 					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
 
 						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
-						if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+						if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
 
 							if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
 								MessageManager.sendMessage(player, "mute_cannot_send_message");
@@ -80,7 +80,7 @@ public class GlobalCommand extends Command {
 							if (!player.hasPermission("multichat.chat.link")) {
 								message = ChatControl.replaceLinks(message);
 							}
-							
+
 							// If they had this channel hidden, then unhide it...
 							Channel global = Channel.getGlobalChannel();
 							if (!global.isMember(player.getUniqueId())) {
@@ -89,13 +89,12 @@ public class GlobalCommand extends Command {
 							}
 
 							// Let server know players channel preference
-							BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+							ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 							// Message passes through to spigot here
 
 							// Send message directly to global chat...
-
-							BungeeComm.sendPlayerCommandMessage("!SINGLE G MESSAGE!" + message, sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
+							ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("global", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
 							if (Events.hiddenStaff.contains(player.getUniqueId())) {
 								Events.hiddenStaff.remove(player.getUniqueId());

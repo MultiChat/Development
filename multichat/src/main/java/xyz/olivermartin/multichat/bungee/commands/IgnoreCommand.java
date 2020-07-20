@@ -4,10 +4,10 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 public class IgnoreCommand extends Command {
 
@@ -31,7 +31,7 @@ public class IgnoreCommand extends Command {
 				ProxiedPlayer target = ProxyServer.getInstance().getPlayer(username);
 
 				if (target != null) {
-					
+
 					if (target.getName().equals(sender.getName())) {
 						MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
 						return;
@@ -49,8 +49,8 @@ public class IgnoreCommand extends Command {
 						ChatControl.unignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
 						MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
 					}
-					
-					BungeeComm.sendIgnoreMap(((ProxiedPlayer) sender).getServer().getInfo());
+
+					ProxyLocalCommunicationManager.sendIgnoreServerData(((ProxiedPlayer) sender).getServer().getInfo());
 
 				} else {
 

@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.local.common;
 
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 
 /**
@@ -12,65 +13,38 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
  */
 public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunicationManager {
 
-	protected final String nicknameChannel = "multichat:nick";
-	protected final String worldChannel = "multichat:world";
-	protected final String prefixChannel = "multichat:prefix";
-	protected final String suffixChannel = "multichat:suffix";
-	protected final String displayNameChannel = "multichat:dn";
-	protected final String pxeChannel = "multichat:pxe";
-	protected final String ppxeChannel = "multichat:ppxe";
-	protected final String chatChannel = "multichat:chat";
-
 	protected LocalBungeeCommunicationManager(MultiChatLocalPlatform localPlatform) {
 		super(localPlatform, MultiChatProxyPlatform.BUNGEE);
 	}
 
 	protected abstract boolean sendUUIDAndString(String channel, UUID uuid, String value);
-	
+
 	protected abstract boolean sendUUIDAndStringAndString(String channel, UUID uuid, String value1, String value2);
+
+	protected abstract boolean sendUUIDAndStringAndStringAndString(String channel, UUID uuid, String value1, String value2, String value3);
 
 	protected abstract boolean sendStringAndString(String channel, String string1, String string2);
 
 	protected abstract boolean sendString(String channel, String string);
 
 	@Override
-	protected void sendNicknameUpdate(UUID uuid, String nickname) {
-		sendUUIDAndString(nicknameChannel, uuid, nickname);
-	}
-
-	@Override
-	public void sendWorldUpdate(UUID uuid, String world) {
-		sendUUIDAndString(worldChannel, uuid, world);
-	}
-
-	@Override
-	protected void sendPrefixUpdate(UUID uuid, String prefix) {
-		sendUUIDAndString(prefixChannel, uuid, prefix);
-	}
-
-	@Override
-	protected void sendSuffixUpdate(UUID uuid, String suffix) {
-		sendUUIDAndString(suffixChannel, uuid, suffix);
-	}
-
-	@Override
-	protected void sendDisplayNameUpdate(UUID uuid, String displayName) {
-		sendUUIDAndString(displayNameChannel, uuid, displayName);
+	public void sendMetaUpdate(UUID uuid, String metaId, String metaValue) {
+		sendUUIDAndStringAndString(CommChannels.getPlayerMeta(), uuid, metaId, metaValue);
 	}
 
 	@Override
 	public void sendProxyExecuteMessage(String command) {
-		sendString(pxeChannel, command);
+		sendString(CommChannels.getServerAction(), command);
 	}
 
 	@Override
 	public void sendProxyExecutePlayerMessage(String command, String player) {
-		sendStringAndString(ppxeChannel, command, player);
+		sendStringAndString(CommChannels.getPlayerAction(), command, player);
 	}
-	
+
 	@Override
-	public void sendChatMessage(UUID uuid, String message, String format) {
-		sendUUIDAndStringAndString(chatChannel, uuid, message, format);
+	public void sendPlayerChatMessage(UUID uuid, String channel, String message, String format) {
+		sendUUIDAndStringAndStringAndString(CommChannels.getPlayerChat(), uuid, channel, message, format);
 	}
 
 }

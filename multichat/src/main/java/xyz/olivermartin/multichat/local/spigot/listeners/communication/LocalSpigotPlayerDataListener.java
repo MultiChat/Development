@@ -7,19 +7,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerChannelListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerDataListener;
 import xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlayer;
 import xyz.olivermartin.multichat.local.spigot.listeners.SpigotBungeeObjectMessage;
 
-public class LocalSpigotPlayerChannelListener extends LocalPlayerChannelListener implements PluginMessageListener {
+public class LocalSpigotPlayerDataListener extends LocalPlayerDataListener implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals("multichat:ch")) return;
+		if (!channel.equals(CommChannels.getPlayerData())) return;
 
 		try {
 			LocalBungeeObjectMessage lbm = new SpigotBungeeObjectMessage(message);
@@ -27,7 +28,7 @@ public class LocalSpigotPlayerChannelListener extends LocalPlayerChannelListener
 			handleMessage(lbm);
 
 		} catch (IOException e) {
-			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local channel listener...");
+			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local player data listener...");
 			return;
 		}
 

@@ -5,7 +5,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * SocialSpy Command
@@ -22,15 +23,17 @@ public class SocialSpyCommand extends Command {
 
 	public void execute(CommandSender sender, String[] args) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		if ((sender instanceof ProxiedPlayer)) {
 
 			if (args.length < 1) {
 
-				if (MultiChat.socialspy.contains(((ProxiedPlayer)sender).getUniqueId())) {
-					MultiChat.socialspy.remove(((ProxiedPlayer)sender).getUniqueId());
+				if (ds.getSocialSpy().contains(((ProxiedPlayer)sender).getUniqueId())) {
+					ds.getSocialSpy().remove(((ProxiedPlayer)sender).getUniqueId());
 					MessageManager.sendMessage(sender, "command_socialspy_disabled");
 				} else {
-					MultiChat.socialspy.add(((ProxiedPlayer)sender).getUniqueId());
+					ds.getSocialSpy().add(((ProxiedPlayer)sender).getUniqueId());
 					MessageManager.sendMessage(sender, "command_socialspy_enabled");
 				}
 

@@ -13,11 +13,11 @@ import org.spongepowered.api.network.RemoteConnection;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerChannelListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerDataListener;
 import xyz.olivermartin.multichat.local.sponge.MultiChatLocalSpongePlayer;
 import xyz.olivermartin.multichat.local.sponge.listeners.SpongeBungeeObjectMessage;
 
-public class LocalSpongePlayerChannelListener extends LocalPlayerChannelListener implements RawDataListener {
+public class LocalSpongePlayerDataListener extends LocalPlayerDataListener implements RawDataListener {
 
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
@@ -28,7 +28,7 @@ public class LocalSpongePlayerChannelListener extends LocalPlayerChannelListener
 			handleMessage(lbm);
 
 		} catch (IOException e) {
-			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local channel listener...");
+			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local player data listener...");
 			return;
 		}
 

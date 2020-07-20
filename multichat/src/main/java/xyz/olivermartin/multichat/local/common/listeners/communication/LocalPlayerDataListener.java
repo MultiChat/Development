@@ -11,7 +11,7 @@ import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
 
-public abstract class LocalPlayerChannelListener {
+public abstract class LocalPlayerDataListener {
 
 	protected abstract Optional<MultiChatLocalPlayer> getPlayerFromName(String playername);
 
@@ -56,12 +56,12 @@ public abstract class LocalPlayerChannelListener {
 
 		} catch (IOException e) {
 
-			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred trying to read local channel message from Bungeecord, is the server lagging?");
+			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred trying to read player data message from Bungeecord, is the server lagging?");
 			return false;
 
 		} catch (ClassNotFoundException e) {
 
-			MultiChatLocal.getInstance().getConsoleLogger().log("Could not read List of UUIDs from local channel message...");
+			MultiChatLocal.getInstance().getConsoleLogger().log("Could not read List of UUIDs from local player data message...");
 			return false;
 
 		}

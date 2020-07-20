@@ -5,12 +5,13 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalActionListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalServerChatListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.SpongeBungeeMessage;
 
-public class LocalSpongeActionListener extends LocalActionListener implements RawDataListener {
+public class LocalSpongeServerChatListener extends LocalServerChatListener implements RawDataListener {
 
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
@@ -22,8 +23,8 @@ public class LocalSpongeActionListener extends LocalActionListener implements Ra
 	}
 
 	@Override
-	protected void executeCommandAsConsole(String command) {
-		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), command);
+	protected void broadcastRawMessageToChat(String message) {
+		Sponge.getServer().getBroadcastChannel().send(TextSerializers.FORMATTING_CODE.deserialize(message));
 	}
 
 }

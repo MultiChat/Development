@@ -7,6 +7,8 @@ import com.olivermartin410.plugins.TGroupChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Group Chat Management Class
@@ -24,6 +26,7 @@ public class GroupManager {
 	public void createGroup(String groupname, UUID owneruuid, boolean secret, String password) {
 
 		TGroupChatInfo newgroup = new TGroupChatInfo();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		newgroup.addMember(owneruuid);
 		newgroup.addViewer(owneruuid);
@@ -35,7 +38,7 @@ public class GroupManager {
 		newgroup.setPassword(password);
 		newgroup.setFormal(false);
 
-		MultiChat.groupchats.put(groupname.toLowerCase(), newgroup);
+		ds.getGroupChats().put(groupname.toLowerCase(), newgroup);
 
 	}
 
@@ -49,8 +52,9 @@ public class GroupManager {
 
 		boolean success = false;
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 		TGroupChatInfo groupchat = new TGroupChatInfo();
-		groupchat = (TGroupChatInfo)MultiChat.groupchats.get(groupname.toLowerCase());
+		groupchat = (TGroupChatInfo)ds.getGroupChats().get(groupname.toLowerCase());
 
 		if (!groupchat.existsBanned(player.getUniqueId())) {
 
@@ -76,8 +80,8 @@ public class GroupManager {
 					groupchat.addMember(player.getUniqueId());
 					groupchat.addViewer(player.getUniqueId());
 
-					MultiChat.groupchats.remove(groupname.toLowerCase());
-					MultiChat.groupchats.put(groupname.toLowerCase(), groupchat);
+					ds.getGroupChats().remove(groupname.toLowerCase());
+					ds.getGroupChats().put(groupname.toLowerCase(), groupchat);
 
 					success = true;
 
@@ -107,8 +111,8 @@ public class GroupManager {
 							groupchat.addMember(player.getUniqueId());
 							groupchat.addViewer(player.getUniqueId());
 
-							MultiChat.groupchats.remove(groupname.toLowerCase());
-							MultiChat.groupchats.put(groupname.toLowerCase(), groupchat);
+							ds.getGroupChats().remove(groupname.toLowerCase());
+							ds.getGroupChats().put(groupname.toLowerCase(), groupchat);
 
 							success = true;
 
@@ -139,11 +143,12 @@ public class GroupManager {
 	 */
 	public void setViewedChat(UUID playeruuid, String groupname) {
 
-		String viewedchat = (String)MultiChat.viewedchats.get(playeruuid);
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+		String viewedchat = (String)ds.getViewedChats().get(playeruuid);
 
 		viewedchat = groupname.toLowerCase();
-		MultiChat.viewedchats.remove(playeruuid);
-		MultiChat.viewedchats.put(playeruuid, viewedchat);
+		ds.getViewedChats().remove(playeruuid);
+		ds.getViewedChats().put(playeruuid, viewedchat);
 
 	}
 
@@ -152,7 +157,9 @@ public class GroupManager {
 	 */
 	public void announceJoinGroup(String playername, String groupname) {
 
-		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_joined"), "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
+		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_joined"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
 
 	}
 
@@ -161,7 +168,9 @@ public class GroupManager {
 	 */
 	public void announceQuitGroup(String playername, String groupname) {
 
-		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_quit"), "&lINFO", MultiChat.groupchats.get(groupname.toLowerCase()));
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
+		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_quit"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
 
 	}
 
@@ -170,10 +179,11 @@ public class GroupManager {
 	 */
 	public void quitGroup(String groupname, UUID player, ProxiedPlayer pinstance) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 		TGroupChatInfo groupchatinfo = new TGroupChatInfo();
-		String viewedchat = (String)MultiChat.viewedchats.get(player);
+		String viewedchat = (String)ds.getViewedChats().get(player);
 
-		groupchatinfo = (TGroupChatInfo)MultiChat.groupchats.get(groupname.toLowerCase());
+		groupchatinfo = (TGroupChatInfo)ds.getGroupChats().get(groupname.toLowerCase());
 
 		if (groupchatinfo.existsMember(player)) {
 
@@ -188,10 +198,10 @@ public class GroupManager {
 
 				viewedchat = null;
 
-				MultiChat.viewedchats.remove(player);
-				MultiChat.viewedchats.put(player, viewedchat);
-				MultiChat.groupchats.remove(groupname.toLowerCase());
-				MultiChat.groupchats.put(groupname.toLowerCase(), groupchatinfo);
+				ds.getViewedChats().remove(player);
+				ds.getViewedChats().put(player, viewedchat);
+				ds.getGroupChats().remove(groupname.toLowerCase());
+				ds.getGroupChats().put(groupname.toLowerCase(), groupchatinfo);
 
 				MessageManager.sendSpecialMessage(pinstance, "groups_quit", groupname.toUpperCase());
 				announceQuitGroup(pinstance.getName(), groupname);
