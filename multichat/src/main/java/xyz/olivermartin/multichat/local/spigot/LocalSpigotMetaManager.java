@@ -28,7 +28,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 				return MultiChatUtil.approximateHexCodes(vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid)));
 			}
 
-			return vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid));
+			return MultiChatUtil.reformatRGB(vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid)));
 
 		}
 
@@ -50,7 +50,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 				return MultiChatUtil.approximateHexCodes(vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid)));
 			}
 
-			return vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid));
+			return MultiChatUtil.reformatRGB(vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid)));
 
 		}
 
@@ -86,6 +86,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", player.getName());
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", getPrefix(uuid));
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", getSuffix(uuid));
+			displayNameFormat = MultiChatUtil.reformatRGB(displayNameFormat);
 			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
 
 			// LEGACY HACK
