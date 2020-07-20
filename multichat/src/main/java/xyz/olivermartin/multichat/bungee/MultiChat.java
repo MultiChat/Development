@@ -35,8 +35,8 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
-import xyz.olivermartin.multichat.proxy.common.storage.ProxyAnnouncementsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
 
 
 /**

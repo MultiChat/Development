@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.proxy.common.storage;
+package xyz.olivermartin.multichat.proxy.common.storage.files;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
 import xyz.olivermartin.multichat.bungee.Announcements;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
 public class ProxyAnnouncementsFileStore extends ProxyGenericFileStore {
 
