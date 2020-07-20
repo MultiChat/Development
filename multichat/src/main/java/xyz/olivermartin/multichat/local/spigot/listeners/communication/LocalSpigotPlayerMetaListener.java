@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
 import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerMetaListener;
@@ -17,7 +18,7 @@ public class LocalSpigotPlayerMetaListener extends LocalPlayerMetaListener imple
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals("multichat:comm")) return;
+		if (!channel.equals(CommChannels.getPlayerMeta())) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 

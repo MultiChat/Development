@@ -13,6 +13,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 public class ChatControl {
 
@@ -118,7 +119,7 @@ public class ChatControl {
 							if ((Boolean) dictionary.get("spigot")) {
 
 								ServerInfo server = ProxyServer.getInstance().getPlayer(playerName).getServer().getInfo();
-								BungeeComm.sendCommandMessage(String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName), server);
+								ProxyLocalCommunicationManager.sendCommandMessage(String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName), server);
 
 							} else {
 								ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), String.valueOf(dictionary.get("command")).replaceAll("%PLAYER%", playerName)); 
@@ -371,7 +372,7 @@ public class ChatControl {
 
 					if (config.getBoolean("anti_spam_spigot")) {
 						ServerInfo server = player.getServer().getInfo();
-						BungeeComm.sendCommandMessage(config.getString("anti_spam_command").replaceAll("%PLAYER%", player.getName()), server);
+						ProxyLocalCommunicationManager.sendCommandMessage(config.getString("anti_spam_command").replaceAll("%PLAYER%", player.getName()), server);
 					} else {
 						ProxyServer.getInstance().getPluginManager().dispatchCommand(ProxyServer.getInstance().getConsole(), config.getString("anti_spam_command").replaceAll("%PLAYER%", player.getName())); 
 					}

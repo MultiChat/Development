@@ -9,6 +9,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Staff Chat Manager
@@ -19,6 +21,8 @@ import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
 public class StaffChatManager {
 
 	public void sendModMessage(String username, String displayname, String server, String message) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		message = MultiChatUtil.reformatRGB(message);
 
@@ -40,13 +44,13 @@ public class StaffChatManager {
 
 			if (onlineplayer.hasPermission("multichat.staff.mod")) {
 
-				if (!MultiChat.modchatpreferences.containsKey(onlineplayer.getUniqueId())) {
+				if (!ds.getModChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
 					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
 					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
 
-					MultiChat.modchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
+					ds.getModChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 
 				}
 
@@ -75,6 +79,8 @@ public class StaffChatManager {
 
 	public void sendAdminMessage(String username, String displayname, String server, String message) {
 
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		message = MultiChatUtil.reformatRGB(message);
 
 		String original = message;
@@ -95,13 +101,13 @@ public class StaffChatManager {
 
 			if (onlineplayer.hasPermission("multichat.staff.admin")) {
 
-				if (!MultiChat.adminchatpreferences.containsKey(onlineplayer.getUniqueId())) {
+				if (!ds.getAdminChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
 					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
 					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
 
-					MultiChat.adminchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
+					ds.getAdminChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 
 				}
 

@@ -9,21 +9,21 @@ import org.spongepowered.api.network.RemoteConnection;
 
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
-import xyz.olivermartin.multichat.local.common.listeners.communication.LocalIgnoreListener;
+import xyz.olivermartin.multichat.local.common.listeners.communication.LocalServerDataListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.SpongeBungeeObjectMessage;
 
-public class LocalSpongeIgnoreListener extends LocalIgnoreListener implements RawDataListener {
+public class LocalSpongeServerDataListener extends LocalServerDataListener implements RawDataListener {
 
 	@Override
 	public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
 
 		try {
-			LocalBungeeObjectMessage lbm = new SpongeBungeeObjectMessage(data);
 
+			LocalBungeeObjectMessage lbm = new SpongeBungeeObjectMessage(data);
 			handleMessage(lbm);
 
 		} catch (IOException e) {
-			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local ignore listener...");
+			MultiChatLocal.getInstance().getConsoleLogger().log("An error occurred reading the object stream in the local server data listener...");
 			return;
 		}
 

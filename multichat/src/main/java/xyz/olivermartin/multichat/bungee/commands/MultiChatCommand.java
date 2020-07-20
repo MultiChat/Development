@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * MultiChat (Admin) Command
@@ -78,13 +79,15 @@ public class MultiChatCommand extends Command {
 
 					MessageManager.sendMessage(sender, "command_multichat_save_prepare");
 
+					MultiChatProxy.getInstance().getFileStoreManager().save();
+
 					MultiChat.saveChatInfo();
 					MultiChat.saveGroupChatInfo();
 					MultiChat.saveGroupSpyInfo();
 					MultiChat.saveGlobalChatInfo();
 					MultiChat.saveSocialSpyInfo();
-					MultiChat.saveAnnouncements();
-					MultiChat.saveBulletins();
+					//TODO Legacy MultiChat.saveAnnouncements();
+					//MultiChat.saveBulletins();
 					MultiChat.saveCasts();
 					MultiChat.saveMute();
 					MultiChat.saveIgnore();

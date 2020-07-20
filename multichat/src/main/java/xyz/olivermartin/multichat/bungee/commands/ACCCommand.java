@@ -7,7 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 
 /**
  * Admin-Chat colour command
@@ -26,6 +27,8 @@ public class ACCCommand extends Command {
 	}
 
 	public void execute(CommandSender sender, String[] args) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		// Check correct arguments
 		if (args.length != 2) {
@@ -62,8 +65,8 @@ public class ACCCommand extends Command {
 					chatinfo.setChatColor(args[0].charAt(0));
 					chatinfo.setNameColor(args[1].charAt(0));
 
-					MultiChat.adminchatpreferences.remove(player.getUniqueId());
-					MultiChat.adminchatpreferences.put(player.getUniqueId(), chatinfo);
+					ds.getAdminChatPreferences().remove(player.getUniqueId());
+					ds.getAdminChatPreferences().put(player.getUniqueId(), chatinfo);
 
 					DebugManager.log("[ACCCommand] Preferences updated");
 

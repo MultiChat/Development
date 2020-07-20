@@ -26,6 +26,18 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.common.communication.CommChannels;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
 
 
 /**
@@ -37,11 +49,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.4";
+	public static final String LATEST_VERSION = "1.10";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+      "1.9.4",
 			"1.9.3",
 			"1.9.2",
 			"1.9.1",
@@ -72,28 +85,16 @@ public class MultiChat extends Plugin implements Listener {
 
 	};
 
-	public static Map<UUID, TChatInfo> modchatpreferences = new HashMap<UUID, TChatInfo>();
-	public static Map<UUID, TChatInfo> adminchatpreferences = new HashMap<UUID, TChatInfo>();
-	public static Map<String, TGroupChatInfo> groupchats = new HashMap<String, TGroupChatInfo>();
-
-	public static Map<UUID, String> viewedchats = new HashMap<UUID, String>();
-	public static Map<UUID, UUID> lastmsg = new HashMap<UUID, UUID>();
-	public static List<UUID> allspy = new ArrayList<UUID>();
-	public static List<UUID> socialspy = new ArrayList<UUID>();
-
-	public static File configDir;
 	public static String configversion;
+	private static MultiChat instance;
 
-	public static boolean frozen;
-
+	// Config values
 	public static String defaultChannel = "";
 	public static boolean forceChannelOnJoin = false;
 
 	public static boolean logPMs = true;
 	public static boolean logStaffChat = true;
 	public static boolean logGroupChat = true;
-
-	private static MultiChat instance;
 
 	public static boolean premiumVanish = false;
 	public static boolean hideVanishedStaffInMsg = true;
@@ -114,13 +115,15 @@ public class MultiChat extends Plugin implements Listener {
 
 				getLogger().info("Commencing backup!");
 
+				MultiChatProxy.getInstance().getFileStoreManager().save();
+
 				saveChatInfo();
 				saveGroupChatInfo();
 				saveGroupSpyInfo();
 				saveGlobalChatInfo();
 				saveSocialSpyInfo();
-				saveAnnouncements();
-				saveBulletins();
+				// TODO Legacy saveAnnouncements();
+				// saveBulletins();
 				saveCasts();
 				saveMute();
 				saveIgnore();
@@ -144,7 +147,7 @@ public class MultiChat extends Plugin implements Listener {
 
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 					}
 
@@ -182,7 +185,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -202,7 +205,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -223,7 +226,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -244,7 +247,7 @@ public class MultiChat extends Plugin implements Listener {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
-							BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
+							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 
 					}
@@ -264,22 +267,29 @@ public class MultiChat extends Plugin implements Listener {
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
 
-		configDir = getDataFolder();
+		MultiChatProxyPlatform platform = MultiChatProxyPlatform.BUNGEE;
+		MultiChatProxy.getInstance().registerPlatform(platform);
+
+		ProxyDataStore dataStore = new ProxyDataStore();
+		MultiChatProxy.getInstance().registerDataStore(dataStore);
+
+		File configDirectory = getDataFolder();
 		if (!getDataFolder().exists()) {
 			System.out.println("[MultiChat] Creating plugin directory!");
 			getDataFolder().mkdirs();
 		}
+		MultiChatProxy.getInstance().registerConfigDirectory(configDirectory);
 
-		String translationsDir = configDir.toString() + File.separator + "translations";
+		String translationsDir = configDirectory.toString() + File.separator + "translations";
 		if (!new File(translationsDir).exists()) {
 			System.out.println("[MultiChat] Creating translations directory!");
 			new File(translationsDir).mkdirs();
 		}
 
-		ConfigManager.getInstance().registerHandler("config.yml", configDir);
-		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDir);
-		ConfigManager.getInstance().registerHandler("messages.yml", configDir);
-		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDir);
+		ConfigManager.getInstance().registerHandler("config.yml", configDirectory);
+		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDirectory);
+		ConfigManager.getInstance().registerHandler("messages.yml", configDirectory);
+		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDirectory);
 
 		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
 		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
@@ -308,21 +318,18 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);
 
-			// Register communication channels and appropriate listeners
-			getProxy().registerChannel("multichat:comm");
-			getProxy().registerChannel("multichat:prefix");
-			getProxy().registerChannel("multichat:suffix");
-			getProxy().registerChannel("multichat:dn");
-			getProxy().registerChannel("multichat:nick");
-			getProxy().registerChannel("multichat:world");
-			getProxy().registerChannel("multichat:act");
-			getProxy().registerChannel("multichat:pact");
-			getProxy().registerChannel("multichat:chat");
-			getProxy().registerChannel("multichat:ch");
-			getProxy().registerChannel("multichat:ignore");
-			getProxy().registerChannel("multichat:pxe");
-			getProxy().registerChannel("multichat:ppxe");
-			getProxy().getPluginManager().registerListener(this, new BungeeComm());
+			// Communication Channels
+			getProxy().registerChannel(CommChannels.getPlayerMeta()); // pmeta
+			getProxy().registerChannel(CommChannels.getPlayerChat()); // pchat
+			getProxy().registerChannel(CommChannels.getServerChat()); // schat
+			getProxy().registerChannel(CommChannels.getPlayerAction()); // pact
+			getProxy().registerChannel(CommChannels.getServerAction()); // sact
+			getProxy().registerChannel(CommChannels.getPlayerData()); // pdata
+			getProxy().registerChannel(CommChannels.getServerData()); // sdata
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener()); // list - pmeta
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener()); // list - pchat
+			getProxy().getPluginManager().registerListener(this, new ProxyPlayerActionListener()); // list - pact
+			getProxy().getPluginManager().registerListener(this, new ProxyServerActionListener()); // list - sact
 
 			// Register commands
 			registerCommands(configYML, chatcontrolYML);
@@ -330,6 +337,16 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Config Version: " + configversion);
 
 			// Run start-up routines
+			ProxyFileStoreManager fileStoreManager = new ProxyFileStoreManager();
+
+			fileStoreManager.registerFileStore("announcements.dat",
+					new ProxyAnnouncementsFileStore("Announcements.dat", configDirectory));
+
+			fileStoreManager.registerFileStore("bulletins.dat",
+					new ProxyBulletinsFileStore("Bulletins.dat", configDirectory));
+
+			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
+
 			Startup();
 			UUIDNameManager.Startup();
 
@@ -394,13 +411,15 @@ public class MultiChat extends Plugin implements Listener {
 
 		getLogger().info("Thankyou for using MultiChat. Disabling...");
 
+		MultiChatProxy.getInstance().getFileStoreManager().save();
+
 		saveChatInfo();
 		saveGroupChatInfo();
 		saveGroupSpyInfo();
 		saveGlobalChatInfo();
 		saveSocialSpyInfo();
-		saveAnnouncements();
-		saveBulletins();
+		// TODO Legacy saveAnnouncements();
+		// saveBulletins();
 		saveCasts();
 		saveMute();
 		saveIgnore();
@@ -514,45 +533,16 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveAnnouncements() {
-
-		try {
-			File file = new File(configDir, "Announcements.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(Announcements.getAnnouncementList());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the announcements file!");
-			e.printStackTrace();
-		}
-
-	}
-
-	public static void saveBulletins() {
-
-		try	{
-			File file = new File(configDir, "Bulletins.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeBoolean(Bulletins.isEnabled());
-			out.writeInt(Bulletins.getTimeBetween());
-			out.writeObject(Bulletins.getArrayList());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the bulletins file!");
-			e.printStackTrace();
-		}
-
-	}
-
 	public static void saveChatInfo() {
+
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		try {
 			File file = new File(configDir, "StaffChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(modchatpreferences);
+			out.writeObject(ds.getModChatPreferences());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the mod chat info file!");
@@ -563,7 +553,7 @@ public class MultiChat extends Plugin implements Listener {
 			File file = new File(configDir, "AdminChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(adminchatpreferences);
+			out.writeObject(ds.getAdminChatPreferences());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the admin chat info file!");
@@ -574,11 +564,14 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveGroupChatInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "GroupChatInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(groupchats);
+			out.writeObject(ds.getGroupChats());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the group chat info file!");
@@ -588,6 +581,8 @@ public class MultiChat extends Plugin implements Listener {
 	}
 
 	public static void saveCasts() {
+
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 
 		try {
 			File file = new File(configDir, "Casts.dat");
@@ -604,11 +599,14 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveGroupSpyInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "GroupSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(allspy);
+			out.writeObject(ds.getAllSpy());
 			out.close();
 		} catch (IOException e) {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the group spy info file!");
@@ -619,11 +617,14 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveSocialSpyInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		try {
 			File file = new File(configDir, "SocialSpyInfo.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(socialspy);
+			out.writeObject(ds.getSocialSpy());
 			out.close();
 		} catch (IOException e)	{
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the social spy info file!");
@@ -633,6 +634,8 @@ public class MultiChat extends Plugin implements Listener {
 	}
 
 	public static void saveGlobalChatInfo() {
+
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 
 		try {
 			File file = new File(configDir, "GlobalChatInfo.dat");
@@ -649,6 +652,8 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveMute() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+
 		try {
 			File file = new File(configDir, "Mute.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
@@ -664,6 +669,7 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void saveIgnore() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
 		if (config.getBoolean("session_ignore")) return;
@@ -684,6 +690,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static HashMap<UUID, TChatInfo> loadModChatInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		HashMap<UUID, TChatInfo> result = null;
 
 		try {
@@ -702,54 +709,9 @@ public class MultiChat extends Plugin implements Listener {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void loadBulletins() {
-
-		ArrayList<String> result = null;
-		boolean enabled = false;
-		int timeBetween = 0;
-
-		try {
-			File file = new File(configDir, "Bulletins.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			enabled = in.readBoolean();
-			timeBetween = in.readInt();
-			result = (ArrayList<String>)in.readObject();
-			in.close();
-			Bulletins.setArrayList(result);
-			if (enabled) {
-				Bulletins.startBulletins(timeBetween);
-			}
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the bulletins file!");
-			e.printStackTrace();
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<String, String> loadAnnouncements() {
-
-		HashMap<String, String> result = null;
-
-		try {
-			File file = new File(configDir, "Announcements.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<String, String>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the announcements file!");
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
-	@SuppressWarnings("unchecked")
 	public static HashMap<UUID, TChatInfo> loadAdminChatInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		HashMap<UUID, TChatInfo> result = null;
 
 		try {
@@ -770,6 +732,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, String> loadCasts() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		HashMap<String, String> result = null;
 
 		try	{
@@ -790,6 +753,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static HashMap<String, TGroupChatInfo> loadGroupChatInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		HashMap<String, TGroupChatInfo> result = null;
 
 		try {
@@ -810,6 +774,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static List<UUID> loadGroupSpyInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		List<UUID> result = null;
 
 		try {
@@ -830,6 +795,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static List<UUID> loadSocialSpyInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		List<UUID> result = null;
 
 		try {
@@ -850,6 +816,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static Map<UUID, Boolean> loadGlobalChatInfo() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		Map<UUID, Boolean> result = null;
 
 		try {
@@ -870,6 +837,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static Set<UUID> loadMute() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		Set<UUID> result = null;
 
 		try {
@@ -890,6 +858,7 @@ public class MultiChat extends Plugin implements Listener {
 	@SuppressWarnings("unchecked")
 	public static Map<UUID, Set<UUID>> loadIgnore() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
 
 		if (config.getBoolean("session_ignore")) return new HashMap<UUID, Set<UUID>>();
@@ -913,6 +882,9 @@ public class MultiChat extends Plugin implements Listener {
 
 	public static void Startup() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		System.out.println("[MultiChat] Starting load routine for data files");
 
 		File f = new File(configDir, "StaffChatInfo.dat");
@@ -920,8 +892,8 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f.exists()) && (!f.isDirectory()) && (f2.exists()) && (!f2.isDirectory())) {
 
-			modchatpreferences.putAll(loadModChatInfo());
-			adminchatpreferences.putAll(loadAdminChatInfo());
+			ds.setModChatPreferences(loadModChatInfo());
+			ds.setAdminChatPreferences(loadAdminChatInfo());
 
 		} else {
 
@@ -937,7 +909,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f3.exists()) && (!f3.isDirectory())) {
 
-			groupchats.putAll(loadGroupChatInfo());
+			ds.setGroupChats(loadGroupChatInfo());
 
 		} else {
 
@@ -953,7 +925,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f4.exists()) && (!f4.isDirectory())) {
 
-			allspy = loadGroupSpyInfo();
+			ds.setAllSpy(loadGroupSpyInfo());
 
 		} else {
 
@@ -985,7 +957,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		if ((f6.exists()) && (!f6.isDirectory())) {
 
-			socialspy = loadSocialSpyInfo();
+			ds.setSocialSpy(loadSocialSpyInfo());
 
 		} else {
 
@@ -993,38 +965,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Enabling Social Spy! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveGroupSpyInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f7 = new File(configDir, "Announcements.dat");
-
-		if ((f7.exists()) && (!f7.isDirectory())) {
-
-			Announcements.loadAnnouncementList((loadAnnouncements()));
-
-		} else {
-
-			System.out.println("[MultiChat] Some announcements files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveAnnouncements();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f8 = new File(configDir, "Bulletins.dat");
-
-		if ((f8.exists()) && (!f8.isDirectory())) {
-
-			loadBulletins();
-
-		} else {
-
-			System.out.println("[MultiChat] Some bulletins files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveBulletins();
 			System.out.println("[MultiChat] The files were created!");
 
 		}

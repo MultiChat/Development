@@ -1,6 +1,6 @@
 name: MultiChat
 main: xyz.olivermartin.multichat.bungee.MultiChat
-version: 1.9.4
+version: 1.10
 author: Revilo410
 api-version: 1.16
 softdepends: [PremiumVanish]
