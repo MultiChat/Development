@@ -24,7 +24,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("prefix").isPresent()) {
-				return MultiChatUtil.approximateHexCodes(player.getOption("prefix").get());
+				return MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(player.getOption("prefix").get()));
 			} else {
 				return "";
 			}
@@ -45,7 +45,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("suffix").isPresent()) {
-				return MultiChatUtil.approximateHexCodes(player.getOption("suffix").get());
+				return MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(player.getOption("suffix").get()));
 			} else {
 				return "";
 			}
@@ -92,8 +92,9 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", player.getName());
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", getPrefix(uuid));
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", getSuffix(uuid));
+			displayNameFormat = MultiChatUtil.reformatRGB(displayNameFormat);
 			displayNameFormat = displayNameFormat.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
-			
+
 			displayNameFormat = MultiChatUtil.approximateHexCodes(displayNameFormat);
 
 			// TODO Sponge doesn't seem to like this... So we tend to work around it by sending back our original string
