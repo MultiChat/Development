@@ -37,11 +37,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.3";
+	public static final String LATEST_VERSION = "1.9.4";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.3",
 			"1.9.2",
 			"1.9.1",
 			"1.9",
@@ -98,7 +99,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInMsg = true;
 	public static boolean hideVanishedStaffInStaffList = true;
 	public static boolean hideVanishedStaffInJoin = true;
-	
+
 	public static List<String> legacyServers = new ArrayList<String>();
 
 	public static MultiChat getInstance() {
@@ -346,7 +347,7 @@ public class MultiChat extends Plugin implements Listener {
 				logStaffChat = configYML.getSection("privacy_settings").getBoolean("log_staffchat");
 				logGroupChat = configYML.getSection("privacy_settings").getBoolean("log_groupchat");
 			}
-			
+
 			// Legacy servers for RGB approximation
 			if (configYML.contains("legacy_servers")) {
 				legacyServers = configYML.getStringList("legacy_servers");
