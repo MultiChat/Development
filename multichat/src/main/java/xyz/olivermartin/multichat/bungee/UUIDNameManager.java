@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+
 /**
  * UUID - NAME Manager
  * <p>Manages storage of UUIDS with their currently associated username</p>
@@ -35,8 +37,10 @@ public class UUIDNameManager {
 
 	public static void saveUUIDS() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+
 		try {
-			File file = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
+			File file = new File(configDir, "MultiChatUUIDName.dat");
 			FileOutputStream saveFile = new FileOutputStream(file);
 			ObjectOutputStream out = new ObjectOutputStream(saveFile);
 			out.writeObject(uuidname);
@@ -51,10 +55,11 @@ public class UUIDNameManager {
 	@SuppressWarnings("unchecked")
 	public static HashMap<UUID, String> loadUUIDS() {
 
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 		HashMap<UUID, String> result = null;
 
 		try {
-			File file = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
+			File file = new File(configDir, "MultiChatUUIDName.dat");
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
 			result = (HashMap<UUID,String>)in.readObject();
@@ -70,7 +75,8 @@ public class UUIDNameManager {
 
 	public static void Startup() {
 
-		File f = new File(MultiChat.configDir, "MultiChatUUIDName.dat");
+		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
+		File f = new File(configDir, "MultiChatUUIDName.dat");
 
 		if ((f.exists()) && (!f.isDirectory())) {
 			uuidname.putAll(loadUUIDS());
