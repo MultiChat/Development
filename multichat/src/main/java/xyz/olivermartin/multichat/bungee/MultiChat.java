@@ -37,6 +37,7 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
 
 
 /**
@@ -121,7 +122,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveGlobalChatInfo();
 				saveSocialSpyInfo();
 				// TODO Legacy saveAnnouncements();
-				saveBulletins();
+				// saveBulletins();
 				saveCasts();
 				saveMute();
 				saveIgnore();
@@ -340,6 +341,9 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("announcements.dat",
 					new ProxyAnnouncementsFileStore("Announcements.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("bulletins.dat",
+					new ProxyBulletinsFileStore("Bulletins.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -414,7 +418,7 @@ public class MultiChat extends Plugin implements Listener {
 		saveGlobalChatInfo();
 		saveSocialSpyInfo();
 		// TODO Legacy saveAnnouncements();
-		saveBulletins();
+		// saveBulletins();
 		saveCasts();
 		saveMute();
 		saveIgnore();
@@ -524,25 +528,6 @@ public class MultiChat extends Plugin implements Listener {
 		// UnRegister mute command
 		if (chatcontrolYML.getBoolean("mute")) {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
-		}
-
-	}
-
-	public static void saveBulletins() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try	{
-			File file = new File(configDir, "Bulletins.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeBoolean(Bulletins.isEnabled());
-			out.writeInt(Bulletins.getTimeBetween());
-			out.writeObject(Bulletins.getArrayList());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the bulletins file!");
-			e.printStackTrace();
 		}
 
 	}
@@ -719,33 +704,6 @@ public class MultiChat extends Plugin implements Listener {
 		}
 
 		return result;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static void loadBulletins() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		ArrayList<String> result = null;
-		boolean enabled = false;
-		int timeBetween = 0;
-
-		try {
-			File file = new File(configDir, "Bulletins.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			enabled = in.readBoolean();
-			timeBetween = in.readInt();
-			result = (ArrayList<String>)in.readObject();
-			in.close();
-			Bulletins.setArrayList(result);
-			if (enabled) {
-				Bulletins.startBulletins(timeBetween);
-			}
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the bulletins file!");
-			e.printStackTrace();
-		}
 
 	}
 
@@ -1006,22 +964,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Enabling Social Spy! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveGroupSpyInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f8 = new File(configDir, "Bulletins.dat");
-
-		if ((f8.exists()) && (!f8.isDirectory())) {
-
-			loadBulletins();
-
-		} else {
-
-			System.out.println("[MultiChat] Some bulletins files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveBulletins();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
