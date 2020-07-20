@@ -8,25 +8,25 @@ public class CommChannels {
 	private static String prefix = "multichat:";
 
 	// Player meta communication (prefix, suffix, displayname etc.)
-	private static String playerMeta = "pmeta"; // Bungee listener is implemented & registered
+	private static String playerMeta = "pmeta";
 
 	// Chat messages sent by players
-	private static String playerChat = "pchat"; // Bungee listener is implemented & registered
+	private static String playerChat = "pchat";
 
 	// Chat messages sent by non-player objects (casts, announcements etc.)
-	private static String serverChat = "schat"; // Bungee listener is implemented & registered
+	private static String serverChat = "schat";
 
-	// Data about specific players (colour permissions etc.)
-	private static String playerData = "pdata"; // NOT REGISTERED ANYWHERE
+	// Data about specific players (selected channels, colour permissions etc.)
+	private static String playerData = "pdata";
 
-	// Data about the server as a whole (ignoremap, channel members, global chat servers, legacy servers etc.)
-	private static String serverData = "sdata"; // NOT REGISTERED ANYWHERE
+	// Data about the server as a whole (ignoremap, global chat servers, display name formats, legacy servers etc.)
+	private static String serverData = "sdata";
 
 	// Actions for the server console (mce/pxe)
-	private static String serverAction = "sact"; // Bungee listener is implemented & registered
+	private static String serverAction = "sact";
 
 	// Actions for players (mce players, ppxe)
-	private static String playerAction = "pact"; // Bungee listener is implemented & registered
+	private static String playerAction = "pact";
 
 	/**
 	 * Gets the channel id used for: 
