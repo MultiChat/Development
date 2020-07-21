@@ -83,7 +83,7 @@ public class MultiChatCommand extends Command {
 
 					//MultiChat.saveChatInfo();
 					//MultiChat.saveGroupChatInfo();
-					MultiChat.saveGroupSpyInfo();
+					//MultiChat.saveGroupSpyInfo();
 					MultiChat.saveGlobalChatInfo();
 					MultiChat.saveSocialSpyInfo();
 					//TODO Legacy MultiChat.saveAnnouncements();
