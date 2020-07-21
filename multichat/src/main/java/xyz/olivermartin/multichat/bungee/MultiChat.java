@@ -36,6 +36,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
 
 
@@ -352,7 +353,7 @@ public class MultiChat extends Plugin implements Listener {
 					new ProxyAdminChatFileStore("AdminChatInfo.dat", configDirectory));
 
 			fileStoreManager.registerFileStore("groupchatinfo.dat",
-					new ProxyAdminChatFileStore("GroupChatInfo.dat", configDirectory));
+					new ProxyGroupChatFileStore("GroupChatInfo.dat", configDirectory));
 
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
