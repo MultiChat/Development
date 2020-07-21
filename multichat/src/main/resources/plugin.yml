@@ -1,6 +1,7 @@
 name: MultiChat
 version: 1.10
 author: Revilo410
+api-version: 1.13
 main: xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlugin
 softdepend: [Vault,PlaceholderAPI]
 commands:
