@@ -2,7 +2,7 @@ package xyz.olivermartin.multichat.local.spigot;
 
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalPlaceholderManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 

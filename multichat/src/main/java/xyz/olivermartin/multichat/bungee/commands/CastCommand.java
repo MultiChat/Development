@@ -9,7 +9,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 
 /**
  * Cast Command

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.md_5.bungee.api.CommandSender;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 
 /**
  * Cast Control

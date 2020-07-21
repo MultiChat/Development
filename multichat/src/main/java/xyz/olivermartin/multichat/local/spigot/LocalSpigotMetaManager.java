@@ -7,7 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import net.milkbowl.vault.chat.Chat;
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.LocalMetaManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;

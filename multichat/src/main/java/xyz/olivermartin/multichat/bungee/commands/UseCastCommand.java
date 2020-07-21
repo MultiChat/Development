@@ -8,7 +8,7 @@ import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 
 /**
  * Use Cast Command
