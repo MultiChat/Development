@@ -89,7 +89,7 @@ public class MultiChatCommand extends Command {
 					//TODO Legacy MultiChat.saveAnnouncements();
 					//MultiChat.saveBulletins();
 					//MultiChat.saveCasts();
-					MultiChat.saveMute();
+					//MultiChat.saveMute();
 					MultiChat.saveIgnore();
 					UUIDNameManager.saveUUIDS();
 

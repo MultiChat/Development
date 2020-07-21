@@ -40,6 +40,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGlobalChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyMuteFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
 
@@ -130,7 +131,7 @@ public class MultiChat extends Plugin implements Listener {
 				// TODO Legacy saveAnnouncements();
 				// saveBulletins();
 				//saveCasts();
-				saveMute();
+				//saveMute();
 				saveIgnore();
 				UUIDNameManager.saveUUIDS();
 
@@ -371,6 +372,9 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("globalchatinfo.dat",
 					new ProxyGlobalChatFileStore("GlobalChatInfo.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("mute.dat",
+					new ProxyMuteFileStore("Mute.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -447,7 +451,7 @@ public class MultiChat extends Plugin implements Listener {
 		// TODO Legacy saveAnnouncements();
 		// saveBulletins();
 		//saveCasts();
-		saveMute();
+		//saveMute();
 		saveIgnore();
 		UUIDNameManager.saveUUIDS();
 
@@ -559,23 +563,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveMute() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try {
-			File file = new File(configDir, "Mute.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ChatControl.getMutedPlayers());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the mute file!");
-			e.printStackTrace();
-		}
-
-	}
-
 	public static void saveIgnore() {
 
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
@@ -593,27 +580,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Set<UUID> loadMute() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		Set<UUID> result = null;
-
-		try {
-			File file = new File(configDir, "Mute.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (Set<UUID>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the mute file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -648,22 +614,6 @@ public class MultiChat extends Plugin implements Listener {
 
 		System.out.println("[MultiChat] Starting load routine for data files");
 
-		File f10 = new File(configDir, "Mute.dat");
-
-		if ((f10.exists()) && (!f10.isDirectory())) {
-
-			ChatControl.setMutedPlayers(loadMute());
-
-		} else {
-
-			System.out.println("[MultiChat] Some mute files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveMute();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
 		File f11 = new File(configDir, "Ignore.dat");
 
 		if ((f11.exists()) && (!f11.isDirectory())) {
@@ -675,7 +625,7 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Some ignore files do not exist to load. Must be first startup!");
 			System.out.println("[MultiChat] Welcome to MultiChat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveMute();
+			saveIgnore();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
