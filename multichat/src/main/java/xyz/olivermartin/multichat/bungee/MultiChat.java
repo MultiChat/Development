@@ -37,6 +37,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileS
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGlobalChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
@@ -124,7 +125,7 @@ public class MultiChat extends Plugin implements Listener {
 				//saveChatInfo();
 				//saveGroupChatInfo();
 				//saveGroupSpyInfo();
-				saveGlobalChatInfo();
+				//saveGlobalChatInfo();
 				//saveSocialSpyInfo();
 				// TODO Legacy saveAnnouncements();
 				// saveBulletins();
@@ -367,6 +368,9 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("socialspyinfo.dat",
 					new ProxySocialSpyFileStore("SocialSpyInfo.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("globalchatinfo.dat",
+					new ProxyGlobalChatFileStore("GlobalChatInfo.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -438,7 +442,7 @@ public class MultiChat extends Plugin implements Listener {
 		//saveChatInfo();
 		//saveGroupChatInfo();
 		//saveGroupSpyInfo();
-		saveGlobalChatInfo();
+		//saveGlobalChatInfo();
 		//saveSocialSpyInfo();
 		// TODO Legacy saveAnnouncements();
 		// saveBulletins();
@@ -555,23 +559,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveGlobalChatInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try {
-			File file = new File(configDir, "GlobalChatInfo.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ChatModeManager.getInstance().getData());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the global chat info file!");
-			e.printStackTrace();
-		}
-
-	}
-
 	public static void saveMute() {
 
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
@@ -606,27 +593,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<UUID, Boolean> loadGlobalChatInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		Map<UUID, Boolean> result = null;
-
-		try {
-			File file = new File(configDir, "GlobalChatInfo.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (Map<UUID, Boolean>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the global chat info file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -681,22 +647,6 @@ public class MultiChat extends Plugin implements Listener {
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
 
 		System.out.println("[MultiChat] Starting load routine for data files");
-
-		File f5 = new File(configDir, "GlobalChatInfo.dat");
-
-		if ((f5.exists()) && (!f5.isDirectory())) {
-
-			ChatModeManager.getInstance().loadData(loadGlobalChatInfo());
-
-		} else {
-
-			System.out.println("[MultiChat] Some global chat files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Enabling Global Chat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveGlobalChatInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
 
 		File f10 = new File(configDir, "Mute.dat");
 
