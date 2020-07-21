@@ -1,16 +1,8 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
-import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * UUID - NAME Manager
@@ -21,7 +13,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
  */
 public class UUIDNameManager {
 
-	private static Map<UUID, String> uuidname = new HashMap<UUID, String>();
+	public static Map<UUID, String> uuidname = new HashMap<UUID, String>();
 
 	public static void addNew(UUID uuid, String name) {
 		uuidname.put(uuid, name);
@@ -33,60 +25,6 @@ public class UUIDNameManager {
 
 	public static String getName(UUID uuid) {
 		return (String)uuidname.get(uuid);
-	}
-
-	public static void saveUUIDS() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try {
-			File file = new File(configDir, "MultiChatUUIDName.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(uuidname);
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the uuid-name file!");
-			e.printStackTrace();
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<UUID, String> loadUUIDS() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		HashMap<UUID, String> result = null;
-
-		try {
-			File file = new File(configDir, "MultiChatUUIDName.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<UUID,String>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[ActivityMonitor] [Load Error] An error has occured reading the uuid-name file!");
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
-	public static void Startup() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		File f = new File(configDir, "MultiChatUUIDName.dat");
-
-		if ((f.exists()) && (!f.isDirectory())) {
-			uuidname.putAll(loadUUIDS());
-		} else {
-			System.out.println("[MultiChat] File for uuid-name conversion does not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Attempting to create hash file!");
-			saveUUIDS();
-			System.out.println("[MultiChat] The uuid-name file was created!");
-		}
-
 	}
 
 	public static boolean existsUUID(UUID uuid) {

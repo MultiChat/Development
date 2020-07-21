@@ -35,6 +35,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyIgnoreFileStor
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyMuteFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyUUIDNameFileStore;
 
 
 /**
@@ -112,11 +113,7 @@ public class MultiChat extends Plugin implements Listener {
 			public void run() {
 
 				getLogger().info("Commencing backup!");
-
 				MultiChatProxy.getInstance().getFileStoreManager().save();
-
-				UUIDNameManager.saveUUIDS();
-
 				getLogger().info("Backup complete. Any errors reported above.");
 
 			}
@@ -360,9 +357,10 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("ignore.dat",
 					new ProxyIgnoreFileStore("Ignore.dat", configDirectory));
 
-			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
+			fileStoreManager.registerFileStore("multichatuuidname.dat",
+					new ProxyUUIDNameFileStore("MultiChatUUIDName.dat", configDirectory));
 
-			UUIDNameManager.Startup();
+			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			// Set up chat control stuff
 			if (chatcontrolYML.contains("link_control")) {
@@ -426,8 +424,6 @@ public class MultiChat extends Plugin implements Listener {
 		getLogger().info("Thankyou for using MultiChat. Disabling...");
 
 		MultiChatProxy.getInstance().getFileStoreManager().save();
-
-		UUIDNameManager.saveUUIDS();
 
 	}
 

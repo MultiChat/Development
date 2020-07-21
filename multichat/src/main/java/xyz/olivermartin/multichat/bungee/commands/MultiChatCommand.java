@@ -12,7 +12,6 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
@@ -78,11 +77,7 @@ public class MultiChatCommand extends Command {
 				} else if (args[0].toLowerCase().equals("save")) {
 
 					MessageManager.sendMessage(sender, "command_multichat_save_prepare");
-
 					MultiChatProxy.getInstance().getFileStoreManager().save();
-
-					UUIDNameManager.saveUUIDS();
-
 					MessageManager.sendMessage(sender, "command_multichat_save_completed");
 
 				} else if (args[0].toLowerCase().equals("reload")) {
