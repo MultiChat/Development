@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -36,8 +35,10 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
 
 
 /**
@@ -54,8 +55,8 @@ public class MultiChat extends Plugin implements Listener {
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
-      "1.9.5",
-      "1.9.4",
+			"1.9.5",
+			"1.9.4",
 			"1.9.3",
 			"1.9.2",
 			"1.9.1",
@@ -118,7 +119,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				MultiChatProxy.getInstance().getFileStoreManager().save();
 
-				saveChatInfo();
+				//saveChatInfo();
 				saveGroupChatInfo();
 				saveGroupSpyInfo();
 				saveGlobalChatInfo();
@@ -346,6 +347,12 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("bulletins.dat",
 					new ProxyBulletinsFileStore("Bulletins.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("staffchatinfo.dat",
+					new ProxyStaffChatFileStore("StaffChatInfo.dat", configDirectory));
+
+			fileStoreManager.registerFileStore("adminchatinfo.dat",
+					new ProxyAdminChatFileStore("AdminChatInfo.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -414,7 +421,7 @@ public class MultiChat extends Plugin implements Listener {
 
 		MultiChatProxy.getInstance().getFileStoreManager().save();
 
-		saveChatInfo();
+		//saveChatInfo();
 		saveGroupChatInfo();
 		saveGroupSpyInfo();
 		saveGlobalChatInfo();
@@ -530,35 +537,6 @@ public class MultiChat extends Plugin implements Listener {
 		// UnRegister mute command
 		if (chatcontrolYML.getBoolean("mute")) {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
-		}
-
-	}
-
-	public static void saveChatInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-
-		try {
-			File file = new File(configDir, "StaffChatInfo.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ds.getModChatPreferences());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the mod chat info file!");
-			e.printStackTrace();
-		}
-
-		try {
-			File file = new File(configDir, "AdminChatInfo.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ds.getAdminChatPreferences());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the admin chat info file!");
-			e.printStackTrace();
 		}
 
 	}
@@ -685,48 +663,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<UUID, TChatInfo> loadModChatInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		HashMap<UUID, TChatInfo> result = null;
-
-		try {
-			File file = new File(configDir, "StaffChatInfo.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<UUID, TChatInfo>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the mod chat info file!");
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<UUID, TChatInfo> loadAdminChatInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		HashMap<UUID, TChatInfo> result = null;
-
-		try {
-			File file = new File(configDir, "AdminChatInfo.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<UUID, TChatInfo>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the admin chat info file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -887,24 +823,6 @@ public class MultiChat extends Plugin implements Listener {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		System.out.println("[MultiChat] Starting load routine for data files");
-
-		File f = new File(configDir, "StaffChatInfo.dat");
-		File f2 = new File(configDir, "AdminChatInfo.dat");
-
-		if ((f.exists()) && (!f.isDirectory()) && (f2.exists()) && (!f2.isDirectory())) {
-
-			ds.setModChatPreferences(loadModChatInfo());
-			ds.setAdminChatPreferences(loadAdminChatInfo());
-
-		} else {
-
-			System.out.println("[MultiChat] Some staff chat files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveChatInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
 
 		File f3 = new File(configDir, "GroupChatInfo.dat");
 
