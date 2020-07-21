@@ -1,18 +1,9 @@
 package xyz.olivermartin.multichat.bungee;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -40,6 +31,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGlobalChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyIgnoreFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyMuteFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
@@ -123,16 +115,6 @@ public class MultiChat extends Plugin implements Listener {
 
 				MultiChatProxy.getInstance().getFileStoreManager().save();
 
-				//saveChatInfo();
-				//saveGroupChatInfo();
-				//saveGroupSpyInfo();
-				//saveGlobalChatInfo();
-				//saveSocialSpyInfo();
-				// TODO Legacy saveAnnouncements();
-				// saveBulletins();
-				//saveCasts();
-				//saveMute();
-				saveIgnore();
 				UUIDNameManager.saveUUIDS();
 
 				getLogger().info("Backup complete. Any errors reported above.");
@@ -375,9 +357,11 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("mute.dat",
 					new ProxyMuteFileStore("Mute.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("ignore.dat",
+					new ProxyIgnoreFileStore("Ignore.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
-			Startup();
 			UUIDNameManager.Startup();
 
 			// Set up chat control stuff
@@ -443,16 +427,6 @@ public class MultiChat extends Plugin implements Listener {
 
 		MultiChatProxy.getInstance().getFileStoreManager().save();
 
-		//saveChatInfo();
-		//saveGroupChatInfo();
-		//saveGroupSpyInfo();
-		//saveGlobalChatInfo();
-		//saveSocialSpyInfo();
-		// TODO Legacy saveAnnouncements();
-		// saveBulletins();
-		//saveCasts();
-		//saveMute();
-		saveIgnore();
 		UUIDNameManager.saveUUIDS();
 
 	}
@@ -563,74 +537,4 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveIgnore() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-
-		if (config.getBoolean("session_ignore")) return;
-
-		try {
-			File file = new File(configDir, "Ignore.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ChatControl.getIgnoreMap());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
-			e.printStackTrace();
-		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<UUID, Set<UUID>> loadIgnore() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-
-		if (config.getBoolean("session_ignore")) return new HashMap<UUID, Set<UUID>>();
-
-		Map<UUID, Set<UUID>> result = null;
-
-		try {
-			File file = new File(configDir, "Ignore.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (Map<UUID, Set<UUID>>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the ignore file!");
-			e.printStackTrace();
-		}
-
-		return result;
-
-	}
-
-	public static void Startup() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		System.out.println("[MultiChat] Starting load routine for data files");
-
-		File f11 = new File(configDir, "Ignore.dat");
-
-		if ((f11.exists()) && (!f11.isDirectory())) {
-
-			ChatControl.setIgnoreMap(loadIgnore());
-
-		} else {
-
-			System.out.println("[MultiChat] Some ignore files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveIgnore();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		System.out.println("[MultiChat] [COMPLETE] Load sequence finished! (Any errors reported above)");
-
-	}
 }

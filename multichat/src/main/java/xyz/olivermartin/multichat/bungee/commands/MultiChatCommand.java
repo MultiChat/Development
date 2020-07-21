@@ -81,16 +81,6 @@ public class MultiChatCommand extends Command {
 
 					MultiChatProxy.getInstance().getFileStoreManager().save();
 
-					//MultiChat.saveChatInfo();
-					//MultiChat.saveGroupChatInfo();
-					//MultiChat.saveGroupSpyInfo();
-					//MultiChat.saveGlobalChatInfo();
-					//MultiChat.saveSocialSpyInfo();
-					//TODO Legacy MultiChat.saveAnnouncements();
-					//MultiChat.saveBulletins();
-					//MultiChat.saveCasts();
-					//MultiChat.saveMute();
-					MultiChat.saveIgnore();
 					UUIDNameManager.saveUUIDS();
 
 					MessageManager.sendMessage(sender, "command_multichat_save_completed");
