@@ -39,6 +39,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileS
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
 
 
@@ -124,7 +125,7 @@ public class MultiChat extends Plugin implements Listener {
 				//saveGroupChatInfo();
 				//saveGroupSpyInfo();
 				saveGlobalChatInfo();
-				saveSocialSpyInfo();
+				//saveSocialSpyInfo();
 				// TODO Legacy saveAnnouncements();
 				// saveBulletins();
 				//saveCasts();
@@ -363,6 +364,9 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("casts.dat",
 					new ProxyCastsFileStore("Casts.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("socialspyinfo.dat",
+					new ProxySocialSpyFileStore("SocialSpyInfo.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -435,7 +439,7 @@ public class MultiChat extends Plugin implements Listener {
 		//saveGroupChatInfo();
 		//saveGroupSpyInfo();
 		saveGlobalChatInfo();
-		saveSocialSpyInfo();
+		//saveSocialSpyInfo();
 		// TODO Legacy saveAnnouncements();
 		// saveBulletins();
 		//saveCasts();
@@ -551,24 +555,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveSocialSpyInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-
-		try {
-			File file = new File(configDir, "SocialSpyInfo.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(ds.getSocialSpy());
-			out.close();
-		} catch (IOException e)	{
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the social spy info file!");
-			e.printStackTrace();
-		}
-
-	}
-
 	public static void saveGlobalChatInfo() {
 
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
@@ -620,27 +606,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<UUID> loadSocialSpyInfo() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		List<UUID> result = null;
-
-		try {
-			File file = new File(configDir, "SocialSpyInfo.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (List<UUID>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the social spy info file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -714,7 +679,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static void Startup() {
 
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		System.out.println("[MultiChat] Starting load routine for data files");
 
@@ -730,22 +694,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Enabling Global Chat! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveGlobalChatInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f6 = new File(configDir, "SocialSpyInfo.dat");
-
-		if ((f6.exists()) && (!f6.isDirectory())) {
-
-			ds.setSocialSpy(loadSocialSpyInfo());
-
-		} else {
-
-			System.out.println("[MultiChat] Some social spy files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Enabling Social Spy! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveSocialSpyInfo();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
