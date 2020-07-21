@@ -82,7 +82,7 @@ public class MultiChatCommand extends Command {
 					MultiChatProxy.getInstance().getFileStoreManager().save();
 
 					//MultiChat.saveChatInfo();
-					MultiChat.saveGroupChatInfo();
+					//MultiChat.saveGroupChatInfo();
 					MultiChat.saveGroupSpyInfo();
 					MultiChat.saveGlobalChatInfo();
 					MultiChat.saveSocialSpyInfo();
