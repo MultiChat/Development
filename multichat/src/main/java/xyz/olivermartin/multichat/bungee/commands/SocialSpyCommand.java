@@ -18,7 +18,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 public class SocialSpyCommand extends Command {
 
 	public SocialSpyCommand() {
-		super("socialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("socialspycommand").toArray(new String[0]));
+		super("mcsocialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("socialspy").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

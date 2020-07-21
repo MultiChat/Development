@@ -21,7 +21,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 public class MultiChatExecuteCommand extends Command {
 
 	public MultiChatExecuteCommand() {
-		super("multichatexecute", "multichat.execute", ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("multichatexecutecommand") ? (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("multichatexecutecommand").toArray(new String[0]) : new String[] {"mcexecute", "mce" ,"gexecute","gexe","gcommand"});
+		super("mcexecute", "multichat.execute", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("execute").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

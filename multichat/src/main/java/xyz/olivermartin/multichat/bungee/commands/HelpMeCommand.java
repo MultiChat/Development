@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
@@ -20,10 +21,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class HelpMeCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public HelpMeCommand() {
-		super("helpme", "multichat.chat.helpme", aliases);
+		super("mchelpme", "multichat.chat.helpme", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("helpme").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

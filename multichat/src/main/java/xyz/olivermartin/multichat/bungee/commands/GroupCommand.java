@@ -13,6 +13,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.GroupManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
@@ -28,10 +29,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
  */
 public class GroupCommand extends Command implements TabExecutor {
 
-	private static String[] aliases = new String[] {};
-
 	public GroupCommand() {
-		super("group", "multichat.group", aliases);
+		super("mcgroup", "multichat.group", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("group").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

@@ -22,10 +22,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
  */
 public class StaffListCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public StaffListCommand() {
-		super("staff", "multichat.staff.list", aliases);
+		super("mcstaff", "multichat.staff.list", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("staff").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

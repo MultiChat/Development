@@ -17,10 +17,8 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
  */
 public class ClearChatCommand extends Command {
 
-	private static String[] aliases = new String[] {"chatclear","wipechat","killchat"};
-
 	public ClearChatCommand() {
-		super("clearchat", "multichat.chat.clear", aliases);
+		super("mcclearchat", "multichat.chat.clear", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("clearchat").toArray(new String[0]));
 	}
 
 	private void clearChatSelf(CommandSender sender) {

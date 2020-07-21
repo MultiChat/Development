@@ -30,7 +30,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 public class MsgCommand extends Command implements TabExecutor {
 
 	public MsgCommand() {
-		super("msg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("msgcommand").toArray(new String[0]));
+		super("mcmsg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("msg").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

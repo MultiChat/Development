@@ -6,6 +6,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
@@ -18,10 +19,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class UseCastCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public UseCastCommand() {
-		super("usecast", "multichat.cast.admin", aliases);
+		super("mcusecast", "multichat.cast.admin", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("usecast").toArray(new String[0]));
 	}
 
 	public void displayUsage(CommandSender sender) {

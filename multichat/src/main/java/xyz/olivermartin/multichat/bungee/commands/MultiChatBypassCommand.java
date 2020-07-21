@@ -10,7 +10,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 public class MultiChatBypassCommand extends Command {
 
 	public MultiChatBypassCommand() {
-		super("multichatbypass", "multichat.bypass", ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("multichatbypasscommand") ? (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("multichatbypasscommand").toArray(new String[0]) : new String[0]);
+		super("mcbypass", "multichat.bypass", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("bypass").toArray(new String[0]));
 	}
 
 	@Override

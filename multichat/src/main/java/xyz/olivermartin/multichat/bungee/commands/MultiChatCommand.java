@@ -23,10 +23,8 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
  */
 public class MultiChatCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public MultiChatCommand() {
-		super("multichat", "multichat.admin", aliases);
+		super("multichat", "multichat.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("multichat").toArray(new String[0]));
 	}
 
 	private void displayHelp(CommandSender sender, int page) {
@@ -93,11 +91,13 @@ public class MultiChatCommand extends Command {
 					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("chatcontrol.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("aliases.yml").startupConfig();
 
 					ConfigManager.getInstance().getHandler("messages_fr.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("joinmessages_fr.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("config_fr.yml").startupConfig();
 					ConfigManager.getInstance().getHandler("chatcontrol_fr.yml").startupConfig();
+					ConfigManager.getInstance().getHandler("aliases_fr.yml").startupConfig();
 
 					// Reload, and re-register commands
 					CommandManager.reload();

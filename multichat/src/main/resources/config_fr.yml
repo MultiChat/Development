@@ -103,31 +103,6 @@ pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
 # Formatage des message en socialspy.
 pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 
-###################################
-# Alias pour les messages privées #
-###################################
-
-# La commande /msg possède les alias suivants (autres que /msg).
-msgcommand:
-- m
-- message
-- t
-- tell
-- w
-- whisper
-- chat
-- pm
-
-# La commande /r possède les alias suivants (autres que /r).
-rcommand:
-- reply
-- respond
-
-# La commande /socialspy a les alias suivants (autres que /socialspy).
-socialspycommand:
-- spy
-- sspy
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                    Cannaux de chat                  | #
@@ -141,18 +116,6 @@ default_channel: "global"
 # Forcer les joueurs dans le canal par défaut quand ils rejoignent le serveur ?
 # Paramétrage disponible : true ou false
 force_channel_on_join: false
-
-# La commande /Channel possède les alias suivants (autres que /Channel)
-channelcommand:
-- ch
-
-# La commande /Global possède les alias suivants (autres que /Global)
-globalcommand:
-- g
-
-# La commande /Local possède les alias suivants (autres que /Local)
-localcommand:
-- l
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -251,19 +214,6 @@ adminchat:
 # Affectez la valeur false pour désactiver la commande de liste de personnel '/staff'.
 # Paramétrage disponible : true ou false
 staff_list: true
-
-# Alias de commande de contournement MultiChat (autre que /multichatbypass).
-multichatbypasscommand:
-- mcb
-- bypass
-
-# Alias de commande MultiChat Execute (autre que /multichatexecute).
-multichatexecutecommand:
-- mcexecute
-- mce
-- gexecute
-- gexe
-- gcommand
 
 # Contrôlez quels aspects du chat sont enregistrés dans les logs MultiChat (utile pour la RGDP etc.)
 privacy_settings:

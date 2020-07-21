@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
@@ -18,10 +19,8 @@ import xyz.olivermartin.multichat.bungee.StaffChatManager;
  */
 public class ACCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public ACCommand() {
-		super("ac", "multichat.staff.admin", aliases);
+		super("mcac", "multichat.staff.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("ac").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

@@ -30,10 +30,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
  */
 public class GCCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public GCCommand() {
-		super("gc", "multichat.group", aliases);
+		super("mcgc", "multichat.group", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("gc").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

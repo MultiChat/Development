@@ -97,31 +97,6 @@ pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
 
 pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 
-##############
-# PM ALIASES #
-##############
-
-# The /msg command has the following aliases (other than /msg)
-msgcommand:
-- m
-- message
-- t
-- tell
-- w
-- whisper
-- chat
-- pm
-
-# The /r command has the following aliases (other than /r)
-rcommand:
-- reply
-- respond
-
-# The /socialspy command has the following aliases (other than /socialspy)
-socialspycommand:
-- spy
-- sspy
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                    Chat Channels                     | #
@@ -134,18 +109,6 @@ default_channel: "global"
 
 # Force players into default channel when they join the server?
 force_channel_on_join: false
-
-# The /channel command has the following aliases (other than /channel)
-channelcommand:
-- ch
-
-# The /global command has the following aliases (other than /global)
-globalcommand:
-- g
-
-# The /local command has the following aliases (other than /local)
-localcommand:
-- l
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -246,19 +209,6 @@ adminchat:
 
 # Set to false to disable the '/staff' staff list command
 staff_list: true
-
-# MultiChat bypass command aliases (other than /multichatbypass)
-multichatbypasscommand:
-- mcb
-- bypass
-
-# MultiChat execute command aliases (other than /multichatexecute)
-multichatexecutecommand:
-- mcexecute
-- mce
-- gexecute
-- gexe
-- gcommand
 
 # Control what aspects of chat are logged by MultiChat (useful for GDPR etc.)
 privacy_settings:

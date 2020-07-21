@@ -25,7 +25,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 public class ReplyCommand extends Command {
 
 	public ReplyCommand() {
-		super("r", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("rcommand").toArray(new String[0]));
+		super("mcr", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("r").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

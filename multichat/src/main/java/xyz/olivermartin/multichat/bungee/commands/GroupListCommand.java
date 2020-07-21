@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
@@ -15,10 +16,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
  */
 public class GroupListCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public GroupListCommand() {
-		super("groups", "multichat.staff.listgroups", aliases);
+		super("mcgroups", "multichat.staff.listgroups", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("groups").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

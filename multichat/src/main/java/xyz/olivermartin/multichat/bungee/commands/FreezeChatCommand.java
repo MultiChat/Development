@@ -4,6 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
@@ -17,10 +18,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
  */
 public class FreezeChatCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public FreezeChatCommand() {
-		super("freezechat", "multichat.chat.freeze", aliases);
+		super("mcfreezechat", "multichat.chat.freeze", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("freezechat").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

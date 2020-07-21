@@ -5,6 +5,7 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
@@ -19,11 +20,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
  */
 public class ACCCommand extends Command {
 
-	// Command aliases
-	private static String[] aliases = new String[] {};
-
 	public ACCCommand() {
-		super("acc", "multichat.staff.mod", aliases);
+		super("mcacc", "multichat.staff.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("acc").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

@@ -7,6 +7,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Bulletins;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
@@ -19,10 +20,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class BulletinCommand extends Command {
 
-	private static String[] aliases = new String[] {"bulletins"};
-
 	public BulletinCommand() {
-		super("bulletin", "multichat.bulletin", aliases);
+		super("mcbulletin", "multichat.bulletin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("bulletin").toArray(new String[0]));
 	}
 
 	@Override

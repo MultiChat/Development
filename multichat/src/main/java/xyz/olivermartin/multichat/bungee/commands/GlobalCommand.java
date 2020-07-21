@@ -26,7 +26,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 public class GlobalCommand extends Command {
 
 	public GlobalCommand() {
-		super("global", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("globalcommand").toArray(new String[0]));
+		super("mcglobal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

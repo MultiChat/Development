@@ -12,7 +12,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 public class IgnoreCommand extends Command {
 
 	public IgnoreCommand() {
-		super("ignore", "multichat.ignore", (String[])ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getStringList("ignorecommand").toArray(new String[0]));
+		super("mcignore", "multichat.ignore", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("ignore").toArray(new String[0]));
 	}
 
 	@Override

@@ -24,10 +24,8 @@ import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
  */
 public class DisplayCommand extends Command {
 
-	private static String[] aliases = new String[] {};
-
 	public DisplayCommand() {
-		super("display", "multichat.staff.display", aliases);
+		super("mcdisplay", "multichat.staff.display", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("display").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

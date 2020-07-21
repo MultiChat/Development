@@ -151,12 +151,6 @@ apply_mute_to:
   group_chats: false
   helpme: false
 
-# Mute command aliases (in addition to /multichatmute)
-
-mutecommand:
-- mute
-- mcmute
-
 ##################
 # Ignore Command #
 ##################
@@ -178,11 +172,6 @@ apply_ignore_to:
   global_chat: true
   private_messages: true
   group_chats: false
-
-# Ignore command aliases (in addition to /ignore)
-
-ignorecommand:
-- blockchat
 
 ############################################################
 # +------------------------------------------------------+ #

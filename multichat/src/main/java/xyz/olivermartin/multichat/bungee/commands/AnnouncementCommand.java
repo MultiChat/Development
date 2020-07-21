@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Announcements;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 
@@ -20,10 +21,8 @@ import xyz.olivermartin.multichat.bungee.MultiChatUtil;
  */
 public class AnnouncementCommand extends Command {
 
-	private static String[] aliases = new String[] {"announce"};
-
 	public AnnouncementCommand() {
-		super("announcement", "multichat.announce", aliases);
+		super("mcannouncement", "multichat.announce", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("announcement").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

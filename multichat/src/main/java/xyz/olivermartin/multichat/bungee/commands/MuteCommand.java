@@ -11,7 +11,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 public class MuteCommand extends Command {
 
 	public MuteCommand() {
-		super("multichatmute", "multichat.mute", (String[])ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getStringList("mutecommand").toArray(new String[0]));
+		super("mcmute", "multichat.mute", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("mute").toArray(new String[0]));
 	}
 
 	@Override
