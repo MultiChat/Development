@@ -36,6 +36,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
@@ -126,7 +127,7 @@ public class MultiChat extends Plugin implements Listener {
 				saveSocialSpyInfo();
 				// TODO Legacy saveAnnouncements();
 				// saveBulletins();
-				saveCasts();
+				//saveCasts();
 				saveMute();
 				saveIgnore();
 				UUIDNameManager.saveUUIDS();
@@ -359,6 +360,9 @@ public class MultiChat extends Plugin implements Listener {
 			fileStoreManager.registerFileStore("groupspyinfo.dat",
 					new ProxyGroupSpyFileStore("GroupSpyInfo.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("casts.dat",
+					new ProxyCastsFileStore("Casts.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			Startup();
@@ -434,7 +438,7 @@ public class MultiChat extends Plugin implements Listener {
 		saveSocialSpyInfo();
 		// TODO Legacy saveAnnouncements();
 		// saveBulletins();
-		saveCasts();
+		//saveCasts();
 		saveMute();
 		saveIgnore();
 		UUIDNameManager.saveUUIDS();
@@ -547,23 +551,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	public static void saveCasts() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-
-		try {
-			File file = new File(configDir, "Casts.dat");
-			FileOutputStream saveFile = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(saveFile);
-			out.writeObject(CastControl.castList);
-			out.close();
-		} catch (IOException e) {
-			System.out.println("[MultiChat] [Save Error] An error has occured writing the casts file!");
-			e.printStackTrace();
-		}
-
-	}
-
 	public static void saveSocialSpyInfo() {
 
 		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
@@ -633,27 +620,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] [Save Error] An error has occured writing the ignore file!");
 			e.printStackTrace();
 		}
-
-	}
-
-	@SuppressWarnings("unchecked")
-	public static HashMap<String, String> loadCasts() {
-
-		File configDir = MultiChatProxy.getInstance().getConfigDirectory();
-		HashMap<String, String> result = null;
-
-		try	{
-			File file = new File(configDir, "Casts.dat");
-			FileInputStream saveFile = new FileInputStream(file);
-			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<String, String>)in.readObject();
-			in.close();
-		} catch (IOException|ClassNotFoundException e) {
-			System.out.println("[MultiChat] [Load Error] An error has occured reading the casts file!");
-			e.printStackTrace();
-		}
-
-		return result;
 
 	}
 
@@ -780,22 +746,6 @@ public class MultiChat extends Plugin implements Listener {
 			System.out.println("[MultiChat] Enabling Social Spy! :D");
 			System.out.println("[MultiChat] Attempting to create hash files!");
 			saveSocialSpyInfo();
-			System.out.println("[MultiChat] The files were created!");
-
-		}
-
-		File f9 = new File(configDir, "Casts.dat");
-
-		if ((f9.exists()) && (!f9.isDirectory())) {
-
-			CastControl.castList = loadCasts();
-
-		} else {
-
-			System.out.println("[MultiChat] Some casts files do not exist to load. Must be first startup!");
-			System.out.println("[MultiChat] Welcome to MultiChat! :D");
-			System.out.println("[MultiChat] Attempting to create hash files!");
-			saveCasts();
 			System.out.println("[MultiChat] The files were created!");
 
 		}
