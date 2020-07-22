@@ -270,15 +270,9 @@ public class MultiChat extends Plugin implements Listener {
 
 		if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
 
-			// TODO - Remove for future versions!
 			if (!configversion.equals(LATEST_VERSION))  {
-
-				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
-				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
-				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
-				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
-				getLogger().info("[!!!] [WARNING] THANK YOU");
-
+				getLogger().warning("YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
+				getLogger().warning("SOME FEATURES OF MULTICHAT ARE ONLY PRESENT IN THE LATEST VERSION OF THE CONFIG");
 			}
 
 			// Register listeners
