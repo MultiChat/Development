@@ -24,7 +24,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class Channel {
+public class LegacyChannel {
 
 	private static GlobalChannel global;
 	private static LocalChannel local;
@@ -44,18 +44,18 @@ public class Channel {
 		return local;
 	}
 
-	public static Map<UUID,Channel> playerChannels = new HashMap<UUID, Channel>();
+	public static Map<UUID,LegacyChannel> playerChannels = new HashMap<UUID, LegacyChannel>();
 
-	public static void setChannel (UUID uuid, Channel channel) {
-		Channel.playerChannels.put(uuid, channel);
+	public static void setChannel (UUID uuid, LegacyChannel channel) {
+		LegacyChannel.playerChannels.put(uuid, channel);
 	}
 
-	public static Channel getChannel (UUID uuid) {
-		return Channel.playerChannels.get(uuid);
+	public static LegacyChannel getChannel (UUID uuid) {
+		return LegacyChannel.playerChannels.get(uuid);
 	}
 
 	public static void removePlayer (UUID uuid) {
-		Channel.playerChannels.remove(uuid);
+		LegacyChannel.playerChannels.remove(uuid);
 	}
 
 	/* END STATIC */
@@ -69,7 +69,7 @@ public class Channel {
 	protected String name;
 	protected String format;
 
-	public Channel(String name, String format, boolean whitelistServers, boolean whitelistMembers) {
+	public LegacyChannel(String name, String format, boolean whitelistServers, boolean whitelistMembers) {
 
 		this.name = name;
 		this.whitelistServers = whitelistServers;

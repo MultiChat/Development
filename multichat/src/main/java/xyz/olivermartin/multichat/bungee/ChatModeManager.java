@@ -33,19 +33,19 @@ public class ChatModeManager {
 		globalPlayers.put(uuid, false);
 
 		// TODO
-		Channel.setChannel(uuid, Channel.getLocalChannel());
+		LegacyChannel.setChannel(uuid, LegacyChannel.getLocalChannel());
 
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
 
-		Channel local = Channel.getLocalChannel();
+		LegacyChannel local = LegacyChannel.getLocalChannel();
 		if (!local.isMember(uuid)) {
 			local.removeMember(uuid);
 			MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
 		}
 
-		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), LegacyChannel.getChannel(uuid).getName(), LegacyChannel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 
@@ -54,19 +54,19 @@ public class ChatModeManager {
 		globalPlayers.put(uuid, true);
 
 		// TODO
-		Channel.setChannel(uuid, Channel.getGlobalChannel());
+		LegacyChannel.setChannel(uuid, LegacyChannel.getGlobalChannel());
 
 		// TODO
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 		if (player == null) return;
 
-		Channel global = Channel.getGlobalChannel();
+		LegacyChannel global = LegacyChannel.getGlobalChannel();
 		if (!global.isMember(uuid)) {
 			global.removeMember(uuid);
 			MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
 		}
 
-		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), Channel.getChannel(uuid).getName(), Channel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), LegacyChannel.getChannel(uuid).getName(), LegacyChannel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 

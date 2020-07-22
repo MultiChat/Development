@@ -7,7 +7,7 @@ import java.io.ObjectOutputStream;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
-import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
@@ -44,7 +44,7 @@ public class ProxyLocalCommunicationManager {
 
 			boolean globalChatServer = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
 					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName());
-			String globalChatFormat = Channel.getGlobalChannel().getFormat();
+			String globalChatFormat = LegacyChannel.getGlobalChannel().getFormat();
 
 			out.writeUTF("global");
 			out.writeBoolean(globalChatServer);
@@ -277,7 +277,7 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendPlayerDataMessage(String playerName, String channel, Channel channelObject, ServerInfo server, boolean colour, boolean rgb) {
+	public static void sendPlayerDataMessage(String playerName, String channel, LegacyChannel channelObject, ServerInfo server, boolean colour, boolean rgb) {
 
 		sendIgnoreServerData(server);
 

@@ -11,7 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.PlayerMeta;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
@@ -83,8 +83,8 @@ public class ProxyPlayerChatListener implements Listener {
 			switch (channel) {
 
 			case "global":
-				DebugManager.log("{multichat:pchat} Global Channel Available? = " + (Channel.getGlobalChannel() != null));
-				Channel.getGlobalChannel().sendMessage(player, message, format);
+				DebugManager.log("{multichat:pchat} Global Channel Available? = " + (LegacyChannel.getGlobalChannel() != null));
+				LegacyChannel.getGlobalChannel().sendMessage(player, message, format);
 				break;
 
 			case "local":

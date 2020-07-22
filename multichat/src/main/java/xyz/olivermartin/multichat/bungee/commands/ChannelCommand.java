@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
@@ -77,7 +77,7 @@ public class ChannelCommand extends Command {
 							return;
 						}
 
-						Channel local = Channel.getLocalChannel();
+						LegacyChannel local = LegacyChannel.getLocalChannel();
 						if (local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
 							local.addMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
@@ -92,7 +92,7 @@ public class ChannelCommand extends Command {
 							return;
 						}
 
-						Channel global = Channel.getGlobalChannel();
+						LegacyChannel global = LegacyChannel.getGlobalChannel();
 						if (global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
 							global.addMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
@@ -112,7 +112,7 @@ public class ChannelCommand extends Command {
 					}
 					if (operand.equals("local")) {
 
-						Channel local = Channel.getLocalChannel();
+						LegacyChannel local = LegacyChannel.getLocalChannel();
 						if (!local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
 							local.removeMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
@@ -122,7 +122,7 @@ public class ChannelCommand extends Command {
 
 					} else if (operand.equals("global")) {
 
-						Channel global = Channel.getGlobalChannel();
+						LegacyChannel global = LegacyChannel.getGlobalChannel();
 						if (!global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
 							global.removeMember(((ProxiedPlayer)sender).getUniqueId());
 							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
@@ -142,7 +142,7 @@ public class ChannelCommand extends Command {
 
 				// Update local channel info
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), Channel.getChannel(p.getUniqueId()).getName(), Channel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), LegacyChannel.getChannel(p.getUniqueId()).getName(), LegacyChannel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
 				}
 
 			}

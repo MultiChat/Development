@@ -4,7 +4,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
-public class LocalChannel extends Channel {
+public class LocalChannel extends LegacyChannel {
 
 	public LocalChannel() {
 		super("local", "", false, false);

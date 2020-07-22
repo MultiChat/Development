@@ -363,7 +363,7 @@ public class MultiChat extends Plugin implements Listener {
 			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
 
 			// Set up global chat
-			GlobalChannel channel = Channel.getGlobalChannel();
+			GlobalChannel channel = LegacyChannel.getGlobalChannel();
 			channel.setFormat(configYML.getString("globalformat"));
 
 			// Add all appropriate servers to this hardcoded global chat stream

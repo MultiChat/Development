@@ -5,7 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.Channel;
+import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
@@ -131,11 +131,11 @@ public class MultiChatCommand extends Command {
 					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
 					MultiChat.forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
 
-					Channel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
-					Channel.getGlobalChannel().clearServers();
+					LegacyChannel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
+					LegacyChannel.getGlobalChannel().clearServers();
 
 					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
-						Channel.getGlobalChannel().addServer(server);
+						LegacyChannel.getGlobalChannel().addServer(server);
 					}
 
 					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
