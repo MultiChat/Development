@@ -169,17 +169,17 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 	private void registerCommunicationChannels() {
 
-		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerMeta());
-		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerChat());
-		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getPlayerAction());
-		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.getServerAction());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerChat(), new LocalSpigotServerChatListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerAction(), new LocalSpigotServerActionListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerAction(), new LocalSpigotPlayerActionListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerChat(), new LocalSpigotPlayerChatListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerData(), new LocalSpigotPlayerDataListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getServerData(), new LocalSpigotServerDataListener());
-		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.getPlayerMeta(), new LocalSpigotPlayerMetaListener());
+		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.PLAYER_META);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.PLAYER_CHAT);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.PLAYER_ACTION);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, CommChannels.SERVER_ACTION);
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.SERVER_CHAT, new LocalSpigotServerChatListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.SERVER_ACTION, new LocalSpigotServerActionListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.PLAYER_ACTION, new LocalSpigotPlayerActionListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.PLAYER_CHAT, new LocalSpigotPlayerChatListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.PLAYER_DATA, new LocalSpigotPlayerDataListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.SERVER_DATA, new LocalSpigotServerDataListener());
+		getServer().getMessenger().registerIncomingPluginChannel(this, CommChannels.PLAYER_META, new LocalSpigotPlayerMetaListener());
 
 	}
 

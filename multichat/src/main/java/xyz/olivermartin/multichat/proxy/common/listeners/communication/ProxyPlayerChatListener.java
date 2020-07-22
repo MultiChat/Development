@@ -29,7 +29,7 @@ public class ProxyPlayerChatListener implements Listener {
 	public static void onPluginMessage(PluginMessageEvent event) {
 
 		// Ignore if sent to a different channel
-		if (!event.getTag().equals(CommChannels.getPlayerChat())) return;
+		if (!event.getTag().equals(CommChannels.PLAYER_CHAT)) return;
 
 		event.setCancelled(true);
 

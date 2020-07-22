@@ -306,13 +306,13 @@ public class MultiChat extends Plugin implements Listener {
 			getProxy().getPluginManager().registerListener(this, this);
 
 			// Communication Channels
-			getProxy().registerChannel(CommChannels.getPlayerMeta()); // pmeta
-			getProxy().registerChannel(CommChannels.getPlayerChat()); // pchat
-			getProxy().registerChannel(CommChannels.getServerChat()); // schat
-			getProxy().registerChannel(CommChannels.getPlayerAction()); // pact
-			getProxy().registerChannel(CommChannels.getServerAction()); // sact
-			getProxy().registerChannel(CommChannels.getPlayerData()); // pdata
-			getProxy().registerChannel(CommChannels.getServerData()); // sdata
+			getProxy().registerChannel(CommChannels.PLAYER_META); // pmeta
+			getProxy().registerChannel(CommChannels.PLAYER_CHAT); // pchat
+			getProxy().registerChannel(CommChannels.SERVER_CHAT); // schat
+			getProxy().registerChannel(CommChannels.PLAYER_ACTION); // pact
+			getProxy().registerChannel(CommChannels.SERVER_ACTION); // sact
+			getProxy().registerChannel(CommChannels.PLAYER_DATA); // pdata
+			getProxy().registerChannel(CommChannels.SERVER_DATA); // sdata
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerMetaListener()); // list - pmeta
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerChatListener()); // list - pchat
 			getProxy().getPluginManager().registerListener(this, new ProxyPlayerActionListener()); // list - pact

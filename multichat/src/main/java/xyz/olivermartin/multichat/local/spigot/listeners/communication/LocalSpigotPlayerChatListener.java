@@ -14,7 +14,7 @@ public class LocalSpigotPlayerChatListener extends LocalPlayerChatListener imple
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals(CommChannels.getPlayerChat())) return;
+		if (!channel.equals(CommChannels.PLAYER_CHAT)) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 

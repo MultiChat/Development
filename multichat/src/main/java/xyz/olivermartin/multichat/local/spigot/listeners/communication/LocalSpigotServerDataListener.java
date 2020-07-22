@@ -16,7 +16,7 @@ public class LocalSpigotServerDataListener extends LocalServerDataListener imple
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals(CommChannels.getServerData())) return;
+		if (!channel.equals(CommChannels.SERVER_DATA)) return;
 
 		try {
 

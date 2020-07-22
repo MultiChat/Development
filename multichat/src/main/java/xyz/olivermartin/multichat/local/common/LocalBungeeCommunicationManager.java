@@ -29,22 +29,22 @@ public abstract class LocalBungeeCommunicationManager extends LocalProxyCommunic
 
 	@Override
 	public void sendMetaUpdate(UUID uuid, String metaId, String metaValue) {
-		sendUUIDAndStringAndString(CommChannels.getPlayerMeta(), uuid, metaId, metaValue);
+		sendUUIDAndStringAndString(CommChannels.PLAYER_META, uuid, metaId, metaValue);
 	}
 
 	@Override
 	public void sendProxyExecuteMessage(String command) {
-		sendString(CommChannels.getServerAction(), command);
+		sendString(CommChannels.SERVER_ACTION, command);
 	}
 
 	@Override
 	public void sendProxyExecutePlayerMessage(String command, String player) {
-		sendStringAndString(CommChannels.getPlayerAction(), command, player);
+		sendStringAndString(CommChannels.PLAYER_ACTION, command, player);
 	}
 
 	@Override
 	public void sendPlayerChatMessage(UUID uuid, String channel, String message, String format) {
-		sendUUIDAndStringAndStringAndString(CommChannels.getPlayerChat(), uuid, channel, message, format);
+		sendUUIDAndStringAndStringAndString(CommChannels.PLAYER_CHAT, uuid, channel, message, format);
 	}
 
 }

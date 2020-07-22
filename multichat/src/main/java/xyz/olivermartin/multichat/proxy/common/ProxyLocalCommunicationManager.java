@@ -55,7 +55,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_DATA, stream.toByteArray());
 
 		DebugManager.log("Completed send on multichat:sdata on the global id");
 
@@ -96,7 +96,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_DATA, stream.toByteArray());
 
 		DebugManager.log("Completed send to multichat:sdata on the dn id");
 
@@ -129,7 +129,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_DATA, stream.toByteArray());
 
 		DebugManager.log("Completed send to multichat:sdata on the ignore id");
 
@@ -170,7 +170,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerData(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_DATA, stream.toByteArray());
 
 		DebugManager.log("Completed send to multichat:sdata on the legacy id");
 
@@ -194,7 +194,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getPlayerMeta(), stream.toByteArray());
+		server.sendData(CommChannels.PLAYER_META, stream.toByteArray());
 		DebugManager.log("Request sent!");
 
 	}
@@ -213,7 +213,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerAction(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_ACTION, stream.toByteArray());
 
 	}
 
@@ -232,7 +232,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getPlayerAction(), stream.toByteArray());
+		server.sendData(CommChannels.PLAYER_ACTION, stream.toByteArray());
 
 	}
 
@@ -251,7 +251,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getPlayerChat(), stream.toByteArray());
+		server.sendData(CommChannels.PLAYER_CHAT, stream.toByteArray());
 
 	}
 
@@ -273,7 +273,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getServerChat(), stream.toByteArray());
+		server.sendData(CommChannels.SERVER_CHAT, stream.toByteArray());
 
 	}
 
@@ -299,7 +299,7 @@ public class ProxyLocalCommunicationManager {
 			e.printStackTrace();
 		}
 
-		server.sendData(CommChannels.getPlayerData(), stream.toByteArray());
+		server.sendData(CommChannels.PLAYER_DATA, stream.toByteArray());
 
 		DebugManager.log("Sent message on multichat:pdata channel!");
 

@@ -25,7 +25,7 @@ public class ProxyPlayerActionListener implements Listener {
 	public static void onPluginMessage(PluginMessageEvent event) {
 
 		// Ignore if sent to a different channel
-		if (!event.getTag().equals(CommChannels.getPlayerAction())) return;
+		if (!event.getTag().equals(CommChannels.PLAYER_ACTION)) return;
 
 		event.setCancelled(true);
 

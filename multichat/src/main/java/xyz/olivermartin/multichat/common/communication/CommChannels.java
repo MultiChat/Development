@@ -1,32 +1,11 @@
 package xyz.olivermartin.multichat.common.communication;
 
-public class CommChannels {
+public interface CommChannels {
 
 	/*
 	 * The prefix used for multichat communication channels
 	 */
-	private static String prefix = "multichat:";
-
-	// Player meta communication (prefix, suffix, displayname etc.)
-	private static String playerMeta = "pmeta";
-
-	// Chat messages sent by players
-	private static String playerChat = "pchat";
-
-	// Chat messages sent by non-player objects (casts, announcements etc.)
-	private static String serverChat = "schat";
-
-	// Data about specific players (selected channels, colour permissions etc.)
-	private static String playerData = "pdata";
-
-	// Data about the server as a whole (ignoremap, global chat servers, display name formats, legacy servers etc.)
-	private static String serverData = "sdata";
-
-	// Actions for the server console (mce/pxe)
-	private static String serverAction = "sact";
-
-	// Actions for players (mce players, ppxe)
-	private static String playerAction = "pact";
+	String PREFIX = "multichat:";
 
 	/**
 	 * Gets the channel id used for: 
@@ -52,9 +31,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getPlayerMeta() {
-		return prefix + playerMeta;
-	}
+	String PLAYER_META = PREFIX + "pmeta";
 
 	/**
 	 * Gets the channel id used for: 
@@ -76,9 +53,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getPlayerChat() {
-		return prefix + playerChat;
-	}
+	String PLAYER_CHAT = PREFIX + "pchat";
 
 	/**
 	 * Gets the channel id used for: 
@@ -100,9 +75,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getServerChat() {
-		return prefix + serverChat;
-	}
+	String SERVER_CHAT = PREFIX + "schat";
 
 	/**
 	 * Gets the channel id used for: 
@@ -126,9 +99,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getPlayerData() {
-		return prefix + playerData;
-	}
+	String PLAYER_DATA = PREFIX + "pdata";
 
 	/**
 	 * Gets the channel id used for: 
@@ -155,9 +126,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getServerData() {
-		return prefix + serverData;
-	}
+	String SERVER_DATA = PREFIX + "sdata";
 
 	/**
 	 * Gets the channel id used for: 
@@ -179,9 +148,7 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getServerAction() {
-		return prefix + serverAction;
-	}
+	String SERVER_ACTION = PREFIX + "sact";
 
 	/**
 	 * Gets the channel id used for: 
@@ -203,8 +170,6 @@ public class CommChannels {
 	 * </p>
 	 * @return the channel id
 	 */
-	public static String getPlayerAction() {
-		return prefix + playerAction;
-	}
+	String PLAYER_ACTION = PREFIX + "pact";
 
 }

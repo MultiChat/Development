@@ -18,7 +18,7 @@ public class LocalSpigotPlayerMetaListener extends LocalPlayerMetaListener imple
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals(CommChannels.getPlayerMeta())) return;
+		if (!channel.equals(CommChannels.PLAYER_META)) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 

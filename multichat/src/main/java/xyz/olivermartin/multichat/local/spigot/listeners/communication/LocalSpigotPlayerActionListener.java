@@ -14,7 +14,7 @@ public class LocalSpigotPlayerActionListener extends LocalPlayerActionListener i
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals(CommChannels.getPlayerAction())) return;
+		if (!channel.equals(CommChannels.PLAYER_ACTION)) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 

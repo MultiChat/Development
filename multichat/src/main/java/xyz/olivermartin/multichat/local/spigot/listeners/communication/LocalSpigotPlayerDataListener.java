@@ -20,7 +20,7 @@ public class LocalSpigotPlayerDataListener extends LocalPlayerDataListener imple
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals(CommChannels.getPlayerData())) return;
+		if (!channel.equals(CommChannels.PLAYER_DATA)) return;
 
 		try {
 			LocalBungeeObjectMessage lbm = new SpigotBungeeObjectMessage(message);

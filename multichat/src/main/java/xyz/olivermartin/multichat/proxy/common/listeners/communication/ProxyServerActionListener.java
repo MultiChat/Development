@@ -22,7 +22,7 @@ public class ProxyServerActionListener implements Listener {
 	public static void onPluginMessage(PluginMessageEvent event) {
 
 		// Ignore if sent to a different channel
-		if (!event.getTag().equals(CommChannels.getServerAction())) return;
+		if (!event.getTag().equals(CommChannels.SERVER_ACTION)) return;
 
 		event.setCancelled(true);
 

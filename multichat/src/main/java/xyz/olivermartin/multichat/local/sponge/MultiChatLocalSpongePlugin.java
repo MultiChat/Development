@@ -233,26 +233,26 @@ public class MultiChatLocalSpongePlugin {
 		ChannelRegistrar channelRegistrar = Sponge.getGame().getChannelRegistrar();
 
 		// New channels
-		ChannelBinding.RawDataChannel playerMetaChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerMeta());
-		commManager.registerChannel(CommChannels.getPlayerMeta(), playerMetaChannel);
+		ChannelBinding.RawDataChannel playerMetaChannel = channelRegistrar.createRawChannel(this, CommChannels.PLAYER_META);
+		commManager.registerChannel(CommChannels.PLAYER_META, playerMetaChannel);
 
-		ChannelBinding.RawDataChannel playerChatChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerChat());
-		commManager.registerChannel(CommChannels.getPlayerChat(), playerChatChannel);
+		ChannelBinding.RawDataChannel playerChatChannel = channelRegistrar.createRawChannel(this, CommChannels.PLAYER_CHAT);
+		commManager.registerChannel(CommChannels.PLAYER_CHAT, playerChatChannel);
 
-		ChannelBinding.RawDataChannel serverChatChannel = channelRegistrar.createRawChannel(this, CommChannels.getServerChat());
-		commManager.registerChannel(CommChannels.getServerChat(), serverChatChannel);
+		ChannelBinding.RawDataChannel serverChatChannel = channelRegistrar.createRawChannel(this, CommChannels.SERVER_CHAT);
+		commManager.registerChannel(CommChannels.SERVER_CHAT, serverChatChannel);
 
-		ChannelBinding.RawDataChannel serverActionChannel = channelRegistrar.createRawChannel(this, CommChannels.getServerAction());
-		commManager.registerChannel(CommChannels.getServerAction(), serverActionChannel);
+		ChannelBinding.RawDataChannel serverActionChannel = channelRegistrar.createRawChannel(this, CommChannels.SERVER_ACTION);
+		commManager.registerChannel(CommChannels.SERVER_ACTION, serverActionChannel);
 
-		ChannelBinding.RawDataChannel playerActionChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerAction());
-		commManager.registerChannel(CommChannels.getPlayerAction(), playerActionChannel);
+		ChannelBinding.RawDataChannel playerActionChannel = channelRegistrar.createRawChannel(this, CommChannels.PLAYER_ACTION);
+		commManager.registerChannel(CommChannels.PLAYER_ACTION, playerActionChannel);
 
-		ChannelBinding.RawDataChannel playerDataChannel = channelRegistrar.createRawChannel(this, CommChannels.getPlayerData());
-		commManager.registerChannel(CommChannels.getPlayerData(), playerDataChannel);
+		ChannelBinding.RawDataChannel playerDataChannel = channelRegistrar.createRawChannel(this, CommChannels.PLAYER_DATA);
+		commManager.registerChannel(CommChannels.PLAYER_DATA, playerDataChannel);
 
-		ChannelBinding.RawDataChannel serverDataChannel = channelRegistrar.createRawChannel(this, CommChannels.getServerData());
-		commManager.registerChannel(CommChannels.getServerData(), serverDataChannel);
+		ChannelBinding.RawDataChannel serverDataChannel = channelRegistrar.createRawChannel(this, CommChannels.SERVER_DATA);
+		commManager.registerChannel(CommChannels.SERVER_DATA, serverDataChannel);
 
 		serverChatChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerChatListener());
 		serverActionChannel.addListener(Platform.Type.SERVER, new LocalSpongeServerActionListener());
@@ -270,26 +270,26 @@ public class MultiChatLocalSpongePlugin {
 		SpongeBungeeCommunicationManager commManager = (SpongeBungeeCommunicationManager)MultiChatLocal.getInstance().getProxyCommunicationManager();
 
 		// New channels
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerMeta()));
-		commManager.unregisterChannel(CommChannels.getPlayerMeta());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.PLAYER_META));
+		commManager.unregisterChannel(CommChannels.PLAYER_META);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerChat()));
-		commManager.unregisterChannel(CommChannels.getPlayerChat());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.PLAYER_CHAT));
+		commManager.unregisterChannel(CommChannels.PLAYER_CHAT);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getServerChat()));
-		commManager.unregisterChannel(CommChannels.getServerChat());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.SERVER_CHAT));
+		commManager.unregisterChannel(CommChannels.SERVER_CHAT);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerAction()));
-		commManager.unregisterChannel(CommChannels.getPlayerAction());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.PLAYER_ACTION));
+		commManager.unregisterChannel(CommChannels.PLAYER_ACTION);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getServerAction()));
-		commManager.unregisterChannel(CommChannels.getServerAction());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.SERVER_ACTION));
+		commManager.unregisterChannel(CommChannels.SERVER_ACTION);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getPlayerData()));
-		commManager.unregisterChannel(CommChannels.getPlayerData());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.PLAYER_DATA));
+		commManager.unregisterChannel(CommChannels.PLAYER_DATA);
 
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.getServerData()));
-		commManager.unregisterChannel(CommChannels.getServerData());
+		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel(CommChannels.SERVER_DATA));
+		commManager.unregisterChannel(CommChannels.SERVER_DATA);
 
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 
