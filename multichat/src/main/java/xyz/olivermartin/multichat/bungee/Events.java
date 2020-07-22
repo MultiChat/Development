@@ -457,10 +457,14 @@ public class Events implements Listener {
 
 		}
 
+		String defaultChannel = MultiChatProxy.getInstance().getContextManager().getGlobalContext().getDefaultChannel();
+		boolean forceChannel = MultiChatProxy.getInstance().getContextManager().getGlobalContext().isForceChannel();
+
 		if (!ChatModeManager.getInstance().existsPlayer(uuid)) {
 
 			boolean globalMode;
-			if (!MultiChat.defaultChannel.equalsIgnoreCase("local")) {
+
+			if (!defaultChannel.equalsIgnoreCase("local")) {
 				globalMode = true;
 			} else {
 				globalMode = false;
@@ -471,10 +475,10 @@ public class Events implements Listener {
 
 		}
 
-		if (MultiChat.forceChannelOnJoin) {
+		if (forceChannel) {
 
 			boolean globalMode;
-			if (!MultiChat.defaultChannel.equalsIgnoreCase("local")) {
+			if (!defaultChannel.equalsIgnoreCase("local")) {
 				globalMode = true;
 			} else {
 				globalMode = false;

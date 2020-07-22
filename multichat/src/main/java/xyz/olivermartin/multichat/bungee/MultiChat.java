@@ -20,6 +20,8 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ContextManager;
+import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
@@ -88,8 +90,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static String configversion;
 
 	// Config values
-	public static String defaultChannel = "";
-	public static boolean forceChannelOnJoin = false;
 
 	public static boolean logPMs = true;
 	public static boolean logStaffChat = true;
@@ -359,17 +359,29 @@ public class MultiChat extends Plugin implements Listener {
 			}
 
 			// Set default channel
-			defaultChannel = configYML.getString("default_channel");
-			forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
+			String defaultChannel = configYML.getString("default_channel");
+			boolean forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
 
 			// Set up global chat
 			GlobalChannel channel = LegacyChannel.getGlobalChannel();
 			channel.setFormat(configYML.getString("globalformat"));
 
+			List<String> noGlobalServers = new ArrayList<String>();
+
 			// Add all appropriate servers to this hardcoded global chat stream
 			for (String server : configYML.getStringList("no_global")) {
 				channel.addServer(server);
+				noGlobalServers.add(server);
 			}
+
+			///
+
+			// New context manager
+			GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
+			ContextManager contextManager = new ContextManager(globalContext);
+			MultiChatProxy.getInstance().registerContextManager(contextManager);
+
+			///
 
 			// Initiate backup routine
 			ProxyBackupManager backupManager = new ProxyBackupManager();

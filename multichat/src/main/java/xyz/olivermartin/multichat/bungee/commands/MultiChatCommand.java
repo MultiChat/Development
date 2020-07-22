@@ -1,18 +1,23 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.CommandManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
+import xyz.olivermartin.multichat.bungee.GlobalChannel;
+import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
 
 /**
  * MultiChat (Admin) Command
@@ -128,15 +133,29 @@ public class MultiChatCommand extends Command {
 					}
 
 					// Set default channel
-					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
-					MultiChat.forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
+					String defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
+					boolean forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
 
-					LegacyChannel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
-					LegacyChannel.getGlobalChannel().clearServers();
+					// Set up global chat
+					GlobalChannel channel = LegacyChannel.getGlobalChannel();
+					channel.setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
 
+					List<String> noGlobalServers = new ArrayList<String>();
+
+					channel.clearServers();
+					// Add all appropriate servers to this hardcoded global chat stream
 					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
-						LegacyChannel.getGlobalChannel().addServer(server);
+						channel.addServer(server);
+						noGlobalServers.add(server);
 					}
+
+					///
+
+					// New context manager
+					GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
+					MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
+
+					///
 
 					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 						MultiChat.premiumVanish = true;
