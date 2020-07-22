@@ -4,7 +4,7 @@ public class ChannelFactory {
 
 	public ChannelFactory() {
 
-
+		/* Not yet implemented */
 
 	}
 

@@ -1,42 +1,26 @@
 package xyz.olivermartin.multichat.proxy.common.channels;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConsoleManager;
+import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 
 public abstract class NetworkChannel {
 
-	private String id; // The channel ID
-	private String desc; // A short description of the channel
-	private String format; // The format of this channel
-	private boolean unhideable; // If the channel is unhideable
-	private Context context; // The context for this channel
-	private List<String> aliases; // The command aliases for this channel
+	private String id;
+	private ChannelInfo info;
+	private ChannelManager manager;
 
-	private String permission; // Permission to view / speak
-	private String viewPermission; // Permission to view only
-
-	private boolean blacklistMembers; // Should member list of the channel be a blacklist or whitelist
-	private Set<UUID> members; // Member list of the channel
-
-	public NetworkChannel(String id, String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission, String viewPermission, boolean blacklistMembers, Set<UUID> members) {
-
+	public NetworkChannel(String id, ChannelInfo info, ChannelManager manager) {
 		this.id = id;
-		this.desc = desc;
-		this.format = format;
-		this.unhideable = unhideable;
-		this.context = context;
-		this.aliases = aliases;
-
-		this.permission = null;
-		this.viewPermission = null;
-
-		this.blacklistMembers = blacklistMembers;
-		this.members = members;
-
+		this.info = info;
+		this.manager = manager;
 	}
 
 	/**
@@ -48,67 +32,93 @@ public abstract class NetworkChannel {
 	}
 
 	/**
-	 * Gets a short description of this channel
-	 * @return the description
+	 * Gets the info for this channel
+	 * @return the info
 	 */
-	public String getDescription() {
-		return this.desc;
+	public ChannelInfo getInfo() {
+		return this.info;
 	}
 
 	/**
-	 * Gets the format used for chat in this channel
-	 * @return the format
+	 * Updates the ChannelInfo used for this channel
+	 * @param info The new info for the channel
 	 */
-	public String getFormat() {
-		return this.format;
+	public void updateInfo(ChannelInfo info) {
+		this.info = info;
 	}
 
 	/**
-	 * Checks if this channel is not allowed to be hidden
-	 * @return true if the channel can not be hidden
+	 * Gets the manager for this channel
+	 * @return the manager
 	 */
-	public boolean isUnhideable() {
-		return this.unhideable;
+	public ChannelManager getManager() {
+		return this.manager;
 	}
 
-	/**
-	 * Gets the context of this channel
-	 * @return the context
-	 */
-	public Context getContext() {
-		return this.context;
+	public void sendMessage(CommandSender sender, String message) {
+
+		// If the sender can't speak then return
+		if (!canSpeak(sender)) return;
+
+		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
+
+			// Skip sending to this player if they shouldn't receive the message
+			if (receiver.getServer() == null // Receiver is between servers
+					|| !canView(receiver) // Receiver is not permitted to view message
+					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
+				continue;
+
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				message = MultiChatUtil.approximateHexCodes(message);
+			}
+
+			receiver.sendMessage(TextComponent.fromLegacyText(message));
+
+		}
+
+		// Trigger PostBroadcastEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
+
+		ConsoleManager.logDisplayMessage(message);
+
 	}
 
-	/**
-	 * Gets the command aliases of this channel
-	 * @return the command aliases
-	 */
-	public List<String> getAliases() {
-		return this.aliases;
-	}
+	public void distributeMessage(ProxiedPlayer sender, String message, String format) {
 
-	/**
-	 * Checks if this channel requires a permission to view / speak
-	 * @return true if the channel requires a permission
-	 */
-	public boolean isPermissionProtected() {
-		return this.permission == null;
-	}
+		// If the sender can't speak, or is between servers, then return
+		if (!canSpeak(sender) || sender.getServer() == null) return;
 
-	/**
-	 * Gets the permission required to view / speak in the channel (if one exists)
-	 * @return an optional of the permission
-	 */
-	public Optional<String> getPermission() {
-		return Optional.ofNullable(permission);
-	}
+		String senderServer = sender.getServer().getInfo().getName();
+		String joined = format + message;
 
-	/**
-	 * Gets the permission required to ONLY view the channel (if one exists)
-	 * @return an optional of the permission
-	 */
-	public Optional<String> getViewPermission() {
-		return Optional.ofNullable(viewPermission);
+		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
+
+			// Skip sending to this player if they shouldn't receive the message
+			if (receiver.getServer() == null // Receiver is between servers
+					|| !canView(receiver) // Receiver is not permitted to view message
+					|| manager.isHidden(receiver.getUniqueId(), id) // Receiver has hidden this channel
+					|| receiver.getServer().getInfo().getName().equals(senderServer)) // Receiver is on same server as sender
+				continue;
+
+			// If receiver ignores sender
+			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+				ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+				continue;
+			}
+
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				joined = MultiChatUtil.approximateHexCodes(joined);
+			}
+
+			receiver.sendMessage(TextComponent.fromLegacyText(joined));
+
+		}
+
+		// Trigger PostGlobalChatEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
+
+		ConsoleManager.logChat(MultiChatUtil.approximateHexCodes(joined));
+
 	}
 
 	/**
@@ -116,36 +126,13 @@ public abstract class NetworkChannel {
 	 * @param sender The command sender
 	 * @return true if they are allowed to speak
 	 */
-	public boolean canSpeak(CommandSender sender) {
-		if (!isPermissionProtected()) return true;
-		return sender.hasPermission(permission);
-	}
+	public abstract boolean canSpeak(CommandSender sender);
 
 	/**
 	 * Checks if this command sender is allowed to view the channel
 	 * @param sender The command sender
 	 * @return true if they are allowed to view
 	 */
-	public boolean canView(CommandSender sender) {
-		if (!isPermissionProtected()) return true;
-		return sender.hasPermission(permission) || sender.hasPermission(viewPermission);
-	}
-
-	/**
-	 * Is the member list for this channel a blacklist or a whitelist?
-	 * @return true if it is a blacklist
-	 */
-	public boolean isBlacklistMembers() {
-		return this.blacklistMembers;
-	}
-
-	/**
-	 * <p>Gets the blacklist/whitelist of members for this channel.</p>
-	 * <p>List is a blacklist if isBlacklistMembers() returns true, otherwise is a whitelist</p>
-	 * @return the blacklist/whitelist of members
-	 */
-	public Set<UUID> getMembers() {
-		return this.members;
-	}
+	public abstract boolean canView(CommandSender sender);
 
 }

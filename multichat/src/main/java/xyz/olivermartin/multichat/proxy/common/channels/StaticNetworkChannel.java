@@ -1,8 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common.channels;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import net.md_5.bungee.api.CommandSender;
 
 public class StaticNetworkChannel extends NetworkChannel {
 
@@ -89,9 +87,18 @@ public class StaticNetworkChannel extends NetworkChannel {
 
 	}*/
 
-	public StaticNetworkChannel(String id, String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission, String viewPermission) {
-		// Create NetworkChannel with a "blacklist of members" that will always be empty (as this is a static channel)
-		super(id, desc, format, unhideable, context, aliases, permission, viewPermission, true, new HashSet<UUID>());
+	public StaticNetworkChannel(String id, ChannelInfo info, ChannelManager manager) {
+		super(id, info, manager);
+	}
+
+	@Override
+	public boolean canSpeak(CommandSender sender) {
+		return getInfo().inContext(sender) && getInfo().hasSpeakPermission(sender);
+	}
+
+	@Override
+	public boolean canView(CommandSender sender) {
+		return getInfo().inContext(sender) && getInfo().hasViewPermission(sender);
 	}
 
 }
