@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.io.File;
 
+import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 
 /**
@@ -25,13 +26,23 @@ public class MultiChatProxy {
 	/* END STATIC */
 
 	private MultiChatProxyPlatform platform;
+	private Plugin plugin;
 	private File configDirectory;
 	private ProxyDataStore dataStore;
 	private ProxyFileStoreManager fileStoreManager;
+	private ProxyBackupManager backupManager;
 
 	/* END ATTRIBUTES */
 
 	private MultiChatProxy() { /* EMPTY */ }
+
+	public Plugin getPlugin() {
+		return this.plugin;
+	}
+
+	public void registerPlugin(Plugin plugin) {
+		this.plugin = plugin;
+	}
 
 	public MultiChatProxyPlatform getPlatform() {
 		return this.platform;
@@ -63,6 +74,14 @@ public class MultiChatProxy {
 
 	public void registerFileStoreManager(ProxyFileStoreManager fileStoreManager) {
 		this.fileStoreManager = fileStoreManager;
+	}
+
+	public ProxyBackupManager getBackupManager() {
+		return this.backupManager;
+	}
+
+	public void registerBackupManager(ProxyBackupManager backupManager) {
+		this.backupManager = backupManager;
 	}
 
 }

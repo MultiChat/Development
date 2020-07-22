@@ -83,7 +83,7 @@ public class MultiChatCommand extends Command {
 					MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
 
 					// Unregister commands
-					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
+					((MultiChat)MultiChatProxy.getInstance().getPlugin()).unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
 
 					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
 					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
@@ -101,7 +101,7 @@ public class MultiChatCommand extends Command {
 
 					// Reload, and re-register commands
 					CommandManager.reload();
-					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
+					((MultiChat)MultiChatProxy.getInstance().getPlugin()).registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
 
 					ChatControl.reload();
 

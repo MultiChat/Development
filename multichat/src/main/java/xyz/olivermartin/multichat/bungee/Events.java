@@ -642,7 +642,7 @@ public class Events implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onServerSwitch(ServerSwitchEvent event) {
 		// Tell the new server the player's channel preference
-		ProxyServer.getInstance().getScheduler().schedule(MultiChat.getInstance(), new Runnable() {
+		ProxyServer.getInstance().getScheduler().schedule(MultiChatProxy.getInstance().getPlugin(), new Runnable() {
 
 			public void run() {
 				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), Channel.getChannel(event.getPlayer().getUniqueId()).getName(), Channel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));

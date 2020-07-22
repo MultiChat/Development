@@ -17,6 +17,7 @@ import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
+import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
@@ -85,7 +86,6 @@ public class MultiChat extends Plugin implements Listener {
 	};
 
 	public static String configversion;
-	private static MultiChat instance;
 
 	// Config values
 	public static String defaultChannel = "";
@@ -101,26 +101,6 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInJoin = true;
 
 	public static List<String> legacyServers = new ArrayList<String>();
-
-	public static MultiChat getInstance() {
-		return instance;
-	}
-
-	public void backup() {
-
-		getProxy().getScheduler().schedule(this, new Runnable() {
-
-			public void run() {
-
-				getLogger().info("Commencing backup!");
-				MultiChatProxy.getInstance().getFileStoreManager().save();
-				getLogger().info("Backup complete. Any errors reported above.");
-
-			}
-
-		}, 1L, 60L, TimeUnit.MINUTES);
-
-	}
 
 	public void fetchDisplayNames() {
 
@@ -247,7 +227,7 @@ public class MultiChat extends Plugin implements Listener {
 
 	public void onEnable() {
 
-		instance = this;
+		MultiChatProxy.getInstance().registerPlugin(this);
 
 		@SuppressWarnings("unused")
 		Metrics metrics = new Metrics(this);
@@ -398,7 +378,16 @@ public class MultiChat extends Plugin implements Listener {
 			}
 
 			// Initiate backup routine
-			backup();
+			ProxyBackupManager backupManager = new ProxyBackupManager();
+			MultiChatProxy.getInstance().registerBackupManager(backupManager);
+			backupManager.registerBackupTask(new Runnable() {
+
+				public void run() {
+					MultiChatProxy.getInstance().getFileStoreManager().save();
+				}
+
+			});
+			backupManager.startBackup(1L, 60L, TimeUnit.MINUTES);
 
 			// Fetch display names of all players
 			fetchDisplayNames();
