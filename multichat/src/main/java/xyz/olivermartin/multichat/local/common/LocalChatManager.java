@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
@@ -58,6 +59,29 @@ public abstract class LocalChatManager {
 
 	}
 
+	public void queueRecipients(UUID uuid, Set<UUID> recipients) {
+
+		Map<UUID, Queue<Set<UUID>>> recipientQueues = MultiChatLocal.getInstance().getDataStore().getRecipientQueues();
+
+		synchronized (recipientQueues) {
+
+			if (recipientQueues.containsKey(uuid)) {
+
+				Queue<Set<UUID>> q = recipientQueues.get(uuid);
+				q.add(recipients);
+
+			} else {
+
+				Queue<Set<UUID>> q = new LinkedList<Set<UUID>>();
+				q.add(recipients);
+				recipientQueues.put(uuid, q);
+
+			}
+
+		}
+
+	}
+
 	public void queueChatChannel(String playerName, String channel) {
 
 		Map<String, Queue<String>> chatQueues = MultiChatLocal.getInstance().getDataStore().getChatQueues();
@@ -78,6 +102,26 @@ public abstract class LocalChatManager {
 			}
 
 		}
+
+	}
+
+	public Set<UUID> getRecipientsFromRecipientQueue(UUID uuid) {
+
+		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
+		Map<UUID, Queue<Set<UUID>>> recipientQueues = store.getRecipientQueues();
+		Set<UUID> recipients;
+
+		synchronized (recipientQueues) {
+
+			recipients = recipientQueues.get(uuid).poll();
+
+			if (recipientQueues.get(uuid).size() < 1) {
+				recipientQueues.remove(uuid);
+			}
+
+		}
+
+		return recipients;
 
 	}
 

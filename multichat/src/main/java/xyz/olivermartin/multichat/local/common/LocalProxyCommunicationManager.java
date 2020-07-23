@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.local.common;
 
+import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
@@ -44,6 +45,6 @@ public abstract class LocalProxyCommunicationManager {
 
 	public abstract void sendProxyExecutePlayerMessage(String command, String player);
 
-	public abstract void sendPlayerChatMessage(UUID uuid, String channel, String message, String format);
+	public abstract void sendPlayerChatMessage(UUID uuid, String channel, String message, String format, Set<UUID> otherRecipients);
 
 }

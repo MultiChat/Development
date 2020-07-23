@@ -20,7 +20,9 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ContextManager;
+import xyz.olivermartin.multichat.proxy.common.channels.GlobalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
@@ -363,23 +365,27 @@ public class MultiChat extends Plugin implements Listener {
 			boolean forceChannelOnJoin = configYML.getBoolean("force_channel_on_join");
 
 			// Set up global chat
-			GlobalChannel channel = LegacyChannel.getGlobalChannel();
-			channel.setFormat(configYML.getString("globalformat"));
+			//GlobalChannel channel = LegacyChannel.getGlobalChannel();
+			//channel.setFormat(configYML.getString("globalformat"));
 
 			List<String> noGlobalServers = new ArrayList<String>();
 
 			// Add all appropriate servers to this hardcoded global chat stream
 			for (String server : configYML.getStringList("no_global")) {
-				channel.addServer(server);
+				//channel.addServer(server);
 				noGlobalServers.add(server);
 			}
 
 			///
 
-			// New context manager
+			// New context manager and channels
 			GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
 			ContextManager contextManager = new ContextManager(globalContext);
 			MultiChatProxy.getInstance().registerContextManager(contextManager);
+
+			ChannelManager channelManager = new ChannelManager();
+			channelManager.setGlobalChannel(new GlobalChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), channelManager));
+			MultiChatProxy.getInstance().registerChannelManager(channelManager);
 
 			///
 

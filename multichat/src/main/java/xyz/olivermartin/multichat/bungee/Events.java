@@ -32,6 +32,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 /**
  * Events Manager
@@ -143,6 +144,7 @@ public class Events implements Listener {
 	public void onChat(ChatEvent event) {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
 		// New null pointer checks
@@ -325,7 +327,7 @@ public class Events implements Listener {
 
 						String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-						CastControl.sendCast(parts[0].substring(1),message,LegacyChannel.getChannel(playerSender.getUniqueId()), playerSender);
+						CastControl.sendCast(parts[0].substring(1),message,channelManager.getChannel(player), playerSender);
 
 						event.setCancelled(true);
 
@@ -335,7 +337,7 @@ public class Events implements Listener {
 
 					String message = MultiChatUtil.getMessageFromArgs(parts, 1);
 
-					CastControl.sendCast(parts[0].substring(1), message, LegacyChannel.getGlobalChannel(), ProxyServer.getInstance().getConsole());
+					CastControl.sendCast(parts[0].substring(1), message, channelManager.getGlobalChannel(), ProxyServer.getInstance().getConsole());
 
 					event.setCancelled(true);
 
@@ -397,7 +399,12 @@ public class Events implements Listener {
 				DebugManager.log("Does player have rgb colour permission? " + (player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 				// Let server know players channel preference
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), LegacyChannel.getChannel(player.getUniqueId()).getName(), LegacyChannel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+
+				DebugManager.log("!!!!! : " + channelManager.getChannel(player).toString());
+				DebugManager.log("!!!!! : " + channelManager.getChannel(player).getId());
+				DebugManager.log("!!!!! : " + player.getServer().getInfo().getName());
+
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player).getId(), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 				// Message passes through to spigot here
 
@@ -419,6 +426,7 @@ public class Events implements Listener {
 	public void onLogin(PostLoginEvent event) {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
 		ProxiedPlayer player = event.getPlayer();
 		UUID uuid = player.getUniqueId();
@@ -489,9 +497,9 @@ public class Events implements Listener {
 
 		// Set player to appropriate channels
 		if (ChatModeManager.getInstance().isGlobal(uuid)) {
-			LegacyChannel.setChannel(player.getUniqueId(), LegacyChannel.getGlobalChannel());
+			channelManager.select(uuid, "global");
 		} else {
-			LegacyChannel.setChannel(player.getUniqueId(), LegacyChannel.getLocalChannel());
+			channelManager.select(uuid, "local");
 		}
 
 		//BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
@@ -596,10 +604,6 @@ public class Events implements Listener {
 		// Reset their spam data on logout (nothing is stored persistantly)
 		ChatControl.spamPardonPlayer(uuid);
 
-		///
-		LegacyChannel.removePlayer(player.getUniqueId());
-		///
-
 		if (ds.getViewedChats().containsKey(uuid)) {
 			ds.getViewedChats().remove(uuid);
 		}
@@ -607,14 +611,6 @@ public class Events implements Listener {
 		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
 
 		ConsoleManager.log("Un-Registered player " + player.getName());
-
-		if (!LegacyChannel.getGlobalChannel().isMember(player.getUniqueId())) {
-			LegacyChannel.getGlobalChannel().removeMember(uuid);
-		}
-
-		if (!LegacyChannel.getLocalChannel().isMember(player.getUniqueId())) {
-			LegacyChannel.getLocalChannel().removeMember(uuid);
-		}
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
@@ -649,7 +645,7 @@ public class Events implements Listener {
 		ProxyServer.getInstance().getScheduler().schedule(MultiChatProxy.getInstance().getPlugin(), new Runnable() {
 
 			public void run() {
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), LegacyChannel.getChannel(event.getPlayer().getUniqueId()).getName(), LegacyChannel.getChannel(event.getPlayer().getUniqueId()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), MultiChatProxy.getInstance().getChannelManager().getChannel(event.getPlayer()).getId(), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
 				ProxyLocalCommunicationManager.sendLegacyServerData(event.getPlayer().getServer().getInfo());
 			}
 

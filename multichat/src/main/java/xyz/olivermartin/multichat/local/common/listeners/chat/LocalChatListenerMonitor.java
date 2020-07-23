@@ -1,5 +1,8 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
+import java.util.Set;
+import java.util.UUID;
+
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
@@ -13,6 +16,8 @@ public abstract class LocalChatListenerMonitor {
 
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
+
+		Set<UUID> originalRecipients = chatManager.getRecipientsFromRecipientQueue(event.getPlayer().getUniqueId());
 
 		String channel = chatManager.pollChatChannel(event.getPlayer());
 
@@ -74,7 +79,7 @@ public abstract class LocalChatListenerMonitor {
 
 		}
 
-		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), "global", proxyMessage, proxyFormat);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), "global", proxyMessage, proxyFormat, originalRecipients);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Aaaaand we sent it to the proxy! ALL DONE.");
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - UUID: " + event.getPlayer().getUniqueId());

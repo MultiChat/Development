@@ -5,7 +5,6 @@ import java.util.Optional;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
@@ -15,6 +14,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 /**
  * Local Chat Command
@@ -30,6 +30,8 @@ public class LocalCommand extends Command {
 	}
 
 	public void execute(CommandSender sender, String[] args) {
+
+		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
 		if ((sender instanceof ProxiedPlayer)) {
 
@@ -78,14 +80,13 @@ public class LocalCommand extends Command {
 					}
 
 					// If they had this channel hidden, then unhide it...
-					LegacyChannel local = LegacyChannel.getLocalChannel();
-					if (!local.isMember(player.getUniqueId())) {
-						local.removeMember(player.getUniqueId());
+					if (channelManager.isHidden(player.getUniqueId(), "local")) {
+						channelManager.show(player.getUniqueId(), "local");
 						MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
 					}
 
 					// Let server know players channel preference
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), LegacyChannel.getChannel(player.getUniqueId()).getName(), LegacyChannel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player).getId(), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 					// Message passes through to spigot here
 					// Send message directly to local chat...

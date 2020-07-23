@@ -5,10 +5,10 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
-import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 
 /**
  * Use Cast Command
@@ -40,7 +40,7 @@ public class UseCastCommand extends Command {
 
 			String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
-			CastControl.sendCast(args[0], message, LegacyChannel.getGlobalChannel(), sender);
+			CastControl.sendCast(args[0], message, MultiChatProxy.getInstance().getChannelManager().getGlobalChannel(), sender);
 
 		} else {
 

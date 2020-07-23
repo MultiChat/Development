@@ -44,6 +44,11 @@ public class LocalDataStore {
 	private Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
 
 	/**
+	 * Recipient Queues
+	 */
+	private Map<UUID, Queue<Set<UUID>>> recipientQueues = new HashMap<UUID, Queue<Set<UUID>>>();
+
+	/**
 	 * What channel is each player speaking in?
 	 */
 	private Map<UUID, String> playerChannels = new HashMap<UUID, String>();
@@ -106,6 +111,13 @@ public class LocalDataStore {
 	 */
 	public synchronized Map<String, Queue<String>> getChatQueues() {
 		return chatQueues;
+	}
+
+	/**
+	 * @return the recipientQueues
+	 */
+	public synchronized Map<UUID, Queue<Set<UUID>>> getRecipientQueues() {
+		return recipientQueues;
 	}
 
 	/**
@@ -183,6 +195,13 @@ public class LocalDataStore {
 	 */
 	public synchronized void setChatQueues(Map<String, Queue<String>> chatQueues) {
 		this.chatQueues = chatQueues;
+	}
+
+	/**
+	 * @param recipientQueues the recipientQueues to set
+	 */
+	public synchronized void setRecipientQueues(Map<UUID, Queue<Set<UUID>>> recipientQueues) {
+		this.recipientQueues = recipientQueues;
 	}
 
 	/**

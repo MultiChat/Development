@@ -3,19 +3,13 @@ package xyz.olivermartin.multichat.local.sponge.listeners.chat;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.channel.impl.SimpleMutableMessageChannel;
 
-import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
-import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
-import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 
 public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
@@ -30,7 +24,21 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 
 		Set<MessageReceiver> recipients = new HashSet<MessageReceiver>(originalRecipients);
 
-		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
+		Iterator<MessageReceiver> it = recipients.iterator();
+
+		while (it.hasNext()) {
+
+			MessageReceiver p = it.next();
+
+			if (p instanceof Player) {
+
+				if (!((Player) p).getUniqueId().equals(sender.getUniqueId())) it.remove(); 
+
+			}
+
+		}
+
+		/*LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
 
 		logger.debug("Creating new MultiChatMessageChannel for " + sender.getName());
 
@@ -93,7 +101,7 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 
 			}
 
-		}
+		}*/
 
 		for (MessageReceiver p : recipients) {
 			//logger.debug("...Adding player " + p.getName() + " to recipients list...");

@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common.channels;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -8,21 +9,26 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
-import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 
-public abstract class NetworkChannel {
+public abstract class LocalChannel {
 
 	private String id;
-	private ChannelInfo info;
+
+	private String desc;
+	private String format;
+	private List<String> aliases;
+
 	private ChannelManager manager;
 
-	public NetworkChannel(String id, ChannelInfo info, ChannelManager manager) {
+	public LocalChannel(String id, String desc, String format, List<String> aliases, ChannelManager manager) {
 		this.id = id;
-		this.info = info;
+
+		this.desc = desc;
+		this.format = format;
+		this.aliases = aliases;
+
 		this.manager = manager;
 	}
 
@@ -35,19 +41,27 @@ public abstract class NetworkChannel {
 	}
 
 	/**
-	 * Gets the info for this channel
-	 * @return the info
+	 * Gets the description of this channel
+	 * @return the description
 	 */
-	public ChannelInfo getInfo() {
-		return this.info;
+	public String getDiscription() {
+		return this.desc;
 	}
 
 	/**
-	 * Updates the ChannelInfo used for this channel
-	 * @param info The new info for the channel
+	 * Gets the format of this channel
+	 * @return the format
 	 */
-	public void updateInfo(ChannelInfo info) {
-		this.info = info;
+	public String getFormat() {
+		return this.format;
+	}
+
+	/**
+	 * Gets the aliases of this channel
+	 * @return the aliases
+	 */
+	public List<String> getAliases() {
+		return this.aliases;
 	}
 
 	/**
@@ -58,18 +72,17 @@ public abstract class NetworkChannel {
 		return this.manager;
 	}
 
-	public void sendMessage(CommandSender sender, String message) {
-
-		// If the sender can't speak then return
-		if (!canSpeak(sender)) return;
+	public void sendMessage(CommandSender sender, String message, String server) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
 			// Skip sending to this player if they shouldn't receive the message
 			if (receiver.getServer() == null // Receiver is between servers
-					|| !canView(receiver) // Receiver is not permitted to view message
 					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
 				continue;
+
+			// If not on specified server then return
+			if (!receiver.getServer().getInfo().getName().equals(server)) continue;
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
 				message = MultiChatUtil.approximateHexCodes(message);
@@ -79,33 +92,24 @@ public abstract class NetworkChannel {
 
 		}
 
-		// Trigger PostBroadcastEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
-
-		ConsoleManager.logDisplayMessage(message);
-
 	}
 
 	public void distributeMessage(ProxiedPlayer sender, String message, String format, Set<UUID> otherRecipients) {
 
 		// If the sender can't speak, or is between servers, then return
-		if (!canSpeak(sender) || sender.getServer() == null) return;
+		if (sender.getServer() == null) return;
 
-		String senderServer = sender.getServer().getInfo().getName();
 		String joined = format + message;
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
 			// Skip sending to this player if they shouldn't receive the message
 			if (receiver.getServer() == null // Receiver is between servers
-					|| !canView(receiver) // Receiver is not permitted to view message
 					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
 				continue;
 
-			// If receiver is on the same server as the sender AND NOT in the other recipients list
-			if (receiver.getServer().getInfo().getName().equals(senderServer)
-					&& !otherRecipients.contains(receiver.getUniqueId()))
-				continue;
+			// If receiver is NOT in the other recipients list then leave processing (as this is local only)
+			if (!otherRecipients.contains(receiver.getUniqueId())) continue;
 
 			// If receiver ignores sender
 			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
@@ -121,25 +125,6 @@ public abstract class NetworkChannel {
 
 		}
 
-		// Trigger PostGlobalChatEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
-
-		ConsoleManager.logChat(MultiChatUtil.approximateHexCodes(joined));
-
 	}
-
-	/**
-	 * Checks if this command sender is allowed to speak in the channel
-	 * @param sender The command sender
-	 * @return true if they are allowed to speak
-	 */
-	public abstract boolean canSpeak(CommandSender sender);
-
-	/**
-	 * Checks if this command sender is allowed to view the channel
-	 * @param sender The command sender
-	 * @return true if they are allowed to view
-	 */
-	public abstract boolean canView(CommandSender sender);
 
 }

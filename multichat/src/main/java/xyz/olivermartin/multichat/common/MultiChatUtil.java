@@ -31,7 +31,15 @@ public class MultiChatUtil {
 		}
 
 		for (String match : allMatches) {
-			String hexonly = match.split("#")[1];
+
+			String hexonly;
+			if (match.contains("#")) {
+				hexonly = match.split("#")[1];
+			} else if (match.contains("x")) {
+				hexonly = match.split("x")[1];
+			} else {
+				hexonly = match.split("X")[1];
+			}
 			String minecraftCode = hexToMinecraft(hexonly);
 			message = message.replace(match,"§"+minecraftCode);
 		}

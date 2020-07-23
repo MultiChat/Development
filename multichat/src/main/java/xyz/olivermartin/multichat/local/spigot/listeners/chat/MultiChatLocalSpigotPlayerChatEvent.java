@@ -1,15 +1,13 @@
 package xyz.olivermartin.multichat.local.spigot.listeners.chat;
 
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
-import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.listeners.chat.MultiChatLocalPlayerChatEvent;
 import xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlayer;
@@ -62,6 +60,33 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 	}
 
 	@Override
+	public void removeOtherPlayers() {
+
+		Iterator<Player> it = event.getRecipients().iterator();
+
+		while (it.hasNext()) {
+			Player p = it.next();
+			if (!p.getUniqueId().equals(player.getUniqueId())) it.remove();
+		}
+
+	}
+
+	@Override
+	public Set<UUID> getOtherRecipients() {
+
+		Set<UUID> rSet = new HashSet<UUID>();
+
+		for (Player p : event.getRecipients()) {
+			rSet.add(p.getUniqueId());
+		}
+
+		rSet.remove(player.getUniqueId());
+
+		return rSet;
+
+	}
+
+	/*@Override
 	public void removeIgnoredPlayersAndNonChannelMembersFromRecipients(LocalPseudoChannel channel) {
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[MultiChatLocalSpigotChatEvent] Removing Ignored Players and Non Channel Members from recipients!");
@@ -105,6 +130,6 @@ public class MultiChatLocalSpigotPlayerChatEvent implements MultiChatLocalPlayer
 			}
 		}
 
-	}
+	}*/
 
 }

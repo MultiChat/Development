@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
-import xyz.olivermartin.multichat.bungee.LegacyChannel;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
@@ -44,7 +43,7 @@ public class ProxyLocalCommunicationManager {
 
 			boolean globalChatServer = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true
 					&& !ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(server.getName());
-			String globalChatFormat = LegacyChannel.getGlobalChannel().getFormat();
+			String globalChatFormat = MultiChatProxy.getInstance().getChannelManager().getGlobalChannel().getInfo().getFormat();
 
 			out.writeUTF("global");
 			out.writeBoolean(globalChatServer);
@@ -277,7 +276,9 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendPlayerDataMessage(String playerName, String channel, LegacyChannel channelObject, ServerInfo server, boolean colour, boolean rgb) {
+	public static void sendPlayerDataMessage(String playerName, String channel, ServerInfo server, boolean colour, boolean rgb) {
+
+		//ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
 		sendIgnoreServerData(server);
 
@@ -292,8 +293,9 @@ public class ProxyLocalCommunicationManager {
 			oout.writeUTF(channel);
 			oout.writeBoolean(colour);
 			oout.writeBoolean(rgb);
-			oout.writeBoolean(channelObject.isWhitelistMembers());
-			oout.writeObject(channelObject.getMembers());
+			//oout.writeBoolean(channelObject.isWhitelistMembers());
+			//oout.writeObject(channelObject.getMembers());
+			oout.flush();
 
 		} catch (IOException e) {
 			e.printStackTrace();

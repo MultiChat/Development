@@ -1,9 +1,9 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
-import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
-import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
@@ -43,7 +43,13 @@ public abstract class LocalChatListenerHighest {
 
 		// Deal with ignores and channel members
 
-		Optional<LocalPseudoChannel> opChannelObject = chatManager.getChannelObject(channel);
+		Set<UUID> intendedRecipients = event.getOtherRecipients();
+
+		chatManager.queueRecipients(event.getPlayer().getUniqueId(), intendedRecipients);
+
+		event.removeOtherPlayers();
+
+		/*Optional<LocalPseudoChannel> opChannelObject = chatManager.getChannelObject(channel);
 
 		if (opChannelObject.isPresent()) {
 
@@ -58,7 +64,7 @@ public abstract class LocalChatListenerHighest {
 
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We didn't find a channel object to match that name... Probably not good!");
 
-		}
+		}*/
 
 		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into local chat, so at this point we are returning! Bye!");
