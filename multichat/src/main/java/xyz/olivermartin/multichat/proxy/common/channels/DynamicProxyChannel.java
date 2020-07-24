@@ -6,12 +6,12 @@ import java.util.UUID;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class DynamicNetworkChannel extends NetworkChannel {
+public class DynamicProxyChannel extends GenericProxyChannel {
 
 	private boolean blacklistMembers; // Should member list of the channel be a blacklist or whitelist
 	private Set<UUID> members; // Member list of the channel
 
-	public DynamicNetworkChannel(String id, ChannelInfo info, ChannelManager manager, boolean blacklistMembers, Set<UUID> members) {
+	public DynamicProxyChannel(String id, ProxyChannelInfo info, ChannelManager manager, boolean blacklistMembers, Set<UUID> members) {
 		super(id, info, manager);
 		this.blacklistMembers = blacklistMembers;
 		this.members = members;

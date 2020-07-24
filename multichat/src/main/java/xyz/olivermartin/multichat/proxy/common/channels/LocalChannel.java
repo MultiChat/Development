@@ -11,8 +11,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
-public abstract class LocalChannel {
+public class LocalChannel {
 
 	private String id;
 
@@ -23,6 +24,7 @@ public abstract class LocalChannel {
 	private ChannelManager manager;
 
 	public LocalChannel(String id, String desc, String format, List<String> aliases, ChannelManager manager) {
+
 		this.id = id;
 
 		this.desc = desc;
@@ -30,70 +32,35 @@ public abstract class LocalChannel {
 		this.aliases = aliases;
 
 		this.manager = manager;
+
 	}
 
-	/**
-	 * Gets the ID of this channel
-	 * @return the id
-	 */
+	@Override
 	public String getId() {
 		return this.id;
 	}
 
-	/**
-	 * Gets the description of this channel
-	 * @return the description
-	 */
-	public String getDiscription() {
+	@Override
+	public String getDescription() {
 		return this.desc;
 	}
 
-	/**
-	 * Gets the format of this channel
-	 * @return the format
-	 */
+	@Override
 	public String getFormat() {
 		return this.format;
 	}
 
-	/**
-	 * Gets the aliases of this channel
-	 * @return the aliases
-	 */
+	@Override
 	public List<String> getAliases() {
 		return this.aliases;
 	}
 
-	/**
-	 * Gets the manager for this channel
-	 * @return the manager
-	 */
+	@Override
 	public ChannelManager getManager() {
 		return this.manager;
 	}
 
-	public void sendMessage(CommandSender sender, String message, String server) {
-
-		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-
-			// Skip sending to this player if they shouldn't receive the message
-			if (receiver.getServer() == null // Receiver is between servers
-					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
-				continue;
-
-			// If not on specified server then return
-			if (!receiver.getServer().getInfo().getName().equals(server)) continue;
-
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				message = MultiChatUtil.approximateHexCodes(message);
-			}
-
-			receiver.sendMessage(TextComponent.fromLegacyText(message));
-
-		}
-
-	}
-
+	@Override
 	public void distributeMessage(ProxiedPlayer sender, String message, String format, Set<UUID> otherRecipients) {
 
 		// If the sender can't speak, or is between servers, then return
@@ -122,6 +89,39 @@ public abstract class LocalChannel {
 			}
 
 			receiver.sendMessage(TextComponent.fromLegacyText(joined));
+
+		}
+
+	}
+
+	@Override
+	public void sendMessage(ProxiedPlayer sender, String message) {
+		ProxyLocalCommunicationManager.sendPlayerDirectChatMessage(getId(), sender.getName(), message, sender.getServer().getInfo());
+	}
+
+	@Override
+	public void broadcastRawMessage(ProxiedPlayer sender, String message) {
+		broadcastRawServerMessage(sender, sender.getServer().getInfo().getName(), message);
+	}
+
+	@Override
+	public void broadcastRawServerMessage(CommandSender sender, String server, String message) {
+
+		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
+
+			// Skip sending to this player if they shouldn't receive the message
+			if (receiver.getServer() == null // Receiver is between servers
+					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
+				continue;
+
+			// If not on specified server then return
+			if (!receiver.getServer().getInfo().getName().equals(server)) continue;
+
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				message = MultiChatUtil.approximateHexCodes(message);
+			}
+
+			receiver.sendMessage(TextComponent.fromLegacyText(message));
 
 		}
 

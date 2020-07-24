@@ -22,7 +22,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ContextManager;
-import xyz.olivermartin.multichat.proxy.common.channels.GlobalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
@@ -384,7 +384,7 @@ public class MultiChat extends Plugin implements Listener {
 			MultiChatProxy.getInstance().registerContextManager(contextManager);
 
 			ChannelManager channelManager = new ChannelManager();
-			channelManager.setGlobalChannel(new GlobalChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), channelManager));
+			channelManager.setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), channelManager));
 			MultiChatProxy.getInstance().registerChannelManager(channelManager);
 
 			///

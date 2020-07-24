@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import net.md_5.bungee.api.CommandSender;
 
-public class ChannelInfo {
+public class ProxyChannelInfo {
 
 	private String desc; // A short description of the channel
 	private String format; // The format of this channel
@@ -16,7 +16,7 @@ public class ChannelInfo {
 	private String permission; // Permission to view / speak
 	private String viewPermission; // Permission to view only
 
-	public ChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases) {
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases) {
 
 		this.desc = desc;
 		this.format = format;

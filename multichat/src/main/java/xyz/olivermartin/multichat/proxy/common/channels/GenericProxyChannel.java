@@ -13,79 +13,44 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
-public abstract class NetworkChannel {
+public abstract class GenericProxyChannel implements ProxyChannel {
 
 	private String id;
-	private ChannelInfo info;
+	private ProxyChannelInfo info;
 	private ChannelManager manager;
 
-	public NetworkChannel(String id, ChannelInfo info, ChannelManager manager) {
+	public GenericProxyChannel(String id, ProxyChannelInfo info, ChannelManager manager) {
 		this.id = id;
 		this.info = info;
 		this.manager = manager;
 	}
 
-	/**
-	 * Gets the ID of this channel
-	 * @return the id
-	 */
+	@Override
 	public String getId() {
 		return this.id;
 	}
 
-	/**
-	 * Gets the info for this channel
-	 * @return the info
-	 */
-	public ChannelInfo getInfo() {
+	@Override
+	public ProxyChannelInfo getInfo() {
 		return this.info;
+	}
+
+	@Override
+	public ChannelManager getManager() {
+		return this.manager;
 	}
 
 	/**
 	 * Updates the ChannelInfo used for this channel
 	 * @param info The new info for the channel
 	 */
-	public void updateInfo(ChannelInfo info) {
+	public void updateInfo(ProxyChannelInfo info) {
 		this.info = info;
 	}
 
-	/**
-	 * Gets the manager for this channel
-	 * @return the manager
-	 */
-	public ChannelManager getManager() {
-		return this.manager;
-	}
-
-	public void sendMessage(CommandSender sender, String message) {
-
-		// If the sender can't speak then return
-		if (!canSpeak(sender)) return;
-
-		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
-
-			// Skip sending to this player if they shouldn't receive the message
-			if (receiver.getServer() == null // Receiver is between servers
-					|| !canView(receiver) // Receiver is not permitted to view message
-					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
-				continue;
-
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				message = MultiChatUtil.approximateHexCodes(message);
-			}
-
-			receiver.sendMessage(TextComponent.fromLegacyText(message));
-
-		}
-
-		// Trigger PostBroadcastEvent
-		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
-
-		ConsoleManager.logDisplayMessage(message);
-
-	}
-
+	@Override
 	public void distributeMessage(ProxiedPlayer sender, String message, String format, Set<UUID> otherRecipients) {
 
 		// If the sender can't speak, or is between servers, then return
@@ -125,6 +90,40 @@ public abstract class NetworkChannel {
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
 
 		ConsoleManager.logChat(MultiChatUtil.approximateHexCodes(joined));
+
+	}
+
+	@Override
+	public void sendMessage(ProxiedPlayer sender, String message) {
+		ProxyLocalCommunicationManager.sendPlayerDirectChatMessage(getId(), sender.getName(), message, sender.getServer().getInfo());
+	}
+
+	@Override
+	public void broadcastRawMessage(CommandSender sender, String message) {
+
+		// If the sender can't speak then return
+		if (!canSpeak(sender)) return;
+
+		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
+
+			// Skip sending to this player if they shouldn't receive the message
+			if (receiver.getServer() == null // Receiver is between servers
+					|| !canView(receiver) // Receiver is not permitted to view message
+					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
+				continue;
+
+			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+				message = MultiChatUtil.approximateHexCodes(message);
+			}
+
+			receiver.sendMessage(TextComponent.fromLegacyText(message));
+
+		}
+
+		// Trigger PostBroadcastEvent
+		ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("cast", message));
+
+		ConsoleManager.logDisplayMessage(message);
 
 	}
 

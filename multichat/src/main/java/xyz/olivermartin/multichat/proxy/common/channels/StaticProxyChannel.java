@@ -2,7 +2,7 @@ package xyz.olivermartin.multichat.proxy.common.channels;
 
 import net.md_5.bungee.api.CommandSender;
 
-public class StaticNetworkChannel extends NetworkChannel {
+public class StaticProxyChannel extends GenericProxyChannel {
 
 	/*public static class Builder {
 
@@ -87,7 +87,7 @@ public class StaticNetworkChannel extends NetworkChannel {
 
 	}*/
 
-	public StaticNetworkChannel(String id, ChannelInfo info, ChannelManager manager) {
+	public StaticProxyChannel(String id, ProxyChannelInfo info, ChannelManager manager) {
 		super(id, info, manager);
 	}
 
