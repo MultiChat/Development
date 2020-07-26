@@ -20,7 +20,7 @@ public class LocalSpongeChatManager extends LocalChatManager {
 
 		if (rgb) {
 			message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
-			message = message.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "§");
+			message = message.replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
 			message = MultiChatUtil.approximateHexCodes(message);
 			return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
 		} else {

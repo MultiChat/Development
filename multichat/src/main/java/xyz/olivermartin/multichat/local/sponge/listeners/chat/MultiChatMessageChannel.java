@@ -107,6 +107,7 @@ public class MultiChatMessageChannel extends SimpleMutableMessageChannel {
 			//logger.debug("...Adding player " + p.getName() + " to recipients list...");
 			addMember(p);
 		}
+		
 		addMember(Sponge.getServer().getConsole());
 
 	}
