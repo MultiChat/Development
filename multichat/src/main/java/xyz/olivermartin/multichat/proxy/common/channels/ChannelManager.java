@@ -54,6 +54,16 @@ public class ChannelManager {
 		}
 	}
 
+	public ChannelMode getChannelMode(UUID uuid) {
+
+		if (selectedChannels.containsKey(uuid)) {
+			if (selectedChannels.get(uuid).equals("local")) return ChannelMode.LOCAL;
+		}
+
+		return ChannelMode.PROXY;
+
+	}
+
 	public GlobalStaticProxyChannel getGlobalChannel() {
 		return this.global;
 	}

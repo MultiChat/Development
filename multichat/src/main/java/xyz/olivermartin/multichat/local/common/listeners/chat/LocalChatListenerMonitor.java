@@ -32,14 +32,14 @@ public abstract class LocalChatListenerMonitor {
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - The message isn't cancelled!");
 
 		// IF ITS LOCAL CHAT WE CAN IGNORE IT
-		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
+		/*if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We are speaking into local chat, so at this point we are returning! Bye!");
 			return;
-		}
+		}*/
 
 		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We are in global chat... SO TIME TO FORWARD TO PROXY!");
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - TIME TO FORWARD TO PROXY!");
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - First we are sending their meta data...");
 		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(event.getPlayer().getUniqueId());
@@ -79,7 +79,7 @@ public abstract class LocalChatListenerMonitor {
 
 		}
 
-		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), "global", proxyMessage, proxyFormat, originalRecipients);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), channel, proxyMessage, proxyFormat, originalRecipients);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Aaaaand we sent it to the proxy! ALL DONE.");
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - UUID: " + event.getPlayer().getUniqueId());

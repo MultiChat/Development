@@ -15,17 +15,13 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
 public class LocalChannel {
 
-	private String id;
-
 	private String desc;
 	private String format;
 	private List<String> aliases;
 
 	private ChannelManager manager;
 
-	public LocalChannel(String id, String desc, String format, List<String> aliases, ChannelManager manager) {
-
-		this.id = id;
+	public LocalChannel(String desc, String format, List<String> aliases, ChannelManager manager) {
 
 		this.desc = desc;
 		this.format = format;
@@ -35,32 +31,22 @@ public class LocalChannel {
 
 	}
 
-	@Override
-	public String getId() {
-		return this.id;
-	}
-
-	@Override
 	public String getDescription() {
 		return this.desc;
 	}
 
-	@Override
 	public String getFormat() {
 		return this.format;
 	}
 
-	@Override
 	public List<String> getAliases() {
 		return this.aliases;
 	}
 
-	@Override
 	public ChannelManager getManager() {
 		return this.manager;
 	}
 
-	@Override
 	public void distributeMessage(ProxiedPlayer sender, String message, String format, Set<UUID> otherRecipients) {
 
 		// If the sender can't speak, or is between servers, then return
@@ -72,7 +58,7 @@ public class LocalChannel {
 
 			// Skip sending to this player if they shouldn't receive the message
 			if (receiver.getServer() == null // Receiver is between servers
-					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
+					|| manager.isHidden(receiver.getUniqueId(), "local")) // Receiver has hidden this channel
 				continue;
 
 			// If receiver is NOT in the other recipients list then leave processing (as this is local only)
@@ -94,24 +80,17 @@ public class LocalChannel {
 
 	}
 
-	@Override
 	public void sendMessage(ProxiedPlayer sender, String message) {
-		ProxyLocalCommunicationManager.sendPlayerDirectChatMessage(getId(), sender.getName(), message, sender.getServer().getInfo());
+		ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("local", sender.getName(), message, sender.getServer().getInfo());
 	}
 
-	@Override
-	public void broadcastRawMessage(ProxiedPlayer sender, String message) {
-		broadcastRawServerMessage(sender, sender.getServer().getInfo().getName(), message);
-	}
-
-	@Override
-	public void broadcastRawServerMessage(CommandSender sender, String server, String message) {
+	public void broadcastRawMessage(CommandSender sender, String server, String message) {
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
 			// Skip sending to this player if they shouldn't receive the message
 			if (receiver.getServer() == null // Receiver is between servers
-					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
+					|| manager.isHidden(receiver.getUniqueId(), "local")) // Receiver has hidden this channel
 				continue;
 
 			// If not on specified server then return

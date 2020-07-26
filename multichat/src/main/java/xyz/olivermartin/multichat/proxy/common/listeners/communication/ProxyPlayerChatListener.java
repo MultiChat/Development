@@ -99,7 +99,8 @@ public class ProxyPlayerChatListener implements Listener {
 				break;
 
 			case "local":
-				DebugManager.log("{multichat:pchat} LOCAL SPY MESSAGE - Not yet implemented...?");
+				DebugManager.log("{multichat:pchat} LOCAL SPY MESSAGE - Not yet implemented...?"); // TODO ?!
+				channelManager.getLocalChannel().distributeMessage(player, message, format, otherRecipients);
 				break;
 
 			default:

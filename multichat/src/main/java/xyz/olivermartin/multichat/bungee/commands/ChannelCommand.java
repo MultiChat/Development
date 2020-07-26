@@ -141,7 +141,7 @@ public class ChannelCommand extends Command {
 
 				// Update local channel info
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), channelManager.getChannel(p).getId(), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), channelManager.getChannel(p), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
 				}
 
 			}

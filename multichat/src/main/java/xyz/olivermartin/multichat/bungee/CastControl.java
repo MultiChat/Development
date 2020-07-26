@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.channels.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.ProxyChannel;
-import xyz.olivermartin.multichat.proxy.common.channels.GenericProxyChannel;
 
 /**
  * Cast Control
@@ -20,15 +19,14 @@ public class CastControl {
 
 	public static Map<String,String> castList = new HashMap<String,String>();
 
-	public static void sendCast(String castName, String castMessage, ProxyChannel channel, ProxiedPlayer player) {
-		MultiChatProxy
+	public static void sendCast(String castName, String castMessage, ProxyChannel channel, CommandSender sender) {
 		castMessage = ChatControl.applyChatRules(castMessage, "casts", "").get();
-		chatStream.sendMessage(sender, castList.get(castName.toLowerCase()) + " " + castMessage);
+		channel.broadcastRawMessage(sender, castList.get(castName.toLowerCase()) + " " + castMessage);
 	}
-	
-	public static void sendCast(String castName, String castMessage, GenericProxyChannel proxyChannel, CommandSender sender) {
+
+	public static void sendCast(String castName, String castMessage, LocalChannel channel, String server, CommandSender sender) {
 		castMessage = ChatControl.applyChatRules(castMessage, "casts", "").get();
-		chatStream.sendMessage(sender, castList.get(castName.toLowerCase()) + " " + castMessage);
+		channel.broadcastRawMessage(sender, server, castList.get(castName.toLowerCase()) + " " + castMessage);
 	}
 
 	public static void addCast(String castName, String castFormat) {
