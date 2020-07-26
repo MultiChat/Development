@@ -5,8 +5,8 @@ import java.util.Map;
 
 import net.md_5.bungee.api.CommandSender;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
-import xyz.olivermartin.multichat.proxy.common.channels.LocalChannel;
-import xyz.olivermartin.multichat.proxy.common.channels.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 
 /**
  * Cast Control

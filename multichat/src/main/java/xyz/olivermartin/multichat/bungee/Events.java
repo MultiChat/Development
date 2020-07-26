@@ -34,7 +34,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelMode;
-import xyz.olivermartin.multichat.proxy.common.channels.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 
 /**
  * Events Manager

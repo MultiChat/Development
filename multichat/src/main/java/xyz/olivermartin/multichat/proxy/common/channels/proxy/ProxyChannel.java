@@ -1,10 +1,11 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
 import java.util.Set;
 import java.util.UUID;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 public interface ProxyChannel {
 

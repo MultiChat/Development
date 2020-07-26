@@ -1,9 +1,10 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
 import java.util.List;
 import java.util.Optional;
 
 import net.md_5.bungee.api.CommandSender;
+import xyz.olivermartin.multichat.proxy.common.contexts.Context;
 
 public class ProxyChannelInfo {
 

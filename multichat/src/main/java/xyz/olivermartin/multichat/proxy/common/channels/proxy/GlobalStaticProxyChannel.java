@@ -1,8 +1,9 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
 import java.util.List;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 public class GlobalStaticProxyChannel extends StaticProxyChannel {
 

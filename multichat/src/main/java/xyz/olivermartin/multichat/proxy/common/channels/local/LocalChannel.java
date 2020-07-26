@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.channels.local;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +12,7 @@ import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 public class LocalChannel {
 

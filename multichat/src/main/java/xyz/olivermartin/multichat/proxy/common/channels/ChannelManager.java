@@ -10,6 +10,10 @@ import java.util.UUID;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 
 public class ChannelManager {
 

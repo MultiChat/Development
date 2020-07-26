@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.contexts;
 
 import java.util.List;
 

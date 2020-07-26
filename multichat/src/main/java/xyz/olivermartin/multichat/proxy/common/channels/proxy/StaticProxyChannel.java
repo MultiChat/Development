@@ -1,6 +1,7 @@
-package xyz.olivermartin.multichat.proxy.common.channels;
+package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
 import net.md_5.bungee.api.CommandSender;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 public class StaticProxyChannel extends GenericProxyChannel {
 

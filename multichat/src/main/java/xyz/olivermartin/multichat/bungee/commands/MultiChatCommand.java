@@ -15,9 +15,9 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
-import xyz.olivermartin.multichat.proxy.common.channels.GlobalStaticProxyChannel;
-import xyz.olivermartin.multichat.proxy.common.channels.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 
 /**
  * MultiChat (Admin) Command
