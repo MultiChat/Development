@@ -15,8 +15,9 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.channels.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.GlobalContext;
+import xyz.olivermartin.multichat.proxy.common.channels.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.LocalChannel;
 
 /**
  * MultiChat (Admin) Command
@@ -155,6 +156,7 @@ public class MultiChatCommand extends Command {
 					MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
 
 					MultiChatProxy.getInstance().getChannelManager().setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), MultiChatProxy.getInstance().getChannelManager()));
+					MultiChatProxy.getInstance().getChannelManager().setLocalChannel(new LocalChannel("Local Channel", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("local"), MultiChatProxy.getInstance().getChannelManager()));
 
 					///
 
