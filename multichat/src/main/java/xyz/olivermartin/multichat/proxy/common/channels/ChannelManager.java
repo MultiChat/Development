@@ -104,7 +104,7 @@ public class ChannelManager {
 	}
 
 	public boolean select(UUID uuid, String channelId) {
-		if (existsProxyChannel(channelId)) {
+		if (existsProxyChannel(channelId) || channelId.equals("local")) {
 			selectedChannels.put(uuid, channelId);
 			return true;
 		} else {
