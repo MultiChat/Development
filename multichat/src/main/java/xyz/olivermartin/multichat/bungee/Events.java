@@ -2,31 +2,18 @@ package xyz.olivermartin.multichat.bungee;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import com.olivermartin410.plugins.TChatInfo;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
-import de.myzelyam.api.vanish.BungeeVanishAPI;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
-import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
@@ -47,12 +34,10 @@ public class Events implements Listener {
 
 	public static List<UUID> mcbPlayers = new ArrayList<UUID>();
 
-	private static List<UUID> MCToggle = new ArrayList<UUID>();
-	private static List<UUID> ACToggle = new ArrayList<UUID>();
-	private static List<UUID> GCToggle = new ArrayList<UUID>();
+	public static List<UUID> MCToggle = new ArrayList<UUID>();
+	public static List<UUID> ACToggle = new ArrayList<UUID>();
+	public static List<UUID> GCToggle = new ArrayList<UUID>();
 	public static Map<UUID, UUID> PMToggle = new HashMap<UUID, UUID>();
-
-	public static Set<UUID> hiddenStaff = new HashSet<UUID>();
 
 	public static boolean toggleMC(UUID uuid) {
 
@@ -415,8 +400,8 @@ public class Events implements Listener {
 
 				// Message passes through to spigot here
 
-				if (hiddenStaff.contains(player.getUniqueId())) {
-					hiddenStaff.remove(player.getUniqueId());
+				if (ds.getHiddenStaff().contains(player.getUniqueId())) {
+					ds.getHiddenStaff().remove(player.getUniqueId());
 				}
 
 			} else {
@@ -427,237 +412,6 @@ public class Events implements Listener {
 		}
 		//TODO ?}
 		//TODO? }
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onLogin(PostLoginEvent event) {
-
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
-
-		ProxiedPlayer player = event.getPlayer();
-		UUID uuid = player.getUniqueId();
-		boolean firstJoin = false;
-
-		if (player.hasPermission("multichat.staff.mod")) {
-
-			if (!ds.getModChatPreferences().containsKey(uuid)) {
-
-				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
-				ds.getModChatPreferences().put(uuid, chatinfo);
-
-			}
-		}
-
-		if (player.hasPermission("multichat.staff.admin")) {
-
-			if (!ds.getAdminChatPreferences().containsKey(uuid)) {
-
-				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
-				ds.getAdminChatPreferences().put(uuid, chatinfo);
-
-			}
-		}
-
-		PlayerMetaManager.getInstance().registerPlayer(uuid, event.getPlayer().getName());
-
-		if (!ds.getViewedChats().containsKey(uuid)) {
-
-			ds.getViewedChats().put(uuid, null);
-			ConsoleManager.log("Registered player " + player.getName());
-
-		}
-
-		String defaultChannel = MultiChatProxy.getInstance().getContextManager().getGlobalContext().getDefaultChannel();
-		boolean forceChannel = MultiChatProxy.getInstance().getContextManager().getGlobalContext().isForceChannel();
-
-		if (!ChatModeManager.getInstance().existsPlayer(uuid)) {
-
-			boolean globalMode;
-
-			if (!defaultChannel.equalsIgnoreCase("local")) {
-				globalMode = true;
-			} else {
-				globalMode = false;
-			}
-			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
-			firstJoin = true;
-			//ConsoleManager.log("Created new global chat entry for " + player.getName());
-
-		}
-
-		if (forceChannel) {
-
-			boolean globalMode;
-			if (!defaultChannel.equalsIgnoreCase("local")) {
-				globalMode = true;
-			} else {
-				globalMode = false;
-			}
-			ChatModeManager.getInstance().registerPlayer(uuid, globalMode);
-
-		}
-
-		// Set player to appropriate channels
-		if (ChatModeManager.getInstance().isGlobal(uuid)) {
-			channelManager.select(uuid, "global");
-		} else {
-			channelManager.select(uuid, "local");
-		}
-
-		//BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo());
-
-		if (UUIDNameManager.existsUUID(uuid)) {
-			UUIDNameManager.removeUUID(uuid);
-		}
-
-		UUIDNameManager.addNew(uuid, player.getName());
-
-		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
-
-		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
-
-			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
-			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
-				return;
-			}
-
-			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
-			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
-			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
-			String privateWelcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("private_welcome_message");
-
-			ChatManipulation chatman = new ChatManipulation();
-
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
-			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
-
-			boolean broadcastWelcome = true;
-			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("welcome")) {
-				broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome");
-			}
-
-			boolean privateWelcome = false;
-			if (ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().contains("private_welcome")) {
-				privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome");
-			}
-
-			boolean broadcastJoin = !player.hasPermission("multichat.staff.silentjoin");
-			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-				if (broadcastJoin) {
-
-					if (firstJoin && broadcastWelcome) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
-					}
-
-					if (firstJoin && privateWelcome && onlineplayer.getName().equals(player.getName())) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
-					}
-
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
-
-				} else {
-
-					hiddenStaff.add(player.getUniqueId());
-
-					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
-					}
-
-				}
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onLogout(PlayerDisconnectEvent event) {
-
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-
-		ProxiedPlayer player = event.getPlayer();
-		UUID uuid = event.getPlayer().getUniqueId();
-
-		if (hiddenStaff.contains(uuid)) {
-			hiddenStaff.remove(uuid);
-		}
-
-		if (mcbPlayers.contains(uuid)) {
-			mcbPlayers.remove(uuid);
-		}
-
-		if (MCToggle.contains(uuid)) {
-			MCToggle.remove(uuid);
-		}
-		if (ACToggle.contains(uuid)) {
-			ACToggle.remove(uuid);
-		}
-		if (GCToggle.contains(uuid)) {
-			GCToggle.remove(uuid);
-		}
-
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
-
-		if (config.getBoolean("session_ignore")) {
-			ChatControl.unignoreAll(uuid);
-		}
-
-		// Reset their spam data on logout (nothing is stored persistantly)
-		ChatControl.spamPardonPlayer(uuid);
-
-		if (ds.getViewedChats().containsKey(uuid)) {
-			ds.getViewedChats().remove(uuid);
-		}
-
-		PlayerMetaManager.getInstance().unregisterPlayer(uuid);
-
-		ConsoleManager.log("Un-Registered player " + player.getName());
-
-		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
-
-			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");
-			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentquit");
-
-			ChatManipulation chatman = new ChatManipulation();
-
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-
-			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-				if (!player.hasPermission("multichat.staff.silentjoin")) {
-
-					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
-
-				} else {
-
-					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
-					}
-				}
-			}
-		}
-	}
-
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onServerSwitch(ServerSwitchEvent event) {
-		// Tell the new server the player's channel preference
-		ProxyServer.getInstance().getScheduler().schedule(MultiChatProxy.getInstance().getPlugin(), new Runnable() {
-
-			public void run() {
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), MultiChatProxy.getInstance().getChannelManager().getChannel(event.getPlayer()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
-				ProxyLocalCommunicationManager.sendLegacyServerData(event.getPlayer().getServer().getInfo());
-			}
-
-		}, 500L, TimeUnit.MILLISECONDS);
-
 	}
 
 }

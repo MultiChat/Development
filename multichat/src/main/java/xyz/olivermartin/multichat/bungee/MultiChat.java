@@ -25,6 +25,9 @@ import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
+import xyz.olivermartin.multichat.proxy.common.listeners.ProxyLoginListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.ProxyLogoutListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.ProxyServerSwitchListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
@@ -281,6 +284,11 @@ public class MultiChat extends Plugin implements Listener {
 			// Register listeners
 			getProxy().getPluginManager().registerListener(this, new Events());
 			getProxy().getPluginManager().registerListener(this, this);
+
+			// New listeners (1.10+)
+			getProxy().getPluginManager().registerListener(this, new ProxyLoginListener());
+			getProxy().getPluginManager().registerListener(this, new ProxyLogoutListener());
+			getProxy().getPluginManager().registerListener(this, new ProxyServerSwitchListener());
 
 			// Communication Channels
 			getProxy().registerChannel(CommChannels.PLAYER_META); // pmeta

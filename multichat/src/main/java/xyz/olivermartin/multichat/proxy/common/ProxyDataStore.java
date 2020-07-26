@@ -2,8 +2,10 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.olivermartin410.plugins.TChatInfo;
@@ -42,6 +44,9 @@ public class ProxyDataStore {
 
 	// Who has social spy on?
 	private List<UUID> socialSpy = new ArrayList<UUID>();
+
+	// Which staff are hidden?
+	private Set<UUID> hiddenStaff = new HashSet<UUID>();
 
 	public synchronized boolean isChatFrozen() {
 		return this.chatFrozen;
@@ -147,6 +152,20 @@ public class ProxyDataStore {
 	 */
 	public void setSocialSpy(List<UUID> socialSpy) {
 		this.socialSpy = socialSpy;
+	}
+
+	/**
+	 * @return the hiddenStaff
+	 */
+	public Set<UUID> getHiddenStaff() {
+		return hiddenStaff;
+	}
+
+	/**
+	 * @param hiddenStaff the hiddenStaff to set
+	 */
+	public void setHiddenStaff(Set<UUID> hiddenStaff) {
+		this.hiddenStaff = hiddenStaff;
 	}
 
 }

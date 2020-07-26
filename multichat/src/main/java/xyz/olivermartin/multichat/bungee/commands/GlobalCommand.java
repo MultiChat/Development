@@ -9,7 +9,6 @@ import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
@@ -97,8 +96,8 @@ public class GlobalCommand extends Command {
 							// Send message directly to global chat...
 							ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("global", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
-							if (Events.hiddenStaff.contains(player.getUniqueId())) {
-								Events.hiddenStaff.remove(player.getUniqueId());
+							if (MultiChatProxy.getInstance().getDataStore().getHiddenStaff().contains(player.getUniqueId())) {
+								MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(player.getUniqueId());
 							}
 
 						} else {
