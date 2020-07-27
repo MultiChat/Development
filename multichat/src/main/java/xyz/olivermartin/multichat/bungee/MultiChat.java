@@ -8,12 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerSwitchEvent;
-import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
@@ -57,7 +53,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyUUIDNameFileSt
  * @author Oliver Martin (Revilo410)
  *
  */
-public class MultiChat extends Plugin implements Listener {
+public class MultiChat extends Plugin {
 
 	public static final String LATEST_VERSION = "1.10";
 
@@ -133,107 +129,6 @@ public class MultiChat extends Plugin implements Listener {
 
 	}
 
-	@EventHandler
-	public void onLogin(PostLoginEvent event) {
-
-		fetchDisplayNameOnce(event.getPlayer().getName());
-
-	}
-
-	@EventHandler
-	public void onServerSwitch(ServerSwitchEvent event) {
-
-		fetchDisplayNameOnce(event.getPlayer().getName());
-
-	}
-
-	public void fetchDisplayNameOnce(final String playername) {
-
-		getProxy().getScheduler().schedule(this, new Runnable() {
-
-			public void run() {
-
-				try {
-
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
-
-						ProxiedPlayer player = getProxy().getPlayer(playername);
-						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
-						}
-
-					}
-				} catch (NullPointerException ex) { /* EMPTY */ }
-
-			}
-
-		}, 0L, TimeUnit.SECONDS);
-
-		getProxy().getScheduler().schedule(this, new Runnable() {
-
-			public void run() {
-
-				try {
-
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
-
-						ProxiedPlayer player = getProxy().getPlayer(playername);
-						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
-						}
-
-					}
-				}
-
-				catch (NullPointerException ex) { /* EMPTY */ }
-			}
-
-		}, 1L, TimeUnit.SECONDS);
-
-		getProxy().getScheduler().schedule(this, new Runnable() {
-
-			public void run() {
-
-				try {
-
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
-
-						ProxiedPlayer player = getProxy().getPlayer(playername);
-						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
-						}
-
-					}
-
-				} catch (NullPointerException ex) { /* EMPTY */ }
-
-			}
-
-		}, 2L, TimeUnit.SECONDS);
-
-		getProxy().getScheduler().schedule(this, new Runnable() {
-
-			public void run() {
-
-				try {
-
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
-
-						ProxiedPlayer player = getProxy().getPlayer(playername);
-						if (player.getServer() != null) {
-							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
-						}
-
-					}
-
-				} catch (NullPointerException ex) { /* EMPTY */ }
-
-			}
-
-		}, 4L, TimeUnit.SECONDS);
-
-	}
-
 	public void onEnable() {
 
 		MultiChatProxy.getInstance().registerPlugin(this);
@@ -286,7 +181,6 @@ public class MultiChat extends Plugin implements Listener {
 
 			// Register listeners
 			getProxy().getPluginManager().registerListener(this, new Events());
-			getProxy().getPluginManager().registerListener(this, this);
 
 			// New listeners (1.10+)
 			getProxy().getPluginManager().registerListener(this, new ProxyLoginListener());
