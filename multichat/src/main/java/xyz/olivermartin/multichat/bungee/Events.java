@@ -17,6 +17,7 @@ import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
@@ -133,6 +134,7 @@ public class Events implements Listener {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
+		ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
 		ProxiedPlayer player = (ProxiedPlayer) event.getSender();
 
 		// New null pointer checks
@@ -344,94 +346,64 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			//TODO? I removed these checks... I think thats good... if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
+			String message = event.getMessage();
 
-			//TODO ? if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
-
-			/*if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-				if (player.getServer() != null) {
-					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
-				}
-			}*/
-
-			if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
-
-				String message = event.getMessage();
-
-				if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
-					MessageManager.sendMessage(player, "mute_cannot_send_message");
-					event.setCancelled(true);
-					return;
-				}
-
-				DebugManager.log(player.getName() + "- about to check for spam");
-
-				if (ChatControl.handleSpam(player, message, "global_chat")) {
-					DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
-					event.setCancelled(true);
-					return;
-				}
-
-				Optional<String> crm;
-
-				crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
-
-				if (crm.isPresent()) {
-					message = crm.get();
-					event.setMessage(message);
-				} else {
-					event.setCancelled(true);
-					return;
-				}
-
-				if (!player.hasPermission("multichat.chat.link")) {
-					message = ChatControl.replaceLinks(message);
-					event.setMessage(message);
-				}
-
-				DebugManager.log("Does player have ALL colour permission? " + (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")));
-
-				DebugManager.log("Does player have simple colour permission? " + (player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")));
-
-				DebugManager.log("Does player have rgb colour permission? " + (player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
-
-				// Let server know players channel preference
-
-				String channelFormat;
-
-				switch (channelManager.getChannel(player)) {
-
-				case "global":
-					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-					break;
-				case "local":
-					channelFormat = channelManager.getLocalChannel().getFormat();
-					break;
-				default:
-					if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
-						channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
-					} else {
-						channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-					}
-					break;
-				}
-
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), channelFormat, player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
-
-				// Message passes through to spigot here
-
-				if (ds.getHiddenStaff().contains(player.getUniqueId())) {
-					ds.getHiddenStaff().remove(player.getUniqueId());
-				}
-
-			} else {
-				MessageManager.sendMessage(player, "freezechat_frozen");
+			if (!chatManager.canPlayerSendChat(player, message)) {
 				event.setCancelled(true);
+				return;
+			}
+
+			Optional<String> preProcessedMessage = chatManager.preProcessMessage(player, message);
+
+			if (!preProcessedMessage.isPresent()) {
+				event.setCancelled(true);
+				return;
+			}
+
+			message = preProcessedMessage.get();
+			event.setMessage(message);
+
+			DebugManager.log("Does player have ALL colour permission? " + chatManager.hasLegacyColourPermission(player));
+			DebugManager.log("Does player have simple colour permission? " + chatManager.hasSimpleColourPermission(player));
+			DebugManager.log("Does player have rgb colour permission? " + chatManager.hasRGBColourPermission(player));
+
+			// Let server know players channel preference
+
+			String channelFormat;
+
+			switch (channelManager.getChannel(player)) {
+
+			case "global":
+				channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+				break;
+			case "local":
+				channelFormat = channelManager.getLocalChannel().getFormat();
+				break;
+			default:
+				if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
+					channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
+				} else {
+					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+				}
+				break;
+			}
+
+			ProxyLocalCommunicationManager.sendPlayerDataMessage(
+					player.getName(),
+					channelManager.getChannel(player),
+					channelFormat,
+					player.getServer().getInfo(),
+					chatManager.hasSimpleColourPermission(player),
+					chatManager.hasRGBColourPermission(player));
+
+			// Message passes through to spigot here
+
+			if (ds.getHiddenStaff().contains(player.getUniqueId())) {
+				ds.getHiddenStaff().remove(player.getUniqueId());
 			}
 
 		}
-		//TODO ?}
-		//TODO? }
+
 	}
 
 }

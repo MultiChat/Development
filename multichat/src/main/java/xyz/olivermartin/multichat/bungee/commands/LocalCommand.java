@@ -5,13 +5,12 @@ import java.util.Optional;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
@@ -32,6 +31,7 @@ public class LocalCommand extends Command {
 	public void execute(CommandSender sender, String[] args) {
 
 		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
+		ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
 
 		if ((sender instanceof ProxiedPlayer)) {
 
@@ -51,73 +51,53 @@ public class LocalCommand extends Command {
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 				}
 
-				if ((!MultiChatProxy.getInstance().getDataStore().isChatFrozen()) || (player.hasPermission("multichat.chat.always"))) {
+				if (!chatManager.canPlayerSendChat(player, message)) {
+					return;
+				}
 
-					if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
-						MessageManager.sendMessage(player, "mute_cannot_send_message");
-						return;
-					}
+				Optional<String> preProcessedMessage = chatManager.preProcessMessage(player, message);
 
-					DebugManager.log(player.getName() + "- about to check for spam");
+				if (!preProcessedMessage.isPresent()) {
+					return;
+				}
 
-					if (ChatControl.handleSpam(player, message, "global_chat")) {
-						DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
-						return;
-					}
+				message = preProcessedMessage.get();
 
-					Optional<String> crm;
+				// If they had this channel hidden, then unhide it...
+				if (channelManager.isHidden(player.getUniqueId(), "local")) {
+					channelManager.show(player.getUniqueId(), "local");
+					MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
+				}
 
-					crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+				// Let server know players channel preference
 
-					if (crm.isPresent()) {
-						message = crm.get();
+				String channelFormat;
+
+				switch (channelManager.getChannel(player)) {
+
+				case "global":
+					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					break;
+				case "local":
+					channelFormat = channelManager.getLocalChannel().getFormat();
+					break;
+				default:
+					if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
+						channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
 					} else {
-						return;
-					}
-
-					if (!player.hasPermission("multichat.chat.link")) {
-						message = ChatControl.replaceLinks(message);
-					}
-
-					// If they had this channel hidden, then unhide it...
-					if (channelManager.isHidden(player.getUniqueId(), "local")) {
-						channelManager.show(player.getUniqueId(), "local");
-						MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
-					}
-
-					// Let server know players channel preference
-					
-					String channelFormat;
-
-					switch (channelManager.getChannel(player)) {
-
-					case "global":
 						channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-						break;
-					case "local":
-						channelFormat = channelManager.getLocalChannel().getFormat();
-						break;
-					default:
-						if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
-							channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
-						} else {
-							channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-						}
-						break;
 					}
-					
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), channelFormat, player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+					break;
+				}
 
-					// Message passes through to spigot here
-					// Send message directly to local chat...
-					ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("local", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), channelFormat, player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
-					if (MultiChatProxy.getInstance().getDataStore().getHiddenStaff().contains(player.getUniqueId())) {
-						MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(player.getUniqueId());
-					}
+				// Message passes through to spigot here
+				// Send message directly to local chat...
+				ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("local", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
 
-				} else {
-					MessageManager.sendMessage(player, "freezechat_frozen");
+				if (MultiChatProxy.getInstance().getDataStore().getHiddenStaff().contains(player.getUniqueId())) {
+					MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(player.getUniqueId());
 				}
 
 			}

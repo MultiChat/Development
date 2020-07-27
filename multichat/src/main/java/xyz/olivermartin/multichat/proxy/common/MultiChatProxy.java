@@ -35,6 +35,7 @@ public class MultiChatProxy {
 	private ProxyBackupManager backupManager;
 	private ContextManager contextManager;
 	private ChannelManager channelManager;
+	private ProxyChatManager chatManager;
 
 	/* END ATTRIBUTES */
 
@@ -102,6 +103,14 @@ public class MultiChatProxy {
 
 	public void registerChannelManager(ChannelManager channelManager) {
 		this.channelManager = channelManager;
+	}
+
+	public ProxyChatManager getChatManager() {
+		return this.chatManager;
+	}
+
+	public void registerChatManager(ProxyChatManager chatManager) {
+		this.chatManager = chatManager;
 	}
 
 }

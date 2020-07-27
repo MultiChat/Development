@@ -14,6 +14,7 @@ import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
@@ -296,6 +297,9 @@ public class MultiChat extends Plugin {
 
 			// TODO This is just a test channel
 			channelManager.registerProxyChannel(new StaticProxyChannel("test", new ProxyChannelInfo("A test channel", "&8[&7TEST&8] &f%DISPLAYNAME%&f: ", false, globalContext, new ArrayList<String>(), "multichat.chat.channel.test", "multichat.chat.channel.test.view"), channelManager));
+
+			ProxyChatManager chatManager = new ProxyChatManager();
+			MultiChatProxy.getInstance().registerChatManager(chatManager);
 
 			///
 
