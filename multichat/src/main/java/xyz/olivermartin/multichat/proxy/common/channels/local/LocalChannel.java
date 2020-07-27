@@ -74,7 +74,7 @@ public class LocalChannel {
 
 			String finalMessage = joined;
 
-			if (manager.isLocalSpy(receiver)) {
+			if (manager.isLocalSpy(receiver) && !otherRecipients.contains(receiver.getUniqueId())) {
 				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + joined;
 			}
 
@@ -109,7 +109,7 @@ public class LocalChannel {
 
 			String finalMessage = message;
 
-			if (manager.isLocalSpy(receiver)) {
+			if (manager.isLocalSpy(receiver) && !receiver.getServer().getInfo().getName().equals(server)) {
 				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + message;
 			}
 
