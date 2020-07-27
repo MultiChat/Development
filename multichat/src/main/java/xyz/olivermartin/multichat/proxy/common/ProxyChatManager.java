@@ -58,7 +58,7 @@ public class ProxyChatManager {
 	 * @param message The message they are trying to send
 	 * @return true if they are allowed to send a message
 	 */
-	public boolean canPlayerSendChat(ProxiedPlayer player, String message) {
+	private boolean canPlayerSendChat(ProxiedPlayer player, String message) {
 
 		// Check if chat is frozen
 		if (MultiChatProxy.getInstance().getDataStore().isChatFrozen() && !player.hasPermission("multichat.chat.always")) {
@@ -94,7 +94,7 @@ public class ProxyChatManager {
 	 * @param message The message they are trying to send
 	 * @return the new processed string if they are allowed to send the message, or empty if the message should be cancelled
 	 */
-	public Optional<String> preProcessMessage(ProxiedPlayer player, String message) {
+	private Optional<String> preProcessMessage(ProxiedPlayer player, String message) {
 
 		Optional<String> crm;
 
@@ -111,6 +111,31 @@ public class ProxyChatManager {
 		}
 
 		return Optional.of(message);
+
+	}
+
+	/**
+	 * <p>Handles the process of getting a message ready to send from the proxy</p>
+	 * <p>This includes the following:
+	 * <ul>
+	 *     <li>Makes sure chat is not frozen</li>
+	 *     <li>Makes sure the player is not muted by MultiChat</li>
+	 *     <li>Makes sure the player is not spamming</li>
+	 *     <li>Applies regex rules and actions to message</li>
+	 *     <li>Filters links if they player does not have permission</li>
+	 * </ul>
+	 * </p>
+	 * @param player The player to check
+	 * @param message The message they are trying to send
+	 * @return the new processed string if they are allowed to send the message, or empty if the message should be cancelled
+	 */
+	public Optional<String> handleChatMessage(ProxiedPlayer player, String message) {
+
+		if (!canPlayerSendChat(player, message)) {
+			return Optional.empty();
+		}
+
+		return preProcessMessage(player, message);
 
 	}
 

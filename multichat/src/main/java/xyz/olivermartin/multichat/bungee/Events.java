@@ -346,21 +346,17 @@ public class Events implements Listener {
 
 		if ((!event.isCancelled()) && (!event.isCommand())) {
 
-			String message = event.getMessage();
+			String message = event.getMessage(); // Current message
+			
+			Optional<String> optionalMessage = chatManager.handleChatMessage(player, message); // Processed message
 
-			if (!chatManager.canPlayerSendChat(player, message)) {
+			if (!optionalMessage.isPresent()) {
+				// Player not permitted to send this message, so cancel it
 				event.setCancelled(true);
 				return;
 			}
 
-			Optional<String> preProcessedMessage = chatManager.preProcessMessage(player, message);
-
-			if (!preProcessedMessage.isPresent()) {
-				event.setCancelled(true);
-				return;
-			}
-
-			message = preProcessedMessage.get();
+			message = optionalMessage.get();
 			event.setMessage(message);
 
 			DebugManager.log("Does player have ALL colour permission? " + chatManager.hasLegacyColourPermission(player));

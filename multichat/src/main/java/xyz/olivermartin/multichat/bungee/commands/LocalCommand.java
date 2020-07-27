@@ -51,17 +51,14 @@ public class LocalCommand extends Command {
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 				}
 
-				if (!chatManager.canPlayerSendChat(player, message)) {
+				Optional<String> optionalMessage = chatManager.handleChatMessage(player, message); // Processed message
+
+				if (!optionalMessage.isPresent()) {
+					// Player not permitted to send this message, so cancel it
 					return;
 				}
 
-				Optional<String> preProcessedMessage = chatManager.preProcessMessage(player, message);
-
-				if (!preProcessedMessage.isPresent()) {
-					return;
-				}
-
-				message = preProcessedMessage.get();
+				message = optionalMessage.get();
 
 				// If they had this channel hidden, then unhide it...
 				if (channelManager.isHidden(player.getUniqueId(), "local")) {
