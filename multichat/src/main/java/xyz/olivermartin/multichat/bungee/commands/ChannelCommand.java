@@ -10,6 +10,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 
 /**
  * Chat Channel Command
@@ -66,6 +67,14 @@ public class ChannelCommand extends Command {
 					} else {
 
 						if (channelManager.existsProxyChannel(operand)) {
+
+							ProxyChannel proxyChannel = channelManager.getProxyChannel(operand).get();
+
+							if (!proxyChannel.getInfo().hasSpeakPermission(sender)) {
+								MessageManager.sendMessage(sender, "command_channel_switch_no_permission");
+								return;
+							}
+
 							ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
 							channelManager.select(((ProxiedPlayer)sender).getUniqueId(), operand);
 							MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
