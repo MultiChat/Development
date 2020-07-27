@@ -10,6 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 public class PrivateMessageManager {
 
@@ -37,9 +38,9 @@ public class PrivateMessageManager {
 
 		message = MultiChatUtil.reformatRGB(message);
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_OUT_FORMAT);
+		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_IN_FORMAT);
+		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_SPY_FORMAT);
 
 		String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, sender, target);
 		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
@@ -97,9 +98,9 @@ public class PrivateMessageManager {
 
 		message = MultiChatUtil.reformatRGB(message);
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_OUT_FORMAT);
+		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_IN_FORMAT);
+		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_SPY_FORMAT);
 
 		String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
 		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
@@ -150,9 +151,9 @@ public class PrivateMessageManager {
 
 		CommandSender sender = ProxyServer.getInstance().getConsole();
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_OUT_FORMAT);
+		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_IN_FORMAT);
+		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.PM_SPY_FORMAT);
 
 		String finalmessage = chatfix.replaceMsgConsoleSenderVars(messageoutformat, message, target);
 		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));

@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 public class PlayerMetaManager {
 
@@ -53,17 +54,17 @@ public class PlayerMetaManager {
 
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
-		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true && player != null) {
+		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true && player != null) {
 
 			DebugManager.log("[PlayerMetaManager] Fetch Spigot Display Names is true");
 
-			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("set_display_name")) {
+			if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains(ConfigValues.Config.SET_DISPLAY_NAME)) {
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("set_display_name")) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.SET_DISPLAY_NAME)) {
 
 					DebugManager.log("[PlayerMetaManager] MultiChat is in charge of display names");
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains(ConfigValues.Config.DISPLAY_NAME_FORMAT)) {
 						//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
 
 						DebugManager.log("[PlayerMetaManager] Set as: " + opm.get().getSpigotDisplayname());
@@ -88,7 +89,7 @@ public class PlayerMetaManager {
 
 			} else {
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("display_name_format")) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains(ConfigValues.Config.DISPLAY_NAME_FORMAT)) {
 					//player.setDisplayName(opm.get().getDisplayName(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("display_name_format")));
 					// TODO Maybe new option for "fetch_spigot_displayname"?
 

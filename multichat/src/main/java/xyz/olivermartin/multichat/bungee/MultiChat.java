@@ -23,6 +23,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 import xyz.olivermartin.multichat.proxy.common.listeners.ProxyLoginListener;
@@ -114,7 +115,7 @@ public class MultiChat extends Plugin implements Listener {
 
 			public void run() {
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						if (player.getServer() != null) {
@@ -152,7 +153,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
@@ -172,7 +173,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
@@ -193,7 +194,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {
@@ -214,7 +215,7 @@ public class MultiChat extends Plugin implements Listener {
 
 				try {
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxiedPlayer player = getProxy().getPlayer(playername);
 						if (player.getServer() != null) {

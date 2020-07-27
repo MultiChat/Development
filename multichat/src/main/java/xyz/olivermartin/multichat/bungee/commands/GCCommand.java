@@ -20,6 +20,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
  * Group Chat Messaging Command
@@ -123,7 +124,7 @@ public class GCCommand extends Command {
 			return;
 		}
 
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("groupchat.format");
+		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
 		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

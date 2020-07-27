@@ -14,6 +14,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
  * Global Command
@@ -46,11 +47,11 @@ public class GlobalCommand extends Command {
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 				String message = MultiChatUtil.getMessageFromArgs(args);
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("global") == true) {
+				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.GLOBAL) == true) {
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global").contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_GLOBAL).contains(player.getServer().getInfo().getName())) {
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 

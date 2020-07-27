@@ -12,6 +12,7 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
  * Staff List Command
@@ -72,7 +73,7 @@ public class StaffListCommand extends Command {
 
 							if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
 
-								if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+								if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 									ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 								}
 

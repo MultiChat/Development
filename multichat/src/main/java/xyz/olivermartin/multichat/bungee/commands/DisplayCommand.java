@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
 /**
@@ -51,7 +52,7 @@ public class DisplayCommand extends Command {
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			if (onlineplayer.getServer() != null) {
-				if (!config.getStringList("no_global").contains(
+				if (!config.getStringList(ConfigValues.Config.NO_GLOBAL).contains(
 						onlineplayer.getServer().getInfo().getName())) {
 					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
 						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));

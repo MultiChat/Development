@@ -20,6 +20,7 @@ import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
  * Message Command
@@ -74,7 +75,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 								Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
 
-								if (config.contains("toggle_pm") ? config.getBoolean("toggle_pm") == false : false) {
+								if (config.contains(ConfigValues.Config.TOGGLE_PM) ? config.getBoolean(ConfigValues.Config.TOGGLE_PM) == false : false) {
 
 									toggleresult = Events.togglePM(player.getUniqueId(), target.getUniqueId());
 									MessageManager.sendMessage(sender, "command_msg_no_toggle");
@@ -148,16 +149,16 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (permittedToMessage) {
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 						}
 
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-							if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+							if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 								if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
 									ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
@@ -183,13 +184,13 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					// New console target stuff here!
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 
 					}
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer)sender);
 
@@ -213,13 +214,13 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
+					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 					}
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
 
