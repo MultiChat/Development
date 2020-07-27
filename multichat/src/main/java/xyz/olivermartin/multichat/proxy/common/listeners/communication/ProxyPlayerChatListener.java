@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 
 /**
  * Listener for communication over the Player Chat communication channel
@@ -104,7 +105,18 @@ public class ProxyPlayerChatListener implements Listener {
 				break;
 
 			default:
-				DebugManager.log("{multichat:pchat} Channel: " + channel + ", is not recognised");
+
+				Optional<ProxyChannel> opProxyChannel = channelManager.getProxyChannel(channel);
+
+				if (opProxyChannel.isPresent()) {
+
+					ProxyChannel proxyChannel = opProxyChannel.get();
+					proxyChannel.distributeMessage(player, message, format, otherRecipients);
+
+				} else {
+					DebugManager.log("{multichat:pchat} Channel: " + channel + ", is not recognised");
+				}
+
 				return;
 
 			}

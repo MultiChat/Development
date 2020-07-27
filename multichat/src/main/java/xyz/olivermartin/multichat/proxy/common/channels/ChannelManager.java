@@ -86,6 +86,15 @@ public class ChannelManager {
 		this.local = local;
 	}
 
+	public void registerProxyChannel(ProxyChannel channel) {
+		proxyChannels.put(channel.getId(), channel);
+	}
+
+	public void unregisterProxyChannel(String channelId) {
+		if (channelId.equals("global")) return;
+		proxyChannels.remove(channelId);
+	}
+
 	public boolean existsProxyChannel(String channelId) {
 		return proxyChannels.containsKey(channelId);
 	}

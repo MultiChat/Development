@@ -276,7 +276,7 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendPlayerDataMessage(String playerName, String channel, ServerInfo server, boolean colour, boolean rgb) {
+	public static void sendPlayerDataMessage(String playerName, String channel, String channelFormat, ServerInfo server, boolean colour, boolean rgb) {
 
 		//ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
@@ -291,6 +291,7 @@ public class ProxyLocalCommunicationManager {
 			oout.writeUTF(playerName);
 			// Channel part
 			oout.writeUTF(channel);
+			oout.writeUTF(channelFormat);
 			oout.writeBoolean(colour);
 			oout.writeBoolean(rgb);
 			//oout.writeBoolean(channelObject.isWhitelistMembers());

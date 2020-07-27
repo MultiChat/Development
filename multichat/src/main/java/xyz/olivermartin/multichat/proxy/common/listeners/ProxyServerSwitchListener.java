@@ -9,6 +9,7 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
 public class ProxyServerSwitchListener implements Listener {
 
@@ -19,7 +20,28 @@ public class ProxyServerSwitchListener implements Listener {
 		ProxyServer.getInstance().getScheduler().schedule(MultiChatProxy.getInstance().getPlugin(), new Runnable() {
 
 			public void run() {
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), MultiChatProxy.getInstance().getChannelManager().getChannel(event.getPlayer()), event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
+
+				ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
+				String channelFormat;
+
+				switch (channelManager.getChannel(event.getPlayer())) {
+
+				case "global":
+					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					break;
+				case "local":
+					channelFormat = channelManager.getLocalChannel().getFormat();
+					break;
+				default:
+					if (channelManager.existsProxyChannel(channelManager.getChannel(event.getPlayer()))) {
+						channelFormat = channelManager.getProxyChannel(channelManager.getChannel(event.getPlayer())).get().getInfo().getFormat();
+					} else {
+						channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					}
+					break;
+				}
+
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(event.getPlayer().getName(), MultiChatProxy.getInstance().getChannelManager().getChannel(event.getPlayer()), channelFormat, event.getPlayer().getServer().getInfo(), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.simple")||event.getPlayer().hasPermission("multichat.chat.color.simple")), (event.getPlayer().hasPermission("multichat.chat.colour")||event.getPlayer().hasPermission("multichat.chat.color")||event.getPlayer().hasPermission("multichat.chat.colour.rgb")||event.getPlayer().hasPermission("multichat.chat.color.rgb")));
 				ProxyLocalCommunicationManager.sendLegacyServerData(event.getPlayer().getServer().getInfo());
 			}
 

@@ -39,6 +39,11 @@ public class LocalDataStore {
 	private String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
 	/**
+	 * Channel formats received from the proxy
+	 */
+	private Map<String, String> channelFormats = new HashMap<String, String>();
+
+	/**
 	 * Chat Queues to handle the local global hack
 	 */
 	private Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
@@ -244,6 +249,20 @@ public class LocalDataStore {
 	 */
 	public synchronized void setLegacy(boolean legacy) {
 		this.legacy = legacy;
+	}
+
+	/**
+	 * @return the channelFormats
+	 */
+	public Map<String, String> getChannelFormats() {
+		return channelFormats;
+	}
+
+	/**
+	 * @param channelFormats the channelFormats to set
+	 */
+	public void setChannelFormats(Map<String, String> channelFormats) {
+		this.channelFormats = channelFormats;
 	}
 
 }

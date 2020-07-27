@@ -193,8 +193,8 @@ public abstract class LocalChatManager {
 			format = config.getLocalChatFormat();
 
 			break;
-
-		default:
+			
+		case "global":
 
 			// Global Chat
 
@@ -211,6 +211,11 @@ public abstract class LocalChatManager {
 			}
 
 			break;
+			
+			default:
+				
+				format = MultiChatLocal.getInstance().getDataStore().getChannelFormats().getOrDefault(channel, MultiChatLocal.getInstance().getDataStore().getGlobalChatFormat());
+				break;
 
 		}
 

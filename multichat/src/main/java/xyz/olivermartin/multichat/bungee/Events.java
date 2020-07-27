@@ -397,7 +397,26 @@ public class Events implements Listener {
 
 				// Let server know players channel preference
 
-				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+				String channelFormat;
+
+				switch (channelManager.getChannel(player)) {
+
+				case "global":
+					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					break;
+				case "local":
+					channelFormat = channelManager.getLocalChannel().getFormat();
+					break;
+				default:
+					if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
+						channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
+					} else {
+						channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					}
+					break;
+				}
+
+				ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), channelFormat, player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 				// Message passes through to spigot here
 

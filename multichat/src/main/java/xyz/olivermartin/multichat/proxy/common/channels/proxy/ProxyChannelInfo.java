@@ -17,7 +17,7 @@ public class ProxyChannelInfo {
 	private String permission; // Permission to view / speak
 	private String viewPermission; // Permission to view only
 
-	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases) {
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission, String viewPermission) {
 
 		this.desc = desc;
 		this.format = format;
@@ -25,9 +25,17 @@ public class ProxyChannelInfo {
 		this.context = context;
 		this.aliases = aliases;
 
-		this.permission = null;
-		this.viewPermission = null;
+		this.permission = permission;
+		this.viewPermission = viewPermission;
 
+	}
+
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission) {
+		this(desc, format, unhideable, context, aliases, permission, permission);
+	}
+
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases) {
+		this(desc, format, unhideable, context, aliases, null);
 	}
 
 	/**

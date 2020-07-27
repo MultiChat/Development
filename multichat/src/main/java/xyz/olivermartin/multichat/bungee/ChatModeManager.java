@@ -57,7 +57,7 @@ public class ChatModeManager {
 
 		// TODO
 		//ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), LegacyChannel.getChannel(uuid).getName(), LegacyChannel.getChannel(uuid), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
-		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), "local", player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), "local", channelManager.getLocalChannel().getFormat(), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 
@@ -86,7 +86,7 @@ public class ChatModeManager {
 			MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
 		}
 
-		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), "global", player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
+		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), "global", channelManager.getGlobalChannel().getInfo().getFormat(), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
 
 	}
 

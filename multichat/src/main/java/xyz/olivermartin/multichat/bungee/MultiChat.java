@@ -23,6 +23,8 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannelInfo;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.StaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
@@ -397,6 +399,9 @@ public class MultiChat extends Plugin implements Listener {
 			channelManager.setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), channelManager));
 			channelManager.setLocalChannel(new LocalChannel("Local Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("local"), channelManager));
 			MultiChatProxy.getInstance().registerChannelManager(channelManager);
+
+			// TODO This is just a test channel
+			channelManager.registerProxyChannel(new StaticProxyChannel("test", new ProxyChannelInfo("A test channel", "&8[&7TEST&8] &f%DISPLAYNAME%&f: ", false, globalContext, new ArrayList<String>(), "multichat.chat.channel.test", "multichat.chat.channel.test.view"), channelManager));
 
 			///
 

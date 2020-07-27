@@ -39,6 +39,9 @@ public abstract class LocalPlayerDataListener {
 				playerChannels.put(player.getUniqueId(), channelName);
 			}
 
+			String channelFormat = message.readUTF();
+			MultiChatLocal.getInstance().getDataStore().getChannelFormats().put(channelName, channelFormat);
+
 			boolean colour = message.readBoolean();
 
 			logger.debug("Colour: " + colour);

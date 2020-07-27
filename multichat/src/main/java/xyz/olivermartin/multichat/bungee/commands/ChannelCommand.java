@@ -64,7 +64,15 @@ public class ChannelCommand extends Command {
 						ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
 						MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
 					} else {
-						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
+
+						if (channelManager.existsProxyChannel(operand)) {
+							ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
+							channelManager.select(((ProxiedPlayer)sender).getUniqueId(), operand);
+							MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
+						} else {
+							MessageManager.sendMessage(sender, "command_channel_does_not_exist");
+						}
+
 					}
 					break;
 
@@ -139,9 +147,29 @@ public class ChannelCommand extends Command {
 					break;
 				}
 
+				ProxiedPlayer player = (ProxiedPlayer) sender;
+				String channelFormat;
+
+				switch (channelManager.getChannel(player)) {
+
+				case "global":
+					channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					break;
+				case "local":
+					channelFormat = channelManager.getLocalChannel().getFormat();
+					break;
+				default:
+					if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
+						channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
+					} else {
+						channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
+					}
+					break;
+				}
+
 				// Update local channel info
 				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), channelManager.getChannel(p), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
+					ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(), channelManager.getChannel(p), channelFormat, p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
 				}
 
 			}
