@@ -21,8 +21,8 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyLoginListener implements Listener {
 

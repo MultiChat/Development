@@ -18,7 +18,7 @@ import xyz.olivermartin.multichat.bungee.GroupManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * The Group Command

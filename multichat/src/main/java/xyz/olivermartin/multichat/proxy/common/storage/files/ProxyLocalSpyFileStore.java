@@ -6,18 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
-
-import com.olivermartin410.plugins.TChatInfo;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
-public class ProxyAdminChatFileStore extends ProxyGenericFileStore {
+public class ProxyLocalSpyFileStore extends ProxyGenericFileStore {
 
-	public ProxyAdminChatFileStore(String fileName, File fileDirectory) {
+	public ProxyLocalSpyFileStore(String fileName, File fileDirectory) {
 		super(fileName, fileDirectory);
 	}
 
@@ -26,15 +24,15 @@ public class ProxyAdminChatFileStore extends ProxyGenericFileStore {
 	protected boolean loadFile(File file) {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-		HashMap<UUID, TChatInfo> result = null;
+		List<UUID> result = null;
 
 		try {
 
 			FileInputStream saveFile = new FileInputStream(file);
 			ObjectInputStream in = new ObjectInputStream(saveFile);
-			result = (HashMap<UUID, TChatInfo>)in.readObject();
+			result = (List<UUID>)in.readObject();
 			in.close();
-			ds.setAdminChatPreferences(result);
+			ds.setLocalSpy(result);
 			return true;
 
 		} catch (IOException|ClassNotFoundException e) {
@@ -53,13 +51,13 @@ public class ProxyAdminChatFileStore extends ProxyGenericFileStore {
 
 		try {
 
-			FileOutputStream stream = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(stream);
-			out.writeObject(ds.getAdminChatPreferences());
+			FileOutputStream saveFile = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(saveFile);
+			out.writeObject(ds.getLocalSpy());
 			out.close();
 			return true;
 
-		} catch (IOException e) {
+		} catch (IOException e)	{
 
 			e.printStackTrace();
 			return false;

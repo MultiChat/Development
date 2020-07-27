@@ -98,6 +98,12 @@ local:
 - local
 - l
 
+# The localspy command has the following aliases (other than /mclocalspy)
+localspy:
+- localspy
+- localchatspy
+- lspy
+
 # The mod chat colour command has the following aliases (other than /mcmcc)
 mcc:
 - mcc

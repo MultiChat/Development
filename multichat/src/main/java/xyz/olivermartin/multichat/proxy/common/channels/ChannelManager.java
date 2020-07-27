@@ -125,4 +125,9 @@ public class ChannelManager {
 		}
 	}
 
+	public boolean isLocalSpy(ProxiedPlayer player) {
+		return MultiChatProxy.getInstance().getDataStore().getLocalSpy().contains(player.getUniqueId())
+				&& player.hasPermission("multichat.chat.spy");
+	}
+
 }

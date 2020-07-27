@@ -15,7 +15,6 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
 import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
@@ -32,6 +31,7 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerMetaListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
@@ -41,6 +41,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGlobalChatFile
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyIgnoreFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyLocalSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyMuteFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
 import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
@@ -245,6 +246,9 @@ public class MultiChat extends Plugin {
 			fileStoreManager.registerFileStore("multichatuuidname.dat",
 					new ProxyUUIDNameFileStore("MultiChatUUIDName.dat", configDirectory));
 
+			fileStoreManager.registerFileStore("localspyinfo.dat",
+					new ProxyLocalSpyFileStore("LocalSpyInfo.dat", configDirectory));
+
 			MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
 			// Set up chat control stuff
@@ -379,6 +383,7 @@ public class MultiChat extends Plugin {
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocal());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getGlobal());
 			getProxy().getPluginManager().registerCommand(this, CommandManager.getChannel());
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getLocalspy());
 		}
 
 		// Register staff list command /staff
@@ -432,6 +437,7 @@ public class MultiChat extends Plugin {
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocal());
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getGlobal());
 			getProxy().getPluginManager().unregisterCommand(CommandManager.getChannel());
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocalspy());
 		}
 
 		// Unregister staff list command /staff

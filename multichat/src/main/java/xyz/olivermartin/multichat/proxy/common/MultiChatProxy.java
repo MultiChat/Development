@@ -5,6 +5,7 @@ import java.io.File;
 import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 
 /**

@@ -100,6 +100,12 @@ local:
 - local
 - l
 
+# La commande 'localspy' possède les alias suivants (autres que /mclocalspy)
+localspy:
+- localspy
+- localchatspy
+- lspy
+
 # La commande 'mcc' possède les alias suivants (autres que /mcmcc)
 mcc:
 - mcc

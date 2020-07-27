@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.proxy.common;
+package xyz.olivermartin.multichat.proxy.common.storage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +44,9 @@ public class ProxyDataStore {
 
 	// Who has social spy on?
 	private List<UUID> socialSpy = new ArrayList<UUID>();
+
+	// Who has local spy on?
+	private List<UUID> localSpy = new ArrayList<UUID>();
 
 	// Which staff are hidden?
 	private Set<UUID> hiddenStaff = new HashSet<UUID>();
@@ -166,6 +169,20 @@ public class ProxyDataStore {
 	 */
 	public void setHiddenStaff(Set<UUID> hiddenStaff) {
 		this.hiddenStaff = hiddenStaff;
+	}
+
+	/**
+	 * @return the localSpy
+	 */
+	public List<UUID> getLocalSpy() {
+		return localSpy;
+	}
+
+	/**
+	 * @param localSpy the localSpy to set
+	 */
+	public void setLocalSpy(List<UUID> localSpy) {
+		this.localSpy = localSpy;
 	}
 
 }

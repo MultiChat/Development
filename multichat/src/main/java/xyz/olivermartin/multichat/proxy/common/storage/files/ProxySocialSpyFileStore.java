@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
 public class ProxySocialSpyFileStore extends ProxyGenericFileStore {

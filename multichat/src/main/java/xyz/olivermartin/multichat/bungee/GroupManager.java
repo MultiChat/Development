@@ -8,8 +8,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * Group Chat Management Class

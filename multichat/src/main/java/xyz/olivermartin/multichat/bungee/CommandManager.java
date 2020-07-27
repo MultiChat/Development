@@ -17,6 +17,7 @@ import xyz.olivermartin.multichat.bungee.commands.GroupListCommand;
 import xyz.olivermartin.multichat.bungee.commands.HelpMeCommand;
 import xyz.olivermartin.multichat.bungee.commands.IgnoreCommand;
 import xyz.olivermartin.multichat.bungee.commands.LocalCommand;
+import xyz.olivermartin.multichat.bungee.commands.LocalSpyCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCCommand;
 import xyz.olivermartin.multichat.bungee.commands.MCCommand;
 import xyz.olivermartin.multichat.bungee.commands.MsgCommand;
@@ -49,6 +50,7 @@ public class CommandManager {
 		helpme = new HelpMeCommand();
 		ignore = new IgnoreCommand();
 		local = new LocalCommand();
+		localspy = new LocalSpyCommand();
 		mcc = new MCCCommand();
 		mc = new MCCommand();
 		msg = new MsgCommand();
@@ -79,6 +81,7 @@ public class CommandManager {
 	private static Command helpme;
 	private static Command ignore;
 	private static Command local;
+	private static Command localspy;
 	private static Command mcc;
 	private static Command mc;
 	private static Command msg;
@@ -418,6 +421,18 @@ public class CommandManager {
 	public static void setUsecast(Command usecast) {
 		CommandManager.usecast = usecast;
 	}
+	/**
+	 * @return the localspy
+	 */
+	public static Command getLocalspy() {
+		return localspy;
+	}
+	/**
+	 * @param localspy the localspy to set
+	 */
+	public static void setLocalspy(Command localspy) {
+		CommandManager.localspy = localspy;
+	}
 
 	/**
 	 * Generates new instances of all commands
@@ -439,6 +454,7 @@ public class CommandManager {
 		helpme = new HelpMeCommand();
 		ignore = new IgnoreCommand();
 		local = new LocalCommand();
+		localspy = new LocalSpyCommand();
 		mcc = new MCCCommand();
 		mc = new MCCommand();
 		msg = new MsgCommand();

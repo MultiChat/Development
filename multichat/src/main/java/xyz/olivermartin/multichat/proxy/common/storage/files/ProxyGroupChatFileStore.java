@@ -11,7 +11,7 @@ import java.util.HashMap;
 import com.olivermartin410.plugins.TGroupChatInfo;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
 public class ProxyGroupChatFileStore extends ProxyGenericFileStore {

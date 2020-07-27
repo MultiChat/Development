@@ -12,7 +12,7 @@ import java.util.UUID;
 import com.olivermartin410.plugins.TChatInfo;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
 public class ProxyStaffChatFileStore extends ProxyGenericFileStore {

@@ -15,10 +15,10 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
  * @author Oliver Martin (Revilo410)
  *
  */
-public class SocialSpyCommand extends Command {
+public class LocalSpyCommand extends Command {
 
-	public SocialSpyCommand() {
-		super("mcsocialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("socialspy").toArray(new String[0]));
+	public LocalSpyCommand() {
+		super("mclocalspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("localspy").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -29,21 +29,21 @@ public class SocialSpyCommand extends Command {
 
 			if (args.length < 1) {
 
-				if (ds.getSocialSpy().contains(((ProxiedPlayer)sender).getUniqueId())) {
-					ds.getSocialSpy().remove(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_socialspy_disabled");
+				if (ds.getLocalSpy().contains(((ProxiedPlayer)sender).getUniqueId())) {
+					ds.getLocalSpy().remove(((ProxiedPlayer)sender).getUniqueId());
+					MessageManager.sendMessage(sender, "command_localspy_disabled");
 				} else {
-					ds.getSocialSpy().add(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_socialspy_enabled");
+					ds.getLocalSpy().add(((ProxiedPlayer)sender).getUniqueId());
+					MessageManager.sendMessage(sender, "command_localspy_enabled");
 				}
 
 			} else {
-				MessageManager.sendMessage(sender, "command_socialspy_usage");
-				MessageManager.sendMessage(sender, "command_socialspy_desc");
+				MessageManager.sendMessage(sender, "command_localspy_usage");
+				MessageManager.sendMessage(sender, "command_localspy_desc");
 			}
 
 		} else {
-			MessageManager.sendMessage(sender, "command_socialspy_only_players");
+			MessageManager.sendMessage(sender, "command_localspy_only_players");
 		}
 	}
 }

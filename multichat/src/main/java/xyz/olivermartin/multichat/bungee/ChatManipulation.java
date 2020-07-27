@@ -7,7 +7,7 @@ import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * LEGACY ** TO BE REMOVED ** Chat Manipulation Class

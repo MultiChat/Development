@@ -18,12 +18,12 @@ import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
-import xyz.olivermartin.multichat.proxy.common.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelMode;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * Events Manager

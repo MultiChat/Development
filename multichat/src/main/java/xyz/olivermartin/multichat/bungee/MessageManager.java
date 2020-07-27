@@ -177,6 +177,12 @@ public class MessageManager {
 		defaultMessages.put("command_local_enabled_2", "&bYour messages will only go to this server!");
 		defaultMessages.put("command_local_only_players", "&cOnly players can change their chat state");
 
+		defaultMessages.put("command_localspy_disabled", "&cLocal Spy Disabled");
+		defaultMessages.put("command_localspy_enabled", "&bLocal Spy Enabled");
+		defaultMessages.put("command_localspy_usage", "&bUsage: /localspy");
+		defaultMessages.put("command_localspy_desc", "&bToggles if the user has local spy enabled or disabled");
+		defaultMessages.put("command_localspy_only_players", "&cOnly players can toggle localspy");
+
 		defaultMessages.put("command_mcc_usage", "&aUsage: /mcc <chatcolorcode> <namecolorcode>");
 		defaultMessages.put("command_mcc_only_players", "&cOnly players can change chat colours!");
 		defaultMessages.put("command_mcc_updated", "&aMod-Chat colours updated!");

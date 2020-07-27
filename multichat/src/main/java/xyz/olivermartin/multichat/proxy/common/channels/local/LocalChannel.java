@@ -63,8 +63,8 @@ public class LocalChannel {
 					|| manager.isHidden(receiver.getUniqueId(), "local")) // Receiver has hidden this channel
 				continue;
 
-			// If receiver is NOT in the other recipients list then leave processing (as this is local only)
-			if (!otherRecipients.contains(receiver.getUniqueId())) continue;
+			// If receiver is NOT in the other recipients list then leave processing (as this is local only) (unless they are spying)
+			if (!otherRecipients.contains(receiver.getUniqueId()) && !manager.isLocalSpy(receiver)) continue;
 
 			// If receiver ignores sender
 			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
@@ -72,8 +72,14 @@ public class LocalChannel {
 				continue;
 			}
 
+			String finalMessage = joined;
+
+			if (manager.isLocalSpy(receiver)) {
+				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + joined;
+			}
+
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(joined)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(joined));
 			}
@@ -98,13 +104,19 @@ public class LocalChannel {
 					|| manager.isHidden(receiver.getUniqueId(), "local")) // Receiver has hidden this channel
 				continue;
 
-			// If not on specified server then return
-			if (!receiver.getServer().getInfo().getName().equals(server)) continue;
+			// If not on specified server then return (unless spying)
+			if (!receiver.getServer().getInfo().getName().equals(server) && !manager.isLocalSpy(receiver)) continue;
+
+			String finalMessage = message;
+
+			if (manager.isLocalSpy(receiver)) {
+				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + message;
+			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(message)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(finalMessage)));
 			} else {
-				receiver.sendMessage(TextComponent.fromLegacyText(message));
+				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}
 
 		}
