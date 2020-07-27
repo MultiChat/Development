@@ -81,7 +81,7 @@ public class LocalChannel {
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(finalMessage)));
 			} else {
-				receiver.sendMessage(TextComponent.fromLegacyText(joined));
+				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}
 
 		}
