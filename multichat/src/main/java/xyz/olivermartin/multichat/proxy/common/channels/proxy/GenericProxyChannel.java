@@ -3,6 +3,8 @@ package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.ChatColor;
+
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -104,6 +106,9 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 
 		// If the sender can't speak then return
 		if (!canSpeak(sender)) return;
+
+		message = MultiChatUtil.reformatRGB(message);
+		message = ChatColor.translateAlternateColorCodes('&', message);
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
