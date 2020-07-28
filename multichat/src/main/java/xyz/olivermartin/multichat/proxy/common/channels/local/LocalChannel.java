@@ -75,7 +75,9 @@ public class LocalChannel {
 
 			String finalMessage = joined;
 
-			if (manager.isLocalSpy(receiver) && !otherRecipients.contains(receiver.getUniqueId())) {
+			if (manager.isLocalSpy(receiver)
+					&& !otherRecipients.contains(receiver.getUniqueId())
+					&& !receiver.getUniqueId().equals(sender.getUniqueId())) {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, format, message);
 			}
 
