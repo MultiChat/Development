@@ -89,6 +89,11 @@ public class ConfigValues {
 		 */
 		String GLOBAL_FORMAT = "globalformat";
 
+		/**
+		 * STRING :: Format for local spy
+		 */
+		String LOCAL_SPY_FORMAT = "localspyformat";
+
 		// Group Chats
 
 		public static interface GroupChat {

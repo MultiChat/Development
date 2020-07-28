@@ -150,6 +150,27 @@ no_global: []
 
 globalformat: "&2[&aG&2] &f%DISPLAYNAME%&f: "
 
+######################
+# Local Chat Formats #
+######################
+
+# This is the format used for LOCAL SPY
+# %FORMAT% = The original format of the message, usually contains prefixes, displayname etc.
+
+# Additionally, you can use the following placeholders:
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %SERVER% = The server of the sender
+# %WORLD% = The world of the sender
+
+# Global Chat Format
+# Will display as [FORMAT] [MESSAGE]
+
+localspyformat: "&8[&7SPY&8] %FORMAT%"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                     Group Chats                      | #

@@ -12,6 +12,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
@@ -75,7 +76,7 @@ public class LocalChannel {
 			String finalMessage = joined;
 
 			if (manager.isLocalSpy(receiver) && !otherRecipients.contains(receiver.getUniqueId())) {
-				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + joined;
+				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, format, message);
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
@@ -110,7 +111,7 @@ public class LocalChannel {
 			String finalMessage = message;
 
 			if (manager.isLocalSpy(receiver) && !receiver.getServer().getInfo().getName().equals(server)) {
-				finalMessage = ChatColor.translateAlternateColorCodes('&', "&8[&7SPY&8] ") + message;
+				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, message);
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {

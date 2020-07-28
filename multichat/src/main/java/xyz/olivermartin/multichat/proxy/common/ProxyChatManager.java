@@ -2,10 +2,17 @@ package xyz.olivermartin.multichat.proxy.common;
 
 import java.util.Optional;
 
+import org.bukkit.ChatColor;
+
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
+import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.bungee.PlayerMeta;
+import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 public class ProxyChatManager {
 
@@ -136,6 +143,54 @@ public class ProxyChatManager {
 		}
 
 		return preProcessMessage(player, message);
+
+	}
+
+	public String getLocalSpyMessage(ProxiedPlayer player, String format, String message) {
+
+		String spyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig()
+				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
+
+		spyFormat = spyFormat.replace("%FORMAT%", format);
+		spyFormat = spyFormat.replace("%DISPLAYNAME%", player.getDisplayName());
+		spyFormat = spyFormat.replace("%NAME%", player.getName());
+
+		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(player.getUniqueId());
+		if (opm.isPresent()) {
+			spyFormat = spyFormat.replace("%PREFIX%", opm.get().prefix);
+			spyFormat = spyFormat.replace("%SUFFIX%", opm.get().suffix);
+			spyFormat = spyFormat.replace("%NICK%", opm.get().nick);
+			spyFormat = spyFormat.replace("%WORLD%", opm.get().world);
+		}
+
+		spyFormat = spyFormat.replace("%SERVER%", player.getServer().getInfo().getName());
+		spyFormat = ChatColor.translateAlternateColorCodes('&', spyFormat);
+
+		// Append message
+		spyFormat = spyFormat + message;
+
+		return spyFormat;
+
+	}
+
+	public String getLocalSpyMessage(CommandSender sender, String message) {
+
+		String spyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig()
+				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
+
+		spyFormat = spyFormat.replace("%FORMAT%", "");
+		spyFormat = spyFormat.replace("%DISPLAYNAME%", sender.getName());
+		spyFormat = spyFormat.replace("%NAME%", sender.getName());
+
+		spyFormat = spyFormat.replace("%PREFIX%", "");
+		spyFormat = spyFormat.replace("%SUFFIX%", "");
+		spyFormat = spyFormat.replace("%NICK%",  sender.getName());
+		spyFormat = spyFormat.replace("%WORLD%", "");
+
+		spyFormat = spyFormat.replace("%SERVER%", "");
+		spyFormat = ChatColor.translateAlternateColorCodes('&', spyFormat);
+
+		return spyFormat + message;
 
 	}
 
