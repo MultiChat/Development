@@ -64,8 +64,12 @@ public class LocalChannel {
 					|| manager.isHidden(receiver.getUniqueId(), "local")) // Receiver has hidden this channel
 				continue;
 
+			// If receiver is sender then ignore them
+			if (receiver.getUniqueId().equals(sender.getUniqueId())) continue;
+
 			// If receiver is NOT in the other recipients list then leave processing (as this is local only) (unless they are spying)
-			if (!otherRecipients.contains(receiver.getUniqueId()) && !manager.isLocalSpy(receiver)) continue;
+			if (!otherRecipients.contains(receiver.getUniqueId())
+					&& !manager.isLocalSpy(receiver)) continue;
 
 			// If receiver ignores sender
 			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
@@ -76,8 +80,7 @@ public class LocalChannel {
 			String finalMessage = joined;
 
 			if (manager.isLocalSpy(receiver)
-					&& !otherRecipients.contains(receiver.getUniqueId())
-					&& !receiver.getUniqueId().equals(sender.getUniqueId())) {
+					&& !otherRecipients.contains(receiver.getUniqueId())) {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, format, message);
 			}
 
