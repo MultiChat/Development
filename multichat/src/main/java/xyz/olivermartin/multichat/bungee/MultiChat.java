@@ -27,6 +27,7 @@ import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 import xyz.olivermartin.multichat.proxy.common.listeners.ProxyLoginListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.ProxyLogoutListener;
+import xyz.olivermartin.multichat.proxy.common.listeners.ProxyServerConnectedListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.ProxyServerSwitchListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerActionListener;
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlayerChatListener;
@@ -187,6 +188,7 @@ public class MultiChat extends Plugin {
 
 			// New listeners (1.10+)
 			getProxy().getPluginManager().registerListener(this, new ProxyLoginListener());
+			getProxy().getPluginManager().registerListener(this, new ProxyServerConnectedListener());
 			getProxy().getPluginManager().registerListener(this, new ProxyLogoutListener());
 			getProxy().getPluginManager().registerListener(this, new ProxyServerSwitchListener());
 
