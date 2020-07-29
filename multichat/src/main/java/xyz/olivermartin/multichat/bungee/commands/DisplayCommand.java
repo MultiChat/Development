@@ -35,6 +35,8 @@ public class DisplayCommand extends Command {
 
 	public static boolean isValidJson(String json) {
 
+		if (!isSafeMinecraftJson(json)) return false;
+
 		try {
 
 			return new JsonParser().parse(json).getAsJsonObject() != null;
@@ -49,6 +51,14 @@ public class DisplayCommand extends Command {
 
 		}
 
+	}
+
+	public static boolean isSafeMinecraftJson(String json) {
+		try {
+			return ComponentSerializer.parse(json) != null;
+		} catch (Throwable ignored) {
+			return false;
+		}
 	}
 
 	public void execute(CommandSender sender, String[] args) {
