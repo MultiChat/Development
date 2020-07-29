@@ -83,7 +83,9 @@ public class ProxyServerConnectedListener implements Listener {
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		// If MultiChat is handling join messages...
-		if ( ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin") == true ) {
+		if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")
+				|| ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome")
+				|| ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("private_welcome")) {
 
 			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
 			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
@@ -121,34 +123,43 @@ public class ProxyServerConnectedListener implements Listener {
 						}
 					}
 
-					if (firstJoin && privateWelcome && onlineplayer.getName().equals(player.getName())) {
+					if (firstJoin && privateWelcome
+							&& onlineplayer.getName().equals(player.getName())) {
+
 						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
 							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage))));
 						} else {
 							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
 						}
+
 					}
 
-					if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', joinformat))));
-					} else {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
+					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
+						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', joinformat))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
+						}
 					}
 
 				} else {
 
 					ds.getHiddenStaff().add(player.getUniqueId());
 
-					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', silentformat))));
-						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
+					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
+						if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
+							if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', silentformat))));
+							} else {
+								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
+							}
 						}
 					}
 
 				}
+
 			}
+
 		}
 
 	}
