@@ -11,6 +11,7 @@ import xyz.olivermartin.multichat.bungee.Announcements;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Announcement Command
@@ -22,7 +23,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 public class AnnouncementCommand extends Command {
 
 	public AnnouncementCommand() {
-		super("mcannouncement", "multichat.announce", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("announcement").toArray(new String[0]));
+		super("mcannouncement", "multichat.announce", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("announcement").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

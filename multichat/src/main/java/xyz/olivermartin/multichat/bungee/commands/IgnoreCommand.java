@@ -8,11 +8,12 @@ import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 public class IgnoreCommand extends Command {
 
 	public IgnoreCommand() {
-		super("mcignore", "multichat.ignore", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("ignore").toArray(new String[0]));
+		super("mcignore", "multichat.ignore", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ignore").toArray(new String[0]));
 	}
 
 	@Override

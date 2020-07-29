@@ -7,17 +7,18 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 public class MuteCommand extends Command {
 
 	public MuteCommand() {
-		super("mcmute", "multichat.mute", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("mute").toArray(new String[0]));
+		super("mcmute", "multichat.mute", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("mute").toArray(new String[0]));
 	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		
-		if (!ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getBoolean("mute")) return;
+		if (!ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().getBoolean("mute")) return;
 		
 		if (args.length != 1) {
 			

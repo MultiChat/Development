@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -33,8 +34,8 @@ public class GroupManager {
 		newgroup.addViewer(owneruuid);
 		newgroup.addAdmin(owneruuid);
 		newgroup.setName(groupname.toLowerCase());
-		newgroup.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.GroupChat.CC_DEFAULT).toCharArray()[0]);
-		newgroup.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.GroupChat.NC_DEFAULT).toCharArray()[0]);
+		newgroup.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.CC_DEFAULT).toCharArray()[0]);
+		newgroup.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.NC_DEFAULT).toCharArray()[0]);
 		newgroup.setSecret(secret);
 		newgroup.setPassword(password);
 		newgroup.setFormal(false);

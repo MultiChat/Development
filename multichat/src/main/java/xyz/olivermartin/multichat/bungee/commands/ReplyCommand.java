@@ -10,9 +10,10 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -26,7 +27,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class ReplyCommand extends Command {
 
 	public ReplyCommand() {
-		super("mcr", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("r").toArray(new String[0]));
+		super("mcr", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("r").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -67,9 +68,9 @@ public class ReplyCommand extends Command {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get(((ProxiedPlayer)sender).getUniqueId()));
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
 								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
@@ -90,7 +91,7 @@ public class ReplyCommand extends Command {
 
 					// Console target stuff
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer)sender);
 
@@ -120,7 +121,7 @@ public class ReplyCommand extends Command {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)ds.getLastMsg().get((new UUID(0L,0L))));
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
 

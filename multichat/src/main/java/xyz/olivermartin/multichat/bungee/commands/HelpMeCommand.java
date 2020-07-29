@@ -11,6 +11,7 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * 'Help Me' Command
@@ -22,7 +23,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 public class HelpMeCommand extends Command {
 
 	public HelpMeCommand() {
-		super("mchelpme", "multichat.chat.helpme", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("helpme").toArray(new String[0]));
+		super("mchelpme", "multichat.chat.helpme", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("helpme").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

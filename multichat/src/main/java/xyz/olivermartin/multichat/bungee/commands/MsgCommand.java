@@ -20,6 +20,7 @@ import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
@@ -32,7 +33,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class MsgCommand extends Command implements TabExecutor {
 
 	public MsgCommand() {
-		super("mcmsg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("msg").toArray(new String[0]));
+		super("mcmsg", "multichat.chat.msg", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("msg").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -73,7 +74,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 							if (toggleresult == true) {
 
-								Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+								Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
 
 								if (config.contains(ConfigValues.Config.TOGGLE_PM) ? config.getBoolean(ConfigValues.Config.TOGGLE_PM) == false : false) {
 
@@ -149,16 +150,16 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					if (permittedToMessage) {
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+						if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 						}
 
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
-							if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+							if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 								if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
 									ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
@@ -184,13 +185,13 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					// New console target stuff here!
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+					if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
 
 					}
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer)sender);
 
@@ -214,13 +215,13 @@ public class MsgCommand extends Command implements TabExecutor {
 
 					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+					if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 						ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
 					}
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 						PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
 

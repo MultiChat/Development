@@ -11,6 +11,7 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.PlayerMeta;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 public class ProxyChatManager {
@@ -147,7 +148,7 @@ public class ProxyChatManager {
 
 	public String getLocalSpyMessage(ProxiedPlayer player, String format, String message) {
 
-		String spyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig()
+		String spyFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
 				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
 
 		spyFormat = spyFormat.replace("%FORMAT%", format);
@@ -174,7 +175,7 @@ public class ProxyChatManager {
 
 	public String getLocalSpyMessage(CommandSender sender, String message) {
 
-		String spyFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig()
+		String spyFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
 				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
 
 		spyFormat = spyFormat.replace("%FORMAT%", "");

@@ -8,6 +8,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Message Manager
@@ -407,7 +408,7 @@ public class MessageManager {
 
 	public static String getMessage(String id) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("messages.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
 
 		if (config.contains(id)) return config.getString(id);
 		if (!defaultMessages.containsKey(id)) return "&cERROR - Please report to plugin developer - No message defined for: " + id;
@@ -432,7 +433,7 @@ public class MessageManager {
 
 	private static void updatePrefix() {
 
-		Configuration config = ConfigManager.getInstance().getHandler("messages.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
 
 		if (config.contains("prefix")) {
 			prefix = config.getString("prefix");

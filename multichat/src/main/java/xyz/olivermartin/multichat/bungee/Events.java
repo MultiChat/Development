@@ -22,6 +22,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelMode;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -154,7 +155,7 @@ public class Events implements Listener {
 		}
 
 		///
-		if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+		if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 			if (player.getServer() != null) {
 				ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 			}
@@ -263,9 +264,9 @@ public class Events implements Listener {
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(player.getServer().getInfo().getName())) {
 
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+						if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
 
 							if (ChatControl.ignores(player.getUniqueId(), target.getUniqueId(), "private_messages")) {
 								ChatControl.sendIgnoreNotifications(target, player, "private_messages");

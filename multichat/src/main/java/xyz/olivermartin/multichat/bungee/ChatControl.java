@@ -14,6 +14,7 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 public class ChatControl {
 
@@ -56,7 +57,7 @@ public class ChatControl {
 	@SuppressWarnings("rawtypes")
 	public static Optional<String>applyChatRules(String input, String chatType, String playerName) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 		boolean cancel = false;
 
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(playerName);
@@ -143,7 +144,7 @@ public class ChatControl {
 
 	public static boolean isMuted(UUID uuid, String chatType) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (!config.getBoolean("mute")) return false;
 
@@ -159,7 +160,7 @@ public class ChatControl {
 
 	public static boolean isMutedAnywhere(UUID uuid) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (!config.getBoolean("mute")) return false;
 
@@ -189,7 +190,7 @@ public class ChatControl {
 	 */
 	public static boolean ignores(UUID sender, UUID target, String chatType) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (!ignoreMap.containsKey(target)) return false;
 
@@ -279,7 +280,7 @@ public class ChatControl {
 
 	public static void sendIgnoreNotifications(CommandSender ignorer, CommandSender ignoree, String chatType) {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (config.getBoolean("notify_ignore")) {
 			MessageManager.sendSpecialMessage(ignorer, "ignore_target", ignoree.getName());
@@ -296,7 +297,7 @@ public class ChatControl {
 	 */
 	public static void reload() {
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (config.getBoolean("session_ignore")) {
 
@@ -330,7 +331,7 @@ public class ChatControl {
 
 		DebugManager.log(player.getName() + " - checking for spam...");
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		if (player.hasPermission("multichat.spam.bypass")) return false;
 
@@ -405,7 +406,7 @@ public class ChatControl {
 
 			boolean spam = false;
 			long currentTime = System.currentTimeMillis();
-			Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+			Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 			// If the user triggered anti-spam, check if they are still on cooldown
 			if (currentTime - lastSpamTime < (1000 * config.getInt("anti_spam_cooldown"))) return true;
@@ -454,7 +455,7 @@ public class ChatControl {
 		}
 
 		public long getCooldownSeconds() {
-			Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+			Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 			return config.getInt("anti_spam_cooldown") - ((System.currentTimeMillis() - lastSpamTime)/1000);
 		}
 

@@ -9,6 +9,7 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Use Cast Command
@@ -20,7 +21,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 public class UseCastCommand extends Command {
 
 	public UseCastCommand() {
-		super("mcusecast", "multichat.cast.admin", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("usecast").toArray(new String[0]));
+		super("mcusecast", "multichat.cast.admin", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("usecast").toArray(new String[0]));
 	}
 
 	public void displayUsage(CommandSender sender) {

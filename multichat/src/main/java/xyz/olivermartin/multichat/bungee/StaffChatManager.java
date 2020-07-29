@@ -11,6 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -29,7 +30,7 @@ public class StaffChatManager {
 		message = MultiChatUtil.reformatRGB(message);
 
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.ModChat.FORMAT);
+		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.FORMAT);
 		String original = message;
 
 		Optional<String> crm;
@@ -49,8 +50,8 @@ public class StaffChatManager {
 				if (!ds.getModChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.ModChat.CC_DEFAULT).toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.ModChat.NC_DEFAULT).toCharArray()[0]);
+					chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.CC_DEFAULT).toCharArray()[0]);
+					chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.NC_DEFAULT).toCharArray()[0]);
 
 					ds.getModChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 
@@ -87,7 +88,7 @@ public class StaffChatManager {
 
 		String original = message;
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.AdminChat.FORMAT);
+		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.FORMAT);
 
 		Optional<String> crm;
 
@@ -106,8 +107,8 @@ public class StaffChatManager {
 				if (!ds.getAdminChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.AdminChat.CC_DEFAULT).toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.AdminChat.NC_DEFAULT).toCharArray()[0]);
+					chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.CC_DEFAULT).toCharArray()[0]);
+					chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.NC_DEFAULT).toCharArray()[0]);
 
 					ds.getAdminChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 

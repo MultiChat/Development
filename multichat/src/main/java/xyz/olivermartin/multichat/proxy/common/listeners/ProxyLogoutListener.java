@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyLogoutListener implements Listener {
@@ -51,7 +52,7 @@ public class ProxyLogoutListener implements Listener {
 			Events.GCToggle.remove(uuid);
 		}
 
-		Configuration config = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		// If using sessional ignore, then wipe ignores stored
 		if (config.getBoolean("session_ignore")) {
@@ -72,11 +73,11 @@ public class ProxyLogoutListener implements Listener {
 		ConsoleManager.log("Un-Registered player " + player.getName());
 
 		// If we are handling the quit messages, then handle them...
-		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
+		if ( ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showquit") == true ) {
 
 			// Get the formats
-			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");
-			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentquit");
+			String joinformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("networkquit");
+			String silentformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("silentquit");
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation();

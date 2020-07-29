@@ -10,6 +10,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Execute Command
@@ -21,7 +22,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 public class MultiChatExecuteCommand extends Command {
 
 	public MultiChatExecuteCommand() {
-		super("mcexecute", "multichat.execute", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("execute").toArray(new String[0]));
+		super("mcexecute", "multichat.execute", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("execute").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

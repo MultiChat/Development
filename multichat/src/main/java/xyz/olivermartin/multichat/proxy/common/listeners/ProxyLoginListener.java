@@ -22,6 +22,7 @@ import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyLoginListener implements Listener {
@@ -41,8 +42,8 @@ public class ProxyLoginListener implements Listener {
 			if (!ds.getModChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("modchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("modchat.ncdefault").toCharArray()[0]);
 				ds.getModChatPreferences().put(uuid, chatinfo);
 
 			}
@@ -54,8 +55,8 @@ public class ProxyLoginListener implements Listener {
 			if (!ds.getAdminChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
+				chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
 				ds.getAdminChatPreferences().put(uuid, chatinfo);
 
 			}
@@ -121,7 +122,7 @@ public class ProxyLoginListener implements Listener {
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
 		// If MultiChat is handling join messages...
-		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showjoin") == true ) {
+		if ( ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin") == true ) {
 
 			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
 			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
@@ -129,10 +130,10 @@ public class ProxyLoginListener implements Listener {
 			}
 
 			// Load join message formats from config
-			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("serverjoin");
-			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentjoin");
-			String welcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("welcome_message");
-			String privateWelcomeMessage = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("private_welcome_message");
+			String joinformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("serverjoin");
+			String silentformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("silentjoin");
+			String welcomeMessage = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("welcome_message");
+			String privateWelcomeMessage = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("private_welcome_message");
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation(); // TODO Legacy
@@ -142,8 +143,8 @@ public class ProxyLoginListener implements Listener {
 			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
 
 			// Check which messages should be broadcast
-			boolean broadcastWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("welcome", true);
-			boolean privateWelcome = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("private_welcome", false);
+			boolean broadcastWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome", true);
+			boolean privateWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("private_welcome", false);
 			boolean broadcastJoin = !player.hasPermission("multichat.staff.silentjoin");
 
 			// Broadcast

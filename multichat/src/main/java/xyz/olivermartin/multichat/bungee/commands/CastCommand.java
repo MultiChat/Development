@@ -10,6 +10,7 @@ import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Cast Command
@@ -21,7 +22,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 public class CastCommand extends Command {
 
 	public CastCommand() {
-		super("mccast", "multichat.cast.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("cast").toArray(new String[0]));
+		super("mccast", "multichat.cast.admin", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("cast").toArray(new String[0]));
 	}
 
 	public void showCommandUsage(CommandSender sender) {

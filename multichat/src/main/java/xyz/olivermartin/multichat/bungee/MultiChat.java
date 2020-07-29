@@ -21,6 +21,7 @@ import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannelInfo;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.StaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
@@ -115,7 +116,7 @@ public class MultiChat extends Plugin {
 
 			public void run() {
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+				if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 
 					for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
 						if (player.getServer() != null) {
@@ -157,20 +158,20 @@ public class MultiChat extends Plugin {
 			new File(translationsDir).mkdirs();
 		}
 
-		ConfigManager.getInstance().registerHandler("config.yml", configDirectory);
-		ConfigManager.getInstance().registerHandler("joinmessages.yml", configDirectory);
-		ConfigManager.getInstance().registerHandler("messages.yml", configDirectory);
-		ConfigManager.getInstance().registerHandler("chatcontrol.yml", configDirectory);
-		ConfigManager.getInstance().registerHandler("aliases.yml", configDirectory);
+		ConfigManager.getInstance().registerHandler(ConfigFile.CONFIG, configDirectory);
+		ConfigManager.getInstance().registerHandler(ConfigFile.JOIN_MESSAGES, configDirectory);
+		ConfigManager.getInstance().registerHandler(ConfigFile.MESSAGES, configDirectory);
+		ConfigManager.getInstance().registerHandler(ConfigFile.CHAT_CONTROL, configDirectory);
+		ConfigManager.getInstance().registerHandler(ConfigFile.ALIASES, configDirectory);
 
-		ConfigManager.getInstance().registerHandler("messages_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("joinmessages_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("config_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("chatcontrol_fr.yml", new File(translationsDir));
-		ConfigManager.getInstance().registerHandler("aliases_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerRawHandler("messages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerRawHandler("joinmessages_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerRawHandler("config_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerRawHandler("chatcontrol_fr.yml", new File(translationsDir));
+		ConfigManager.getInstance().registerRawHandler("aliases_fr.yml", new File(translationsDir));
 
-		Configuration configYML = ConfigManager.getInstance().getHandler("config.yml").getConfig();
-		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig();
+		Configuration configYML = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
+		Configuration chatcontrolYML = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
 
 		configversion = configYML.getString("version");
 
@@ -295,8 +296,8 @@ public class MultiChat extends Plugin {
 			MultiChatProxy.getInstance().registerContextManager(contextManager);
 
 			ChannelManager channelManager = new ChannelManager();
-			channelManager.setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), channelManager));
-			channelManager.setLocalChannel(new LocalChannel("Local Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("local"), channelManager));
+			channelManager.setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("global"), channelManager));
+			channelManager.setLocalChannel(new LocalChannel("Local Channel", configYML.getString("globalformat"), ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("local"), channelManager));
 			MultiChatProxy.getInstance().registerChannelManager(channelManager);
 
 			// TODO This is just a test channel

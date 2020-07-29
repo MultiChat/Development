@@ -17,6 +17,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 
 /**
@@ -29,7 +30,7 @@ import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 public class MultiChatCommand extends Command {
 
 	public MultiChatCommand() {
-		super("multichat", "multichat.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("multichat").toArray(new String[0]));
+		super("multichat", "multichat.admin", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("multichat").toArray(new String[0]));
 	}
 
 	private void displayHelp(CommandSender sender, int page) {
@@ -88,63 +89,63 @@ public class MultiChatCommand extends Command {
 					MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
 
 					// Unregister commands
-					((MultiChat)MultiChatProxy.getInstance().getPlugin()).unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
+					((MultiChat)MultiChatProxy.getInstance().getPlugin()).unregisterCommands(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig(), ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig());
 
-					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
-					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
+					ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).startupConfig();
+					MultiChat.configversion = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("version");
 
-					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("chatcontrol.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("aliases.yml").startupConfig();
+					ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).startupConfig();
+					ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).startupConfig();
+					ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).startupConfig();
+					ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).startupConfig();
 
-					ConfigManager.getInstance().getHandler("messages_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("joinmessages_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("config_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("chatcontrol_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("aliases_fr.yml").startupConfig();
+					ConfigManager.getInstance().getRawHandler("messages_fr.yml").startupConfig();
+					ConfigManager.getInstance().getRawHandler("joinmessages_fr.yml").startupConfig();
+					ConfigManager.getInstance().getRawHandler("config_fr.yml").startupConfig();
+					ConfigManager.getInstance().getRawHandler("chatcontrol_fr.yml").startupConfig();
+					ConfigManager.getInstance().getRawHandler("aliases_fr.yml").startupConfig();
 
 					// Reload, and re-register commands
 					CommandManager.reload();
-					((MultiChat)MultiChatProxy.getInstance().getPlugin()).registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
+					((MultiChat)MultiChatProxy.getInstance().getPlugin()).registerCommands(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig(), ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig());
 
 					ChatControl.reload();
 
 					System.out.println("VERSION LOADED: " + MultiChat.configversion);
 
 					// Set up chat control stuff
-					if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_control")) {
-						ChatControl.controlLinks = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getBoolean("link_control");
-						ChatControl.linkMessage = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_removal_message");
-						if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_regex")) {
-							ChatControl.linkRegex = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_regex");
+					if (ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().contains("link_control")) {
+						ChatControl.controlLinks = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().getBoolean("link_control");
+						ChatControl.linkMessage = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().getString("link_removal_message");
+						if (ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().contains("link_regex")) {
+							ChatControl.linkRegex = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig().getString("link_regex");
 						}
 					}
 
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("privacy_settings")) {
-						MultiChat.logPMs = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_pms");
-						MultiChat.logStaffChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_staffchat");
-						MultiChat.logGroupChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_groupchat");
+					if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().contains("privacy_settings")) {
+						MultiChat.logPMs = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("privacy_settings").getBoolean("log_pms");
+						MultiChat.logStaffChat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("privacy_settings").getBoolean("log_staffchat");
+						MultiChat.logGroupChat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("privacy_settings").getBoolean("log_groupchat");
 					}
 
 					// Legacy servers for RGB approximation
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("legacy_servers")) {
-						MultiChat.legacyServers = ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers");
+					if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().contains("legacy_servers")) {
+						MultiChat.legacyServers = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList("legacy_servers");
 					}
 
 					// Set default channel
-					String defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
-					boolean forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
+					String defaultChannel = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("default_channel");
+					boolean forceChannelOnJoin = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean("force_channel_on_join");
 
 					// Set up global chat
 					//GlobalAChannel channel = LegacyChannel.getGlobalChannel();
-					//channel.setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
+					//channel.setFormat(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("globalformat"));
 
 					List<String> noGlobalServers = new ArrayList<String>();
 
 					//channel.clearServers();
 					// Add all appropriate servers to this hardcoded global chat stream
-					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
+					for (String server : ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList("no_global")) {
 						//channel.addServer(server);
 						noGlobalServers.add(server);
 					}
@@ -155,18 +156,18 @@ public class MultiChatCommand extends Command {
 					GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
 					MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
 
-					MultiChatProxy.getInstance().getChannelManager().setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global"), MultiChatProxy.getInstance().getChannelManager()));
-					MultiChatProxy.getInstance().getChannelManager().setLocalChannel(new LocalChannel("Local Channel", ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("local"), MultiChatProxy.getInstance().getChannelManager()));
+					MultiChatProxy.getInstance().getChannelManager().setGlobalChannel(new GlobalStaticProxyChannel("Global Channel", ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("global"), MultiChatProxy.getInstance().getChannelManager()));
+					MultiChatProxy.getInstance().getChannelManager().setLocalChannel(new LocalChannel("Local Channel", ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("globalformat"), ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("local"), MultiChatProxy.getInstance().getChannelManager()));
 
 					///
 
 					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
 						MultiChat.premiumVanish = true;
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("premium_vanish")) {
-							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_message");
-							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
-							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_join");
+						if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().contains("premium_vanish")) {
+							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("premium_vanish").getBoolean("prevent_message");
+							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
+							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getSection("premium_vanish").getBoolean("silence_join");
 						}
 
 					} else {

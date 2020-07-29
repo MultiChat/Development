@@ -6,11 +6,12 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 public class MultiChatBypassCommand extends Command {
 
 	public MultiChatBypassCommand() {
-		super("mcbypass", "multichat.bypass", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("bypass").toArray(new String[0]));
+		super("mcbypass", "multichat.bypass", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("bypass").toArray(new String[0]));
 	}
 
 	@Override

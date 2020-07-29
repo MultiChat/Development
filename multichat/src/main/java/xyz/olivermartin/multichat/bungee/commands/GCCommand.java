@@ -19,6 +19,7 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -32,7 +33,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class GCCommand extends Command {
 
 	public GCCommand() {
-		super("mcgc", "multichat.group", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("gc").toArray(new String[0]));
+		super("mcgc", "multichat.group", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("gc").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -124,7 +125,7 @@ public class GCCommand extends Command {
 			return;
 		}
 
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
+		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
 		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

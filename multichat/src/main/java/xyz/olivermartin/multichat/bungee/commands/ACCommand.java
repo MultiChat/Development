@@ -8,6 +8,7 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
@@ -20,7 +21,7 @@ import xyz.olivermartin.multichat.bungee.StaffChatManager;
 public class ACCommand extends Command {
 
 	public ACCommand() {
-		super("mcac", "multichat.staff.admin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("ac").toArray(new String[0]));
+		super("mcac", "multichat.staff.admin", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ac").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

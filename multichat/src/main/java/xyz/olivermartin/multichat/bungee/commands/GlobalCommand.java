@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
@@ -25,7 +26,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class GlobalCommand extends Command {
 
 	public GlobalCommand() {
-		super("mcglobal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("global").toArray(new String[0]));
+		super("mcglobal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("global").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -47,11 +48,11 @@ public class GlobalCommand extends Command {
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 				String message = MultiChatUtil.getMessageFromArgs(args);
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.GLOBAL) == true) {
+				if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.GLOBAL) == true) {
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList(ConfigValues.Config.NO_GLOBAL).contains(player.getServer().getInfo().getName())) {
+					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_GLOBAL).contains(player.getServer().getInfo().getName())) {
 
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+						if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 						}
 

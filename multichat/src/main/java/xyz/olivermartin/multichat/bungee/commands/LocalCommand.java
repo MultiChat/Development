@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
@@ -25,7 +26,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class LocalCommand extends Command {
 
 	public LocalCommand() {
-		super("mclocal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("local").toArray(new String[0]));
+		super("mclocal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("local").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -47,7 +48,7 @@ public class LocalCommand extends Command {
 				String message = MultiChatUtil.getMessageFromArgs(args);
 				ProxiedPlayer player = (ProxiedPlayer)sender;
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+				if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 				}
 

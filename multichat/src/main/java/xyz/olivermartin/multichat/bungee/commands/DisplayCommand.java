@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 
@@ -26,7 +27,7 @@ import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 public class DisplayCommand extends Command {
 
 	public DisplayCommand() {
-		super("mcdisplay", "multichat.staff.display", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("display").toArray(new String[0]));
+		super("mcdisplay", "multichat.staff.display", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("display").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -48,7 +49,7 @@ public class DisplayCommand extends Command {
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
 		message = MultiChatUtil.reformatRGB(message);
-		Configuration config = ConfigManager.getInstance().getHandler("config.yml").getConfig();
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 			if (onlineplayer.getServer() != null) {

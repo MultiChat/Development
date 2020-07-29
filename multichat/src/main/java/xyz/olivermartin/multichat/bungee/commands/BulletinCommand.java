@@ -10,6 +10,7 @@ import xyz.olivermartin.multichat.bungee.Bulletins;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Bulletin Command
@@ -21,7 +22,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 public class BulletinCommand extends Command {
 
 	public BulletinCommand() {
-		super("mcbulletin", "multichat.bulletin", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("bulletin").toArray(new String[0]));
+		super("mcbulletin", "multichat.bulletin", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("bulletin").toArray(new String[0]));
 	}
 
 	@Override

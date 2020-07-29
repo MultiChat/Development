@@ -6,6 +6,7 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -18,7 +19,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class SocialSpyCommand extends Command {
 
 	public SocialSpyCommand() {
-		super("mcsocialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("socialspy").toArray(new String[0]));
+		super("mcsocialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("socialspy").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

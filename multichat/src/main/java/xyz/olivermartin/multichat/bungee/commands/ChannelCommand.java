@@ -11,6 +11,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
  * Chat Channel Command
@@ -22,7 +23,7 @@ import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 public class ChannelCommand extends Command {
 
 	public ChannelCommand() {
-		super("mcchannel", "multichat.chat.channel", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("channel").toArray(new String[0]));
+		super("mcchannel", "multichat.chat.channel", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("channel").toArray(new String[0]));
 	}
 
 	private void showHelp(CommandSender sender) {

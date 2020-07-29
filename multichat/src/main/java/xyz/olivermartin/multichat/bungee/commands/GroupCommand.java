@@ -18,6 +18,7 @@ import xyz.olivermartin.multichat.bungee.GroupManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -30,7 +31,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class GroupCommand extends Command implements TabExecutor {
 
 	public GroupCommand() {
-		super("mcgroup", "multichat.group", (String[]) ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("group").toArray(new String[0]));
+		super("mcgroup", "multichat.group", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("group").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {

@@ -12,6 +12,7 @@ import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
 /**
@@ -24,7 +25,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class StaffListCommand extends Command {
 
 	public StaffListCommand() {
-		super("mcstaff", "multichat.staff.list", (String[])ConfigManager.getInstance().getHandler("aliases.yml").getConfig().getStringList("staff").toArray(new String[0]));
+		super("mcstaff", "multichat.staff.list", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("staff").toArray(new String[0]));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -73,7 +74,7 @@ public class StaffListCommand extends Command {
 
 							if (onlineplayer2.getServer().getInfo().getName().equals(server)) {
 
-								if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+								if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 									ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(onlineplayer2.getName(), onlineplayer2.getServer().getInfo());
 								}
 
