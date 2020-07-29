@@ -20,6 +20,7 @@ import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
@@ -137,10 +138,10 @@ public class ProxyLoginListener implements Listener {
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation(); // TODO Legacy
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
-			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
+			joinformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(joinformat, player.getName()));
+			silentformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(silentformat, player.getName()));
+			welcomeMessage = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(welcomeMessage, player.getName()));
+			privateWelcomeMessage = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName()));
 
 			// Check which messages should be broadcast
 			boolean broadcastWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome", true);
@@ -153,21 +154,37 @@ public class ProxyLoginListener implements Listener {
 				if (broadcastJoin) {
 
 					if (firstJoin && broadcastWelcome) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', welcomeMessage))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
+						}
 					}
 
 					if (firstJoin && privateWelcome && onlineplayer.getName().equals(player.getName())) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
+						}
 					}
 
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
+					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', joinformat))));
+					} else {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
+					}
 
 				} else {
 
 					ds.getHiddenStaff().add(player.getUniqueId());
 
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', silentformat))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
+						}
 					}
 
 				}

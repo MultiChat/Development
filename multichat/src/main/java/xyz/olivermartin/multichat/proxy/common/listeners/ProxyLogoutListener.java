@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -16,7 +16,9 @@ import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
+import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -81,20 +83,28 @@ public class ProxyLogoutListener implements Listener {
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation();
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
+			joinformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(joinformat, player.getName()));
+			silentformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(silentformat, player.getName()));
 
 			// Broadcast
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 				if (!player.hasPermission("multichat.staff.silentjoin")) {
 
-					onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', joinformat)).create());
+					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', joinformat))));
+					} else {
+						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
+					}
 
 				} else {
 
 					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						onlineplayer.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', silentformat)).create());
+						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', silentformat))));
+						} else {
+							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
+						}
 					}
 
 				}
