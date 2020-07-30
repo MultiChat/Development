@@ -44,7 +44,79 @@ public class MultiChatUtil {
 			message = message.replace(match,"§"+minecraftCode);
 		}
 
+		return approximateJsonHexCodes(message);
+
+	}
+
+	private static String approximateJsonHexCodes(String message) {
+
+		message = message.replaceAll("(?i)(\"color\":\")#([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])(\")", "$1&#$2$3$4$5$6$7$8");
+
+		List<String> allMatches = new ArrayList<String>();
+		Matcher m = Pattern.compile("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])")
+				.matcher(message);
+		while (m.find()) {
+			allMatches.add(m.group());
+		}
+
+		for (String match : allMatches) {
+
+			String hexonly;
+			if (match.contains("#")) {
+				hexonly = match.split("#")[1];
+			} else if (match.contains("x")) {
+				hexonly = match.split("x")[1];
+			} else {
+				hexonly = match.split("X")[1];
+			}
+			String minecraftCode = hexToMinecraft(hexonly);
+			message = message.replace(match,getMinecraftCodeName(minecraftCode));
+		}
+
 		return message;
+
+	}
+
+	public static String getMinecraftCodeName(String code) {
+
+		code = code.toLowerCase();
+
+		switch (code) {
+		case "0":
+			return "black";
+		case "1":
+			return "dark_blue";
+		case "2":
+			return "dark_green";
+		case "3":
+			return "dark_aqua";
+		case "4":
+			return "dark_red";
+		case "5":
+			return "dark_purple";
+		case "6":
+			return "gold";
+		case "7":
+			return "gray";
+		case "8":
+			return "dark_gray";
+		case "9":
+			return "blue";
+		case "a":
+			return "green";
+		case "b":
+			return "aqua";
+		case "c":
+			return "red";
+		case "d":
+			return "light_purple";
+		case "e":
+			return "yellow";
+		case "f":
+			return "white";
+		default:
+			return "white";
+		}
 
 	}
 
