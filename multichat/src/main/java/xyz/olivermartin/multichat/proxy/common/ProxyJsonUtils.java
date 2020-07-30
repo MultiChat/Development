@@ -1,6 +1,7 @@
 package xyz.olivermartin.multichat.proxy.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gson.JsonParser;
@@ -38,8 +39,8 @@ public class ProxyJsonUtils {
 	public static BaseComponent[] parseMultiple(String rawMessage) {
 
 		String[] split = rawMessage.split("\\+\\+\\+");
-		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
 
+		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
 		int size = 0;
 
 		for (String s : split) {
@@ -48,16 +49,9 @@ public class ProxyJsonUtils {
 			size += next.length;
 		}
 
-		BaseComponent[] processed = new BaseComponent[size];
+		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
 
-		int counter = 0;
-		for (BaseComponent[] bca : parsed) {
-			for (BaseComponent bc : bca) {
-				processed[counter++] = bc;
-			}
-		}
-
-		return processed;
+		return merge(false, size, parsed.toArray(bcaa));
 
 	}
 
@@ -72,39 +66,60 @@ public class ProxyJsonUtils {
 	private static BaseComponent[] parseCopies(String rawMessage) {
 
 		String[] split = rawMessage.split(">>>");
+
 		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
 		int size = 0;
 
 		for (String s : split) {
-
-			BaseComponent[] next;
-
-			if (isValidJson(s)) {
-				next = ComponentSerializer.parse(s);
-			} else {
-				next = TextComponent.fromLegacyText(s);
-			}
-
+			BaseComponent[] next = parse(s);
 			parsed.add(next);
 			size += next.length;
-
 		}
 
-		BaseComponent[] processed = new BaseComponent[size];
-		BaseComponent last = null;
+		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
+
+		return merge(true, size, parsed.toArray(bcaa));
+
+	}
+
+	/**
+	 * Merge together multiple entirely separate base component arrays
+	 * @param injectFormatting If the formatting from the previous base component should be injected into the next
+	 * @param baseComponentArrays The base component arrays to merge
+	 * @return the concatenated array
+	 */
+	public static BaseComponent[] merge(boolean injectFormatting, BaseComponent[]... baseComponentArrays) {
+		return merge(
+				injectFormatting,
+				Arrays.stream(baseComponentArrays).mapToInt(bca -> bca.length).sum(),
+				baseComponentArrays);
+	}
+
+	/**
+	 * Merge together multiple entirely separate base component arrays
+	 * @param injectFormatting If the formatting from the previous base component should be injected into the next
+	 * @param size The length of the new array
+	 * @param baseComponentArrays The base component arrays to merge
+	 * @return the concatenated array
+	 */
+	public static BaseComponent[] merge(boolean injectFormatting, int size, BaseComponent[]... baseComponentArrays) {
+
+		BaseComponent[] concatenated = new BaseComponent[size];
+		BaseComponent previous = null;
 
 		int counter = 0;
-		for (BaseComponent[] bca : parsed) {
-			if (last != null) {
-				bca[0].copyFormatting(last, false);
-			}
+		for (BaseComponent[] bca : baseComponentArrays) {
+
+			if (previous != null && injectFormatting) bca[0].copyFormatting(previous, false);
+
 			for (BaseComponent bc : bca) {
-				processed[counter++] = bc;
-				last = bc;
+				concatenated[counter++] = bc;
+				previous = bc;
 			}
+
 		}
 
-		return processed;
+		return concatenated;
 
 	}
 
