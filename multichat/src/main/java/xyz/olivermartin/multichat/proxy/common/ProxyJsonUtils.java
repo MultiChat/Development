@@ -104,7 +104,7 @@ public class ProxyJsonUtils {
 	 */
 	public static BaseComponent[] merge(boolean injectFormatting, int size, BaseComponent[]... baseComponentArrays) {
 
-		BaseComponent[] concatenated = new BaseComponent[size];
+		BaseComponent[] merged = new BaseComponent[size];
 		BaseComponent previous = null;
 
 		int counter = 0;
@@ -113,13 +113,13 @@ public class ProxyJsonUtils {
 			if (previous != null && injectFormatting) bca[0].copyFormatting(previous, false);
 
 			for (BaseComponent bc : bca) {
-				concatenated[counter++] = bc;
+				merged[counter++] = bc;
 				previous = bc;
 			}
 
 		}
 
-		return concatenated;
+		return merged;
 
 	}
 
