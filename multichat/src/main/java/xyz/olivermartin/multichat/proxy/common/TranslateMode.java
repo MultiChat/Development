@@ -1,5 +1,8 @@
 package xyz.olivermartin.multichat.proxy.common;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public enum TranslateMode {
 
 	COLOUR_SIMPLE ("(?i)&(?=[a-f,0-9])"),
@@ -13,18 +16,19 @@ public enum TranslateMode {
 	FORMAT_ALL ("(?i)&(?=[k-o,r])"),
 	ALL ("(?i)&(?=[a-f,0-9,k-o,r,x])");
 
-	private String regex;
+	private Pattern pattern;
 
 	private TranslateMode(String regex) {
-		this.regex = regex;
+		this.pattern = Pattern.compile(regex);
 	}
 
-	public String getRegex() {
-		return this.regex;
+	public Pattern getPattern() {
+		return this.pattern;
 	}
 
 	public String translate(String rawMessage) {
-		return rawMessage.replaceAll(this.regex,  "§");
+		Matcher matcher = pattern.matcher(rawMessage);
+		return matcher.replaceAll("§");
 	}
 
 }
