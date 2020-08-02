@@ -22,7 +22,7 @@ public class ChatManipulation {
 
 	public String replaceMsgVars(String messageFormat, String message, ProxiedPlayer sender, ProxiedPlayer target) {
 
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		messageFormat = messageFormat.replace("%NAME%", sender.getName());
 
@@ -55,7 +55,7 @@ public class ChatManipulation {
 
 	public String replaceMsgConsoleTargetVars(String messageFormat, String message, ProxiedPlayer sender) {
 
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", sender.getDisplayName());
 		messageFormat = messageFormat.replace("%NAME%", sender.getName());
 
@@ -85,7 +85,7 @@ public class ChatManipulation {
 
 	public String replaceMsgConsoleSenderVars(String messageFormat, String message, ProxiedPlayer target) {
 
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", "CONSOLE");
 		messageFormat = messageFormat.replace("%NAME%", "CONSOLE");
 

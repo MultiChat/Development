@@ -44,18 +44,26 @@ public class PrivateMessageManager {
 		return ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.PM_SPY_FORMAT);
 	}
 
-	private void displayMessage(ProxiedPlayer player, String message) {
+	private void displayMessage(ProxiedPlayer player, String rawMessage, String replacement) {
+
+		rawMessage = ProxyUtils.translateColourCodes(rawMessage);
+		replacement = ProxyUtils.translateColourCodes(replacement);
 
 		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
-			player.sendMessage(ProxyJsonUtils.parseMultiple(MultiChatUtil.approximateHexCodes(message)));
-		} else {
-			player.sendMessage(ProxyJsonUtils.parseMultiple(message));
+			rawMessage = MultiChatUtil.approximateHexCodes(rawMessage);
+			replacement = MultiChatUtil.approximateHexCodes(replacement);
 		}
+
+		player.sendMessage(ProxyJsonUtils.parsePartialMultiple(rawMessage, "%MESSAGE%", replacement));
 
 	}
 
-	private void displayConsoleMessage(String message) {
-		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMultiple(MultiChatUtil.approximateHexCodes(message)));
+	private void displayConsoleMessage(String rawMessage, String replacement) {
+
+		rawMessage = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(rawMessage));
+		replacement = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(replacement));
+		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parsePartialMultiple(rawMessage, "%MESSAGE%", replacement));
+
 	}
 
 	private void updateLastMessage(UUID sender, UUID target) {
@@ -72,22 +80,16 @@ public class PrivateMessageManager {
 
 		// Replace placeholders (SENDER)
 		String finalmessage = chatfix.replaceMsgVars(getOutFormat(), message, sender, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayMessage(sender, finalmessage);
+		displayMessage(sender, finalmessage, message);
 
 		// Replace placeholders (TARGET)
 		finalmessage = chatfix.replaceMsgVars(getInFormat(), message, sender, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayMessage(target, finalmessage);
+		displayMessage(target, finalmessage, message);
 
 		// Replace placeholders (SPY)
 		finalmessage = chatfix.replaceMsgVars(getSpyFormat(), message, sender, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -98,7 +100,7 @@ public class PrivateMessageManager {
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")
 							|| target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				displayMessage(onlineplayer, finalmessage);
+				displayMessage(onlineplayer, finalmessage, message);
 
 			}
 
@@ -117,22 +119,16 @@ public class PrivateMessageManager {
 
 		// Replace placeholders (SENDER)
 		String finalmessage = chatfix.replaceMsgConsoleTargetVars(getOutFormat(), message, (ProxiedPlayer)sender);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayMessage(sender, finalmessage);
+		displayMessage(sender, finalmessage, message);
 
 		// Replace placeholders (TARGET) (CONSOLE)
 		finalmessage = chatfix.replaceMsgConsoleTargetVars(getInFormat(), message, (ProxiedPlayer)sender);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayConsoleMessage(finalmessage);
+		displayConsoleMessage(finalmessage, message);
 
 		// Replace placeholders (SPY)
 		finalmessage = chatfix.replaceMsgConsoleTargetVars(getSpyFormat(), message, (ProxiedPlayer)sender);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -141,7 +137,7 @@ public class PrivateMessageManager {
 					&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
-				displayMessage(onlineplayer, finalmessage);
+				displayMessage(onlineplayer, finalmessage, message);
 			}
 
 		}
@@ -157,22 +153,16 @@ public class PrivateMessageManager {
 
 		// Replace placeholders (SENDER) (CONSOLE)
 		String finalmessage = chatfix.replaceMsgConsoleSenderVars(getOutFormat(), message, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayConsoleMessage(finalmessage);
+		displayConsoleMessage(finalmessage, message);
 
 		// Replace placeholders (TARGET)
 		finalmessage = chatfix.replaceMsgConsoleSenderVars(getInFormat(), message, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
-		displayMessage(target, finalmessage);
+		displayMessage(target, finalmessage, message);
 
 		// Replace placeholders (SPY)
 		finalmessage = chatfix.replaceMsgConsoleSenderVars(getSpyFormat(), message, target);
-		// Translate formats
-		finalmessage = ProxyUtils.translateColourCodes(finalmessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -181,7 +171,7 @@ public class PrivateMessageManager {
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				displayMessage(onlineplayer, finalmessage);
+				displayMessage(onlineplayer, finalmessage, message);
 			}
 
 		}

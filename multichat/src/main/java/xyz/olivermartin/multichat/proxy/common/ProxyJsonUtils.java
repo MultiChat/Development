@@ -12,19 +12,50 @@ import net.md_5.bungee.chat.ComponentSerializer;
 
 public class ProxyJsonUtils {
 
+	static public final String WITH_DELIMITER = "((?<=(%1$s))|(?=(%1$s)))";
+
+	/**
+	 * <p>Parses a raw string as legacy text and returns the BaseComponent[]</p>
+	 * @param rawMessage The message to parse
+	 * @return the parsed BaseComponent[] ready for sending
+	 */
+	public static BaseComponent[] parseAsLegacy(String rawMessage) {
+		return TextComponent.fromLegacyText(rawMessage);
+	}
+
 	/**
 	 * <p>Parses a raw string (which might be Json) and returns the BaseComponent[]</p>
 	 * <p>If the string is not Json text, it is treated as legacy text</p>
 	 * @param rawMessage The message (which might be Json) to parse
 	 * @return the parsed BaseComponent[] ready for sending
 	 */
-	public static BaseComponent[] parse(String rawMessage) {
+	public static BaseComponent[] parseSingle(String rawMessage) {
 
 		if (isValidJson(rawMessage)) {
 			return ComponentSerializer.parse(rawMessage);
 		} else {
 			return TextComponent.fromLegacyText(rawMessage);
 		}
+
+	}
+
+	public static BaseComponent[] parsePartialSingle(String rawMessage, String placeholder, String replacement) {
+
+		String[] split = rawMessage.split(String.format(WITH_DELIMITER, placeholder), -1);
+		BaseComponent[][] result = new BaseComponent[split.length][];
+
+		int counter = 0;
+		for (String s : split) {
+
+			if (s.equals(placeholder)) {
+				result[counter++] = parseAsLegacy(replacement);
+			} else {
+				result[counter++] = parseSingle(s);
+			}
+
+		}
+
+		return merge(true, result);
 
 	}
 
@@ -55,6 +86,25 @@ public class ProxyJsonUtils {
 
 	}
 
+	public static BaseComponent[] parsePartialMultiple(String rawMessage, String placeholder, String replacement) {
+
+		String[] split = rawMessage.split("\\+\\+\\+");
+
+		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
+		int size = 0;
+
+		for (String s : split) {
+			BaseComponent[] next = parsePartialCopies(s, placeholder, replacement);
+			parsed.add(next);
+			size += next.length;
+		}
+
+		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
+
+		return merge(false, size, parsed.toArray(bcaa));
+
+	}
+
 	/**
 	 * <p><b>PROTOTYPE ONLY</b></p>
 	 * <p>Parses a raw string (which might be Json) and returns the BaseComponent[]</p>
@@ -71,7 +121,26 @@ public class ProxyJsonUtils {
 		int size = 0;
 
 		for (String s : split) {
-			BaseComponent[] next = parse(s);
+			BaseComponent[] next = parseSingle(s);
+			parsed.add(next);
+			size += next.length;
+		}
+
+		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
+
+		return merge(true, size, parsed.toArray(bcaa));
+
+	}
+
+	private static BaseComponent[] parsePartialCopies(String rawMessage, String placeholder, String replacement) {
+
+		String[] split = rawMessage.split(">>>");
+
+		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
+		int size = 0;
+
+		for (String s : split) {
+			BaseComponent[] next = parsePartialSingle(s, placeholder, replacement);
 			parsed.add(next);
 			size += next.length;
 		}
