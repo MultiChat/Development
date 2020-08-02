@@ -110,11 +110,13 @@ public class ProxyJsonUtils {
 		int counter = 0;
 		for (BaseComponent[] bca : baseComponentArrays) {
 
-			if (injectFormatting && previous != null) bca[0].copyFormatting(previous, false);
-
 			for (BaseComponent bc : bca) {
+
+				if (injectFormatting && previous != null) bc.copyFormatting(previous, false);
+
 				merged[counter++] = bc;
 				previous = bc;
+
 			}
 
 		}
