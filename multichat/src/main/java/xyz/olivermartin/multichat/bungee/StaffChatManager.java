@@ -83,12 +83,14 @@ public class StaffChatManager {
 				}
 
 				message = ProxyUtils.translateColourCodes(message);
+				String originalTranslated = ProxyUtils.translateColourCodes(original);
 
 				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message)));
-				} else {
-					onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
+					message = MultiChatUtil.approximateHexCodes(message);
+					originalTranslated = MultiChatUtil.approximateHexCodes(originalTranslated);
 				}
+
+				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 
 			}
 		}

@@ -120,7 +120,7 @@ public class ChatManipulation {
 		messageFormat = messageFormat.replace("%DISPLAYNAME%", displayname);
 		messageFormat = messageFormat.replace("%NAME%", playername);
 		messageFormat = messageFormat.replace("%SERVER%", server);
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)ds.getModChatPreferences().get(target.getUniqueId())).getChatColor());
 		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)ds.getModChatPreferences().get(target.getUniqueId())).getNameColor());
 		return messageFormat;
@@ -134,7 +134,7 @@ public class ChatManipulation {
 		messageFormat = messageFormat.replace("%DISPLAYNAME%",displayname);
 		messageFormat = messageFormat.replace("%NAME%", playername);
 		messageFormat = messageFormat.replace("%SERVER%", server);
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%CC%", "&" + ((TChatInfo)ds.getAdminChatPreferences().get(target.getUniqueId())).getChatColor());
 		messageFormat = messageFormat.replace("%NC%", "&" + ((TChatInfo)ds.getAdminChatPreferences().get(target.getUniqueId())).getNameColor());
 		return messageFormat;
