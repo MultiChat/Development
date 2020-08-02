@@ -12,7 +12,7 @@ import net.md_5.bungee.chat.ComponentSerializer;
 
 public class ProxyJsonUtils {
 
-	static public final String WITH_DELIMITER = "((?<=(%1$s))|(?=(%1$s)))";
+	public static final String WITH_DELIMITER = "((?<=(%1$s))|(?=(%1$s)))";
 
 	/**
 	 * <p>Parses a single node of a MultiChat message as legacy text and returns the BaseComponent[]</p>

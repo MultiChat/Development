@@ -3,11 +3,12 @@ package xyz.olivermartin.multichat.bungee;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
@@ -19,8 +20,6 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 public class MessageManager {
 
 	private static Map<String,String> defaultMessages;
-
-	private static String prefix;
 
 	static {
 
@@ -403,7 +402,18 @@ public class MessageManager {
 	}
 
 	public static String getPrefix() {
+
+		String prefix;
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
+
+		if (config.contains("prefix")) {
+			prefix = config.getString("prefix");
+		} else {
+			prefix = defaultMessages.get("prefix");
+		}
+
 		return prefix;
+
 	}
 
 	public static String getMessage(String id) {
@@ -417,28 +427,44 @@ public class MessageManager {
 	}
 
 	public static void sendMessage(CommandSender sender, String id) {
-		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)))));
+		handleSend(sender, id, getPrefix() + "+++", null);
 	}
 
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
-		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special))));
+		handleSend(sender, id, getPrefix() + "+++", special);
 	}
 
 	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {
-		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special))));
+		handleSend(sender, id, "", special);
 	}
 
-	private static void updatePrefix() {
+	private static void handleSend(CommandSender sender, String id, String prefix, String special) {
 
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
+		boolean isSpecial = special != null;
 
-		if (config.contains("prefix")) {
-			prefix = config.getString("prefix");
+		// Translate format codes
+		String message = prefix + getMessage(id);
+		message = ProxyUtils.translateColourCodes(message);
+		if (isSpecial) special = ProxyUtils.translateColourCodes(special);
+
+		// Handle legacy servers
+		if (sender instanceof ProxiedPlayer) {
+			ProxiedPlayer player = (ProxiedPlayer) sender;
+			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
+				message = MultiChatUtil.approximateHexCodes(message);
+				if (isSpecial) special = MultiChatUtil.approximateHexCodes(special);
+			}
 		} else {
-			prefix = defaultMessages.get("prefix");
+			// Handle console
+			message = MultiChatUtil.approximateHexCodes(message);
+			if (isSpecial) special = MultiChatUtil.approximateHexCodes(special);
+		}
+
+		// Parse & send message
+		if (isSpecial) {
+			sender.sendMessage(ProxyJsonUtils.parseMessage(message, "%SPECIAL%", special));
+		} else {
+			sender.sendMessage(ProxyJsonUtils.parseMessage(message));
 		}
 
 	}
