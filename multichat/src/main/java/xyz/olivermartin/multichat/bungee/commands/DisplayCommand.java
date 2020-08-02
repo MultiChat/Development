@@ -60,9 +60,9 @@ public class DisplayCommand extends Command {
 					onlineplayer.getServer().getInfo().getName())) continue;
 
 			if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-				onlineplayer.sendMessage(ProxyJsonUtils.parseMultiple(MultiChatUtil.approximateHexCodes(message)));
+				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message)));
 			} else {
-				onlineplayer.sendMessage(ProxyJsonUtils.parseMultiple(message));
+				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 			}
 
 		}

@@ -15,21 +15,21 @@ public class ProxyJsonUtils {
 	static public final String WITH_DELIMITER = "((?<=(%1$s))|(?=(%1$s)))";
 
 	/**
-	 * <p>Parses a raw string as legacy text and returns the BaseComponent[]</p>
-	 * @param rawMessage The message to parse
+	 * <p>Parses a single node of a MultiChat message as legacy text and returns the BaseComponent[]</p>
+	 * @param rawMessage The raw message node to parse
 	 * @return the parsed BaseComponent[] ready for sending
 	 */
-	public static BaseComponent[] parseAsLegacy(String rawMessage) {
+	private static BaseComponent[] parseNodeAsLegacy(String rawMessage) {
 		return TextComponent.fromLegacyText(rawMessage);
 	}
 
 	/**
-	 * <p>Parses a raw string (which might be Json) and returns the BaseComponent[]</p>
+	 * <p>Parses a single node of a MultiChat message (which might be Json) and returns the BaseComponent[]</p>
 	 * <p>If the string is not Json text, it is treated as legacy text</p>
-	 * @param rawMessage The message (which might be Json) to parse
+	 * @param rawMessage The raw message node (which might be Json) to parse
 	 * @return the parsed BaseComponent[] ready for sending
 	 */
-	public static BaseComponent[] parseSingle(String rawMessage) {
+	private static BaseComponent[] parseNode(String rawMessage) {
 
 		if (isValidJson(rawMessage)) {
 			return ComponentSerializer.parse(rawMessage);
@@ -39,7 +39,20 @@ public class ProxyJsonUtils {
 
 	}
 
-	public static BaseComponent[] parsePartialSingle(String rawMessage, String placeholder, String replacement) {
+	/**
+	 * <p>Parses a single node of a MultiChat message (which might be Json) and returns the BaseComponent[]</p>
+	 * <p>If the string is not Json text, it is treated as legacy text</p>
+	 * <p>This method allows for a partially substituted message node</p>
+	 * <p>You can specify a placeholder and its replacement which will be parsed as legacy text within the rest of the node</p>
+	 * <p>This is useful for user %MESSAGE%s which you do not want to be parsed as JSON</p>
+	 * @param rawMessage The raw message node (which might be Json) to parse
+	 * @param placeholder The placeholder to be substituted
+	 * @param replacement The replacement value for the placeholder (substituted as legacy text)
+	 * @return the parsed BaseComponent[] ready for sending
+	 */
+	private static BaseComponent[] parsePartialNode(String rawMessage, String placeholder, String replacement) {
+
+		if (placeholder == null || replacement == null) return parseNode(rawMessage);
 
 		String[] split = rawMessage.split(String.format(WITH_DELIMITER, placeholder), -1);
 		BaseComponent[][] result = new BaseComponent[split.length][];
@@ -48,9 +61,9 @@ public class ProxyJsonUtils {
 		for (String s : split) {
 
 			if (s.equals(placeholder)) {
-				result[counter++] = parseAsLegacy(replacement);
+				result[counter++] = parseNodeAsLegacy(replacement);
 			} else {
-				result[counter++] = parseSingle(s);
+				result[counter++] = parseNode(s);
 			}
 
 		}
@@ -60,79 +73,58 @@ public class ProxyJsonUtils {
 	}
 
 	/**
-	 * <p><b>PROTOTYPE ONLY</b></p>
-	 * <p>Parses a raw string (which might be Json) and returns the BaseComponent[]</p>
-	 * <p>The parseMultiple method is a prototype using a +++ separator between Json and legacy text</p>
+	 * <p>Parses an entire MultiChat message (which might include Json) and returns the BaseComponent[]</p>
 	 * <p>If the string is not Json text, it is treated as legacy text</p>
-	 * @param rawMessage The message (which might contains Json) to parse
+	 * <p>The concatenation operator +++, and injection operator >>>, will also be parsed</p>
+	 * @param rawMessage The raw message (which might include Json) to parse
 	 * @return the parsed BaseComponent[] ready for sending
 	 */
-	public static BaseComponent[] parseMultiple(String rawMessage) {
-
-		String[] split = rawMessage.split("\\+\\+\\+");
-
-		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
-		int size = 0;
-
-		for (String s : split) {
-			BaseComponent[] next = parseCopies(s);
-			parsed.add(next);
-			size += next.length;
-		}
-
-		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
-
-		return merge(false, size, parsed.toArray(bcaa));
-
-	}
-
-	public static BaseComponent[] parsePartialMultiple(String rawMessage, String placeholder, String replacement) {
-
-		String[] split = rawMessage.split("\\+\\+\\+");
-
-		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
-		int size = 0;
-
-		for (String s : split) {
-			BaseComponent[] next = parsePartialCopies(s, placeholder, replacement);
-			parsed.add(next);
-			size += next.length;
-		}
-
-		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
-
-		return merge(false, size, parsed.toArray(bcaa));
-
+	public static BaseComponent[] parseMessage(String rawMessage) {
+		return parseConcatenations(rawMessage, null, null);
 	}
 
 	/**
-	 * <p><b>PROTOTYPE ONLY</b></p>
-	 * <p>Parses a raw string (which might be Json) and returns the BaseComponent[]</p>
-	 * <p>The parseMultiple method is a prototype using a +++ separator between Json and legacy text</p>
+	 * <p>Parses an entire MultiChat message (which might include Json) and returns the BaseComponent[]</p>
 	 * <p>If the string is not Json text, it is treated as legacy text</p>
-	 * @param rawMessage The message (which might contains Json) to parse
+	 * <p>The concatenation operator +++, and injection operator >>>, will also be parsed</p>
+	 * <p>This method allows for a partially substituted message node</p>
+	 * <p>You can specify a placeholder and its replacement which will be parsed as legacy text within the rest of the node</p>
+	 * <p>This is useful for user %MESSAGE%s which you do not want to be parsed as JSON</p>
+	 * @param rawMessage The raw message (which might include Json) to parse
+	 * @param placeholder The placeholder to be substituted
+	 * @param replacement The replacement value for the placeholder (substituted as legacy text)
 	 * @return the parsed BaseComponent[] ready for sending
 	 */
-	private static BaseComponent[] parseCopies(String rawMessage) {
+	public static BaseComponent[] parseMessage(String rawMessage, String placeholder, String replacement) {
+		return parseConcatenations(rawMessage, placeholder, replacement);
+	}
 
-		String[] split = rawMessage.split(">>>");
+	/*
+	 * Parses the concatenations in a MultiChat message
+	 */
+	private static BaseComponent[] parseConcatenations(String rawMessage, String placeholder, String replacement) {
+
+		String[] split = rawMessage.split("\\+\\+\\+");
 
 		List<BaseComponent[]> parsed = new ArrayList<BaseComponent[]>();
 		int size = 0;
 
 		for (String s : split) {
-			BaseComponent[] next = parseSingle(s);
+			BaseComponent[] next = parseInjections(s, placeholder, replacement);
 			parsed.add(next);
 			size += next.length;
 		}
 
 		BaseComponent[][] bcaa = new BaseComponent[parsed.size()][];
 
-		return merge(true, size, parsed.toArray(bcaa));
+		return merge(false, size, parsed.toArray(bcaa));
 
 	}
 
-	private static BaseComponent[] parsePartialCopies(String rawMessage, String placeholder, String replacement) {
+	/*
+	 * Parses the injections in a MultiChat message
+	 */
+	private static BaseComponent[] parseInjections(String rawMessage, String placeholder, String replacement) {
 
 		String[] split = rawMessage.split(">>>");
 
@@ -140,7 +132,7 @@ public class ProxyJsonUtils {
 		int size = 0;
 
 		for (String s : split) {
-			BaseComponent[] next = parsePartialSingle(s, placeholder, replacement);
+			BaseComponent[] next = parsePartialNode(s, placeholder, replacement);
 			parsed.add(next);
 			size += next.length;
 		}
@@ -219,6 +211,9 @@ public class ProxyJsonUtils {
 
 	}
 
+	/*
+	 * Checks if the json can be safely parsed by Minecraft
+	 */
 	private static boolean isSafeMinecraftJson(String json) {
 		try {
 			return ComponentSerializer.parse(json) != null;

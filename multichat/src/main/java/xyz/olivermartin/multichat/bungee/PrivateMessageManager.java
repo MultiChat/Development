@@ -54,7 +54,7 @@ public class PrivateMessageManager {
 			replacement = MultiChatUtil.approximateHexCodes(replacement);
 		}
 
-		player.sendMessage(ProxyJsonUtils.parsePartialMultiple(rawMessage, "%MESSAGE%", replacement));
+		player.sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
 
 	}
 
@@ -62,7 +62,7 @@ public class PrivateMessageManager {
 
 		rawMessage = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(rawMessage));
 		replacement = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(replacement));
-		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parsePartialMultiple(rawMessage, "%MESSAGE%", replacement));
+		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
 
 	}
 
