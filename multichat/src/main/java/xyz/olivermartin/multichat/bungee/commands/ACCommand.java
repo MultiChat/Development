@@ -7,77 +7,56 @@ import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
 
 /**
  * Admin-Chat command
  * <p>Allows the user to toggle / send a message to admin-chat</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class ACCommand extends Command {
 
-	public ACCommand() {
-		super("mcac", "multichat.staff.admin", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ac").toArray(new String[0]));
-	}
+    public ACCommand() {
+        super("mcac", "multichat.staff.admin", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ac").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (args.length > 0) {
+        	// Default sender values
+            String name = "CONSOLE";
+            String displayName = "CONSOLE";
+            String serverName = "#";
 
-		boolean toggleresult;
+            // Change values if sender is a player
+            if (sender instanceof ProxiedPlayer) {
+                ProxiedPlayer player = (ProxiedPlayer) sender;
+                name = player.getName();
+                displayName = player.getDisplayName();
+                serverName = player.getServer().getInfo().getName();
+            }
 
-		if (args.length < 1) {
+            // Send message
+            DebugManager.log("[ACCommand] Attempting to send a staff chat message as " + name + ".");
+            StaffChatManager staffChatManager = new StaffChatManager();
+            staffChatManager.sendAdminMessage(name, displayName, serverName, String.join(" ", args));
+            return;
+        }
 
-			if ((sender instanceof ProxiedPlayer)) {
+        // Console can't toggle AC
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "command_ac_only_players");
+            return;
+        }
 
-				DebugManager.log("[ACCommand] Command sender is a player");
+        // Toggle AC for player
+        DebugManager.log("[ACCommand] Sender is a player, toggling AC...");
 
-				ProxiedPlayer player = (ProxiedPlayer)sender;
-				toggleresult = Events.toggleAC(player.getUniqueId());
+        ProxiedPlayer player = (ProxiedPlayer) sender;
+        boolean toggleresult = Events.toggleAC(player.getUniqueId());
 
-				DebugManager.log("[ACCommand] AC new toggle state: " + toggleresult);
-
-				if (toggleresult == true) {
-					MessageManager.sendMessage(sender, "command_ac_toggle_on");
-				} else {
-					MessageManager.sendMessage(sender, "command_ac_toggle_off");
-				}
-
-			} else {
-
-				MessageManager.sendMessage(sender, "command_ac_only_players");
-
-			}
-
-		} else if ((sender instanceof ProxiedPlayer)) {
-
-			DebugManager.log("[ACCommand] Command sender is a player");
-
-			String message = MultiChatUtil.getMessageFromArgs(args);
-
-			ProxiedPlayer player = (ProxiedPlayer)sender;
-			StaffChatManager chatman = new StaffChatManager();
-
-			DebugManager.log("[ACCommand] Next line of code will send the message, if no errors, then it worked!");
-
-			chatman.sendAdminMessage(player.getName(), player.getDisplayName(), player.getServer().getInfo().getName(), message);
-			chatman = null;
-
-		} else {
-
-			DebugManager.log("[ACCommand] Command sender is the console");
-
-			String message = MultiChatUtil.getMessageFromArgs(args);
-
-			StaffChatManager chatman = new StaffChatManager();
-
-			DebugManager.log("[ACCommand] Next line of code will send the message, if no errors, then it worked!");
-
-			chatman.sendAdminMessage("CONSOLE", "CONSOLE", "#", message);
-			chatman = null;
-
-		}
-	}
+        DebugManager.log("[ACCommand] AC new toggle state: " + toggleresult);
+        MessageManager.sendMessage(sender, "command_ac_toggle_" + (toggleresult ? "on" : "off"));
+    }
 }
