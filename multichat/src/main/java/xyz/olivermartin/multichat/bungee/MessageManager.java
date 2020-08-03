@@ -427,18 +427,22 @@ public class MessageManager {
 	}
 
 	public static void sendMessage(CommandSender sender, String id) {
-		handleSend(sender, id, getPrefix() + "+++", null);
+		handleSend(sender, id, getPrefix() + "+++", null, false);
 	}
 
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
-		handleSend(sender, id, getPrefix() + "+++", special);
+		handleSend(sender, id, getPrefix() + "+++", special, false);
+	}
+
+	public static void sendSpecialMessage(CommandSender sender, String id, String special, boolean specialJson) {
+		handleSend(sender, id, getPrefix() + "+++", special, specialJson);
 	}
 
 	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {
-		handleSend(sender, id, "", special);
+		handleSend(sender, id, "", special, false);
 	}
 
-	private static void handleSend(CommandSender sender, String id, String prefix, String special) {
+	private static void handleSend(CommandSender sender, String id, String prefix, String special, boolean specialJson) {
 
 		boolean isSpecial = special != null;
 
@@ -458,6 +462,12 @@ public class MessageManager {
 			// Handle console
 			message = MultiChatUtil.approximateHexCodes(message);
 			if (isSpecial) special = MultiChatUtil.approximateHexCodes(special);
+		}
+
+		// If we want to treat the "Special" part as Json, then we will parse it here and treat it as a non special message
+		if (specialJson) {
+			message = message.replace("%SPECIAL%", special);
+			isSpecial = false;
 		}
 
 		// Parse & send message
