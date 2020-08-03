@@ -3,9 +3,7 @@ package xyz.olivermartin.multichat.proxy.common.listeners;
 import java.util.UUID;
 
 import de.myzelyam.api.vanish.BungeeVanishAPI;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -19,11 +17,28 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyServerConnectedListener implements Listener {
+
+	private void displayMessage(ProxiedPlayer player, ProxiedPlayer sender, String senderServer, String message) {
+
+		message = ProxyUtils.translateColourCodes(message);
+
+		if (player.getUniqueId().equals(sender.getUniqueId())) {
+			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateHexCodes(message);
+		} else {
+			if (player.getServer() == null) return;
+			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateHexCodes(message);
+		}
+
+		player.sendMessage(ProxyJsonUtils.parseMessage(message));
+
+	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onServerConnected(ServerConnectedEvent event) {
@@ -104,10 +119,10 @@ public class ProxyServerConnectedListener implements Listener {
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation(); // TODO Legacy
-			joinformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(joinformat, player.getName()));
-			silentformat = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(silentformat, player.getName()));
-			welcomeMessage = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(welcomeMessage, player.getName()));
-			privateWelcomeMessage = MultiChatUtil.reformatRGB(chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName()));
+			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
+			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
+			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
+			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
 
 			// Check which messages should be broadcast
 			boolean broadcastWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome", true);
@@ -120,30 +135,18 @@ public class ProxyServerConnectedListener implements Listener {
 				if (broadcastJoin) {
 
 					if (firstJoin && broadcastWelcome) {
-						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', welcomeMessage))));
-						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', welcomeMessage)));
-						}
+						displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), welcomeMessage);
 					}
 
 					if (firstJoin && privateWelcome
 							&& onlineplayer.getName().equals(player.getName())) {
 
-						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage))));
-						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', privateWelcomeMessage)));
-						}
+						displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), privateWelcomeMessage);
 
 					}
 
 					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
-						if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', joinformat))));
-						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', joinformat)));
-						}
+						displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), joinformat);
 					}
 
 				} else {
@@ -152,11 +155,7 @@ public class ProxyServerConnectedListener implements Listener {
 
 					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
 						if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-							if (MultiChat.legacyServers.contains(event.getServer().getInfo().getName())) {
-								onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', silentformat))));
-							} else {
-								onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', silentformat)));
-							}
+							displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), silentformat);
 						}
 					}
 
