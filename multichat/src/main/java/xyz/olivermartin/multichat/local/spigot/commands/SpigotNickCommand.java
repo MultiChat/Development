@@ -21,34 +21,46 @@ public class SpigotNickCommand extends NickCommand implements CommandExecutor {
 
 		if (!command.getName().equalsIgnoreCase("nick")) return false;
 
-		MultiChatLocalCommandSender mccs = new MultiChatLocalSpigotCommandSender(sender);
-
-		if (!mccs.isPlayer()) {
-			mccs.sendBadMessage("Only players can use this command!");
-			return true;
-		}
-
-		MultiChatLocalPlayer senderPlayer = new MultiChatLocalSpigotPlayer((Player)sender);
-
 		if (args.length < 1 || args.length > 2) {
 			return false;
 		}
 
+		MultiChatLocalCommandSender mccs = new MultiChatLocalSpigotCommandSender(sender);
+
+		UUID targetUniqueId;
+		String proposedNickname;
+		
 		if (args.length == 1) {
 
-			return executeNickCommand(senderPlayer.getUniqueId(), senderPlayer, args[0]);
+			if (!mccs.isPlayer()) {
+				mccs.sendBadMessage("Only players can have nicknames!");
+				return true;
+			}
+			
+			MultiChatLocalPlayer senderPlayer = new MultiChatLocalSpigotPlayer((Player)sender);
+			
+			targetUniqueId = senderPlayer.getUniqueId();
+			proposedNickname = args[0];
 
 		} else {
 
-			Optional<UUID> targetUniqueId = MultiChatLocal.getInstance().getNameManager().getUUIDFromName(args[0]);
+			Optional<UUID> opTargetUniqueId = MultiChatLocal.getInstance().getNameManager().getUUIDFromName(args[0]);
 
-			if (!targetUniqueId.isPresent()) {
+			if (!opTargetUniqueId.isPresent()) {
 				mccs.sendBadMessage(args[0] + " has never joined the server so cannot be nicknamed!");
 				return true;
 			}
+			
+			targetUniqueId = opTargetUniqueId.get();
+			proposedNickname = args[1];
 
-			return executeNickCommand(targetUniqueId.get(), senderPlayer, args[1]);
-
+		}
+		
+		if (!mccs.isPlayer()) {
+			return executeConsoleNickCommand(targetUniqueId, mccs, proposedNickname);
+		} else {
+			MultiChatLocalPlayer senderPlayer = new MultiChatLocalSpigotPlayer((Player)sender);
+			return executeNickCommand(targetUniqueId, senderPlayer, proposedNickname);
 		}
 
 	}

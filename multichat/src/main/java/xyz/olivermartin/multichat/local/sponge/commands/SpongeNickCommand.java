@@ -23,13 +23,6 @@ public class SpongeNickCommand extends NickCommand implements CommandExecutor {
 
 		MultiChatLocalCommandSender mccs = new MultiChatLocalSpongeCommandSender(src);
 
-		if (!mccs.isPlayer()) {
-			mccs.sendBadMessage("Only players can use this command!");
-			return CommandResult.success();
-		}
-
-		MultiChatLocalPlayer senderPlayer = new MultiChatLocalSpongePlayer((Player)src);
-
 		Optional<String> opTargetName = args.<String>getOne("player");
 
 		if (!opTargetName.isPresent()) {
@@ -46,7 +39,14 @@ public class SpongeNickCommand extends NickCommand implements CommandExecutor {
 
 		String nickname = args.<String>getOne("message").get();
 
-		boolean status = executeNickCommand(targetUniqueId.get(), senderPlayer, nickname);
+		boolean status;
+
+		if (!mccs.isPlayer()) {
+			status = executeConsoleNickCommand(targetUniqueId.get(), mccs, nickname);
+		} else {
+			MultiChatLocalPlayer senderPlayer = new MultiChatLocalSpongePlayer((Player)src);
+			status = executeNickCommand(targetUniqueId.get(), senderPlayer, nickname);
+		}
 
 		if (status) {
 			return CommandResult.success();
