@@ -1,10 +1,14 @@
 package xyz.olivermartin.multichat.local.spigot.commands;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.commands.MultiChatLocalCommandSender;
 import xyz.olivermartin.multichat.local.common.commands.NickCommand;
@@ -30,26 +34,20 @@ public class SpigotNickCommand extends NickCommand implements CommandExecutor {
 			return false;
 		}
 
-		MultiChatLocalPlayer targetPlayer;
-
 		if (args.length == 1) {
 
-			targetPlayer = senderPlayer;
-
-			return executeNickCommand(targetPlayer, senderPlayer, args[0]);
+			return executeNickCommand(senderPlayer.getUniqueId(), senderPlayer, args[0]);
 
 		} else {
 
-			Player target = sender.getServer().getPlayer(args[0]);
+			Optional<UUID> targetUniqueId = MultiChatLocal.getInstance().getNameManager().getUUIDFromName(args[0]);
 
-			if (target == null) {
-				mccs.sendBadMessage(args[0] + " is not currently online so cannot be nicknamed!");
+			if (!targetUniqueId.isPresent()) {
+				mccs.sendBadMessage(args[0] + " has never joined the server so cannot be nicknamed!");
 				return true;
 			}
 
-			targetPlayer = new MultiChatLocalSpigotPlayer(target);
-
-			return executeNickCommand(targetPlayer, senderPlayer, args[1]);
+			return executeNickCommand(targetUniqueId.get(), senderPlayer, args[1]);
 
 		}
 

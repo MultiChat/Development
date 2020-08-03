@@ -177,7 +177,7 @@ public class MultiChatLocalSpongePlugin {
 		CommandSpec nicknameCommandSpec = CommandSpec.builder()
 				.description(Text.of("Sponge Nickname Command"))
 				.arguments(
-						GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))),
+						GenericArguments.onlyOne(GenericArguments.string(Text.of("player"))),
 						GenericArguments.remainingJoinedStrings(Text.of("message")))
 				.permission("multichatlocal.nick.self")
 				.executor(new SpongeNickCommand())

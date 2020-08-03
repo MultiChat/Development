@@ -13,15 +13,13 @@ public abstract class NickCommand {
 	//private static final Pattern simpleNickname = Pattern.compile("^[a-zA-Z0-9&_]+$");
 	private static final Pattern simpleNickname = Pattern.compile("^([a-zA-Z0-9_]|(?i)(\\&[0-9A-FL-ORX]))+$");
 
-	public boolean executeNickCommand(MultiChatLocalPlayer targetPlayer, MultiChatLocalPlayer sender, String proposedNick) {
+	public boolean executeNickCommand(UUID targetUniqueId, MultiChatLocalPlayer sender, String proposedNick) {
 
 		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
 
-		UUID targetUUID = targetPlayer.getUniqueId();
-
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
-		if (targetPlayer.getUniqueId() != sender.getUniqueId()) {
+		if (targetUniqueId != sender.getUniqueId()) {
 			if (!sender.hasPermission("multichatlocal.nick.others")) {
 				sender.sendBadMessage("You do not have permission to nickname other players!");
 				return true;
@@ -29,18 +27,18 @@ public abstract class NickCommand {
 		}
 
 		if (proposedNick.equalsIgnoreCase("off")) {
-			lnm.removeNickname(targetUUID);
-			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUUID);
+			lnm.removeNickname(targetUniqueId);
+			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 			sender.sendGoodMessage("The nickname has been removed!");
 			return true;
 		}
 
-		if (!checkPermissions(targetPlayer, sender, proposedNick)) {
+		if (!checkPermissions(targetUniqueId, sender, proposedNick)) {
 			return true;
 		}
 
-		lnm.setNickname(targetUUID, proposedNick);
-		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUUID);
+		lnm.setNickname(targetUniqueId, proposedNick);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 
 		sender.sendGoodMessage("The nickname has been set!");
 		return true;
@@ -48,7 +46,7 @@ public abstract class NickCommand {
 	}
 
 
-	private boolean checkPermissions(MultiChatLocalPlayer targetPlayer, MultiChatLocalPlayer sender, String proposedNick) {
+	private boolean checkPermissions(UUID targetUniqueId, MultiChatLocalPlayer sender, String proposedNick) {
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
@@ -140,8 +138,8 @@ public abstract class NickCommand {
 			return false;
 		}
 
-		String targetNickname = lnm.stripAllFormattingCodes(lnm.getCurrentName(targetPlayer.getUniqueId(), false));
-		String targetName = lnm.getName(targetPlayer.getUniqueId());
+		String targetNickname = lnm.stripAllFormattingCodes(lnm.getCurrentName(targetUniqueId, false));
+		String targetName = lnm.getName(targetUniqueId);
 
 		if (lnm.existsNickname(proposedNick) && !targetNickname.equalsIgnoreCase(lnm.stripAllFormattingCodes(proposedNick)) ) {
 			sender.sendBadMessage("Sorry, this nickname is already in use!");
