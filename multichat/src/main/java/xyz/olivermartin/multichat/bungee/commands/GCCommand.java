@@ -4,10 +4,8 @@ import java.util.Optional;
 
 import com.olivermartin410.plugins.TGroupChatInfo;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
@@ -19,6 +17,8 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -95,13 +95,10 @@ public class GCCommand extends Command {
 		}
 	}
 
-	public static void sendMessage(String message, String playerName, TGroupChatInfo groupInfo) {
+	public static void sendMessage(String originalMessage, String playerName, TGroupChatInfo groupInfo) {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-
 		ChatManipulation chatfix = new ChatManipulation();
-
-		message = MultiChatUtil.reformatRGB(message);
 
 		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(playerName);
 		if (potentialPlayer != null) {
@@ -110,23 +107,26 @@ public class GCCommand extends Command {
 				return;
 			}
 
-			if (ChatControl.handleSpam(potentialPlayer, message, "group_chats")) {
+			if (ChatControl.handleSpam(potentialPlayer, originalMessage, "group_chats")) {
 				return;
 			}
 		}
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "group_chats", playerName);
+		crm = ChatControl.applyChatRules(originalMessage, "group_chats", playerName);
 
 		if (crm.isPresent()) {
-			message = crm.get();
+			originalMessage = crm.get();
 		} else {
 			return;
 		}
 
 		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
-		message = chatfix.replaceGroupChatVars(messageFormat, playerName, message, groupInfo.getName());
+		String message = chatfix.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName());
+
+		message = ProxyUtils.translateColourCodes(message);
+		String originalTranslated = ProxyUtils.translateColourCodes(originalMessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -135,18 +135,18 @@ public class GCCommand extends Command {
 				if (potentialPlayer != null) {
 					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message), "%MESSAGE%", MultiChatUtil.approximateHexCodes(originalTranslated)));
 						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 						}
 					} else {
 						ChatControl.sendIgnoreNotifications(onlineplayer, potentialPlayer, "group_chats");
 					}
 				} else {
 					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message), "%MESSAGE%", MultiChatUtil.approximateHexCodes(originalTranslated)));
 					} else {
-						onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 					}
 				}
 
@@ -154,6 +154,7 @@ public class GCCommand extends Command {
 
 		}
 
-		ConsoleManager.logGroupChat(message);
+		ConsoleManager.logGroupChat(originalMessage);
+
 	}
 }

@@ -146,7 +146,7 @@ public class ChatManipulation {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		messageFormat = messageFormat.replace("%NAME%", sendername);
-		messageFormat = messageFormat.replace("%MESSAGE%", message);
+		//messageFormat = messageFormat.replace("%MESSAGE%", message);
 		messageFormat = messageFormat.replace("%CC%", "&" + ((TGroupChatInfo)ds.getGroupChats().get(groupName)).getChatColor());
 		messageFormat = messageFormat.replace("%NC%", "&" + ((TGroupChatInfo)ds.getGroupChats().get(groupName)).getNameColor());
 		messageFormat = messageFormat.replace("%GROUPNAME%", groupName.toUpperCase());
