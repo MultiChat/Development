@@ -95,7 +95,7 @@ public class MultiChatUtil {
 		Matcher rgbMatcher = TRANSLATED_RGB.matcher(message);
 		message = rgbMatcher.replaceAll("&#$2$3$4$5$6$7");
 
-		message = replaceRGBShortCodesWithApproximations(message);
+		message = replaceRGBShortCodesWithApproximations(message, false);
 
 		return approximateJsonRGBColourCodes(message);
 
@@ -105,11 +105,11 @@ public class MultiChatUtil {
 
 		Matcher jsonRgbMatcher = JSON_RGB.matcher(message);
 		message = jsonRgbMatcher.replaceAll("$1&#$2$3$4$5$6$7$8");
-		return replaceRGBShortCodesWithApproximations(message);
+		return replaceRGBShortCodesWithApproximations(message, true);
 
 	}
 
-	private static String replaceRGBShortCodesWithApproximations(String message) {
+	private static String replaceRGBShortCodesWithApproximations(String message, boolean useNameInsteadOfCode) {
 
 		List<String> allMatches = new ArrayList<String>();
 		Matcher m = SHORT_UNTRANSLATED_RGB.matcher(message);
@@ -129,7 +129,13 @@ public class MultiChatUtil {
 				hexonly = match.split("X")[1];
 			}
 			String minecraftCode = hexToMinecraft(hexonly);
-			message = message.replace(match,getMinecraftCodeName(minecraftCode));
+
+			if (useNameInsteadOfCode) {
+				message = message.replace(match,getMinecraftCodeName(minecraftCode));
+			} else {
+				message = message.replace(match,"§"+minecraftCode);
+			}
+
 		}
 
 		return message;
