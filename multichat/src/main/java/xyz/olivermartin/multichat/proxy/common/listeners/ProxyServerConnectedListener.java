@@ -82,6 +82,10 @@ public class ProxyServerConnectedListener implements Listener {
 		UUIDNameManager.addNew(uuid, player.getName());
 		ConsoleManager.log("Refreshed UUID-Name lookup: " + uuid.toString());
 
+		// If player is only switching server (not joining for first time) then leave now
+		if (ds.getJoinedNetwork().contains(player.getUniqueId())) return;
+		ds.getJoinedNetwork().add(player.getUniqueId());
+
 		// If MultiChat is handling join messages...
 		if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")
 				|| ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome")

@@ -51,6 +51,9 @@ public class ProxyDataStore {
 	// Which staff are hidden?
 	private Set<UUID> hiddenStaff = new HashSet<UUID>();
 
+	// Which players have had their join message processed for the network
+	private Set<UUID> joinedNetwork = new HashSet<UUID>();
+
 	public synchronized boolean isChatFrozen() {
 		return this.chatFrozen;
 	}
@@ -183,6 +186,20 @@ public class ProxyDataStore {
 	 */
 	public void setLocalSpy(List<UUID> localSpy) {
 		this.localSpy = localSpy;
+	}
+
+	/**
+	 * @return the joinedNetwork
+	 */
+	public Set<UUID> getJoinedNetwork() {
+		return joinedNetwork;
+	}
+
+	/**
+	 * @param joinedNetwork the joinedNetwork to set
+	 */
+	public void setJoinedNetwork(Set<UUID> joinedNetwork) {
+		this.joinedNetwork = joinedNetwork;
 	}
 
 }

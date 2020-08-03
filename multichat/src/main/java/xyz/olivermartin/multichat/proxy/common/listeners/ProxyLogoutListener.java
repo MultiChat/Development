@@ -74,6 +74,9 @@ public class ProxyLogoutListener implements Listener {
 
 		ConsoleManager.log("Un-Registered player " + player.getName());
 
+		// Remove player from the "joined network" list
+		ds.getJoinedNetwork().remove(player.getUniqueId());
+
 		// If we are handling the quit messages, then handle them...
 		if ( ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showquit") == true ) {
 
