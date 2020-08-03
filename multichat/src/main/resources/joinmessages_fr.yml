@@ -73,6 +73,6 @@ private_welcome: false
 # Définissez le message de bienvenue ci-dessous
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = Le nom du joueur
-# %SERVER% = le serveur du joueur
+# %SERVER% = le serveur du joueurs
 
 private_welcome_message: "&dSalut %NAME%! S'il vous plaît lire les règles!"
