@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
@@ -59,6 +60,9 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 
 		String senderServer = sender.getServer().getInfo().getName();
 		String joined = format + message;
+
+		// TODO This is just a test
+		if (sender.hasPermission("multichat.chat.tag")) MultiChatProxy.getInstance().getTagManager().handleTags(message, sender.getName());
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 

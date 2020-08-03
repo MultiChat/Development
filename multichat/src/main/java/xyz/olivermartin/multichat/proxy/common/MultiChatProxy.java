@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.TagManager;
 import xyz.olivermartin.multichat.proxy.common.contexts.ContextManager;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
@@ -37,6 +38,7 @@ public class MultiChatProxy {
 	private ContextManager contextManager;
 	private ChannelManager channelManager;
 	private ProxyChatManager chatManager;
+	private TagManager tagManager;
 
 	/* END ATTRIBUTES */
 
@@ -112,6 +114,14 @@ public class MultiChatProxy {
 
 	public void registerChatManager(ProxyChatManager chatManager) {
 		this.chatManager = chatManager;
+	}
+
+	public TagManager getTagManager() {
+		return this.tagManager;
+	}
+
+	public void registerTagManager(TagManager tagManager) {
+		this.tagManager = tagManager;
 	}
 
 }
