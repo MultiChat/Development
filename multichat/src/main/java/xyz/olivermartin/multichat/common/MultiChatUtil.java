@@ -51,7 +51,7 @@ public class MultiChatUtil {
 	 */
 	private static String reformatRGB(String message) {
 		// Translate RGB codes
-		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&x&$2&$3&$4&$5&$6&$7");
+		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&r&x&$2&$3&$4&$5&$6&$7");
 	}
 
 	public static String approximateHexCodes(String message) {

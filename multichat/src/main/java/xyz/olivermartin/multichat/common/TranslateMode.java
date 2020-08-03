@@ -5,14 +5,13 @@ import java.util.regex.Pattern;
 
 public enum TranslateMode {
 
-	COLOUR_SIMPLE ("(?i)&(?=[a-f,0-9])"),
-	COLOUR_ALL ("(?i)&(?=[a-f,0-9,x])"),
-	FORMAT_UNDERLINE ("(?i)&(?=[n])"),
-	FORMAT_ITALIC ("(?i)&(?=[o])"),
-	FORMAT_BOLD ("(?i)&(?=[l])"),
-	FORMAT_STRIKE ("(?i)&(?=[m])"),
-	FORMAT_OBFUSCATED ("(?i)&(?=[k])"),
-	FORMAT_RESET ("(?i)&(?=[r])"),
+	COLOUR_SIMPLE ("(?i)&(?=[a-f,0-9,r])"),
+	COLOUR_ALL ("(?i)&(?=[a-f,0-9,r,x])"),
+	FORMAT_UNDERLINE ("(?i)&(?=[r,n])"),
+	FORMAT_ITALIC ("(?i)&(?=[r,o])"),
+	FORMAT_BOLD ("(?i)&(?=[r,l])"),
+	FORMAT_STRIKE ("(?i)&(?=[r,m])"),
+	FORMAT_OBFUSCATED ("(?i)&(?=[r,k])"),
 	FORMAT_ALL ("(?i)&(?=[k-o,r])"),
 	SIMPLE ("(?i)&(?=[a-f,0-9,k-o,r])"),
 	ALL ("(?i)&(?=[a-f,0-9,k-o,r,x])");
