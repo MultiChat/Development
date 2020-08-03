@@ -11,7 +11,6 @@ import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 
 /**
  * Bulletins Management
@@ -112,7 +111,7 @@ public class Bulletins {
 
 					message = ChatControl.applyChatRules(message, "bulletins", "").get();
 
-					message = ProxyUtils.translateColourCodes(message);
+					message = MultiChatUtil.translateColourCodes(message);
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {

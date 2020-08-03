@@ -19,7 +19,6 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -126,8 +125,8 @@ public class GCCommand extends Command {
 		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
 		String message = chatfix.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName());
 
-		message = ProxyUtils.translateColourCodes(message);
-		String originalTranslated = ProxyUtils.translateColourCodes(originalMessage);
+		message = MultiChatUtil.translateColourCodes(message);
+		String originalTranslated = MultiChatUtil.translateColourCodes(originalMessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -159,6 +158,6 @@ public class GCCommand extends Command {
 		String consoleMessage = "";
 		for (BaseComponent bc : finalMessage) consoleMessage += bc.toLegacyText();
 		ConsoleManager.logGroupChat(consoleMessage);
-		
+
 	}
 }

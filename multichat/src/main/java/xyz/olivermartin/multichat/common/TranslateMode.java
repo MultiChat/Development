@@ -1,4 +1,4 @@
-package xyz.olivermartin.multichat.proxy.common;
+package xyz.olivermartin.multichat.common;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

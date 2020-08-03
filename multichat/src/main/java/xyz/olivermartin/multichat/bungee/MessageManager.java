@@ -8,7 +8,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 /**
@@ -448,8 +447,8 @@ public class MessageManager {
 
 		// Translate format codes
 		String message = prefix + getMessage(id);
-		message = ProxyUtils.translateColourCodes(message);
-		if (isSpecial) special = ProxyUtils.translateColourCodes(special);
+		message = MultiChatUtil.translateColourCodes(message);
+		if (isSpecial) special = MultiChatUtil.translateColourCodes(special);
 
 		// Handle legacy servers
 		if (sender instanceof ProxiedPlayer) {

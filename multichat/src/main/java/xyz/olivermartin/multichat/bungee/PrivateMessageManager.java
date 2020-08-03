@@ -7,7 +7,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -46,8 +45,8 @@ public class PrivateMessageManager {
 
 	private void displayMessage(ProxiedPlayer player, String rawMessage, String replacement) {
 
-		rawMessage = ProxyUtils.translateColourCodes(rawMessage);
-		replacement = ProxyUtils.translateColourCodes(replacement);
+		rawMessage = MultiChatUtil.translateColourCodes(rawMessage);
+		replacement = MultiChatUtil.translateColourCodes(replacement);
 
 		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
 			rawMessage = MultiChatUtil.approximateHexCodes(rawMessage);
@@ -60,8 +59,8 @@ public class PrivateMessageManager {
 
 	private void displayConsoleMessage(String rawMessage, String replacement) {
 
-		rawMessage = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(rawMessage));
-		replacement = MultiChatUtil.approximateHexCodes(ProxyUtils.translateColourCodes(replacement));
+		rawMessage = MultiChatUtil.approximateHexCodes(MultiChatUtil.translateColourCodes(rawMessage));
+		replacement = MultiChatUtil.approximateHexCodes(MultiChatUtil.translateColourCodes(replacement));
 		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
 
 	}

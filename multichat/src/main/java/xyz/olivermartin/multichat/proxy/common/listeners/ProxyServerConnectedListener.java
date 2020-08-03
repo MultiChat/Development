@@ -18,7 +18,6 @@ import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -27,7 +26,7 @@ public class ProxyServerConnectedListener implements Listener {
 
 	private void displayMessage(ProxiedPlayer player, ProxiedPlayer sender, String senderServer, String message) {
 
-		message = ProxyUtils.translateColourCodes(message);
+		message = MultiChatUtil.translateColourCodes(message);
 
 		if (player.getUniqueId().equals(sender.getUniqueId())) {
 			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateHexCodes(message);

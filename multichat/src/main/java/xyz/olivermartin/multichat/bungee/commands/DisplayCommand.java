@@ -13,7 +13,6 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 
@@ -50,7 +49,7 @@ public class DisplayCommand extends Command {
 		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
-		message = ProxyUtils.translateColourCodes(message);
+		message = MultiChatUtil.translateColourCodes(message);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 

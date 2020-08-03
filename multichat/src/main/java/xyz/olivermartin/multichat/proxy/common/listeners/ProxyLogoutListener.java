@@ -19,7 +19,6 @@ import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
@@ -29,7 +28,7 @@ public class ProxyLogoutListener implements Listener {
 
 		if (player.getServer() == null) return;
 
-		message = ProxyUtils.translateColourCodes(message);
+		message = MultiChatUtil.translateColourCodes(message);
 
 		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateHexCodes(message);
 
