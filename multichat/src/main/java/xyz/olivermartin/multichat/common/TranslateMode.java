@@ -14,6 +14,7 @@ public enum TranslateMode {
 	FORMAT_OBFUSCATED ("(?i)&(?=[k])"),
 	FORMAT_RESET ("(?i)&(?=[r])"),
 	FORMAT_ALL ("(?i)&(?=[k-o,r])"),
+	SIMPLE ("(?i)&(?=[a-f,0-9,k-o,r])"),
 	ALL ("(?i)&(?=[a-f,0-9,k-o,r,x])");
 
 	private Pattern pattern;

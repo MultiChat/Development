@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -100,8 +99,7 @@ public class LocalChannel {
 
 	public void broadcastRawMessage(CommandSender sender, String server, String message) {
 
-		message = MultiChatUtil.reformatRGB(message);
-		message = ChatColor.translateAlternateColorCodes('&', message);
+		message = MultiChatUtil.translateColourCodes(message);
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 

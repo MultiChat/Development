@@ -24,12 +24,16 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 
 			Chat vaultChat = opVault.get();
 
-			// LEGACY HACK
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-				return MultiChatUtil.approximateHexCodes(vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid)));
-			}
+			// Get prefix
+			String prefix = vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid));
 
-			return MultiChatUtil.reformatRGB(vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid)));
+			// Translate prefix
+			prefix = MultiChatUtil.translateColourCodes(prefix); 
+
+			// Deal with legacy servers
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) prefix = MultiChatUtil.approximateHexCodes(prefix);
+
+			return prefix;
 
 		}
 
@@ -46,12 +50,16 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 
 			Chat vaultChat = opVault.get();
 
-			// LEGACY HACK
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-				return MultiChatUtil.approximateHexCodes(vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid)));
-			}
+			// Get suffix
+			String suffix = vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid));
 
-			return MultiChatUtil.reformatRGB(vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid)));
+			// Translate suffix
+			suffix = MultiChatUtil.translateColourCodes(suffix); 
+
+			// Deal with legacy servers
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) suffix = MultiChatUtil.approximateHexCodes(suffix);
+
+			return suffix;
 
 		}
 
@@ -98,20 +106,14 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			logger.debug("[LocalSpigotMetaManager] Format with placeholders = " + displayNameFormat);
 			logger.debug("[LocalSpigotMetaManager] Format with placeholders (using & only) = " + displayNameFormat.replaceAll("(?i)§(?=[a-f,0-9,k-o,r,x])", "&"));
 
-			displayNameFormat = MultiChatUtil.reformatRGB(displayNameFormat);
-
-			logger.debug("[LocalSpigotMetaManager] Format after reformatting RGB = " + displayNameFormat);
-			logger.debug("[LocalSpigotMetaManager] Format after reformatting RGB (using & only) = " + displayNameFormat.replaceAll("(?i)§(?=[a-f,0-9,k-o,r,x])", "&"));
-
-			displayNameFormat = displayNameFormat.replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
+			displayNameFormat = MultiChatUtil.translateColourCodes(displayNameFormat);
 
 			logger.debug("[LocalSpigotMetaManager] FINAL = " + displayNameFormat);
 			logger.debug("[LocalSpigotMetaManager] FINAL (using & only) = " + displayNameFormat.replaceAll("(?i)§(?=[a-f,0-9,k-o,r,x])", "&"));
 
-			// LEGACY HACK
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
+			// Handle legacy servers
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy())
 				displayNameFormat = MultiChatUtil.approximateHexCodes(displayNameFormat);
-			}
 
 			player.setDisplayName(displayNameFormat);
 			player.setPlayerListName(displayNameFormat);
@@ -119,6 +121,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 		}
 
 		return player.getDisplayName();
+
 	}
 
 }

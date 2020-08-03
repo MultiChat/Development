@@ -8,6 +8,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.common.TranslateMode;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
 import xyz.olivermartin.multichat.local.common.config.RegexChannelForcer;
 import xyz.olivermartin.multichat.local.common.storage.LocalDataStore;
@@ -193,7 +195,7 @@ public abstract class LocalChatManager {
 			format = config.getLocalChatFormat();
 
 			break;
-			
+
 		case "global":
 
 			// Global Chat
@@ -211,11 +213,11 @@ public abstract class LocalChatManager {
 			}
 
 			break;
-			
-			default:
-				
-				format = MultiChatLocal.getInstance().getDataStore().getChannelFormats().getOrDefault(channel, MultiChatLocal.getInstance().getDataStore().getGlobalChatFormat());
-				break;
+
+		default:
+
+			format = MultiChatLocal.getInstance().getDataStore().getChannelFormats().getOrDefault(channel, MultiChatLocal.getInstance().getDataStore().getGlobalChatFormat());
+			break;
 
 		}
 
@@ -306,7 +308,21 @@ public abstract class LocalChatManager {
 
 	}
 
-	public abstract String translateColourCodes(String message, boolean rgb);
+	public String translateColourCodes(String message, boolean rgb) {
+
+		if (rgb) {
+			message = MultiChatUtil.translateColourCodes(message);
+		} else {
+			message = MultiChatUtil.translateColourCodes(message, TranslateMode.SIMPLE);
+		}
+
+		if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
+			message = MultiChatUtil.approximateHexCodes(message);
+		}
+
+		return message;
+
+	}
 
 	public abstract String processExternalPlaceholders(MultiChatLocalPlayer player, String message);
 

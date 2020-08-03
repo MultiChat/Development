@@ -2,7 +2,6 @@ package xyz.olivermartin.multichat.local.spigot;
 
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalPlaceholderManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
@@ -14,9 +13,6 @@ public class LocalSpigotPlaceholderManager extends LocalPlaceholderManager {
 
 	@Override
 	public String buildChatFormat(UUID uuid, String format) {
-
-		// Reformat any hex codes in the format
-		format = MultiChatUtil.reformatRGB(format);
 
 		// RESPECT OTHER PLUGIN'S DISPLAY NAMES FIRST! (Allows for factions etc.)
 		format = format.replace("%DISPLAYNAME%", "%1$s");

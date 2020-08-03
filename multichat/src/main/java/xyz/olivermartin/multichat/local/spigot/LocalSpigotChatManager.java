@@ -1,36 +1,13 @@
 package xyz.olivermartin.multichat.local.spigot;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
-import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.spigot.hooks.LocalSpigotPAPIHook;
 
 public class LocalSpigotChatManager extends LocalChatManager {
-
-	@Override
-	public String translateColourCodes(String message, boolean rgb) {
-
-		if (rgb) {
-			message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
-
-			// LEGACY HACK
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-				message = message.replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
-				message = MultiChatUtil.approximateHexCodes(message);
-			}
-
-			return ChatColor.translateAlternateColorCodes('&', message);
-		} else {
-			message = message.replaceAll("(?i)&(?=[a-f,0-9,k-o,r])", "§");
-			return message;
-		}
-
-	}
 
 	@Override
 	public String processExternalPlaceholders(MultiChatLocalPlayer player, String message) {

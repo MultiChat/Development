@@ -7,27 +7,12 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import me.rojo8399.placeholderapi.PlaceholderService;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.sponge.hooks.LocalSpongePAPIHook;
 
 public class LocalSpongeChatManager extends LocalChatManager {
-
-	@Override
-	public String translateColourCodes(String message, boolean rgb) {
-
-		if (rgb) {
-			message = MultiChatLocal.getInstance().getChatManager().reformatRGB(message);
-			message = message.replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
-			message = MultiChatUtil.approximateHexCodes(message);
-			return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
-		} else {
-			return TextSerializers.formattingCode('§').serialize(TextSerializers.FORMATTING_CODE.deserialize(message));
-		}
-
-	}
 
 	@Override
 	public String processExternalPlaceholders(MultiChatLocalPlayer player, String message) {

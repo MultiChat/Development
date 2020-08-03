@@ -3,7 +3,6 @@ package xyz.olivermartin.multichat.bungee;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -80,7 +79,9 @@ public class ConsoleManager {
 
 	private static void logToConsole(String message, String unformattedMessage) {
 		BaseComponent[] first = TextComponent.fromLegacyText(
-				ChatColor.translateAlternateColorCodes('&', MessageManager.getMessage("console_main_prefix") + MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(message))));
+				MultiChatUtil.approximateHexCodes(
+						MultiChatUtil.translateColourCodes(
+								MessageManager.getMessage("console_main_prefix") + message)));
 
 		BaseComponent[] second = TextComponent.fromLegacyText(unformattedMessage);
 
