@@ -119,10 +119,10 @@ public class ProxyServerConnectedListener implements Listener {
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation(); // TODO Legacy
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
-			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName());
-			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName());
+			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName(), event.getServer().getInfo().getName());
+			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName(), event.getServer().getInfo().getName());
+			welcomeMessage = chatman.replaceJoinMsgVars(welcomeMessage, player.getName(), event.getServer().getInfo().getName());
+			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName(), event.getServer().getInfo().getName());
 
 			// Check which messages should be broadcast
 			boolean broadcastWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome", true);

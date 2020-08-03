@@ -98,8 +98,8 @@ public class ProxyLogoutListener implements Listener {
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation();
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName());
+			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName(), player.getServer().getInfo().getName());
+			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName(), player.getServer().getInfo().getName());
 
 			// Broadcast
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {

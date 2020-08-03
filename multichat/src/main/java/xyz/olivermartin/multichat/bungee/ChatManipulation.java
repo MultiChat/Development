@@ -154,10 +154,11 @@ public class ChatManipulation {
 
 	}
 
-	public String replaceJoinMsgVars(String MessageFormat, String sendername) {
+	public String replaceJoinMsgVars(String messageFormat, String senderName, String serverName) {
 
-		MessageFormat = MessageFormat.replace("%NAME%", sendername);
-		return MessageFormat;
+		messageFormat = messageFormat.replace("%NAME%", senderName);
+		messageFormat = messageFormat.replace("%SERVER%", serverName);
+		return messageFormat;
 
 	}
 }
