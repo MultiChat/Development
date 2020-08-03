@@ -28,7 +28,7 @@ public abstract class NickCommand {
 
 		if (proposedNick.equalsIgnoreCase("off")) {
 			lnm.removeNickname(targetUniqueId);
-			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
+			//MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 			sender.sendGoodMessage("The nickname has been removed!");
 			return true;
 		}
@@ -38,7 +38,7 @@ public abstract class NickCommand {
 		}
 
 		lnm.setNickname(targetUniqueId, proposedNick);
-		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
+		//MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 
 		sender.sendGoodMessage("The nickname has been set!");
 		return true;
