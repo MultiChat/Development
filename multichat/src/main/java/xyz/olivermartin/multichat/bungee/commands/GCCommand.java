@@ -6,6 +6,7 @@ import com.olivermartin410.plugins.TGroupChatInfo;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
@@ -154,7 +155,10 @@ public class GCCommand extends Command {
 
 		}
 
-		ConsoleManager.logGroupChat(originalMessage);
-
+		BaseComponent[] finalMessage = ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message), "%MESSAGE%", MultiChatUtil.approximateHexCodes(originalTranslated));
+		String consoleMessage = "";
+		for (BaseComponent bc : finalMessage) consoleMessage += bc.toLegacyText();
+		ConsoleManager.logGroupChat(consoleMessage);
+		
 	}
 }
