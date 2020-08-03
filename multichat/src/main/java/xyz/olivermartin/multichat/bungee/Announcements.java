@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.ProxyUtils;
 
 /**
  * Announcements Management
@@ -39,11 +39,13 @@ public class Announcements {
 
 					message = ChatControl.applyChatRules(message, "announcements", "").get();
 
+					message = ProxyUtils.translateColourCodes(message);
+
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message)));
 						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 						}
 					}
 
@@ -94,7 +96,7 @@ public class Announcements {
 
 		if (!announcements.containsKey(name.toLowerCase())) {
 
-			announcements.put(name.toLowerCase(), MultiChatUtil.reformatRGB(message));
+			announcements.put(name.toLowerCase(), message);
 			return true;
 
 		} else {
@@ -137,11 +139,13 @@ public class Announcements {
 
 			message = ChatControl.applyChatRules(message, "announcements", "").get();
 
+			message = ProxyUtils.translateColourCodes(message);
+
 			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+					onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message)));
 				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+					onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 				}
 			}
 

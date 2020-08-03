@@ -44,7 +44,7 @@ public class AnnouncementCommand extends Command {
 				String currentItem;
 				while (it.hasNext()) {
 					currentItem = it.next();
-					MessageManager.sendSpecialMessage(sender, "command_announcement_list_item", currentItem + ": " + announcementList.get(currentItem));
+					MessageManager.sendSpecialMessage(sender, "command_announcement_list_item", currentItem + ": +++" + announcementList.get(currentItem), true);
 				}
 
 			} else if (Announcements.existsAnnouncemnt(args[0].toLowerCase())) {
