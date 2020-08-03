@@ -24,91 +24,91 @@ public class AnnouncementCommand extends Command {
     }
 
     public void execute(CommandSender sender, String[] args) {
-    	if (args.length == 0) {
-    		showCommandUsage(sender);
-    		return;
-		}
+        if (args.length == 0) {
+            showCommandUsage(sender);
+            return;
+        }
 
-    	String arg = args[0].toLowerCase();
-    	switch (arg) {
-			case "list": {
-				MessageManager.sendMessage(sender, "command_announcement_list");
-				Announcements.getAnnouncementList().forEach((key, value) ->
-						MessageManager.sendSpecialMessage(sender,
-								"command_announcement_list_item",
-								key + ": +++" + value,
-								true
-						)
-				);
-				break;
-			}
-			case "add": {
-				if (args.length < 3) {
-					showCommandUsage(sender);
-					return;
-				}
+        String arg = args[0].toLowerCase();
+        switch (arg) {
+            case "list": {
+                MessageManager.sendMessage(sender, "command_announcement_list");
+                Announcements.getAnnouncementList().forEach((key, value) ->
+                        MessageManager.sendSpecialMessage(sender,
+                                "command_announcement_list_item",
+                                key + ": +++" + value,
+                                true
+                        )
+                );
+                break;
+            }
+            case "add": {
+                if (args.length < 3) {
+                    showCommandUsage(sender);
+                    return;
+                }
 
-				String announcementKey = args[1].toLowerCase();
-				String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
-				if (Announcements.addAnnouncement(announcementKey, message)) {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_added", announcementKey);
-				} else {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", announcementKey);
-				}
-				break;
-			}
-			case "remove": {
-				if (args.length < 2) {
-					showCommandUsage(sender);
-					return;
-				}
+                String announcementKey = args[1].toLowerCase();
+                String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                if (Announcements.addAnnouncement(announcementKey, message)) {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_added", announcementKey);
+                } else {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", announcementKey);
+                }
+                break;
+            }
+            case "remove": {
+                if (args.length < 2) {
+                    showCommandUsage(sender);
+                    return;
+                }
 
-				String announcementKey = args[1].toLowerCase();
-				if (Announcements.removeAnnouncement(announcementKey)) {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_removed", announcementKey);
-				} else {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", announcementKey);
-				}
-				break;
-			}
-			case "start": {
-				int timer;
-				if (args.length < 3 || (timer = parseInt(args[2])) == -1) {
-					showCommandUsage(sender);
-					return;
-				}
+                String announcementKey = args[1].toLowerCase();
+                if (Announcements.removeAnnouncement(announcementKey)) {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_removed", announcementKey);
+                } else {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", announcementKey);
+                }
+                break;
+            }
+            case "start": {
+                int timer;
+                if (args.length < 3 || (timer = parseInt(args[2])) == -1) {
+                    showCommandUsage(sender);
+                    return;
+                }
 
-				String announcementKey = args[1].toLowerCase();
-				if (Announcements.startAnnouncement(announcementKey, timer)) {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_started", announcementKey);
-				} else {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_started_error", announcementKey);
-				}
-				break;
-			}
-			case "stop": {
-				if (args.length < 2) {
-					showCommandUsage(sender);
-					return;
-				}
+                String announcementKey = args[1].toLowerCase();
+                if (Announcements.startAnnouncement(announcementKey, timer)) {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_started", announcementKey);
+                } else {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_started_error", announcementKey);
+                }
+                break;
+            }
+            case "stop": {
+                if (args.length < 2) {
+                    showCommandUsage(sender);
+                    return;
+                }
 
-				String announcementKey = args[1].toLowerCase();
-				if (Announcements.stopAnnouncement(announcementKey)) {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_stopped", announcementKey);
-				} else {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_stopped_error", announcementKey);
-				}
-				break;
-			}
-			default: {
-				if (Announcements.existsAnnouncemnt(arg)) {
-					Announcements.playAnnouncement(arg);
-				} else {
-					MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", arg);
-				}
-				break;
-			}
-		}
+                String announcementKey = args[1].toLowerCase();
+                if (Announcements.stopAnnouncement(announcementKey)) {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_stopped", announcementKey);
+                } else {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_stopped_error", announcementKey);
+                }
+                break;
+            }
+            default: {
+                if (Announcements.existsAnnouncemnt(arg)) {
+                    Announcements.playAnnouncement(arg);
+                } else {
+                    MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", arg);
+                }
+                break;
+            }
+        }
     }
 
     private int parseInt(String str) {
