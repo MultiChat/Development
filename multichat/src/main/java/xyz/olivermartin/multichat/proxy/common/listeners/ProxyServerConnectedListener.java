@@ -29,10 +29,10 @@ public class ProxyServerConnectedListener implements Listener {
 		message = MultiChatUtil.translateColourCodes(message);
 
 		if (player.getUniqueId().equals(sender.getUniqueId())) {
-			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateHexCodes(message);
+			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateRGBColourCodes(message);
 		} else {
 			if (player.getServer() == null) return;
-			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateHexCodes(message);
+			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColourCodes(message);
 		}
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(message));

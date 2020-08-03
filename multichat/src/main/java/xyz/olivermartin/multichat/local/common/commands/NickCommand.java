@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.local.common.commands;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
@@ -15,7 +16,7 @@ public abstract class NickCommand {
 
 	public boolean executeNickCommand(UUID targetUniqueId, MultiChatLocalPlayer sender, String proposedNick) {
 
-		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
+		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
@@ -49,7 +50,7 @@ public abstract class NickCommand {
 
 	public boolean executeConsoleNickCommand(UUID targetUniqueId, MultiChatLocalCommandSender console, String proposedNick) {
 
-		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
+		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 

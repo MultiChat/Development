@@ -8,7 +8,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MultiChatUtil {
-	
+
+	private static final Pattern SHORT_UNTRANSLATED_RGB = Pattern.compile("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])");
+	private static final Pattern LONG_UNTRANSLATED_RGB = Pattern.compile("(?i)\\&x\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])");
+	private static final Pattern TRANSLATED_RGB = Pattern.compile("(?i)(§r)?§x§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])");
+	private static final Pattern ALL_FORMATTING_CHARS = Pattern.compile("(?i)([0-9A-FK-ORX])");
+	private static final Pattern JSON_RGB = Pattern.compile("(?i)(\"color\":\")#([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])(\")");
+
 	/**
 	 * <p>Takes a raw string and translates any colour codes using the & symbol</p>
 	 * <p>Any RGB codes in the format &#abcdef, &xabcdef or &x&a&b&c&d&e&f will also be translated</p>
@@ -32,7 +38,7 @@ public class MultiChatUtil {
 		boolean rgb = Arrays.stream(modes).anyMatch(value -> value.equals(TranslateMode.ALL) || value.equals(TranslateMode.COLOUR_ALL));
 
 		// If we are translating RGB codes, reformat these to the correct format
-		if (rgb) translatedMessage = MultiChatUtil.reformatRGB(translatedMessage);
+		if (rgb) translatedMessage = MultiChatUtil.preProcessColourCodes(translatedMessage);
 
 		// Process each of the translations
 		for (TranslateMode mode : modes) {
@@ -49,47 +55,65 @@ public class MultiChatUtil {
 	 * @param message
 	 * @return message reformatted
 	 */
-	private static String reformatRGB(String message) {
-		// Translate RGB codes
-		return message.replaceAll("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])", "&r&x&$2&$3&$4&$5&$6&$7");
-	}
+	public static String preProcessColourCodes(String message) {
 
-	public static String approximateHexCodes(String message) {
+		Matcher longRgb = LONG_UNTRANSLATED_RGB.matcher(message);
+		message = longRgb.replaceAll("&r&x&$1&$2&$3&$4&$5&$6");
 
-		message = message.replaceAll("(?i)(\\&|§)x(\\&|§)([0-9A-F])(\\&|§)([0-9A-F])(\\&|§)([0-9A-F])(\\&|§)([0-9A-F])(\\&|§)([0-9A-F])(\\&|§)([0-9A-F])", "&#$3$5$7$9$11$13");
+		Matcher shortRgb = SHORT_UNTRANSLATED_RGB.matcher(message);
+		message = shortRgb.replaceAll("&r&x&$2&$3&$4&$5&$6&$7");
 
-		List<String> allMatches = new ArrayList<String>();
-		Matcher m = Pattern.compile("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])")
-				.matcher(message);
-		while (m.find()) {
-			allMatches.add(m.group());
-		}
+		String transformedMessage = "";
+		char lastChar = 'a';
 
-		for (String match : allMatches) {
+		// Transform codes to lowercase for better compatibility with Essentials etc.
+		for (char c : message.toCharArray()) {
 
-			String hexonly;
-			if (match.contains("#")) {
-				hexonly = match.split("#")[1];
-			} else if (match.contains("x")) {
-				hexonly = match.split("x")[1];
-			} else {
-				hexonly = match.split("X")[1];
+			// If this could be a colour code
+			if (lastChar == '&') {
+
+				// If it is a colour code, set to be lowercase
+				Matcher allFormattingChars = ALL_FORMATTING_CHARS.matcher(String.valueOf(c));
+				if (allFormattingChars.matches()) {
+					c = Character.toLowerCase(c);
+				}
+
 			}
-			String minecraftCode = hexToMinecraft(hexonly);
-			message = message.replace(match,"§"+minecraftCode);
+
+			// Append to message
+			transformedMessage = transformedMessage + c;
+			lastChar = c;
+
 		}
 
-		return approximateJsonHexCodes(message);
+		return transformedMessage;
 
 	}
 
-	private static String approximateJsonHexCodes(String message) {
+	public static String approximateRGBColourCodes(String message) {
 
-		message = message.replaceAll("(?i)(\"color\":\")#([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])(\")", "$1&#$2$3$4$5$6$7$8");
+		Matcher rgbMatcher = TRANSLATED_RGB.matcher(message);
+		message = rgbMatcher.replaceAll("&#$2$3$4$5$6$7");
+
+		message = replaceRGBShortCodesWithApproximations(message);
+
+		return approximateJsonRGBColourCodes(message);
+
+	}
+
+	private static String approximateJsonRGBColourCodes(String message) {
+
+		Matcher jsonRgbMatcher = JSON_RGB.matcher(message);
+		message = jsonRgbMatcher.replaceAll("$1&#$2$3$4$5$6$7$8");
+		return replaceRGBShortCodesWithApproximations(message);
+
+	}
+
+	private static String replaceRGBShortCodesWithApproximations(String message) {
 
 		List<String> allMatches = new ArrayList<String>();
-		Matcher m = Pattern.compile("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])")
-				.matcher(message);
+		Matcher m = SHORT_UNTRANSLATED_RGB.matcher(message);
+
 		while (m.find()) {
 			allMatches.add(m.group());
 		}

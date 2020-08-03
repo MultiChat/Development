@@ -30,7 +30,7 @@ public class ProxyLogoutListener implements Listener {
 
 		message = MultiChatUtil.translateColourCodes(message);
 
-		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateHexCodes(message);
+		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColourCodes(message);
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(message));
 

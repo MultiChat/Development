@@ -84,7 +84,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(joined)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(joined)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(joined));
 			}
@@ -94,7 +94,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
 
-		ConsoleManager.logChat(MultiChatUtil.approximateHexCodes(joined));
+		ConsoleManager.logChat(MultiChatUtil.approximateRGBColourCodes(joined));
 
 	}
 
@@ -120,7 +120,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 				continue;
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(message)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(message)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(message));
 			}
