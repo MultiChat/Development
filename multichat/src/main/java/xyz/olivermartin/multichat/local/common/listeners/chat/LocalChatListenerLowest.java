@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
@@ -44,15 +45,18 @@ public abstract class LocalChatListenerLowest {
 
 		format = chatManager.getChannelFormat(channel);
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Got the format for this channel as:" + format);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Visualised chat format:" + MultiChatUtil.visualiseColorCodes(format));
 
 		// Build chat format
 		format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(player.getUniqueId(), format);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Built to become: " + format);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Visualised chat format:" + MultiChatUtil.visualiseColorCodes(format));
 
 		format = chatManager.processExternalPlaceholders(player, format);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Processing external placeholders to become: " + format);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Visualised chat format:" + MultiChatUtil.visualiseColorCodes(format));
 
 		if (MultiChatLocal.getInstance().getPlatform() == MultiChatLocalPlatform.SPIGOT) {
 			// Handle Spigot displayname formatting etc.
@@ -66,8 +70,9 @@ public abstract class LocalChatListenerLowest {
 		}
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Did some magic formatting to end up as: " + format);
+		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Visualised chat format:" + MultiChatUtil.visualiseColorCodes(format));
 
-		event.setFormat(chatManager.translateColourCodes(format, true));
+		event.setFormat(format);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@LOWEST - Set the format of the message. Finished processing at the lowest level!");
 

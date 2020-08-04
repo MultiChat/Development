@@ -283,8 +283,8 @@ public abstract class LocalChatManager {
 
 	}
 
-	public String translateColourCodes(String message, boolean rgb) {
-
+	public String translateColorCodes(String message, boolean rgb) {
+		
 		if (rgb) {
 			message = MultiChatUtil.translateColorCodes(message);
 		} else {
@@ -321,7 +321,7 @@ public abstract class LocalChatManager {
 				value = processExternalPlaceholders(player, value);
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
 
-				value = translateColourCodes(value, true);
+				value = translateColorCodes(value, true);
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Translated colour codes to get: " + value);
 
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
