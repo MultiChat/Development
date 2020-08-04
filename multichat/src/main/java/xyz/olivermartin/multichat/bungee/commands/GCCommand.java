@@ -125,8 +125,8 @@ public class GCCommand extends Command {
 		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
 		String message = chatfix.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName());
 
-		message = MultiChatUtil.translateColourCodes(message);
-		String originalTranslated = MultiChatUtil.translateColourCodes(originalMessage);
+		message = MultiChatUtil.translateColorCodes(message);
+		String originalTranslated = MultiChatUtil.translateColorCodes(originalMessage);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -135,7 +135,7 @@ public class GCCommand extends Command {
 				if (potentialPlayer != null) {
 					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColourCodes(originalTranslated)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated)));
 						} else {
 							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 						}
@@ -144,7 +144,7 @@ public class GCCommand extends Command {
 					}
 				} else {
 					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColourCodes(originalTranslated)));
+						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated)));
 					} else {
 						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 					}
@@ -154,7 +154,7 @@ public class GCCommand extends Command {
 
 		}
 
-		BaseComponent[] finalMessage = ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColourCodes(originalTranslated));
+		BaseComponent[] finalMessage = ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated));
 		String consoleMessage = "";
 		for (BaseComponent bc : finalMessage) consoleMessage += bc.toLegacyText();
 		ConsoleManager.logGroupChat(consoleMessage);

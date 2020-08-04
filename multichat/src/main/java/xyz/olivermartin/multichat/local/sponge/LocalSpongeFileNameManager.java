@@ -137,7 +137,7 @@ public class LocalSpongeFileNameManager extends LocalFileNameManager {
 			removeNickname(uuid);
 		}
 
-		String unformattedNickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
+		String unformattedNickname = MultiChatUtil.stripColorCodes(nickname.toLowerCase(), false);
 
 		synchronized (mapNickUUID) {
 
@@ -181,7 +181,7 @@ public class LocalSpongeFileNameManager extends LocalFileNameManager {
 		Collection<GameProfile> profiles = uss.getAll();
 
 		//Set<String> nameSet = mapNameUUID.keySet();
-		name = MultiChatUtil.stripColourCodes(name.toLowerCase(), false);
+		name = MultiChatUtil.stripColorCodes(name.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (GameProfile gp : profiles) {

@@ -84,7 +84,7 @@ public class LocalChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(finalMessage)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}
@@ -99,7 +99,7 @@ public class LocalChannel {
 
 	public void broadcastRawMessage(CommandSender sender, String server, String message) {
 
-		message = MultiChatUtil.translateColourCodes(message);
+		message = MultiChatUtil.translateColorCodes(message);
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
@@ -118,7 +118,7 @@ public class LocalChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(finalMessage)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}

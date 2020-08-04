@@ -17,7 +17,7 @@ public abstract class NickCommand {
 
 	public boolean executeNickCommand(UUID targetUniqueId, MultiChatLocalPlayer sender, String proposedNick) {
 
-		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
+		proposedNick = MultiChatUtil.preProcessColorCodes(proposedNick);
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
@@ -51,7 +51,7 @@ public abstract class NickCommand {
 
 	public boolean executeConsoleNickCommand(UUID targetUniqueId, MultiChatLocalCommandSender console, String proposedNick) {
 
-		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
+		proposedNick = MultiChatUtil.preProcessColorCodes(proposedNick);
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
@@ -78,17 +78,17 @@ public abstract class NickCommand {
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
 
-		if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.X) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
+		if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.X) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
 			sender.sendBadMessage("You do not have permission to use nicknames with rgb color codes!");
 			return false;
 		}
 
-		if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.COLOUR_SIMPLE) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.simple") || sender.hasPermission("multichatlocal.nick.colour.simple") ||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
+		if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.COLOUR_SIMPLE) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.simple") || sender.hasPermission("multichatlocal.nick.colour.simple") ||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
 			sender.sendBadMessage("You do not have permission to use nicknames with simple color codes!");
 			return false;
 		}
 
-		if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_ALL)) {
+		if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_ALL)) {
 
 			// If the nickname has ANY format codes...
 
@@ -96,32 +96,32 @@ public abstract class NickCommand {
 
 				// If they don't have the permission for ALL format codes, then we will check individually...
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_BOLD) && !(sender.hasPermission("multichatlocal.nick.format.bold"))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_BOLD) && !(sender.hasPermission("multichatlocal.nick.format.bold"))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with bold format codes!");
 					return false;
 				}
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_ITALIC) && !(sender.hasPermission("multichatlocal.nick.format.italic"))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_ITALIC) && !(sender.hasPermission("multichatlocal.nick.format.italic"))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with italic format codes!");
 					return false;
 				}
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_UNDERLINE) && !(sender.hasPermission("multichatlocal.nick.format.underline"))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_UNDERLINE) && !(sender.hasPermission("multichatlocal.nick.format.underline"))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with underline format codes!");
 					return false;
 				}
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_STRIKE) && !(sender.hasPermission("multichatlocal.nick.format.strikethrough"))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_STRIKE) && !(sender.hasPermission("multichatlocal.nick.format.strikethrough"))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with strikethrough format codes!");
 					return false;
 				}
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_OBFUSCATED) && !(sender.hasPermission("multichatlocal.nick.format.obfuscated"))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_OBFUSCATED) && !(sender.hasPermission("multichatlocal.nick.format.obfuscated"))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with obfuscated format codes!");
 					return false;
 				}
 
-				if (MultiChatUtil.containsColourCodes(proposedNick, false, TranslateMode.FORMAT_RESET) && !((sender.hasPermission("multichatlocal.nick.format.reset")||sender.hasPermission("multichatlocal.nick.color")||sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.rgb")||sender.hasPermission("multichatlocal.nick.colour.rgb")))) {
+				if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.FORMAT_RESET) && !((sender.hasPermission("multichatlocal.nick.format.reset")||sender.hasPermission("multichatlocal.nick.color")||sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.rgb")||sender.hasPermission("multichatlocal.nick.colour.rgb")))) {
 					sender.sendBadMessage("You do not have permission to use nicknames with reset format codes!");
 					return false;
 				}
@@ -144,7 +144,7 @@ public abstract class NickCommand {
 				length = proposedNick.length();
 				endOfMessage = "(Including format codes)";
 			} else {
-				length = MultiChatUtil.stripColourCodes(proposedNick, false).length();
+				length = MultiChatUtil.stripColorCodes(proposedNick, false).length();
 				endOfMessage = "(Excluding format codes)";
 			}
 
@@ -162,7 +162,7 @@ public abstract class NickCommand {
 
 		String targetName = lnm.getName(targetUniqueId);
 
-		if (lnm.existsPlayer(proposedNick) && !targetName.equalsIgnoreCase(MultiChatUtil.stripColourCodes(proposedNick, false)) && !sender.hasPermission("multichatlocal.nick.impersonate")) {
+		if (lnm.existsPlayer(proposedNick) && !targetName.equalsIgnoreCase(MultiChatUtil.stripColorCodes(proposedNick, false)) && !sender.hasPermission("multichatlocal.nick.impersonate")) {
 			sender.sendBadMessage("Sorry, a player already exists with this name!");
 			return false;
 		}
@@ -172,7 +172,7 @@ public abstract class NickCommand {
 			boolean blacklisted = false;
 
 			for (String bl : config.getNicknameBlacklist()) {
-				if (MultiChatUtil.stripColourCodes(proposedNick, false).matches(bl)) {
+				if (MultiChatUtil.stripColorCodes(proposedNick, false).matches(bl)) {
 					blacklisted = true;
 					break;
 				}
@@ -193,14 +193,14 @@ public abstract class NickCommand {
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
-		if (MultiChatUtil.stripColourCodes(proposedNick, false).length() < 1) {
+		if (MultiChatUtil.stripColorCodes(proposedNick, false).length() < 1) {
 			sender.sendBadMessage("Sorry your nickname cannot be empty!");
 			return false;
 		}
 
-		String targetNickname = MultiChatUtil.stripColourCodes(lnm.getCurrentName(targetUniqueId, false), false);
+		String targetNickname = MultiChatUtil.stripColorCodes(lnm.getCurrentName(targetUniqueId, false), false);
 
-		if (lnm.existsNickname(proposedNick) && !targetNickname.equalsIgnoreCase(MultiChatUtil.stripColourCodes(proposedNick, false)) ) {
+		if (lnm.existsNickname(proposedNick) && !targetNickname.equalsIgnoreCase(MultiChatUtil.stripColorCodes(proposedNick, false)) ) {
 			sender.sendBadMessage("Sorry, this nickname is already in use!");
 			return false;
 		}

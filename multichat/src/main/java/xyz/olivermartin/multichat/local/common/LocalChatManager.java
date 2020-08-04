@@ -286,13 +286,13 @@ public abstract class LocalChatManager {
 	public String translateColourCodes(String message, boolean rgb) {
 
 		if (rgb) {
-			message = MultiChatUtil.translateColourCodes(message);
+			message = MultiChatUtil.translateColorCodes(message);
 		} else {
-			message = MultiChatUtil.translateColourCodes(message, TranslateMode.SIMPLE);
+			message = MultiChatUtil.translateColorCodes(message, TranslateMode.SIMPLE);
 		}
 
 		if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-			message = MultiChatUtil.approximateRGBColourCodes(message);
+			message = MultiChatUtil.approximateRGBColorCodes(message);
 		}
 
 		return message;

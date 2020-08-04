@@ -333,7 +333,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Old nickname removed!");
 		}
 
-		String unformattedNickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
+		String unformattedNickname = MultiChatUtil.stripColorCodes(nickname.toLowerCase(), false);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Unformatted nickname = " + unformattedNickname);
 
@@ -370,7 +370,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @return If this nickname is currently in use
 	 */
 	public boolean existsNickname(String nickname) {
-		return mapNickUUID.containsKey(MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false));
+		return mapNickUUID.containsKey(MultiChatUtil.stripColorCodes(nickname.toLowerCase(), false));
 	}
 
 	/**
@@ -381,7 +381,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
 
 		Set<String> nickSet = mapNickUUID.keySet();
-		nickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
+		nickname = MultiChatUtil.stripColorCodes(nickname.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String nick : nickSet) {
@@ -432,7 +432,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	public Optional<Set<UUID>> getPartialNameMatches(String name) {
 
 		Set<String> nameSet = mapNameUUID.keySet();
-		name = MultiChatUtil.stripColourCodes(name.toLowerCase(), false);
+		name = MultiChatUtil.stripColorCodes(name.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String n : nameSet) {

@@ -111,11 +111,11 @@ public class Bulletins {
 
 					message = ChatControl.applyChatRules(message, "bulletins", "").get();
 
-					message = MultiChatUtil.translateColourCodes(message);
+					message = MultiChatUtil.translateColorCodes(message);
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message)));
 						} else {
 							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 						}

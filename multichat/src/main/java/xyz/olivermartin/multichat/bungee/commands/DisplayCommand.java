@@ -49,7 +49,7 @@ public class DisplayCommand extends Command {
 		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
 
 		message = ChatControl.applyChatRules(message, "display_command", "").get();
-		message = MultiChatUtil.translateColourCodes(message);
+		message = MultiChatUtil.translateColorCodes(message);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -59,7 +59,7 @@ public class DisplayCommand extends Command {
 					onlineplayer.getServer().getInfo().getName())) continue;
 
 			if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message)));
+				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message)));
 			} else {
 				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 			}

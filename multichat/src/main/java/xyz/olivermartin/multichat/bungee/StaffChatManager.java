@@ -81,12 +81,12 @@ public class StaffChatManager {
 					message = chatfix.replaceAdminChatVars(messageFormat, username, displayname, server, original, onlineplayer);
 				}
 
-				message = MultiChatUtil.translateColourCodes(message);
-				String originalTranslated = MultiChatUtil.translateColourCodes(original);
+				message = MultiChatUtil.translateColorCodes(message);
+				String originalTranslated = MultiChatUtil.translateColorCodes(original);
 
 				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					message = MultiChatUtil.approximateRGBColourCodes(message);
-					originalTranslated = MultiChatUtil.approximateRGBColourCodes(originalTranslated);
+					message = MultiChatUtil.approximateRGBColorCodes(message);
+					originalTranslated = MultiChatUtil.approximateRGBColorCodes(originalTranslated);
 				}
 
 				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));

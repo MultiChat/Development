@@ -24,7 +24,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("prefix").isPresent()) {
-				return MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(player.getOption("prefix").get()));
+				return MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(player.getOption("prefix").get()));
 			} else {
 				return "";
 			}
@@ -45,7 +45,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("suffix").isPresent()) {
-				return MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(player.getOption("suffix").get()));
+				return MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(player.getOption("suffix").get()));
 			} else {
 				return "";
 			}
@@ -92,8 +92,8 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", player.getName());
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", getPrefix(uuid));
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", getSuffix(uuid));
-			displayNameFormat = MultiChatUtil.translateColourCodes(displayNameFormat);
-			displayNameFormat = MultiChatUtil.approximateRGBColourCodes(displayNameFormat);
+			displayNameFormat = MultiChatUtil.translateColorCodes(displayNameFormat);
+			displayNameFormat = MultiChatUtil.approximateRGBColorCodes(displayNameFormat);
 
 			// TODO Sponge doesn't seem to like this... So we tend to work around it by sending back our original string
 			player.offer(Keys.DISPLAY_NAME,Text.of(displayNameFormat));

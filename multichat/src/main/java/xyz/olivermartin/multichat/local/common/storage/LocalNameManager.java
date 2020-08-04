@@ -88,7 +88,7 @@ public abstract class LocalNameManager {
 	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		nickname = nickname.toLowerCase();
-		nickname = MultiChatUtil.stripColourCodes(nickname, false);
+		nickname = MultiChatUtil.stripColorCodes(nickname, false);
 
 		Optional<UUID> uuid = getUUIDFromUnformattedNickname(nickname);
 

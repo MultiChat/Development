@@ -45,12 +45,12 @@ public class PrivateMessageManager {
 
 	private void displayMessage(ProxiedPlayer player, String rawMessage, String replacement) {
 
-		rawMessage = MultiChatUtil.translateColourCodes(rawMessage);
-		replacement = MultiChatUtil.translateColourCodes(replacement);
+		rawMessage = MultiChatUtil.translateColorCodes(rawMessage);
+		replacement = MultiChatUtil.translateColorCodes(replacement);
 
 		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
-			rawMessage = MultiChatUtil.approximateRGBColourCodes(rawMessage);
-			replacement = MultiChatUtil.approximateRGBColourCodes(replacement);
+			rawMessage = MultiChatUtil.approximateRGBColorCodes(rawMessage);
+			replacement = MultiChatUtil.approximateRGBColorCodes(replacement);
 		}
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
@@ -59,8 +59,8 @@ public class PrivateMessageManager {
 
 	private void displayConsoleMessage(String rawMessage, String replacement) {
 
-		rawMessage = MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(rawMessage));
-		replacement = MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(replacement));
+		rawMessage = MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(rawMessage));
+		replacement = MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(replacement));
 		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
 
 	}
