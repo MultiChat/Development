@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.PatternSyntaxException;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
@@ -109,28 +110,28 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @return The NICKNAME of the player if it is set, otherwise their username
 	 */
 	public String getCurrentName(UUID uuid, boolean withPrefix) {
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Getting CurrentName for " + uuid);
 
 		synchronized (mapUUIDNick) {
 			if (mapUUIDNick.containsKey(uuid)) {
-				
+
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] UUID is in the UUIDNick map");
-				
+
 				String currentName;
-				
+
 				if (MultiChatLocal.getInstance().getConfigManager().getLocalConfig().isShowNicknamePrefix() && withPrefix) {
 					currentName = MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getNicknamePrefix() + mapNickFormatted.get(mapUUIDNick.get(uuid));
 				} else {
 					currentName = mapNickFormatted.get(mapUUIDNick.get(uuid));
 				}
-				
+
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] CurrentName (withPrefix?=" + withPrefix + ") is " + currentName);
-				
+
 				return currentName;
 			} 
 		}
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] They do not have a nickname...");
 
 		synchronized (mapUUIDName) {
@@ -141,7 +142,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 				return result;
 			}
 		}
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] This player does not exist in any map... returning empty string");
 
 		return "";
@@ -212,7 +213,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @param player
 	 */
 	public void registerPlayer(UUID uuid, String username) {
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Registering player (" + username + ") with UUID = " + uuid);
 
 		String oldUsername;
@@ -220,13 +221,13 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 		synchronized (mapUUIDName) {
 
 			if (mapUUIDName.containsKey(uuid)) {
-				
+
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] The player has joined before...");
 
 				oldUsername = mapUUIDName.get(uuid);
 
 				if (!oldUsername.equalsIgnoreCase(username)) {
-					
+
 					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] They have a new username (" + username + "), previously was " + oldUsername);
 
 					synchronized (mapNameUUID) {
@@ -242,11 +243,11 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 
 				mapNameFormatted.remove(oldUsername);
 				mapNameFormatted.put(username.toLowerCase(), username);
-				
+
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Updated necessary maps!");
 
 			} else {
-				
+
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Player has not joined before...");
 
 				synchronized (mapNameUUID) {
@@ -254,7 +255,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 					mapUUIDName.put(uuid, username.toLowerCase());
 					mapNameUUID.put(username.toLowerCase(), uuid);
 					mapNameFormatted.put(username.toLowerCase(), username);
-					
+
 					MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Updated necessary maps!");
 
 				}
@@ -264,7 +265,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 		}
 
 		online.add(uuid);
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Added player to list of online players!");
 
 	}
@@ -305,7 +306,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @param player
 	 */
 	public void unregisterPlayer(UUID uuid) {
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Unregistering " + uuid);
 
 		online.remove(uuid);
@@ -318,7 +319,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @param nickname
 	 */
 	public void setNickname(UUID uuid, String nickname) {
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Setting nickname (" + nickname + ") for UUID " + uuid);
 
 		if (!mapUUIDName.containsKey(uuid)) {
@@ -332,8 +333,8 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Old nickname removed!");
 		}
 
-		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
-		
+		String unformattedNickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Unformatted nickname = " + unformattedNickname);
 
 		synchronized (mapNickUUID) {
@@ -349,7 +350,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 			mapUUIDNick.put(uuid, unformattedNickname);
 			mapNickUUID.put(unformattedNickname, uuid);
 			mapNickFormatted.put(unformattedNickname, nickname);
-			
+
 			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Maps updated with new info!");
 
 		}
@@ -369,7 +370,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @return If this nickname is currently in use
 	 */
 	public boolean existsNickname(String nickname) {
-		return mapNickUUID.containsKey(stripAllFormattingCodes(nickname.toLowerCase()));
+		return mapNickUUID.containsKey(MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false));
 	}
 
 	/**
@@ -380,7 +381,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	public Optional<Set<UUID>> getPartialNicknameMatches(String nickname) {
 
 		Set<String> nickSet = mapNickUUID.keySet();
-		nickname = stripAllFormattingCodes(nickname.toLowerCase());
+		nickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String nick : nickSet) {
@@ -431,7 +432,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	public Optional<Set<UUID>> getPartialNameMatches(String name) {
 
 		Set<String> nameSet = mapNameUUID.keySet();
-		name = stripAllFormattingCodes(name.toLowerCase());
+		name = MultiChatUtil.stripColourCodes(name.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (String n : nameSet) {
@@ -487,7 +488,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 	 * @param uuid
 	 */
 	public void removeNickname(UUID uuid) {
-		
+
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Removing nickname for " + uuid);
 
 		synchronized (mapUUIDNick) {
@@ -502,7 +503,7 @@ public abstract class LocalFileNameManager extends LocalNameManager {
 			mapUUIDNick.remove(uuid);
 			mapNickUUID.remove(nickname);
 			mapNickFormatted.remove(nickname);
-			
+
 			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalFileNameManager] Updated necessary maps! Completed process.");
 
 		}

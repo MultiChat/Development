@@ -37,7 +37,7 @@ public class MultiChatUtil {
 
 		String translatedMessage = rawMessage;
 
-		boolean rgb = Arrays.stream(modes).anyMatch(value -> value.equals(TranslateMode.ALL) || value.equals(TranslateMode.COLOUR_ALL));
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
 
 		// If we are translating RGB codes, reformat these to the correct format
 		if (rgb) translatedMessage = MultiChatUtil.preProcessColourCodes(translatedMessage);
@@ -48,6 +48,85 @@ public class MultiChatUtil {
 		}
 
 		return translatedMessage;
+
+	}
+
+	/**
+	 * <p>Takes a raw string and strips any colour codes using the & symbol</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the § symbol</p>
+	 * @param rawMessage The raw message to strip
+	 * @param stripTranslatedCodes If pre-translated codes (§) should also be stripped
+	 * @return the stripped message
+	 */
+	public static String stripColourCodes(String rawMessage, boolean stripTranslatedCodes) {
+		return stripColourCodes(rawMessage, stripTranslatedCodes, TranslateMode.ALL);
+	}
+
+	/**
+	 * <p>Takes a raw string and strips formatting codes (&) according to the TranslateMode</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the § symbol</p>
+	 * @param rawMessage The raw message to strip
+	 * @param stripTranslatedCodes If pre-translated codes (§) should also be stripped
+	 * @param modes The TranslateModes to apply
+	 * @return the stripped message
+	 */
+	public static String stripColourCodes(String rawMessage, boolean stripTranslatedCodes, TranslateMode... modes) {
+
+		String strippedMessage = rawMessage;
+
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
+
+		// If we are stripping RGB codes, reformat these to the correct format
+		if (rgb) strippedMessage = MultiChatUtil.preProcessColourCodes(strippedMessage);
+
+		// Process each of the strips
+		for (TranslateMode mode : modes) {
+			if (stripTranslatedCodes) {
+				strippedMessage = mode.stripAll(strippedMessage);
+			} else {
+				strippedMessage = mode.stripOrigin(strippedMessage);
+			}
+		}
+
+		return strippedMessage;
+
+	}
+
+	/**
+	 * <p>Takes a raw string and checks if it contains any codes using the & symbol</p>
+	 * <p>Any RGB codes in the format &#abcdef, &xabcdef or &x&a&b&c&d&e&f will also be checked</p>
+	 * @param rawMessage The raw message to check
+	 * @param checkTranslatedCodes If pre-translated codes (§) should also be checked
+	 * @return true if it contains format codes
+	 */
+	public static boolean containsColourCodes(String rawMessage, boolean checkTranslatedCodes) {
+		return containsColourCodes(rawMessage, checkTranslatedCodes, TranslateMode.ALL);
+	}
+
+	/**
+	 * <p>Takes a raw string and checks if it contains any formatting codes (&) according to the TranslateMode</p>
+	 * @param rawMessage The raw message to check
+	 * @param checkTranslatedCodes If pre-translated codes (§) should also be checked
+	 * @param modes The TranslateModes to process
+	 * @return true if it contains format codes
+	 */
+	public static boolean containsColourCodes(String rawMessage, boolean checkTranslatedCodes, TranslateMode... modes) {
+
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
+
+		// If we are checking RGB codes, reformat these to the correct format
+		if (rgb) rawMessage = MultiChatUtil.preProcessColourCodes(rawMessage);
+
+		// Process each of the checks
+		for (TranslateMode mode : modes) {
+			if (checkTranslatedCodes) {
+				if (mode.containsAny(rawMessage)) return true;
+			} else {
+				if (mode.containsOrigin(rawMessage)) return true;
+			}
+		}
+
+		return false;
 
 	}
 
@@ -292,6 +371,18 @@ public class MultiChatUtil {
 		}
 
 		return result;
+
+	}
+
+	public static String visualiseColourCodes(String message) {
+
+		Matcher originMatcher = TranslateMode.ALL.getOriginPattern().matcher(message);
+		Matcher translatedMatcher = TranslateMode.ALL.getTranslatedPattern().matcher(message);
+
+		message = originMatcher.replaceAll("{Origin.$1}");
+		message = translatedMatcher.replaceAll("{Transl.$1}");
+
+		return message;
 
 	}
 

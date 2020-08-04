@@ -11,6 +11,7 @@ import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.service.user.UserStorageService;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.storage.LocalFileNameManager;
@@ -136,7 +137,7 @@ public class LocalSpongeFileNameManager extends LocalFileNameManager {
 			removeNickname(uuid);
 		}
 
-		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
+		String unformattedNickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
 
 		synchronized (mapNickUUID) {
 
@@ -180,7 +181,7 @@ public class LocalSpongeFileNameManager extends LocalFileNameManager {
 		Collection<GameProfile> profiles = uss.getAll();
 
 		//Set<String> nameSet = mapNameUUID.keySet();
-		name = stripAllFormattingCodes(name.toLowerCase());
+		name = MultiChatUtil.stripColourCodes(name.toLowerCase(), false);
 		Set<UUID> uuidSet = new HashSet<UUID>();
 
 		for (GameProfile gp : profiles) {

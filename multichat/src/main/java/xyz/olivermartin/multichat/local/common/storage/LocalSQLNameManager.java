@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.common.database.DatabaseManager;
 import xyz.olivermartin.multichat.common.database.GenericPooledDatabase;
 import xyz.olivermartin.multichat.common.database.SimpleConnection;
@@ -458,7 +459,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 			return;
 		}
 
-		String unformattedNickname = stripAllFormattingCodes(nickname.toLowerCase());
+		String unformattedNickname = MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false);
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Unformatted nickname = " + unformattedNickname);
 
@@ -535,7 +536,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 		try {
 
 			conn = localDatabase.getConnection();
-			ResultSet results = conn.safeQuery("SELECT u_nick FROM nick_data WHERE u_nick = ?;", stripAllFormattingCodes(nickname.toLowerCase()));
+			ResultSet results = conn.safeQuery("SELECT u_nick FROM nick_data WHERE u_nick = ?;", MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false));
 
 			if (results.next()) {
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] Nickname " + nickname + " exists");
@@ -567,7 +568,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 			conn = localDatabase.getConnection();
 			ResultSet results = conn.safeQuery("SELECT id, u_nick FROM nick_data WHERE u_nick = ?;"
-					, stripAllFormattingCodes(nickname.toLowerCase()));
+					, MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false));
 
 			if (results.next()) {
 				if (results.getString("id").equals(uuid.toString())) {
@@ -602,7 +603,7 @@ public class LocalSQLNameManager extends LocalNameManager {
 
 			conn = localDatabase.getConnection();
 			ResultSet results = conn.safeQuery("SELECT id FROM nick_data WHERE (u_nick LIKE ?);"
-					, "%" + stripAllFormattingCodes(nickname.toLowerCase()) + "%");
+					, "%" + MultiChatUtil.stripColourCodes(nickname.toLowerCase(), false) + "%");
 
 			if (results.next()) {
 				Set<UUID> uuids = new HashSet<UUID>();
