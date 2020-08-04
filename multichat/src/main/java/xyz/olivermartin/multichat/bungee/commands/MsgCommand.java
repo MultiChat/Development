@@ -53,9 +53,11 @@ public class MsgCommand extends Command implements TabExecutor {
 
 				// 1 arg --> toggle
 
-				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
+				Optional<ProxiedPlayer> opTarget = PrivateMessageManager.getInstance().getPartialPlayerMatch(args[0]);
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
+				if (opTarget.isPresent()) {
+
+					ProxiedPlayer target = opTarget.get();
 
 					if ((sender instanceof ProxiedPlayer)) {
 
@@ -136,9 +138,11 @@ public class MsgCommand extends Command implements TabExecutor {
 					return;
 				}
 
-				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
+				Optional<ProxiedPlayer> opTarget = PrivateMessageManager.getInstance().getPartialPlayerMatch(args[0]);
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
+				if (opTarget.isPresent()) {
+
+					ProxiedPlayer target = opTarget.get();
 
 					boolean permittedToMessage = true;
 
@@ -211,9 +215,11 @@ public class MsgCommand extends Command implements TabExecutor {
 
 				String message = MultiChatUtil.getMessageFromArgs(args, 1);
 
-				if (ProxyServer.getInstance().getPlayer(args[0]) != null) {
+				Optional<ProxiedPlayer> opTarget = PrivateMessageManager.getInstance().getPartialPlayerMatch(args[0]);
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
+				if (opTarget.isPresent()) {
+
+					ProxiedPlayer target = opTarget.get();
 
 					if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
 

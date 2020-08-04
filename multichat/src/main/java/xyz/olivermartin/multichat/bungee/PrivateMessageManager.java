@@ -1,5 +1,7 @@
 package xyz.olivermartin.multichat.bungee;
 
+import java.util.Collection;
+import java.util.Optional;
 import java.util.UUID;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -177,6 +179,33 @@ public class PrivateMessageManager {
 
 		// Update the last message map to be used for /r
 		updateLastMessage(new UUID(0L, 0L), target.getUniqueId());
+
+	}
+
+	public Optional<ProxiedPlayer> getPartialPlayerMatch(String search) {
+
+		// Spigot's own partial match algorithm
+		Collection<ProxiedPlayer> spigotMatches = ProxyServer.getInstance().matchPlayer(search);
+
+		if (spigotMatches != null && spigotMatches.size() > 0) {
+			return Optional.of(spigotMatches.iterator().next());
+		}
+
+		// Check for names to contain the search
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+			if (p.getName().toLowerCase().contains(search.toLowerCase())) {
+				return Optional.of(p);
+			}
+		}
+
+		// Check for display names to contain the search
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+			if (p.getDisplayName().toLowerCase().contains(search.toLowerCase())) {
+				return Optional.of(p);
+			}
+		}
+
+		return Optional.empty();
 
 	}
 
