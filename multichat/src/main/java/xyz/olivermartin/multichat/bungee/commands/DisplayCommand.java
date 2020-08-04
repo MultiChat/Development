@@ -24,7 +24,7 @@ import java.util.Optional;
  * @author Oliver Martin (Revilo410)
  */
 public class DisplayCommand extends Command {
-
+  
     public DisplayCommand() {
         super("mcdisplay", "multichat.staff.display", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("display").toArray(new String[0]));
     }
@@ -47,14 +47,14 @@ public class DisplayCommand extends Command {
         List<String> noGlobalServers = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
                 .getConfig().getStringList(ConfigValues.Config.NO_GLOBAL);
 
-        String finalMessage = MultiChatUtil.translateColourCodes(optionalMessage.get());
+        String finalMessage = MultiChatUtil.translateColorCodes(optionalMessage.get());
         ProxyServer.getInstance().getPlayers().stream()
                 .filter(target -> target.getServer() != null
                         && !noGlobalServers.contains(target.getServer().getInfo().getName())
                 )
                 .forEach(target ->
                         target.sendMessage(MultiChat.legacyServers.contains(target.getServer().getInfo().getName())
-                                ? ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(finalMessage))
+                                ? ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(finalMessage))
                                 : ProxyJsonUtils.parseMessage(finalMessage)
                         )
                 );

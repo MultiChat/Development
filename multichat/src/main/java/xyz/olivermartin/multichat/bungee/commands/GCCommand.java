@@ -97,10 +97,10 @@ public class GCCommand extends Command {
         originalMessage = optionalChatRules.get();
 
         String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
-        String translatedMessage = MultiChatUtil.translateColourCodes(
+        String translatedMessage = MultiChatUtil.translateColorCodes(
                 manipulation.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName())
         );
-        String translatedOriginalMessage = MultiChatUtil.translateColourCodes(originalMessage);
+        String translatedOriginalMessage = MultiChatUtil.translateColorCodes(originalMessage);
 
         BaseComponent[] modernMessage = ProxyJsonUtils.parseMessage(translatedMessage,
                 "%MESSAGE%",
@@ -108,9 +108,9 @@ public class GCCommand extends Command {
         );
 
         BaseComponent[] legacyMessage = ProxyJsonUtils.parseMessage(
-                MultiChatUtil.approximateRGBColourCodes(translatedMessage),
+                MultiChatUtil.approximateRGBColorCodes(translatedMessage),
                 "%MESSAGE%",
-                MultiChatUtil.approximateRGBColourCodes(translatedOriginalMessage)
+                MultiChatUtil.approximateRGBColorCodes(translatedOriginalMessage)
         );
 
         ProxyServer.getInstance().getPlayers().stream()

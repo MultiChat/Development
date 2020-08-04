@@ -447,20 +447,20 @@ public class MessageManager {
 
 		// Translate format codes
 		String message = prefix + getMessage(id);
-		message = MultiChatUtil.translateColourCodes(message);
-		if (isSpecial) special = MultiChatUtil.translateColourCodes(special);
+		message = MultiChatUtil.translateColorCodes(message);
+		if (isSpecial) special = MultiChatUtil.translateColorCodes(special);
 
 		// Handle legacy servers
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
 			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
-				message = MultiChatUtil.approximateRGBColourCodes(message);
-				if (isSpecial) special = MultiChatUtil.approximateRGBColourCodes(special);
+				message = MultiChatUtil.approximateRGBColorCodes(message);
+				if (isSpecial) special = MultiChatUtil.approximateRGBColorCodes(special);
 			}
 		} else {
 			// Handle console
-			message = MultiChatUtil.approximateRGBColourCodes(message);
-			if (isSpecial) special = MultiChatUtil.approximateRGBColourCodes(special);
+			message = MultiChatUtil.approximateRGBColorCodes(message);
+			if (isSpecial) special = MultiChatUtil.approximateRGBColorCodes(special);
 		}
 
 		// If we want to treat the "Special" part as Json, then we will parse it here and treat it as a non special message

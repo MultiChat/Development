@@ -26,13 +26,13 @@ public class ProxyServerConnectedListener implements Listener {
 
 	private void displayMessage(ProxiedPlayer player, ProxiedPlayer sender, String senderServer, String message) {
 
-		message = MultiChatUtil.translateColourCodes(message);
+		message = MultiChatUtil.translateColorCodes(message);
 
 		if (player.getUniqueId().equals(sender.getUniqueId())) {
-			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateRGBColourCodes(message);
+			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateRGBColorCodes(message);
 		} else {
 			if (player.getServer() == null) return;
-			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColourCodes(message);
+			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColorCodes(message);
 		}
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(message));

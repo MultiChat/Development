@@ -58,7 +58,7 @@ public class TagManager {
 	}
 
 	private void notifyPlayer(ProxiedPlayer player, String tagger) {
-		player.sendMessage(ChatMessageType.ACTION_BAR, ProxyJsonUtils.parseMessage(MultiChatUtil.translateColourCodes("&6You were mentioned by %SPECIAL%"), "%SPECIAL%", MultiChatUtil.translateColourCodes(tagger)));
+		player.sendMessage(ChatMessageType.ACTION_BAR, ProxyJsonUtils.parseMessage(MultiChatUtil.translateColorCodes("&6You were mentioned by %SPECIAL%"), "%SPECIAL%", MultiChatUtil.translateColorCodes(tagger)));
 	}
 
 }

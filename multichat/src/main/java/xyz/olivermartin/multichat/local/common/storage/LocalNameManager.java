@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
 /**
@@ -88,7 +88,7 @@ public abstract class LocalNameManager {
 	public Optional<UUID> getUUIDFromNickname(String nickname) {
 
 		nickname = nickname.toLowerCase();
-		nickname = stripAllFormattingCodes(nickname);
+		nickname = MultiChatUtil.stripColorCodes(nickname, false);
 
 		Optional<UUID> uuid = getUUIDFromUnformattedNickname(nickname);
 
@@ -233,192 +233,5 @@ public abstract class LocalNameManager {
 	 * @param uuid
 	 */
 	public abstract void removeNickname(UUID uuid);
-
-	/*
-	 * Remove all colour / format codes from a string (using the '&' char)
-	 */
-	public String stripAllFormattingCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-ORX]");
-
-		if (input == null) {
-			return null;
-		}
-
-		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
-
-	}
-
-	/*
-	 * Remove all colour / format codes from a string (using the special § char)
-	 */
-	public String stripAllFormattingCodesAndPreformattedText(String input) {
-
-		input = stripAllFormattingCodes(input);
-
-		char COLOR_CHAR = '§';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-FK-ORX]");
-
-		if (input == null) {
-			return null;
-		}
-
-		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains colour codes (e.g. '&a')
-	 */
-	public boolean containsSimpleColorCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[0-9A-F]");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains hex colour codes (e.g. '&x...')
-	 */
-	public boolean containsRGBColorCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[X]");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains format codes (e.g. '&l')
-	 */
-	public boolean containsFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "[K-OR]");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains bold format codes
-	 */
-	public boolean containsBoldFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "L");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains italic format codes
-	 */
-	public boolean containsItalicFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "O");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains underline format codes
-	 */
-	public boolean containsUnderlineFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "N");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains strikethrough format codes
-	 */
-	public boolean containsStrikethroughFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "M");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains obfuscated format codes
-	 */
-	public boolean containsObfuscatedFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "K");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
-
-	/**
-	 * @param input
-	 * @return True if the input contains reset format codes
-	 */
-	public boolean containsResetFormatCodes(String input) {
-
-		char COLOR_CHAR = '&';
-		Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + String.valueOf(COLOR_CHAR) + "R");
-
-		if (input == null) {
-			return false;
-		}
-
-		return !STRIP_COLOR_PATTERN.matcher(input).replaceAll("").equals(input);
-
-	}
 
 }

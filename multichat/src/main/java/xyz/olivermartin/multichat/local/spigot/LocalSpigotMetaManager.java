@@ -28,10 +28,10 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			String prefix = vaultChat.getPlayerPrefix(Bukkit.getServer().getPlayer(uuid));
 
 			// Translate prefix
-			prefix = MultiChatUtil.translateColourCodes(prefix); 
+			prefix = MultiChatUtil.translateColorCodes(prefix); 
 
 			// Deal with legacy servers
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) prefix = MultiChatUtil.approximateRGBColourCodes(prefix);
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) prefix = MultiChatUtil.approximateRGBColorCodes(prefix);
 
 			return prefix;
 
@@ -54,10 +54,10 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			String suffix = vaultChat.getPlayerSuffix(Bukkit.getServer().getPlayer(uuid));
 
 			// Translate suffix
-			suffix = MultiChatUtil.translateColourCodes(suffix); 
+			suffix = MultiChatUtil.translateColorCodes(suffix); 
 
 			// Deal with legacy servers
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) suffix = MultiChatUtil.approximateRGBColourCodes(suffix);
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) suffix = MultiChatUtil.approximateRGBColorCodes(suffix);
 
 			return suffix;
 
@@ -106,14 +106,14 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			logger.debug("[LocalSpigotMetaManager] Format with placeholders = " + displayNameFormat);
 			logger.debug("[LocalSpigotMetaManager] Format with placeholders (using & only) = " + displayNameFormat.replaceAll("(?i)§(?=[a-f,0-9,k-o,r,x])", "&"));
 
-			displayNameFormat = MultiChatUtil.translateColourCodes(displayNameFormat);
+			displayNameFormat = MultiChatUtil.translateColorCodes(displayNameFormat);
 
 			logger.debug("[LocalSpigotMetaManager] FINAL = " + displayNameFormat);
 			logger.debug("[LocalSpigotMetaManager] FINAL (using & only) = " + displayNameFormat.replaceAll("(?i)§(?=[a-f,0-9,k-o,r,x])", "&"));
 
 			// Handle legacy servers
 			if (MultiChatLocal.getInstance().getDataStore().isLegacy())
-				displayNameFormat = MultiChatUtil.approximateRGBColourCodes(displayNameFormat);
+				displayNameFormat = MultiChatUtil.approximateRGBColorCodes(displayNameFormat);
 
 			player.setDisplayName(displayNameFormat);
 			player.setPlayerListName(displayNameFormat);

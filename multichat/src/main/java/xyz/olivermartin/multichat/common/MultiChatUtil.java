@@ -18,13 +18,13 @@ public class MultiChatUtil {
 
 
 	/**
-	 * <p>Takes a raw string and translates any colour codes using the & symbol</p>
+	 * <p>Takes a raw string and translates any color codes using the & symbol</p>
 	 * <p>Any RGB codes in the format &#abcdef, &xabcdef or &x&a&b&c&d&e&f will also be translated</p>
 	 * @param rawMessage The raw message to translate
 	 * @return the translated message
 	 */
-	public static String translateColourCodes(String rawMessage) {
-		return translateColourCodes(rawMessage, TranslateMode.ALL);
+	public static String translateColorCodes(String rawMessage) {
+		return translateColorCodes(rawMessage, TranslateMode.ALL);
 	}
 
 	/**
@@ -33,14 +33,14 @@ public class MultiChatUtil {
 	 * @param modes The TranslateModes to process
 	 * @return the translated message
 	 */
-	public static String translateColourCodes(String rawMessage, TranslateMode... modes) {
+	public static String translateColorCodes(String rawMessage, TranslateMode... modes) {
 
 		String translatedMessage = rawMessage;
 
-		boolean rgb = Arrays.stream(modes).anyMatch(value -> value.equals(TranslateMode.ALL) || value.equals(TranslateMode.COLOUR_ALL));
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
 
 		// If we are translating RGB codes, reformat these to the correct format
-		if (rgb) translatedMessage = MultiChatUtil.preProcessColourCodes(translatedMessage);
+		if (rgb) translatedMessage = MultiChatUtil.preProcessColorCodes(translatedMessage);
 
 		// Process each of the translations
 		for (TranslateMode mode : modes) {
@@ -52,12 +52,91 @@ public class MultiChatUtil {
 	}
 
 	/**
+	 * <p>Takes a raw string and strips any color codes using the & symbol</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the § symbol</p>
+	 * @param rawMessage The raw message to strip
+	 * @param stripTranslatedCodes If pre-translated codes (§) should also be stripped
+	 * @return the stripped message
+	 */
+	public static String stripColorCodes(String rawMessage, boolean stripTranslatedCodes) {
+		return stripColorCodes(rawMessage, stripTranslatedCodes, TranslateMode.ALL);
+	}
+
+	/**
+	 * <p>Takes a raw string and strips formatting codes (&) according to the TranslateMode</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the § symbol</p>
+	 * @param rawMessage The raw message to strip
+	 * @param stripTranslatedCodes If pre-translated codes (§) should also be stripped
+	 * @param modes The TranslateModes to apply
+	 * @return the stripped message
+	 */
+	public static String stripColorCodes(String rawMessage, boolean stripTranslatedCodes, TranslateMode... modes) {
+
+		String strippedMessage = rawMessage;
+
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
+
+		// If we are stripping RGB codes, reformat these to the correct format
+		if (rgb) strippedMessage = MultiChatUtil.preProcessColorCodes(strippedMessage);
+
+		// Process each of the strips
+		for (TranslateMode mode : modes) {
+			if (stripTranslatedCodes) {
+				strippedMessage = mode.stripAll(strippedMessage);
+			} else {
+				strippedMessage = mode.stripOrigin(strippedMessage);
+			}
+		}
+
+		return strippedMessage;
+
+	}
+
+	/**
+	 * <p>Takes a raw string and checks if it contains any codes using the & symbol</p>
+	 * <p>Any RGB codes in the format &#abcdef, &xabcdef or &x&a&b&c&d&e&f will also be checked</p>
+	 * @param rawMessage The raw message to check
+	 * @param checkTranslatedCodes If pre-translated codes (§) should also be checked
+	 * @return true if it contains format codes
+	 */
+	public static boolean containsColorCodes(String rawMessage, boolean checkTranslatedCodes) {
+		return containsColorCodes(rawMessage, checkTranslatedCodes, TranslateMode.ALL);
+	}
+
+	/**
+	 * <p>Takes a raw string and checks if it contains any formatting codes (&) according to the TranslateMode</p>
+	 * @param rawMessage The raw message to check
+	 * @param checkTranslatedCodes If pre-translated codes (§) should also be checked
+	 * @param modes The TranslateModes to process
+	 * @return true if it contains format codes
+	 */
+	public static boolean containsColorCodes(String rawMessage, boolean checkTranslatedCodes, TranslateMode... modes) {
+
+		boolean rgb = Arrays.stream(modes).anyMatch(value -> TranslateMode.isRGB(value));
+
+		// If we are checking RGB codes, reformat these to the correct format
+		if (rgb) rawMessage = MultiChatUtil.preProcessColorCodes(rawMessage);
+
+		// Process each of the checks
+		for (TranslateMode mode : modes) {
+			if (checkTranslatedCodes) {
+				if (mode.containsAny(rawMessage)) return true;
+			} else {
+				if (mode.containsOrigin(rawMessage)) return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * Reformat the RGB codes into Spigot Native version
 	 * 
 	 * @param message
 	 * @return message reformatted
 	 */
-	public static String preProcessColourCodes(String message) {
+	public static String preProcessColorCodes(String message) {
 
 		Matcher longRgb = LONG_UNTRANSLATED_RGB.matcher(message);
 		message = longRgb.replaceAll("&r&x&$1&$2&$3&$4&$5&$6");
@@ -71,10 +150,10 @@ public class MultiChatUtil {
 		// Transform codes to lowercase for better compatibility with Essentials etc.
 		for (char c : message.toCharArray()) {
 
-			// If this could be a colour code
+			// If this could be a color code
 			if (lastChar == '&') {
 
-				// If it is a colour code, set to be lowercase
+				// If it is a color code, set to be lowercase
 				Matcher allFormattingChars = ALL_FORMATTING_CHARS.matcher(String.valueOf(c));
 				if (allFormattingChars.matches()) {
 					c = Character.toLowerCase(c);
@@ -92,18 +171,18 @@ public class MultiChatUtil {
 
 	}
 
-	public static String approximateRGBColourCodes(String message) {
+	public static String approximateRGBColorCodes(String message) {
 
 		Matcher rgbMatcher = TRANSLATED_RGB.matcher(message);
 		message = rgbMatcher.replaceAll("§#$2$3$4$5$6$7");
 
 		message = replaceRGBShortCodesWithApproximations(message, false);
 
-		return approximateJsonRGBColourCodes(message);
+		return approximateJsonRGBColorCodes(message);
 
 	}
 
-	private static String approximateJsonRGBColourCodes(String message) {
+	private static String approximateJsonRGBColorCodes(String message) {
 
 		Matcher jsonRgbMatcher = JSON_RGB.matcher(message);
 		message = jsonRgbMatcher.replaceAll("$1§#$2$3$4$5$6$7$8");
@@ -292,6 +371,18 @@ public class MultiChatUtil {
 		}
 
 		return result;
+
+	}
+
+	public static String visualiseColorCodes(String message) {
+
+		Matcher originMatcher = TranslateMode.ALL.getOriginPattern().matcher(message);
+		Matcher translatedMatcher = TranslateMode.ALL.getTranslatedPattern().matcher(message);
+
+		message = originMatcher.replaceAll("{Origin.$1}");
+		message = translatedMatcher.replaceAll("{Transl.$1}");
+
+		return message;
 
 	}
 

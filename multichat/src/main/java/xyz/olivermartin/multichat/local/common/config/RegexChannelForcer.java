@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.local.common.config;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
 public class RegexChannelForcer {
@@ -31,7 +32,7 @@ public class RegexChannelForcer {
 		String testMessage = messageFormat;
 
 		if (ignoreFormatCodes) {
-			testMessage = MultiChatLocal.getInstance().getNameManager().stripAllFormattingCodesAndPreformattedText(testMessage);
+			testMessage = MultiChatUtil.stripColorCodes(testMessage, true);
 		} else {
 			// This makes life easier when doing the config file as only have to use & style colour codes
 			testMessage = testMessage.replace('§', '&');
