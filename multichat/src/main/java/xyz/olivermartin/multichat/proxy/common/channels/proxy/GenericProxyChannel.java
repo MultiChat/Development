@@ -13,6 +13,7 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 
@@ -60,6 +61,9 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 		String senderServer = sender.getServer().getInfo().getName();
 		String joined = format + message;
 
+		// TODO This is just a test
+		if (sender.hasPermission("multichat.chat.tag")) MultiChatProxy.getInstance().getTagManager().handleTags(message, sender.getName());
+
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
 			// Skip sending to this player if they shouldn't receive the message
@@ -80,7 +84,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(joined)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(joined)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(joined));
 			}
@@ -90,7 +94,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 		// Trigger PostGlobalChatEvent
 		ProxyServer.getInstance().getPluginManager().callEvent(new PostGlobalChatEvent(sender, format, message));
 
-		ConsoleManager.logChat(MultiChatUtil.approximateHexCodes(joined));
+		ConsoleManager.logChat(MultiChatUtil.approximateRGBColourCodes(joined));
 
 	}
 
@@ -116,7 +120,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 				continue;
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(message)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(message)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(message));
 			}

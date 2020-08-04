@@ -31,7 +31,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			prefix = MultiChatUtil.translateColourCodes(prefix); 
 
 			// Deal with legacy servers
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) prefix = MultiChatUtil.approximateHexCodes(prefix);
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) prefix = MultiChatUtil.approximateRGBColourCodes(prefix);
 
 			return prefix;
 
@@ -57,7 +57,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 			suffix = MultiChatUtil.translateColourCodes(suffix); 
 
 			// Deal with legacy servers
-			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) suffix = MultiChatUtil.approximateHexCodes(suffix);
+			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) suffix = MultiChatUtil.approximateRGBColourCodes(suffix);
 
 			return suffix;
 
@@ -113,7 +113,7 @@ public class LocalSpigotMetaManager extends LocalMetaManager {
 
 			// Handle legacy servers
 			if (MultiChatLocal.getInstance().getDataStore().isLegacy())
-				displayNameFormat = MultiChatUtil.approximateHexCodes(displayNameFormat);
+				displayNameFormat = MultiChatUtil.approximateRGBColourCodes(displayNameFormat);
 
 			player.setDisplayName(displayNameFormat);
 			player.setPlayerListName(displayNameFormat);

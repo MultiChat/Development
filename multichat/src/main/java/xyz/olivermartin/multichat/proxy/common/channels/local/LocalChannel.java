@@ -84,7 +84,7 @@ public class LocalChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(finalMessage)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}
@@ -118,7 +118,7 @@ public class LocalChannel {
 			}
 
 			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
-				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(finalMessage)));
+				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColourCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
 			}

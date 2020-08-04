@@ -17,6 +17,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.TagManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannelInfo;
@@ -307,6 +308,8 @@ public class MultiChat extends Plugin {
 
 			ProxyChatManager chatManager = new ProxyChatManager();
 			MultiChatProxy.getInstance().registerChatManager(chatManager);
+
+			MultiChatProxy.getInstance().registerTagManager(new TagManager());
 
 			///
 

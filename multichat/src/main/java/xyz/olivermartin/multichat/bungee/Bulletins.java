@@ -115,7 +115,7 @@ public class Bulletins {
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateHexCodes(message)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColourCodes(message)));
 						} else {
 							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 						}

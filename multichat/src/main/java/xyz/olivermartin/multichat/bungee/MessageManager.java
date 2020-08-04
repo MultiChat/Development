@@ -454,13 +454,13 @@ public class MessageManager {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
 			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
-				message = MultiChatUtil.approximateHexCodes(message);
-				if (isSpecial) special = MultiChatUtil.approximateHexCodes(special);
+				message = MultiChatUtil.approximateRGBColourCodes(message);
+				if (isSpecial) special = MultiChatUtil.approximateRGBColourCodes(special);
 			}
 		} else {
 			// Handle console
-			message = MultiChatUtil.approximateHexCodes(message);
-			if (isSpecial) special = MultiChatUtil.approximateHexCodes(special);
+			message = MultiChatUtil.approximateRGBColourCodes(message);
+			if (isSpecial) special = MultiChatUtil.approximateRGBColourCodes(special);
 		}
 
 		// If we want to treat the "Special" part as Json, then we will parse it here and treat it as a non special message

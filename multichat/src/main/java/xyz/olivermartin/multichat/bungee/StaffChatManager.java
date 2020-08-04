@@ -85,8 +85,8 @@ public class StaffChatManager {
 				String originalTranslated = MultiChatUtil.translateColourCodes(original);
 
 				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					message = MultiChatUtil.approximateHexCodes(message);
-					originalTranslated = MultiChatUtil.approximateHexCodes(originalTranslated);
+					message = MultiChatUtil.approximateRGBColourCodes(message);
+					originalTranslated = MultiChatUtil.approximateRGBColourCodes(originalTranslated);
 				}
 
 				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));

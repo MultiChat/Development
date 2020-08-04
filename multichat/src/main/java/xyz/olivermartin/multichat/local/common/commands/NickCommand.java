@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.local.common.commands;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
@@ -15,7 +16,7 @@ public abstract class NickCommand {
 
 	public boolean executeNickCommand(UUID targetUniqueId, MultiChatLocalPlayer sender, String proposedNick) {
 
-		proposedNick = MultiChatLocal.getInstance().getChatManager().reformatRGB(proposedNick);
+		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
 
 		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
 
@@ -28,7 +29,6 @@ public abstract class NickCommand {
 
 		if (proposedNick.equalsIgnoreCase("off")) {
 			lnm.removeNickname(targetUniqueId);
-			//MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 			sender.sendGoodMessage("The nickname has been removed!");
 			return true;
 		}
@@ -37,10 +37,36 @@ public abstract class NickCommand {
 			return true;
 		}
 
+		if (!checkValidNickname(targetUniqueId, sender, proposedNick)) {
+			return true;
+		}
+
 		lnm.setNickname(targetUniqueId, proposedNick);
-		//MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(targetUniqueId);
 
 		sender.sendGoodMessage("The nickname has been set!");
+		return true;
+
+	}
+
+	public boolean executeConsoleNickCommand(UUID targetUniqueId, MultiChatLocalCommandSender console, String proposedNick) {
+
+		proposedNick = MultiChatUtil.preProcessColourCodes(proposedNick);
+
+		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
+
+		if (proposedNick.equalsIgnoreCase("off")) {
+			lnm.removeNickname(targetUniqueId);
+			console.sendGoodMessage("The nickname has been removed!");
+			return true;
+		}
+
+		if (!checkValidNickname(targetUniqueId, console, proposedNick)) {
+			return true;
+		}
+
+		lnm.setNickname(targetUniqueId, proposedNick);
+
+		console.sendGoodMessage("The nickname has been set!");
 		return true;
 
 	}
@@ -133,18 +159,7 @@ public abstract class NickCommand {
 
 		}
 
-		if (lnm.stripAllFormattingCodes(proposedNick).length() < 1) {
-			sender.sendBadMessage("Sorry your nickname cannot be empty!");
-			return false;
-		}
-
-		String targetNickname = lnm.stripAllFormattingCodes(lnm.getCurrentName(targetUniqueId, false));
 		String targetName = lnm.getName(targetUniqueId);
-
-		if (lnm.existsNickname(proposedNick) && !targetNickname.equalsIgnoreCase(lnm.stripAllFormattingCodes(proposedNick)) ) {
-			sender.sendBadMessage("Sorry, this nickname is already in use!");
-			return false;
-		}
 
 		if (lnm.existsPlayer(proposedNick) && !targetName.equalsIgnoreCase(lnm.stripAllFormattingCodes(proposedNick)) && !sender.hasPermission("multichatlocal.nick.impersonate")) {
 			sender.sendBadMessage("Sorry, a player already exists with this name!");
@@ -167,6 +182,26 @@ public abstract class NickCommand {
 				return false;
 			}
 
+		}
+
+		return true;
+
+	}
+
+	private boolean checkValidNickname(UUID targetUniqueId, MultiChatLocalCommandSender sender, String proposedNick) {
+
+		LocalNameManager lnm = MultiChatLocal.getInstance().getNameManager();
+
+		if (lnm.stripAllFormattingCodes(proposedNick).length() < 1) {
+			sender.sendBadMessage("Sorry your nickname cannot be empty!");
+			return false;
+		}
+
+		String targetNickname = lnm.stripAllFormattingCodes(lnm.getCurrentName(targetUniqueId, false));
+
+		if (lnm.existsNickname(proposedNick) && !targetNickname.equalsIgnoreCase(lnm.stripAllFormattingCodes(proposedNick)) ) {
+			sender.sendBadMessage("Sorry, this nickname is already in use!");
+			return false;
 		}
 
 		return true;

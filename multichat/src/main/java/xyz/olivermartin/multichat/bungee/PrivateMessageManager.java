@@ -49,8 +49,8 @@ public class PrivateMessageManager {
 		replacement = MultiChatUtil.translateColourCodes(replacement);
 
 		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
-			rawMessage = MultiChatUtil.approximateHexCodes(rawMessage);
-			replacement = MultiChatUtil.approximateHexCodes(replacement);
+			rawMessage = MultiChatUtil.approximateRGBColourCodes(rawMessage);
+			replacement = MultiChatUtil.approximateRGBColourCodes(replacement);
 		}
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
@@ -59,8 +59,8 @@ public class PrivateMessageManager {
 
 	private void displayConsoleMessage(String rawMessage, String replacement) {
 
-		rawMessage = MultiChatUtil.approximateHexCodes(MultiChatUtil.translateColourCodes(rawMessage));
-		replacement = MultiChatUtil.approximateHexCodes(MultiChatUtil.translateColourCodes(replacement));
+		rawMessage = MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(rawMessage));
+		replacement = MultiChatUtil.approximateRGBColourCodes(MultiChatUtil.translateColourCodes(replacement));
 		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
 
 	}
