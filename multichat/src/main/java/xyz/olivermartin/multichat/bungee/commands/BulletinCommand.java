@@ -43,60 +43,56 @@ public class BulletinCommand extends Command {
                     counter++;
                     MessageManager.sendSpecialMessage(sender, "command_bulletin_list_item", counter + ": +++" + it.next(), true);
                 }
-                break;
+                return;
             }
             case "add": {
-                if (args.length < 2) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 2)
+                    break;
 
                 Bulletins.addBulletin(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
                 MessageManager.sendMessage(sender, "command_bulletin_added");
-                break;
+                return;
             }
             case "remove": {
-                if (args.length < 2) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 2)
+                    break;
 
                 int id;
                 try {
                     id = Integer.parseInt(args[1]);
                 } catch (NumberFormatException ignored) {
                     MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
-                    return;
+                    break;
                 }
 
                 Bulletins.removeBulletin(id - 1);
                 MessageManager.sendMessage(sender, "command_bulletin_removed");
-                break;
+                return;
             }
             case "start": {
-                if (args.length < 2) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 2)
+                    break;
 
                 int bulletinDelay;
                 try {
                     bulletinDelay = Integer.parseInt(args[1]);
                 } catch (NumberFormatException ignored) {
                     MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
-                    return;
+                    break;
                 }
 
                 Bulletins.startBulletins(bulletinDelay);
                 MessageManager.sendMessage(sender, "command_bulletin_started");
-                break;
+                return;
             }
             case "stop": {
                 Bulletins.stopBulletins();
                 MessageManager.sendMessage(sender, "command_bulletin_stopped");
-                break;
+                return;
             }
         }
+
+        showCommandUsage(sender);
     }
 
     private void showCommandUsage(CommandSender sender) {

@@ -40,13 +40,11 @@ public class AnnouncementCommand extends Command {
                                 true
                         )
                 );
-                break;
+                return;
             }
             case "add": {
-                if (args.length < 3) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 3)
+                    break;
 
                 String announcementKey = args[1].toLowerCase();
                 String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
@@ -55,13 +53,11 @@ public class AnnouncementCommand extends Command {
                 } else {
                     MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", announcementKey);
                 }
-                break;
+                return;
             }
             case "remove": {
-                if (args.length < 2) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 2)
+                    break;
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.removeAnnouncement(announcementKey)) {
@@ -69,14 +65,12 @@ public class AnnouncementCommand extends Command {
                 } else {
                     MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", announcementKey);
                 }
-                break;
+                return;
             }
             case "start": {
                 int timer;
-                if (args.length < 3 || (timer = parseInt(args[2])) == -1) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 3 || (timer = parseInt(args[2])) == -1)
+                    break;
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.startAnnouncement(announcementKey, timer)) {
@@ -84,13 +78,11 @@ public class AnnouncementCommand extends Command {
                 } else {
                     MessageManager.sendSpecialMessage(sender, "command_announcement_started_error", announcementKey);
                 }
-                break;
+                return;
             }
             case "stop": {
-                if (args.length < 2) {
-                    showCommandUsage(sender);
-                    return;
-                }
+                if (args.length < 2)
+                    break;
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.stopAnnouncement(announcementKey)) {
@@ -98,7 +90,7 @@ public class AnnouncementCommand extends Command {
                 } else {
                     MessageManager.sendSpecialMessage(sender, "command_announcement_stopped_error", announcementKey);
                 }
-                break;
+                return;
             }
             default: {
                 if (Announcements.existsAnnouncemnt(arg)) {
@@ -106,9 +98,11 @@ public class AnnouncementCommand extends Command {
                 } else {
                     MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", arg);
                 }
-                break;
+                return;
             }
         }
+
+        showCommandUsage(sender);
     }
 
     private int parseInt(String str) {
