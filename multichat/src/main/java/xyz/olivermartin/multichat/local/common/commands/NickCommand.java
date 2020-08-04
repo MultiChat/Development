@@ -83,7 +83,7 @@ public abstract class NickCommand {
 			return false;
 		}
 
-		if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.COLOUR_SIMPLE) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.simple") || sender.hasPermission("multichatlocal.nick.colour.simple") ||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
+		if (MultiChatUtil.containsColorCodes(proposedNick, false, TranslateMode.COLOR_SIMPLE) && !(sender.hasPermission("multichatlocal.nick.color") || sender.hasPermission("multichatlocal.nick.colour")||sender.hasPermission("multichatlocal.nick.color.simple") || sender.hasPermission("multichatlocal.nick.colour.simple") ||sender.hasPermission("multichatlocal.nick.color.rgb") || sender.hasPermission("multichatlocal.nick.colour.rgb"))) {
 			sender.sendBadMessage("You do not have permission to use nicknames with simple color codes!");
 			return false;
 		}

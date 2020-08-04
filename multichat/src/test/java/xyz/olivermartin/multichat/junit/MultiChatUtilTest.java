@@ -23,7 +23,7 @@ public class MultiChatUtilTest {
 	}
 
 	@Test
-	public void shouldTranslateColourCodesCorrectly() {
+	public void shouldTranslateColorCodesCorrectly() {
 
 		String rawMessage = "&r&aHello &kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!";
 
@@ -42,15 +42,15 @@ public class MultiChatUtilTest {
 				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.SIMPLE));
 
-		// SIMPLE COLOUR
-		assertEquals("Simple colour codes should be translated appropriately",
+		// SIMPLE COLOR
+		assertEquals("Simple color codes should be translated appropriately",
 				"&r§aHello &kthere! §6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
-				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOUR_SIMPLE));
+				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOR_SIMPLE));
 
-		// ALL COLOUR
-		assertEquals("All colour codes should be translated appropriately",
+		// ALL COLOR
+		assertEquals("All color codes should be translated appropriately",
 				"§r§aHello &kthere! §6&lthis &ois &ma &nmessage! §r§x§a§b§c§d§e§fRGB §r§x§a§b§c§d§e§ftoo§r§x§a§b§c§d§e§f!",
-				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOUR_ALL));
+				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOR_ALL));
 
 		// FORMAT UNDERLINE
 		assertEquals("Underline codes should be translated appropriately",
@@ -110,7 +110,7 @@ public class MultiChatUtilTest {
 	}
 
 	@Test
-	public void shouldApproximateRGBColourCodesCorrectly() {
+	public void shouldApproximateRGBColorCodesCorrectly() {
 
 		String rawMessage = "&r&aHello &kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!";
 
@@ -118,7 +118,7 @@ public class MultiChatUtilTest {
 
 		String approximated = MultiChatUtil.approximateRGBColorCodes(translated);
 
-		assertEquals("Translated RGB colour codes should be approximated to nearest minecraft equivalent",
+		assertEquals("Translated RGB color codes should be approximated to nearest minecraft equivalent",
 				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! §7RGB §7too§7!",
 				approximated);
 
@@ -126,25 +126,25 @@ public class MultiChatUtilTest {
 
 		String simpleApproximated = MultiChatUtil.approximateRGBColorCodes(simpleTranslated);
 
-		assertEquals("Non translated RGB colour codes should NOT be approximated to nearest minecraft equivalent",
+		assertEquals("Non translated RGB color codes should NOT be approximated to nearest minecraft equivalent",
 				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
 				simpleApproximated);
 
 		String jsonMessage = "{\"text\":\"hello world\", \"color\":\"#ABCDEF\"}";
 
-		assertEquals("JSON RGB colour codes should be approximated to nearest simple equivalent",
+		assertEquals("JSON RGB color codes should be approximated to nearest simple equivalent",
 				"{\"text\":\"hello world\", \"color\":\"gray\"}",
 				MultiChatUtil.approximateRGBColorCodes(jsonMessage));
 
 		String jsonMessage2 = "{\"text\":\"hello world\", \"color\":\"#aBcDeF\"}";
 
-		assertEquals("JSON RGB colour codes should be approximated to nearest simple equivalent (test 2)",
+		assertEquals("JSON RGB color codes should be approximated to nearest simple equivalent (test 2)",
 				"{\"text\":\"hello world\", \"color\":\"gray\"}",
 				MultiChatUtil.approximateRGBColorCodes(jsonMessage2));
 
 		String jsonMessage3 = "{\"text\":\"hello world\", \"color\":\"#abcdef\"}";
 
-		assertEquals("JSON RGB colour codes should be approximated to nearest simple equivalent (test 3)",
+		assertEquals("JSON RGB color codes should be approximated to nearest simple equivalent (test 3)",
 				"{\"text\":\"hello world\", \"color\":\"gray\"}",
 				MultiChatUtil.approximateRGBColorCodes(jsonMessage3));
 
@@ -199,7 +199,7 @@ public class MultiChatUtilTest {
 	}
 
 	@Test
-	public void shouldStripColourCodesCorrectly() {
+	public void shouldStripColorCodesCorrectly() {
 
 		String rawMessage = "&r&aHello &kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!";
 
@@ -218,15 +218,15 @@ public class MultiChatUtilTest {
 				"Hello there! this is a message! &#ABCDEFRGB &xAbCdEftoo&x!",
 				MultiChatUtil.stripColorCodes(rawMessage, false, TranslateMode.SIMPLE));
 
-		// SIMPLE COLOUR
-		assertEquals("Simple colour codes should be stripped appropriately",
+		// SIMPLE COLOR
+		assertEquals("Simple color codes should be stripped appropriately",
 				"&rHello &kthere! &lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x!",
-				MultiChatUtil.stripColorCodes(rawMessage, false, TranslateMode.COLOUR_SIMPLE));
+				MultiChatUtil.stripColorCodes(rawMessage, false, TranslateMode.COLOR_SIMPLE));
 
-		// ALL COLOUR
-		assertEquals("All colour codes should be stripped appropriately",
+		// ALL COLOR
+		assertEquals("All color codes should be stripped appropriately",
 				"Hello &kthere! &lthis &ois &ma &nmessage! RGB too!",
-				MultiChatUtil.stripColorCodes(rawMessage, false, TranslateMode.COLOUR_ALL));
+				MultiChatUtil.stripColorCodes(rawMessage, false, TranslateMode.COLOR_ALL));
 
 		// FORMAT UNDERLINE
 		assertEquals("Underline codes should be stripped appropriately",

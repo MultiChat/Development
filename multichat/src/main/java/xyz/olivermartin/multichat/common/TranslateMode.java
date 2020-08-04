@@ -5,8 +5,8 @@ import java.util.regex.Pattern;
 
 public enum TranslateMode {
 
-	COLOUR_SIMPLE ("(?i)%1$s([a-f,0-9])"),
-	COLOUR_ALL ("(?i)%1$s([a-f,0-9,r,x])"),
+	COLOR_SIMPLE ("(?i)%1$s([a-f,0-9])"),
+	COLOR_ALL ("(?i)%1$s([a-f,0-9,r,x])"),
 	FORMAT_UNDERLINE ("(?i)%1$s([n])"),
 	FORMAT_ITALIC ("(?i)%1$s([o])"),
 	FORMAT_BOLD ("(?i)%1$s([l])"),
@@ -30,7 +30,7 @@ public enum TranslateMode {
 	}
 
 	public static boolean isRGB(TranslateMode mode) {
-		return mode.equals(ALL) ||  mode.equals(X) || mode.equals(COLOUR_ALL);
+		return mode.equals(ALL) ||  mode.equals(X) || mode.equals(COLOR_ALL);
 	}
 
 	public Pattern getOriginPattern() {
