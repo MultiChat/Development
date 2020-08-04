@@ -99,6 +99,7 @@ public class GlobalCommand extends Command {
                 proxiedPlayer.getServer().getInfo()
         );
 
+        // TODO:  Move this to actual message distribution
         MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(proxiedPlayer.getUniqueId());
     }
 }
