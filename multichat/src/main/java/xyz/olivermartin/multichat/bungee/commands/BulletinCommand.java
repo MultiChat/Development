@@ -33,11 +33,6 @@ public class BulletinCommand extends Command {
 
         String arg = args[0].toLowerCase();
         switch (arg) {
-            case "stop": {
-                Bulletins.stopBulletins();
-                MessageManager.sendMessage(sender, "command_bulletin_stopped");
-                break;
-            }
             case "list": {
                 // TODO: Refactor Bulletins to change this part properly
                 int counter = 0;
@@ -94,6 +89,11 @@ public class BulletinCommand extends Command {
 
                 Bulletins.startBulletins(bulletinDelay);
                 MessageManager.sendMessage(sender, "command_bulletin_started");
+                break;
+            }
+            case "stop": {
+                Bulletins.stopBulletins();
+                MessageManager.sendMessage(sender, "command_bulletin_stopped");
                 break;
             }
         }
