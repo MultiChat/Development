@@ -31,12 +31,6 @@ public abstract class LocalChatListenerMonitor {
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - The message isn't cancelled!");
 
-		// IF ITS LOCAL CHAT WE CAN IGNORE IT
-		/*if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We are speaking into local chat, so at this point we are returning! Bye!");
-			return;
-		}*/
-
 		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 
 		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - TIME TO FORWARD TO PROXY!");

@@ -49,23 +49,6 @@ public abstract class LocalChatListenerHighest {
 
 		event.removeOtherPlayers();
 
-		/*Optional<LocalPseudoChannel> opChannelObject = chatManager.getChannelObject(channel);
-
-		if (opChannelObject.isPresent()) {
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Do we have a channel object to match that name? Yes!");
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we are attempting to remove ignored players from the recipient list of the message, and making sure only people who are meant to see the channel (as specified in the channel object), can see it!");
-
-			event.removeIgnoredPlayersAndNonChannelMembersFromRecipients(opChannelObject.get());
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - And BAM! That was handled by the local platform implementation!");
-
-		} else {
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We didn't find a channel object to match that name... Probably not good!");
-
-		}*/
-
 		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
 			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into local chat, so at this point we are returning! Bye!");
 			return;
