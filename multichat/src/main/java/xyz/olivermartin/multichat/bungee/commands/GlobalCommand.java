@@ -8,7 +8,6 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
@@ -19,97 +18,87 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 /**
  * Global Command
  * <p>Causes players to see messages sent from all servers in the global chat</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class GlobalCommand extends Command {
 
-	public GlobalCommand() {
-		super("mcglobal", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("global").toArray(new String[0]));
-	}
+    public GlobalCommand() {
+        super("mcglobal", "multichat.chat.mode", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("global").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "command_global_only_players");
+            return;
+        }
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
-		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
-		ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
+        if (args.length == 0) {
+            ChatModeManager.getInstance().setGlobal(proxiedPlayer.getUniqueId());
 
-		if ((sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "command_global_enabled_1");
+            MessageManager.sendMessage(sender, "command_global_enabled_2");
+            return;
+        }
 
-			if (args.length < 1) {
+        if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.GLOBAL)) {
+            // TODO: Maybe add a message here?
+            //  Don't think anyone will disable global chat and expect /global to work but you never know...
+            return;
+        }
 
-				ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
+        if (proxiedPlayer.getServer() != null
+                && ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
+                .getConfig().getStringList(ConfigValues.Config.NO_GLOBAL).contains(proxiedPlayer.getServer().getInfo().getName())) {
+            // TODO: Same as above
+            return;
+        }
 
-				MessageManager.sendMessage(sender, "command_global_enabled_1");
-				MessageManager.sendMessage(sender, "command_global_enabled_2");
+        if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
+                .getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES)) {
+            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(proxiedPlayer.getName(),
+                    proxiedPlayer.getServer().getInfo()
+            );
+        }
 
-			} else {
+        ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
+        Optional<String> optionalMessage = chatManager.handleChatMessage(proxiedPlayer, String.join(" ", args));
+        if (!optionalMessage.isPresent())
+            return;
 
-				ProxiedPlayer player = (ProxiedPlayer)sender;
-				String message = MultiChatUtil.getMessageFromArgs(args);
+        String message = optionalMessage.get();
+        ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
-				if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.GLOBAL) == true) {
+        // If they had this channel hidden, then unhide it...
+        if (channelManager.isHidden(proxiedPlayer.getUniqueId(), "global")) {
+            channelManager.show(proxiedPlayer.getUniqueId(), "global");
+            MessageManager.sendSpecialMessage(proxiedPlayer, "command_channel_show", "GLOBAL");
+        }
 
-					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_GLOBAL).contains(player.getServer().getInfo().getName())) {
+        // Let server know players channel preference
+        String currentChannel = channelManager.getChannel(proxiedPlayer);
+        String channelFormat = currentChannel.equals("local")
+                ? channelManager.getLocalChannel().getFormat()
+                : channelManager.getProxyChannel(currentChannel)
+                .orElse(channelManager.getGlobalChannel()).getInfo().getFormat();
 
-						if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
-							ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
-						}
+        ProxyLocalCommunicationManager.sendPlayerDataMessage(proxiedPlayer.getName(),
+                currentChannel,
+                channelFormat,
+                proxiedPlayer.getServer().getInfo(),
+                // TODO: Move this permissions check somewhere else or make it simpler
+                (proxiedPlayer.hasPermission("multichat.chat.color") || proxiedPlayer.hasPermission("multichat.chat.colour.simple") || proxiedPlayer.hasPermission("multichat.chat.color.simple")),
+                (proxiedPlayer.hasPermission("multichat.chat.color") || proxiedPlayer.hasPermission("multichat.chat.colour.rgb") || proxiedPlayer.hasPermission("multichat.chat.color.rgb"))
+        );
 
-						Optional<String> optionalMessage = chatManager.handleChatMessage(player, message); // Processed message
+        // Send message directly to global chat...
+        ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("global",
+                proxiedPlayer.getName(),
+                message,
+                proxiedPlayer.getServer().getInfo()
+        );
 
-						if (!optionalMessage.isPresent()) {
-							// Player not permitted to send this message, so cancel it
-							return;
-						}
-
-						message = optionalMessage.get();
-
-						// If they had this channel hidden, then unhide it...
-						if (channelManager.isHidden(player.getUniqueId(), "global")) {
-							channelManager.show(player.getUniqueId(), "global");
-							MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
-						}
-
-						// Let server know players channel preference
-
-						String channelFormat;
-
-						switch (channelManager.getChannel(player)) {
-
-						case "global":
-							channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-							break;
-						case "local":
-							channelFormat = channelManager.getLocalChannel().getFormat();
-							break;
-						default:
-							if (channelManager.existsProxyChannel(channelManager.getChannel(player))) {
-								channelFormat = channelManager.getProxyChannel(channelManager.getChannel(player)).get().getInfo().getFormat();
-							} else {
-								channelFormat = channelManager.getGlobalChannel().getInfo().getFormat();
-							}
-							break;
-						}
-
-						ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), channelManager.getChannel(player), channelFormat, player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
-
-						// Message passes through to spigot here
-
-						// Send message directly to global chat...
-						ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("global", sender.getName(), message, ((ProxiedPlayer)sender).getServer().getInfo());
-
-						if (MultiChatProxy.getInstance().getDataStore().getHiddenStaff().contains(player.getUniqueId())) {
-							MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(player.getUniqueId());
-						}
-
-					}
-				}
-
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_global_only_players");
-		}
-	}
+        MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(proxiedPlayer.getUniqueId());
+    }
 }
