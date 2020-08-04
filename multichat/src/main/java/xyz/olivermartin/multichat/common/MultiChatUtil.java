@@ -379,8 +379,8 @@ public class MultiChatUtil {
 		Matcher originMatcher = TranslateMode.ALL.getOriginPattern().matcher(message);
 		Matcher translatedMatcher = TranslateMode.ALL.getTranslatedPattern().matcher(message);
 
-		message = originMatcher.replaceAll("{Origin.$1}");
-		message = translatedMatcher.replaceAll("{Transl.$1}");
+		message = originMatcher.replaceAll("{O$1}");
+		message = translatedMatcher.replaceAll("{T$1}");
 
 		return message;
 
