@@ -14,6 +14,8 @@ public class MultiChatUtil {
 	private static final Pattern TRANSLATED_RGB = Pattern.compile("(?i)(§r)?§x§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])§([0-9A-F])");
 	private static final Pattern ALL_FORMATTING_CHARS = Pattern.compile("(?i)([0-9A-FK-ORX])");
 	private static final Pattern JSON_RGB = Pattern.compile("(?i)(\"color\":\")#([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])(\")");
+	private static final Pattern APPROX_RGB_FORMAT = Pattern.compile("(?i)\\§(#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])");
+
 
 	/**
 	 * <p>Takes a raw string and translates any colour codes using the & symbol</p>
@@ -93,7 +95,7 @@ public class MultiChatUtil {
 	public static String approximateRGBColourCodes(String message) {
 
 		Matcher rgbMatcher = TRANSLATED_RGB.matcher(message);
-		message = rgbMatcher.replaceAll("&#$2$3$4$5$6$7");
+		message = rgbMatcher.replaceAll("§#$2$3$4$5$6$7");
 
 		message = replaceRGBShortCodesWithApproximations(message, false);
 
@@ -104,7 +106,7 @@ public class MultiChatUtil {
 	private static String approximateJsonRGBColourCodes(String message) {
 
 		Matcher jsonRgbMatcher = JSON_RGB.matcher(message);
-		message = jsonRgbMatcher.replaceAll("$1&#$2$3$4$5$6$7$8");
+		message = jsonRgbMatcher.replaceAll("$1§#$2$3$4$5$6$7$8");
 		return replaceRGBShortCodesWithApproximations(message, true);
 
 	}
@@ -112,7 +114,7 @@ public class MultiChatUtil {
 	private static String replaceRGBShortCodesWithApproximations(String message, boolean useNameInsteadOfCode) {
 
 		List<String> allMatches = new ArrayList<String>();
-		Matcher m = SHORT_UNTRANSLATED_RGB.matcher(message);
+		Matcher m = APPROX_RGB_FORMAT.matcher(message);
 
 		while (m.find()) {
 			allMatches.add(m.group());
