@@ -11,6 +11,8 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 import java.util.UUID;
 
+public class IgnoreCommand extends Command {
+
     public IgnoreCommand() {
         super("mcignore", "multichat.ignore", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ignore").toArray(new String[0]));
     }
