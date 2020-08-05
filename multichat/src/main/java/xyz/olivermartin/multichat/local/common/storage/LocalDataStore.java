@@ -74,11 +74,6 @@ public class LocalDataStore {
 	private Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
 
 	/**
-	 * Map of who players ignore
-	 */
-	private Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
-
-	/**
 	 * IS THIS A LEGACY SERVER THAT NEEDS RGB CODE APPROX.?
 	 */
 	private boolean legacy = false;
@@ -151,13 +146,6 @@ public class LocalDataStore {
 	 */
 	public synchronized Map<String, LocalPseudoChannel> getChannelObjects() {
 		return channelObjects;
-	}
-
-	/**
-	 * @return the ignoreMap
-	 */
-	public synchronized Map<UUID, Set<UUID>> getIgnoreMap() {
-		return ignoreMap;
 	}
 
 	/**
@@ -235,13 +223,6 @@ public class LocalDataStore {
 	 */
 	public synchronized void setChannelObjects(Map<String, LocalPseudoChannel> channelObjects) {
 		this.channelObjects = channelObjects;
-	}
-
-	/**
-	 * @param ignoreMap the ignoreMap to set
-	 */
-	public synchronized void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
-		this.ignoreMap = ignoreMap;
 	}
 
 	/**
