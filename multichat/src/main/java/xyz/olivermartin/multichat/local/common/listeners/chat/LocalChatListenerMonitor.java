@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,7 +24,13 @@ public abstract class LocalChatListenerMonitor {
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
 
-		Set<UUID> originalRecipients = chatManager.getRecipientsFromRecipientQueue(event.getPlayer().getUniqueId());
+		Optional<Set<UUID>> originalRecipients = chatManager.getRecipientsFromRecipientQueue(event.getPlayer().getUniqueId());
+
+		if (!originalRecipients.isPresent()) {
+			logger.debug("&8[&3CHAT-L3&8]&7 ", "No recipients for message, must have been cancelled earlier - FINISH");
+			return;
+		}
+
 		String channel = chatManager.pollChatChannel(event.getPlayer());
 
 		logger.debug("&8[&3CHAT-L3&8]&7 ", "CHANNEL (before forcing) = '" + channel + "'");
@@ -74,7 +81,7 @@ public abstract class LocalChatListenerMonitor {
 		logger.debug("&8[&3CHAT-L3&8]&7 ", "MESSAGE (final for proxy) = '" + proxyMessage + "'");
 		logger.debug("&8[&3CHAT-L3&8]&7 ", "PLAYER UUID = '" + event.getPlayer().getUniqueId() + "'");
 
-		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), channel, proxyMessage, proxyFormat, originalRecipients);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), channel, proxyMessage, proxyFormat, originalRecipients.get());
 
 		logger.debug("&8[&3CHAT-L3&8]&7 ", "Info sent to proxy - FINISH");
 

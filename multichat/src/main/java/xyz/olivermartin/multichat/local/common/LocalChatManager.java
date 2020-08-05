@@ -106,13 +106,15 @@ public abstract class LocalChatManager {
 
 	}
 
-	public Set<UUID> getRecipientsFromRecipientQueue(UUID uuid) {
+	public Optional<Set<UUID>> getRecipientsFromRecipientQueue(UUID uuid) {
 
 		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
 		Map<UUID, Queue<Set<UUID>>> recipientQueues = store.getRecipientQueues();
 		Set<UUID> recipients;
 
 		synchronized (recipientQueues) {
+
+			if (!recipientQueues.containsKey(uuid)) return Optional.empty();
 
 			recipients = recipientQueues.get(uuid).poll();
 
@@ -122,7 +124,7 @@ public abstract class LocalChatManager {
 
 		}
 
-		return recipients;
+		return Optional.of(recipients);
 
 	}
 
