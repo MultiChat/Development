@@ -49,7 +49,6 @@ public abstract class LocalChatManager {
 
 			if (playerChannels.containsKey(uuid)) {
 				channel = playerChannels.get(uuid);
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Got selected player channel as " + channel);
 			} else {
 				channel = "global";
 				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player was not in channel map, so using global...");
@@ -107,13 +106,15 @@ public abstract class LocalChatManager {
 
 	}
 
-	public Set<UUID> getRecipientsFromRecipientQueue(UUID uuid) {
+	public Optional<Set<UUID>> getRecipientsFromRecipientQueue(UUID uuid) {
 
 		LocalDataStore store = MultiChatLocal.getInstance().getDataStore();
 		Map<UUID, Queue<Set<UUID>>> recipientQueues = store.getRecipientQueues();
 		Set<UUID> recipients;
 
 		synchronized (recipientQueues) {
+
+			if (!recipientQueues.containsKey(uuid)) return Optional.empty();
 
 			recipients = recipientQueues.get(uuid).poll();
 
@@ -123,7 +124,7 @@ public abstract class LocalChatManager {
 
 		}
 
-		return recipients;
+		return Optional.of(recipients);
 
 	}
 
@@ -234,13 +235,7 @@ public abstract class LocalChatManager {
 
 			if (colourMap.containsKey(uuid)) {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player is in the simple colour map!");
-
-				boolean colour = colourMap.get(uuid);
-
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Can they use simple colours? --> " + colour);
-
-				return colour;
+				return colourMap.get(uuid);
 
 			} else {
 
@@ -263,13 +258,7 @@ public abstract class LocalChatManager {
 
 			if (colourMap.containsKey(uuid)) {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Player is in the rgb colour map!");
-
-				boolean colour = colourMap.get(uuid);
-
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Can they use rgb colours? --> " + colour);
-
-				return colour;
+				return colourMap.get(uuid);
 
 			} else {
 
@@ -283,7 +272,7 @@ public abstract class LocalChatManager {
 
 	}
 
-	public String translateColourCodes(String message, boolean rgb) {
+	public String translateColorCodes(String message, boolean rgb) {
 
 		if (rgb) {
 			message = MultiChatUtil.translateColorCodes(message);
@@ -309,22 +298,22 @@ public abstract class LocalChatManager {
 
 			for (String key : config.getMultichatPlaceholders().keySet()) {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Key = " + key);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Key = " + key);
 
 				String value = config.getMultichatPlaceholders().get(key);
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Value = " + value);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MultiChatPlaceholder Value = " + value);
 
 				value = MultiChatLocal.getInstance().getPlaceholderManager().processMultiChatPlaceholders(player.getUniqueId(), value);
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed Value to get: " + value);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed Value to get: " + value);
 
 				// If we are hooked with PAPI then use their placeholders!
 				value = processExternalPlaceholders(player, value);
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Processed with external placeholders to get: " + value);
 
-				value = translateColourCodes(value, true);
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Translated colour codes to get: " + value);
+				value = translateColorCodes(value, true);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] Translated colour codes to get: " + value);
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalChatManager] MESSAGE = : " + message);
 
 				if (message.contains(key)) {
 					message = message.replace(key, value);

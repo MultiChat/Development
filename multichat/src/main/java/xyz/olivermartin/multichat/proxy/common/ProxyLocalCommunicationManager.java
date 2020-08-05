@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.config.Configuration;
-import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
@@ -31,7 +30,6 @@ public class ProxyLocalCommunicationManager {
 		 * 
 		 * Other ids are:
 		 * - global = Global chat info
-		 * - ignore = ignore map info
 		 * - dn = display name info
 		 * - legacy = legacy server info
 		 */
@@ -70,7 +68,6 @@ public class ProxyLocalCommunicationManager {
 		 * 
 		 * Other ids are:
 		 * - global = Global chat info
-		 * - ignore = ignore map info
 		 * - dn = display name info
 		 * - legacy = legacy server info
 		 */
@@ -102,39 +99,6 @@ public class ProxyLocalCommunicationManager {
 
 	}
 
-	public static void sendIgnoreServerData(ServerInfo server) {
-
-		DebugManager.log("About to send to multichat:sdata on the ignore id");
-
-		/*
-		 * This is for the sdata channel id: ignore
-		 * 
-		 * Other ids are:
-		 * - global = Global chat info
-		 * - ignore = ignore map info
-		 * - dn = display name info
-		 * - legacy = legacy server info
-		 */
-
-		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-
-		try {
-
-			ObjectOutputStream oout = new ObjectOutputStream(stream);
-			oout.writeUTF("ignore");
-			oout.writeObject(ChatControl.getIgnoreMap());
-			oout.flush();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		server.sendData(CommChannels.SERVER_DATA, stream.toByteArray());
-
-		DebugManager.log("Completed send to multichat:sdata on the ignore id");
-
-	}
-
 	public static void sendLegacyServerData(ServerInfo server) {
 
 		DebugManager.log("About to send to multichat:sdata on the legacy id");
@@ -144,7 +108,6 @@ public class ProxyLocalCommunicationManager {
 		 * 
 		 * Other ids are:
 		 * - global = Global chat info
-		 * - ignore = ignore map info
 		 * - dn = display name info
 		 * - legacy = legacy server info
 		 */
@@ -279,12 +242,8 @@ public class ProxyLocalCommunicationManager {
 
 	public static void sendPlayerDataMessage(String playerName, String channel, String channelFormat, ServerInfo server, boolean colour, boolean rgb) {
 
-		//ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
-
-		sendIgnoreServerData(server);
-
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		//DataOutputStream out = new DataOutputStream(stream);
+
 		try {
 			ObjectOutputStream oout = new ObjectOutputStream(stream);
 
@@ -295,8 +254,6 @@ public class ProxyLocalCommunicationManager {
 			oout.writeUTF(channelFormat);
 			oout.writeBoolean(colour);
 			oout.writeBoolean(rgb);
-			//oout.writeBoolean(channelObject.isWhitelistMembers());
-			//oout.writeObject(channelObject.getMembers());
 			oout.flush();
 
 		} catch (IOException e) {

@@ -3,7 +3,6 @@ package xyz.olivermartin.multichat.local.spigot;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
@@ -22,8 +21,8 @@ public class LocalSpigotConsoleLogger extends LocalConsoleLogger {
 	}
 
 	@Override
-	protected void sendColouredMessageToConsoleSender(String message) {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+	protected void sendConsoleMessage(String message) {
+		Bukkit.getConsoleSender().sendMessage(message);
 	}
 
 }

@@ -72,8 +72,6 @@ public class LocalSQLNameManager extends LocalNameManager {
 				}
 			}
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("[LocalSQLNameManager] CurrentName = " + name);
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 			name = "";

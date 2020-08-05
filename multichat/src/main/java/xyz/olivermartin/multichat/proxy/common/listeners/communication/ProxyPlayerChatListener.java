@@ -59,11 +59,11 @@ public class ProxyPlayerChatListener implements Listener {
 			ObjectInputStream in = new ObjectInputStream(stream);
 
 			uuid = UUID.fromString(in.readUTF());
-			DebugManager.log("{multichat:pchat} UUID = " + uuid);
+			DebugManager.log("{multichat:pchat} UUID = '" + uuid + "'");
 			channel = in.readUTF();
-			DebugManager.log("{multichat:pchat} Channel = " + channel);
+			DebugManager.log("{multichat:pchat} Channel = '" + channel + "'");
 			message = in.readUTF();
-			DebugManager.log("{multichat:pchat} Message = " + message);
+			DebugManager.log("{multichat:pchat} Message = '" + message + "'");
 			format = in.readUTF();
 			otherRecipients = (Set<UUID>) in.readObject();
 
@@ -72,9 +72,9 @@ public class ProxyPlayerChatListener implements Listener {
 			return;
 		}
 
-		DebugManager.log("{multichat:pchat} Format (before removal of double chars) = " + format);
+		DebugManager.log("{multichat:pchat} Format (before removal of double chars) = '" + format + "'");
 		format = format.replace("%%","%");
-		DebugManager.log("{multichat:pchat} Format = " + format);
+		DebugManager.log("{multichat:pchat} Format = '" + format + "'");
 
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 
@@ -84,7 +84,7 @@ public class ProxyPlayerChatListener implements Listener {
 			return;
 		}
 
-		DebugManager.log("{multichat:pchat} Got player successfully! Name = " + player.getName());
+		DebugManager.log("{multichat:pchat} Got player successfully! Name = '" + player.getName() + "'");
 
 		Optional<PlayerMeta> opm = PlayerMetaManager.getInstance().getPlayer(uuid);
 		ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
@@ -94,13 +94,10 @@ public class ProxyPlayerChatListener implements Listener {
 			switch (channel) {
 
 			case "global":
-				//DebugManager.log("{multichat:pchat} Global Channel Available? = " + (LegacyChannel.getGlobalChannel() != null));
-				//LegacyChannel.getGlobalChannel().sendMessage(player, message, format);
 				channelManager.getGlobalChannel().distributeMessage(player, message, format, otherRecipients);
 				break;
 
 			case "local":
-				DebugManager.log("{multichat:pchat} LOCAL SPY MESSAGE - Not yet implemented...?"); // TODO ?!
 				channelManager.getLocalChannel().distributeMessage(player, message, format, otherRecipients);
 				break;
 

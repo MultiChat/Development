@@ -109,7 +109,6 @@ public interface CommChannels {
 	 * <p>
 	 * This channel communicates the following from PROXY -> LOCAL:
 	 * <ul>
-	 * 	<li>Player ignore map</li>
 	 *  <li>Global chat format</li>
 	 *  <li>If this server is a 'global chat server'</li>
 	 *  <li>If this server is a legacy server</li>

@@ -7,12 +7,9 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
 import java.util.UUID;
-
-public class IgnoreCommand extends Command {
 
     public IgnoreCommand() {
         super("mcignore", "multichat.ignore", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ignore").toArray(new String[0]));
@@ -59,7 +56,5 @@ public class IgnoreCommand extends Command {
             ChatControl.unignore(playerUID, targetUID);
             MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
         }
-
-        ProxyLocalCommunicationManager.sendIgnoreServerData(proxiedPlayer.getServer().getInfo());
     }
 }

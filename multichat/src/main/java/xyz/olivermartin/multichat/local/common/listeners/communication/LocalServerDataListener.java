@@ -1,16 +1,12 @@
 package xyz.olivermartin.multichat.local.common.listeners.communication;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeObjectMessage;
 
 public abstract class LocalServerDataListener {
 
-	@SuppressWarnings("unchecked")
 	protected boolean handleMessage(LocalBungeeObjectMessage message) {
 
 		try {
@@ -20,7 +16,6 @@ public abstract class LocalServerDataListener {
 			 * 
 			 * The ids are:
 			 * - global = Global chat info
-			 * - ignore = ignore map info
 			 * - dn = display name info
 			 * - legacy = legacy server info
 			 */
@@ -39,17 +34,6 @@ public abstract class LocalServerDataListener {
 
 				MultiChatLocal.getInstance().getDataStore().setGlobalChatServer(globalServer);
 				MultiChatLocal.getInstance().getDataStore().setGlobalChatFormat(globalChatFormat);
-
-				break;
-
-			case "ignore":
-
-				try {
-					MultiChatLocal.getInstance().getDataStore().setIgnoreMap((Map<UUID, Set<UUID>>) message.readObject());
-				} catch (ClassNotFoundException e) {
-					MultiChatLocal.getInstance().getConsoleLogger().log("Could not read the ignore Map from local ignore message...");
-					e.printStackTrace();
-				}
 
 				break;
 
