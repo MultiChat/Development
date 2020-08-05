@@ -10,63 +10,56 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 
+import java.util.UUID;
+
 public class IgnoreCommand extends Command {
 
-	public IgnoreCommand() {
-		super("mcignore", "multichat.ignore", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ignore").toArray(new String[0]));
-	}
+    public IgnoreCommand() {
+        super("mcignore", "multichat.ignore", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("ignore").toArray(new String[0]));
+    }
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "ignore_only_players");
+            return;
+        }
 
-		if (args.length != 1) {
+        if (args.length == 0) {
+            MessageManager.sendMessage(sender, "ignore_usage");
+            return;
+        }
 
-			MessageManager.sendMessage(sender, "ignore_usage");
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
-		} else {
+        if (target == null) {
+            MessageManager.sendMessage(sender, "ignore_player_not_found");
+            return;
+        }
 
-			if (sender instanceof ProxiedPlayer) {
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+        if (proxiedPlayer.equals(target)) {
+            MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
+            return;
+        }
 
-				String username = args[0];
+        if (target.hasPermission("multichat.ignore.bypass")) {
+            MessageManager.sendMessage(sender, "ignore_bypass");
+            return;
+        }
 
-				ProxiedPlayer target = ProxyServer.getInstance().getPlayer(username);
+        UUID playerUID = proxiedPlayer.getUniqueId();
+        UUID targetUID = target.getUniqueId();
 
-				if (target != null) {
+        // TODO: ChatControl.toggleIgnore
+        if (!ChatControl.ignoresAnywhere(targetUID, playerUID)) {
+            ChatControl.ignore(playerUID, targetUID);
+            MessageManager.sendSpecialMessage(sender, "ignore_ignored", target.getName());
+        } else {
+            ChatControl.unignore(playerUID, targetUID);
+            MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
+        }
 
-					if (target.getName().equals(sender.getName())) {
-						MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
-						return;
-					}
-
-					if (target.hasPermission("multichat.ignore.bypass")) {
-						MessageManager.sendMessage(sender, "ignore_bypass");
-						return;
-					}
-
-					if (!ChatControl.ignoresAnywhere(target.getUniqueId(), ((ProxiedPlayer) sender).getUniqueId())) {
-						ChatControl.ignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
-						MessageManager.sendSpecialMessage(sender, "ignore_ignored", target.getName());
-					} else {
-						ChatControl.unignore(((ProxiedPlayer) sender).getUniqueId(), target.getUniqueId());
-						MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
-					}
-
-					ProxyLocalCommunicationManager.sendIgnoreServerData(((ProxiedPlayer) sender).getServer().getInfo());
-
-				} else {
-
-					MessageManager.sendMessage(sender, "ignore_player_not_found");
-
-				}
-
-			} else {
-
-				MessageManager.sendMessage(sender, "ignore_only_players");
-
-			}
-
-		}
-
-	}
-
+        ProxyLocalCommunicationManager.sendIgnoreServerData(proxiedPlayer.getServer().getInfo());
+    }
 }
