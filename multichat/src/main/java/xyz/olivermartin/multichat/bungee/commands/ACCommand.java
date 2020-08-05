@@ -41,10 +41,10 @@ public class ACCommand extends Command {
         String serverName = "#";
 
         if (sender instanceof ProxiedPlayer) {
-            ProxiedPlayer player = (ProxiedPlayer) sender;
-            name = player.getName();
-            displayName = player.getDisplayName();
-            serverName = player.getServer().getInfo().getName();
+            ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+            name = proxiedPlayer.getName();
+            displayName = proxiedPlayer.getDisplayName();
+            serverName = proxiedPlayer.getServer().getInfo().getName();
         }
 
         new StaffChatManager().sendAdminMessage(name, displayName, serverName, String.join(" ", args));
