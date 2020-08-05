@@ -11,25 +11,21 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 /**
  * Group List Command
  * <p>Displays a list of all current group chats on the server</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class GroupListCommand extends Command {
 
-	public GroupListCommand() {
-		super("mcgroups", "multichat.staff.listgroups", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("groups").toArray(new String[0]));
-	}
+    public GroupListCommand() {
+        super("mcgroups", "multichat.staff.listgroups", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("groups").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
 
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+        MessageManager.sendMessage(sender, "command_grouplist_list");
 
-		MessageManager.sendMessage(sender, "command_grouplist_list");
-
-		for (String groupname : ds.getGroupChats().keySet()) {
-			MessageManager.sendSpecialMessage(sender, "command_grouplist_list_item", groupname);
-		}
-
-	}
+        for (String groupName : proxyDataStore.getGroupChats().keySet())
+            MessageManager.sendSpecialMessage(sender, "command_groulist_list_item", groupName);
+    }
 }
