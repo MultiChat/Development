@@ -4,11 +4,12 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
+
+import java.util.UUID;
 
 /**
  * Admin-Chat command
@@ -23,40 +24,29 @@ public class ACCommand extends Command {
     }
 
     public void execute(CommandSender sender, String[] args) {
-        if (args.length > 0) {
-        	// Default sender values
-            String name = "CONSOLE";
-            String displayName = "CONSOLE";
-            String serverName = "#";
-
-            // Change values if sender is a player
-            if (sender instanceof ProxiedPlayer) {
-                ProxiedPlayer player = (ProxiedPlayer) sender;
-                name = player.getName();
-                displayName = player.getDisplayName();
-                serverName = player.getServer().getInfo().getName();
+        if (args.length == 0) {
+            if (!(sender instanceof ProxiedPlayer)) {
+                MessageManager.sendMessage(sender, "command_ac_only_players");
+                return;
             }
 
-            // Send message
-            DebugManager.log("[ACCommand] Attempting to send a staff chat message as " + name + ".");
-            StaffChatManager staffChatManager = new StaffChatManager();
-            staffChatManager.sendAdminMessage(name, displayName, serverName, String.join(" ", args));
+            UUID playerUID = ((ProxiedPlayer) sender).getUniqueId();
+            boolean toggleResult = Events.toggleAC(playerUID);
+            MessageManager.sendMessage(sender, "command_ac_toggle_" + (toggleResult ? "on" : "off"));
             return;
         }
 
-        // Console can't toggle AC
-        if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_ac_only_players");
-            return;
+        String name = "CONSOLE";
+        String displayName = "CONSOLE";
+        String serverName = "#";
+
+        if (sender instanceof ProxiedPlayer) {
+            ProxiedPlayer player = (ProxiedPlayer) sender;
+            name = player.getName();
+            displayName = player.getDisplayName();
+            serverName = player.getServer().getInfo().getName();
         }
 
-        // Toggle AC for player
-        DebugManager.log("[ACCommand] Sender is a player, toggling AC...");
-
-        ProxiedPlayer player = (ProxiedPlayer) sender;
-        boolean toggleresult = Events.toggleAC(player.getUniqueId());
-
-        DebugManager.log("[ACCommand] AC new toggle state: " + toggleresult);
-        MessageManager.sendMessage(sender, "command_ac_toggle_" + (toggleresult ? "on" : "off"));
+        new StaffChatManager().sendAdminMessage(name, displayName, serverName, String.join(" ", args));
     }
 }
