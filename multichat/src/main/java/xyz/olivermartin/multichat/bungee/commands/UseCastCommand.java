@@ -7,47 +7,39 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
 import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+
+import java.util.Arrays;
 
 /**
  * Use Cast Command
  * <p>A command designed to allow you to use a cast from the console</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class UseCastCommand extends Command {
 
-	public UseCastCommand() {
-		super("mcusecast", "multichat.cast.admin", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("usecast").toArray(new String[0]));
-	}
+    public UseCastCommand() {
+        super("mcusecast", "multichat.cast.admin", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("usecast").toArray(new String[0]));
+    }
 
-	public void displayUsage(CommandSender sender) {
-		MessageManager.sendMessage(sender, "command_usecast_usage");
-		sender.sendMessage(new ComponentBuilder("/usecast <name> <message>").color(ChatColor.AQUA).create());
-	}
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            MessageManager.sendMessage(sender, "command_usecast_usage");
+            // TODO: This should probably be in the configurable usecast message
+            sender.sendMessage(new ComponentBuilder("/usecast <name> <message>").color(ChatColor.AQUA).create());
+            return;
+        }
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
+        String castName = args[0];
+        if (!CastControl.existsCast(castName)) {
+            MessageManager.sendSpecialMessage(sender, "command_usecast_does_not_exist", castName);
+            return;
+        }
 
-		if (args.length < 2) {
-			displayUsage(sender);
-			return;
-		}
-
-		if (CastControl.existsCast(args[0])) {
-
-			String message = MultiChatUtil.getMessageFromArgs(args, 1);
-
-			CastControl.sendCast(args[0], message, MultiChatProxy.getInstance().getChannelManager().getGlobalChannel(), sender);
-
-		} else {
-
-			MessageManager.sendSpecialMessage(sender, "command_usecast_does_not_exist", args[0].toUpperCase());
-			return;
-
-		}
-	}
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        CastControl.sendCast(castName, message, MultiChatProxy.getInstance().getChannelManager().getGlobalChannel(), sender);
+    }
 }

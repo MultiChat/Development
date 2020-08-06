@@ -26,138 +26,116 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 /**
  * Group Chat Messaging Command
  * <p>Allows players to send a message direct to a group chat or toggle group chats</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class GCCommand extends Command {
 
-	public GCCommand() {
-		super("mcgc", "multichat.group", (String[]) ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("gc").toArray(new String[0]));
-	}
+    public GCCommand() {
+        super("mcgc", "multichat.group", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("gc").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, args.length == 0
+                    ? "command_gc_only_players_toggle"
+                    : "command_gc_only_players_speak"
+            );
+            return;
+        }
 
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+        if (args.length == 0) {
+            boolean toggleResult = Events.toggleGC(proxiedPlayer.getUniqueId());
+            MessageManager.sendMessage(sender, "command_gc_toggle_" + (toggleResult ? "on" : "off"));
+            return;
+        }
 
-		if (args.length < 1) {
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
+        String viewedChat = proxyDataStore.getViewedChats().get(proxiedPlayer.getUniqueId());
+        if (viewedChat == null) {
+            MessageManager.sendMessage(sender, "command_gc_no_chat_selected");
+            return;
+        }
 
-			if ((sender instanceof ProxiedPlayer)) {
+        TGroupChatInfo groupChatInfo = proxyDataStore.getGroupChats().get(viewedChat);
+        if (groupChatInfo == null) {
+            MessageManager.sendMessage(sender, "command_gc_no_longer_exists");
+            return;
+        }
 
-				ProxiedPlayer player = (ProxiedPlayer)sender;
-				boolean toggleresult = Events.toggleGC(player.getUniqueId());
+        String playerName = sender.getName();
 
-				if (toggleresult == true) {
-					MessageManager.sendMessage(sender, "command_gc_toggle_on");
-				} else {
-					MessageManager.sendMessage(sender, "command_gc_toggle_off");
-				}
+        if (groupChatInfo.getFormal() && groupChatInfo.getAdmins().contains(proxiedPlayer.getUniqueId())) {
+            playerName = "&o" + playerName;
+        }
 
-			} else {
+        sendMessage(String.join(" ", args), playerName, groupChatInfo);
+    }
 
-				MessageManager.sendMessage(sender, "command_gc_only_players_toggle");
-			}
+    public static void sendMessage(String originalMessage, String playerName, TGroupChatInfo groupInfo) {
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
+        ChatManipulation manipulation = new ChatManipulation();
 
-		} else if ((sender instanceof ProxiedPlayer)) {
+        ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(playerName);
+        if (proxiedPlayer != null) {
+            if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), "group_chats")) {
+                MessageManager.sendMessage(proxiedPlayer, "mute_cannot_send_message");
+                return;
+            }
 
-			ProxiedPlayer player = (ProxiedPlayer)sender;
+            if (ChatControl.handleSpam(proxiedPlayer, originalMessage, "group_chats"))
+                return;
+        }
 
-			if (ds.getViewedChats().get(player.getUniqueId()) != null) {
+        Optional<String> optionalChatRules;
 
-				String groupName = (String)ds.getViewedChats().get(player.getUniqueId());
+        optionalChatRules = ChatControl.applyChatRules(originalMessage, "group_chats", playerName);
 
-				if (ds.getGroupChats().containsKey(groupName)) {
+        if (!optionalChatRules.isPresent())
+            return;
+        originalMessage = optionalChatRules.get();
 
-					TGroupChatInfo groupInfo = (TGroupChatInfo) ds.getGroupChats().get(groupName);
+        String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
+        String translatedMessage = MultiChatUtil.translateColorCodes(
+                manipulation.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName())
+        );
+        String translatedOriginalMessage = MultiChatUtil.translateColorCodes(originalMessage);
 
-					String message = MultiChatUtil.getMessageFromArgs(args);
+        BaseComponent[] modernMessage = ProxyJsonUtils.parseMessage(translatedMessage,
+                "%MESSAGE%",
+                translatedOriginalMessage
+        );
 
-					String playerName = sender.getName();
+        BaseComponent[] legacyMessage = ProxyJsonUtils.parseMessage(
+                MultiChatUtil.approximateRGBColorCodes(translatedMessage),
+                "%MESSAGE%",
+                MultiChatUtil.approximateRGBColorCodes(translatedOriginalMessage)
+        );
 
-					if ((groupInfo.getFormal() == true)
-							&& (groupInfo.getAdmins().contains(player.getUniqueId()))) {
-						playerName = "&o" + playerName;
-					}
+        ProxyServer.getInstance().getPlayers().stream()
+                .filter(target -> target.getServer() != null
+                        && (groupInfo.existsViewer(target.getUniqueId()) && target.hasPermission("multichat.group"))
+                        || proxyDataStore.getAllSpy().contains(target.getUniqueId())
+                )
+                .forEach(target -> {
+                    if (proxiedPlayer != null
+                            && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), "group_chats")) {
+                        ChatControl.sendIgnoreNotifications(target, proxiedPlayer, "group_chats");
+                        return;
+                    }
 
-					sendMessage(message, playerName, groupInfo);
+                    // TODO: Move legacy check inside parsing at some point
+                    if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
+                        target.sendMessage(legacyMessage);
+                        return;
+                    }
+                    target.sendMessage(modernMessage);
+                });
 
-				} else {
-
-					MessageManager.sendMessage(sender, "command_gc_no_longer_exists");
-				}
-
-			} else {
-				MessageManager.sendMessage(sender, "command_gc_no_chat_selected");
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_gc_only_players_speak");
-		}
-	}
-
-	public static void sendMessage(String originalMessage, String playerName, TGroupChatInfo groupInfo) {
-
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
-		ChatManipulation chatfix = new ChatManipulation();
-
-		ProxiedPlayer potentialPlayer = ProxyServer.getInstance().getPlayer(playerName);
-		if (potentialPlayer != null) {
-			if (ChatControl.isMuted(potentialPlayer.getUniqueId(), "group_chats")) {
-				MessageManager.sendMessage(potentialPlayer, "mute_cannot_send_message");
-				return;
-			}
-
-			if (ChatControl.handleSpam(potentialPlayer, originalMessage, "group_chats")) {
-				return;
-			}
-		}
-
-		Optional<String> crm;
-
-		crm = ChatControl.applyChatRules(originalMessage, "group_chats", playerName);
-
-		if (crm.isPresent()) {
-			originalMessage = crm.get();
-		} else {
-			return;
-		}
-
-		String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
-		String message = chatfix.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName());
-
-		message = MultiChatUtil.translateColorCodes(message);
-		String originalTranslated = MultiChatUtil.translateColorCodes(originalMessage);
-
-		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-			if (((groupInfo.existsViewer(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.group"))) || ((ds.getAllSpy().contains(onlineplayer.getUniqueId())) && (onlineplayer.hasPermission("multichat.staff.spy")))) {
-
-				if (potentialPlayer != null) {
-					if (!ChatControl.ignores(potentialPlayer.getUniqueId(), onlineplayer.getUniqueId(), "group_chats")) {
-						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated)));
-						} else {
-							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
-						}
-					} else {
-						ChatControl.sendIgnoreNotifications(onlineplayer, potentialPlayer, "group_chats");
-					}
-				} else {
-					if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated)));
-					} else {
-						onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
-					}
-				}
-
-			}
-
-		}
-
-		BaseComponent[] finalMessage = ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message), "%MESSAGE%", MultiChatUtil.approximateRGBColorCodes(originalTranslated));
-		String consoleMessage = "";
-		for (BaseComponent bc : finalMessage) consoleMessage += bc.toLegacyText();
-		ConsoleManager.logGroupChat(consoleMessage);
-
-	}
+        StringBuilder consoleMessage = new StringBuilder();
+        for (BaseComponent bc : legacyMessage)
+            consoleMessage.append(bc.toLegacyText());
+        ConsoleManager.logGroupChat(consoleMessage.toString());
+    }
 }

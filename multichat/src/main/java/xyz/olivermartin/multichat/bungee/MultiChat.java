@@ -408,58 +408,8 @@ public class MultiChat extends Plugin {
 
 	}
 
-	public void unregisterCommands(Configuration configYML, Configuration chatcontrolYML) {
-
-		// Unregister main commands
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getAcc());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getAc());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMcc());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMc());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getGc());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getGroup());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichatBypass());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getClearchat());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getAnnouncement());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getBulletin());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getIgnore());
-
-		// Unregister PM commands
-		if (configYML.getBoolean("pm")) {
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getMsg());
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getReply());
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getSocialspy());
-		}
-
-		// Unregister global chat commands
-		if (configYML.getBoolean("global")) {
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocal());
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getGlobal());
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getChannel());
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getLocalspy());
-		}
-
-		// Unregister staff list command /staff
-		if (configYML.contains("staff_list")) {
-			if (configYML.getBoolean("staff_list")) {
-				getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
-			}
-		} else {
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getStafflist());
-		}
-
-		// UnRegister mute command
-		if (chatcontrolYML.getBoolean("mute")) {
-			getProxy().getPluginManager().unregisterCommand(CommandManager.getMute());
-		}
-
+	public void unregisterCommands() {
+		getProxy().getPluginManager().unregisterCommands(this);
 	}
 
 }

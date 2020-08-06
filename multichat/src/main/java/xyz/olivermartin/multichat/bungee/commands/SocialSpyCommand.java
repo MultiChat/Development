@@ -9,42 +9,42 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
+import java.util.UUID;
+
 /**
  * SocialSpy Command
  * <p>Allows staff members to view private messages sent by players</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class SocialSpyCommand extends Command {
 
-	public SocialSpyCommand() {
-		super("mcsocialspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("socialspy").toArray(new String[0]));
-	}
+    public SocialSpyCommand() {
+        super("mcsocialspy", "multichat.staff.spy", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("socialspy").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "command_socialspy_only_players");
+            return;
+        }
 
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+        // TODO: We don't really need this check
+        if (args.length != 0) {
+            MessageManager.sendMessage(sender, "command_socialspy_usage");
+            MessageManager.sendMessage(sender, "command_socialspy_desc");
+            return;
+        }
 
-		if ((sender instanceof ProxiedPlayer)) {
+        UUID playerUID = ((ProxiedPlayer) sender).getUniqueId();
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
 
-			if (args.length < 1) {
-
-				if (ds.getSocialSpy().contains(((ProxiedPlayer)sender).getUniqueId())) {
-					ds.getSocialSpy().remove(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_socialspy_disabled");
-				} else {
-					ds.getSocialSpy().add(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_socialspy_enabled");
-				}
-
-			} else {
-				MessageManager.sendMessage(sender, "command_socialspy_usage");
-				MessageManager.sendMessage(sender, "command_socialspy_desc");
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_socialspy_only_players");
-		}
-	}
+        if (proxyDataStore.getSocialSpy().contains(playerUID)) {
+            proxyDataStore.getSocialSpy().remove(playerUID);
+            MessageManager.sendMessage(sender, "command_socialspy_disabled");
+        } else {
+            proxyDataStore.getSocialSpy().add(playerUID);
+            MessageManager.sendMessage(sender, "command_socialspy_enabled");
+        }
+    }
 }

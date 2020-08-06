@@ -9,42 +9,45 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
+import java.util.UUID;
+
 /**
  * SocialSpy Command
  * <p>Allows staff members to view private messages sent by players</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class LocalSpyCommand extends Command {
 
-	public LocalSpyCommand() {
-		super("mclocalspy", "multichat.staff.spy", (String[])ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("localspy").toArray(new String[0]));
-	}
+    public LocalSpyCommand() {
+        super("mclocalspy", "multichat.staff.spy", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("localspy").toArray(new String[0]));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            MessageManager.sendMessage(sender, "command_localspy_only_players");
+            return;
+        }
 
-		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+        // TODO: Do we really need this? I don't think so... just toggle it, no matter how many arguments
+        if (args.length != 0) {
+            MessageManager.sendMessage(sender, "command_localspy_usage");
+            MessageManager.sendMessage(sender, "command_localspy_desc");
+            return;
+        }
 
-		if ((sender instanceof ProxiedPlayer)) {
+        UUID playerUID = ((ProxiedPlayer) sender).getUniqueId();
 
-			if (args.length < 1) {
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
 
-				if (ds.getLocalSpy().contains(((ProxiedPlayer)sender).getUniqueId())) {
-					ds.getLocalSpy().remove(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_localspy_disabled");
-				} else {
-					ds.getLocalSpy().add(((ProxiedPlayer)sender).getUniqueId());
-					MessageManager.sendMessage(sender, "command_localspy_enabled");
-				}
+        // TODO: Potentially proxyDataStore.toggleSpy(playerUID)
+        if (proxyDataStore.getLocalSpy().contains(playerUID)) {
+            proxyDataStore.getLocalSpy().remove(playerUID);
+            MessageManager.sendMessage(sender, "command_localspy_disabled");
+            return;
+        }
 
-			} else {
-				MessageManager.sendMessage(sender, "command_localspy_usage");
-				MessageManager.sendMessage(sender, "command_localspy_desc");
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_localspy_only_players");
-		}
-	}
+        proxyDataStore.getLocalSpy().add(playerUID);
+        MessageManager.sendMessage(sender, "command_localspy_enabled");
+    }
 }
