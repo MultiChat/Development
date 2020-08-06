@@ -1,6 +1,11 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.CommandSender;
@@ -29,186 +34,185 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
  */
 public class MsgCommand extends Command implements TabExecutor {
 
-    public MsgCommand() {
-        super("mcmsg", "multichat.chat.msg", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("msg").toArray(new String[0]));
-    }
+	public MsgCommand() {
+		super("mcmsg", "multichat.chat.msg", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("msg").toArray(new String[0]));
+	}
 
-    public void execute(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            MessageManager.sendMessage(sender, "command_msg_usage");
-            MessageManager.sendMessage(sender, "command_msg_usage_toggle");
-            return;
-        }
+	public void execute(CommandSender sender, String[] args) {
+		if (args.length == 0) {
+			MessageManager.sendMessage(sender, "command_msg_usage");
+			MessageManager.sendMessage(sender, "command_msg_usage_toggle");
+			return;
+		}
 
-        // Pre-Load target because we need it in both scenarios
-        Optional<ProxiedPlayer> optionalTarget = PrivateMessageManager.getInstance().getPartialPlayerMatch(args[0]);
+		// Pre-Load target because we need it in both scenarios
+		Optional<ProxiedPlayer> optionalTarget = PrivateMessageManager.getInstance().getPartialPlayerMatch(args[0]);
 
-        if (args.length == 1) {
-            // Console can not toggle PMs
-            if (!(sender instanceof ProxiedPlayer)) {
-                MessageManager.sendMessage(sender, "command_msg_only_players");
-                return;
-            }
+		if (args.length == 1) {
+			// Console can not toggle PMs
+			if (!(sender instanceof ProxiedPlayer)) {
+				MessageManager.sendMessage(sender, "command_msg_only_players");
+				return;
+			}
 
-            // Check if PMs are allowed to be toggled
-            Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
-            if (config.getBoolean(ConfigValues.Config.TOGGLE_PM, false)) {
-                MessageManager.sendMessage(sender, "command_msg_no_toggle");
-                return;
-            }
+			// Check if PMs are allowed to be toggled
+			Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
+			if (!config.getBoolean(ConfigValues.Config.TOGGLE_PM, true)) {
+				MessageManager.sendMessage(sender, "command_msg_no_toggle");
+				return;
+			}
 
-            ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-            UUID playerUID = proxiedPlayer.getUniqueId();
+			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+			UUID playerUID = proxiedPlayer.getUniqueId();
 
-            // If there is no target, quit current PM toggle or notify sender about it
-            if (!optionalTarget.isPresent()) {
-                if (Events.PMToggle.containsKey(playerUID)) {
-                    Events.PMToggle.remove(playerUID);
-                    MessageManager.sendMessage(sender, "command_msg_toggle_off");
-                } else {
-                    MessageManager.sendMessage(sender, "command_msg_not_online");
-                }
-                return;
-            }
+			// If there is no target, quit current PM toggle or notify sender about it
+			if (!optionalTarget.isPresent()) {
+				if (Events.PMToggle.containsKey(playerUID)) {
+					Events.PMToggle.remove(playerUID);
+					MessageManager.sendMessage(sender, "command_msg_toggle_off");
+				} else {
+					MessageManager.sendMessage(sender, "command_msg_not_online");
+				}
+				return;
+			}
 
-            ProxiedPlayer target = optionalTarget.get();
+			ProxiedPlayer target = optionalTarget.get();
 
-            // TODO: Make this into a proper hook at some point so we can just call Somewhere.getVanishHook().applies(); or something
-            if (MultiChat.premiumVanish
-                    && MultiChat.hideVanishedStaffInMsg
-                    && BungeeVanishAPI.isInvisible(target)
-                    && !sender.hasPermission("multichat.chat.msg.vanished")) {
-                MessageManager.sendMessage(sender, "command_msg_not_online");
-                return;
-            }
+			// TODO: Make this into a proper hook at some point so we can just call Somewhere.getVanishHook().applies(); or something
+			if (MultiChat.premiumVanish
+					&& MultiChat.hideVanishedStaffInMsg
+					&& BungeeVanishAPI.isInvisible(target)
+					&& !sender.hasPermission("multichat.chat.msg.vanished")) {
+				MessageManager.sendMessage(sender, "command_msg_not_online");
+				return;
+			}
 
-            // Toggle PM and send message
-            boolean toggleResult = Events.togglePM(playerUID, target.getUniqueId());
-            MessageManager.sendSpecialMessage(sender,
-                    "command_msg_toggle_" + (toggleResult ? "on" : "off"),
-                    target.getName()
-            );
-            return;
-        }
+			// Toggle PM and send message
+			boolean toggleResult = Events.togglePM(playerUID, target.getUniqueId());
+			MessageManager.sendSpecialMessage(sender,
+					"command_msg_toggle_" + (toggleResult ? "on" : "off"),
+					target.getName()
+					);
+			return;
+		}
 
-        // Cache message
-        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+		// Cache message
+		String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        // Cache config values
-        Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
-        boolean fetchSpigotDisplayNames = config.getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES);
-        List<String> noPmServers = config.getStringList(ConfigValues.Config.NO_PM);
+		// Cache config values
+		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
+		boolean fetchSpigotDisplayNames = config.getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES);
+		List<String> noPmServers = config.getStringList(ConfigValues.Config.NO_PM);
 
-        // Target not online
-        if (!optionalTarget.isPresent()) {
-            if (!(sender instanceof ProxiedPlayer) || !args[0].equalsIgnoreCase("console")) {
-                MessageManager.sendMessage(sender, "command_msg_not_online");
-                return;
-            }
+		// Target not online
+		if (!optionalTarget.isPresent()) {
+			if (!(sender instanceof ProxiedPlayer) || !args[0].equalsIgnoreCase("console")) {
+				MessageManager.sendMessage(sender, "command_msg_not_online");
+				return;
+			}
 
-            // Support to send private messages to console
-            ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-            ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
+			// Support to send private messages to console
+			ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+			ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
 
-            // Handle disabled servers for player
-            if (noPmServers.contains(serverInfo.getName())) {
-                MessageManager.sendMessage(sender, "command_msg_disabled_sender");
-                return;
-            }
+			// Handle disabled servers for player
+			if (noPmServers.contains(serverInfo.getName())) {
+				MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+				return;
+			}
 
-            // Update player data on local server
-            if (fetchSpigotDisplayNames)
-                ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), serverInfo);
+			// Update player data on local server
+			if (fetchSpigotDisplayNames)
+				ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), serverInfo);
 
-            // Send message to console
-            PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, proxiedPlayer);
-            return;
-        }
+			// Send message to console
+			PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, proxiedPlayer);
+			return;
+		}
 
-        ProxiedPlayer target = optionalTarget.get();
-        ServerInfo targetServerInfo = target.getServer().getInfo();
+		ProxiedPlayer target = optionalTarget.get();
+		ServerInfo targetServerInfo = target.getServer().getInfo();
 
-        // Handle disabled servers for target
-        if (noPmServers.contains(targetServerInfo.getName())) {
-            MessageManager.sendMessage(sender, "command_msg_disabled_target");
-            return;
-        }
+		// Handle disabled servers for target
+		if (noPmServers.contains(targetServerInfo.getName())) {
+			MessageManager.sendMessage(sender, "command_msg_disabled_target");
+			return;
+		}
 
-        // Update target data on local server
-        if (fetchSpigotDisplayNames)
-            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), targetServerInfo);
+		// Update target data on local server
+		if (fetchSpigotDisplayNames)
+			ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), targetServerInfo);
 
-        // If the command sender is the console, send the message now
-        if (!(sender instanceof ProxiedPlayer)) {
-            PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
-            return;
-        }
+		// If the command sender is the console, send the message now
+		if (!(sender instanceof ProxiedPlayer)) {
+			PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
+			return;
+		}
 
-        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
-        UUID playerUID = proxiedPlayer.getUniqueId();
-        ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
+		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+		UUID playerUID = proxiedPlayer.getUniqueId();
+		ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
 
-        // Handle disabled servers for player
-        if (noPmServers.contains(serverInfo.getName())) {
-            MessageManager.sendMessage(sender, "command_msg_disabled_sender");
-            return;
-        }
+		// Handle disabled servers for player
+		if (noPmServers.contains(serverInfo.getName())) {
+			MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+			return;
+		}
 
-        // Check if player has been muted through MultiChat
-        if (ChatControl.isMuted(playerUID, "private_messages")) {
-            MessageManager.sendMessage(sender, "mute_cannot_send_message");
-            return;
-        }
+		// Check if player has been muted through MultiChat
+		if (ChatControl.isMuted(playerUID, "private_messages")) {
+			MessageManager.sendMessage(sender, "mute_cannot_send_message");
+			return;
+		}
 
-        // Check if the target ignores the player
-        if (ChatControl.ignores(playerUID, target.getUniqueId(), "private_messages")) {
-            ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
-            return;
-        }
+		// Check if the target ignores the player
+		if (ChatControl.ignores(playerUID, target.getUniqueId(), "private_messages")) {
+			ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+			return;
+		}
 
-        // Check player for potential spam
-        if (ChatControl.handleSpam(proxiedPlayer, message, "private_messages"))
-            return;
+		// Check player for potential spam
+		if (ChatControl.handleSpam(proxiedPlayer, message, "private_messages"))
+			return;
 
-        // Apply chat rules, if any of them cancel the message, return
-        Optional<String> optionalChatControl = ChatControl.applyChatRules(message, "private_messages", sender.getName());
-        if (!optionalChatControl.isPresent())
-            return;
+		// Apply chat rules, if any of them cancel the message, return
+		Optional<String> optionalChatControl = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+		if (!optionalChatControl.isPresent())
+			return;
 
-        message = optionalChatControl.get();
+		message = optionalChatControl.get();
 
-        if (MultiChat.premiumVanish
-                && MultiChat.hideVanishedStaffInMsg
-                && BungeeVanishAPI.isInvisible(target)
-                && !sender.hasPermission("multichat.chat.msg.vanished")) {
-            MessageManager.sendMessage(sender, "command_msg_not_online");
-            return;
-        }
+		if (MultiChat.premiumVanish
+				&& MultiChat.hideVanishedStaffInMsg
+				&& BungeeVanishAPI.isInvisible(target)
+				&& !sender.hasPermission("multichat.chat.msg.vanished")) {
+			MessageManager.sendMessage(sender, "command_msg_not_online");
+			return;
+		}
 
-        // Update player data on local server
-        if (fetchSpigotDisplayNames)
-            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), serverInfo);
+		// Update player data on local server
+		if (fetchSpigotDisplayNames)
+			ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(sender.getName(), serverInfo);
 
-        // Finally send the message
-        PrivateMessageManager.getInstance().sendMessage(message, proxiedPlayer, target);
-    }
+		// Finally send the message
+		PrivateMessageManager.getInstance().sendMessage(message, proxiedPlayer, target);
+	}
 
-    @Override
-    public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
-        Set<String> matches = new HashSet<>();
+	@Override
+	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
+		Set<String> matches = new HashSet<>();
 
-        if (args.length == 1) {
-            String search = args[0].toLowerCase();
-            Set<UUID> hiddenStaff = MultiChatProxy.getInstance().getDataStore().getHiddenStaff();
-            ProxyServer.getInstance().getPlayers().stream()
-                    .filter(target -> target.getName().toLowerCase().startsWith(search)
-                            && !hiddenStaff.contains(target.getUniqueId())
-                            && !MultiChat.premiumVanish
-                            && !BungeeVanishAPI.isInvisible(target)
-                    )
-                    .forEach(target -> matches.add(target.getName()));
-        }
+		if (args.length == 1) {
+			String search = args[0].toLowerCase();
+			Set<UUID> hiddenStaff = MultiChatProxy.getInstance().getDataStore().getHiddenStaff();
+			ProxyServer.getInstance().getPlayers().stream()
+				.filter(target -> target.getName().toLowerCase().startsWith(search)
+						&& !hiddenStaff.contains(target.getUniqueId())
+						&& !(MultiChat.premiumVanish && BungeeVanishAPI.isInvisible(target))
+						)
+			.forEach(target -> matches.add(target.getName()));
+		}
 
-        return matches;
-    }
+		return matches;
+	}
 }
