@@ -26,6 +26,6 @@ public class GroupListCommand extends Command {
         MessageManager.sendMessage(sender, "command_grouplist_list");
 
         for (String groupName : proxyDataStore.getGroupChats().keySet())
-            MessageManager.sendSpecialMessage(sender, "command_groulist_list_item", groupName);
+            MessageManager.sendSpecialMessage(sender, "command_grouplist_list_item", groupName);
     }
 }
