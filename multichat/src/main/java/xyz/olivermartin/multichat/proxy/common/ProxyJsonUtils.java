@@ -173,14 +173,11 @@ public class ProxyJsonUtils {
 		for (BaseComponent[] bca : baseComponentArrays) {
 
 			for (BaseComponent bc : bca) {
-
 				if (!first && injectFormatting && previous != null) bc.copyFormatting(previous, false);
-
 				merged[counter++] = bc;
-				previous = bc;
-
 			}
 
+			previous = bca[bca.length-1];
 			first = false;
 
 		}
