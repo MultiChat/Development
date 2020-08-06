@@ -92,7 +92,7 @@ public class MsgCommand extends Command implements TabExecutor {
         }
 
         // Cache message
-        String message = String.join(" ", args);
+        String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         // Cache config values
         Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
