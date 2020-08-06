@@ -65,16 +65,13 @@ public class ProxyPlayerChatListener implements Listener {
 			message = in.readUTF();
 			DebugManager.log("{multichat:pchat} Message = '" + message + "'");
 			format = in.readUTF();
+			DebugManager.log("{multichat:pchat} Format = '" + format + "'");
 			otherRecipients = (Set<UUID>) in.readObject();
 
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			return;
 		}
-
-		DebugManager.log("{multichat:pchat} Format (before removal of double chars) = '" + format + "'");
-		format = format.replace("%%","%");
-		DebugManager.log("{multichat:pchat} Format = '" + format + "'");
 
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(uuid);
 

@@ -6,7 +6,6 @@ import java.util.UUID;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
-import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
 public abstract class LocalChatListenerHighest {
 
@@ -84,20 +83,7 @@ public abstract class LocalChatListenerHighest {
 
 			format = chatManager.processExternalPlaceholders(event.getPlayer(), format);
 
-			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT (with external placeholders) = '" + format + "'");
-
-			if (MultiChatLocal.getInstance().getPlatform() == MultiChatLocalPlatform.SPIGOT) {
-				// Handle Spigot displayname formatting etc.
-				format = format.replace("%1$s", "!!!1!!!");
-				format = format.replace("%2$s", "!!!2!!!");
-				format = format.replace("%", "%%");
-				format = format.replace("!!!1!!!", "%1$s");
-				format = format.replace("!!!2!!!", "%2$s");
-			} else {
-				format = format.replace("%", "%%");
-			}
-
-			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT (final) = '" + format + "'");
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT (final with external placeholders) = '" + format + "'");
 
 			event.setFormat(format);
 

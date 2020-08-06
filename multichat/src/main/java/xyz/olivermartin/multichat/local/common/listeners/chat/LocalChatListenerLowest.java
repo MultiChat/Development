@@ -3,7 +3,6 @@ package xyz.olivermartin.multichat.local.common.listeners.chat;
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
 import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
-import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 
 public abstract class LocalChatListenerLowest {
@@ -61,20 +60,7 @@ public abstract class LocalChatListenerLowest {
 
 		format = chatManager.processExternalPlaceholders(player, format);
 
-		logger.debug("&8[&1CHAT-L1&8]&7 ", "CHANNEL FORMAT (with external placeholders) = '" + format + "'");
-
-		if (MultiChatLocal.getInstance().getPlatform() == MultiChatLocalPlatform.SPIGOT) {
-			// Handle Spigot displayname formatting etc.
-			format = format.replace("%1$s", "!!!1!!!");
-			format = format.replace("%2$s", "!!!2!!!");
-			format = format.replace("%", "%%");
-			format = format.replace("!!!1!!!", "%1$s");
-			format = format.replace("!!!2!!!", "%2$s");
-		} else {
-			format = format.replace("%", "%%");
-		}
-
-		logger.debug("&8[&1CHAT-L1&8]&7 ", "CHANNEL FORMAT (final) = '" + format + "'");
+		logger.debug("&8[&1CHAT-L1&8]&7 ", "CHANNEL FORMAT (final with external placeholders) = '" + format + "'");
 
 		event.setFormat(format);
 
