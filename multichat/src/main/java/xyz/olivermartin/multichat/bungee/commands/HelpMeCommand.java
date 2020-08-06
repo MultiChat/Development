@@ -45,7 +45,8 @@ public class HelpMeCommand extends Command {
             return;
         }
 
-        String message = String.join(" ", args);
+        // TODO: Probably should do this differently
+        String message = proxiedPlayer.getName() + ": " + String.join(" ", args);
 
         if (ChatControl.handleSpam(proxiedPlayer, message, "helpme")) {
             return;
