@@ -36,17 +36,21 @@ public abstract class AbstractProxyConfig {
     public final void reloadConfig(Plugin plugin, File folder) {
         File configFile = new File(folder, fileName);
         if (!configFile.exists()) {
+            plugin.getLogger().info("Creating " + fileName + "...");
             InputStream in = plugin.getResourceAsStream(fileName);
             try {
                 Files.copy(in, configFile.toPath());
+                plugin.getLogger().info("Created " + fileName + "!");
             } catch (IOException e) {
                 e.printStackTrace();
                 return;
             }
         }
 
+        plugin.getLogger().info("Loading " + fileName + "...");
         try {
             config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
+            plugin.getLogger().info("Loaded " + fileName + "!");
             // TODO: We can probably add some config update code here
             reloadValues();
         } catch (IOException e) {
