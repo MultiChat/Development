@@ -10,6 +10,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
@@ -71,7 +72,7 @@ public class LocalChannel {
 					&& !manager.isLocalSpy(receiver)) continue;
 
 			// If receiver ignores sender
-			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), MessageType.GLOBAL_CHAT)) {
 				ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 				continue;
 			}

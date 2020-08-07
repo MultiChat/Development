@@ -8,7 +8,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Message Manager
@@ -402,8 +402,9 @@ public class MessageManager {
 
 	public static String getPrefix() {
 
+		// TODO: [ConfigRefactor] Change or move this ProxyMessages.class
 		String prefix;
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
+		Configuration config = ProxyConfigs.MESSAGES.getConfig();
 
 		if (config.contains("prefix")) {
 			prefix = config.getString("prefix");
@@ -417,7 +418,8 @@ public class MessageManager {
 
 	public static String getMessage(String id) {
 
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.MESSAGES).getConfig();
+		// TODO: [ConfigRefactor] Change or move this ProxyMessages.class
+		Configuration config = ProxyConfigs.MESSAGES.getConfig();
 
 		if (config.contains(id)) return config.getString(id);
 		if (!defaultMessages.containsKey(id)) return "&cERROR - Please report to plugin developer - No message defined for: " + id;

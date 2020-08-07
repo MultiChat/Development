@@ -9,8 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class PrivateMessageManager {
@@ -31,18 +30,6 @@ public class PrivateMessageManager {
 
 	private PrivateMessageManager() { 
 		chatfix = new ChatManipulation();
-	}
-
-	private String getOutFormat() {
-		return ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.PM_OUT_FORMAT);
-	}
-
-	private String getInFormat() {
-		return ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.PM_IN_FORMAT);
-	}
-
-	private String getSpyFormat() {
-		return ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.PM_SPY_FORMAT);
 	}
 
 	private void displayMessage(ProxiedPlayer player, String rawMessage, String replacement) {
@@ -80,17 +67,17 @@ public class PrivateMessageManager {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		// Replace placeholders (SENDER)
-		String finalmessage = chatfix.replaceMsgVars(getOutFormat(), message, sender, target);
+		String finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, sender, target);
 
 		displayMessage(sender, finalmessage, message);
 
 		// Replace placeholders (TARGET)
-		finalmessage = chatfix.replaceMsgVars(getInFormat(), message, sender, target);
+		finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmInFormat(), message, sender, target);
 
 		displayMessage(target, finalmessage, message);
 
 		// Replace placeholders (SPY)
-		finalmessage = chatfix.replaceMsgVars(getSpyFormat(), message, sender, target);
+		finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, sender, target);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
@@ -119,23 +106,23 @@ public class PrivateMessageManager {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		// Replace placeholders (SENDER)
-		String finalmessage = chatfix.replaceMsgConsoleTargetVars(getOutFormat(), message, (ProxiedPlayer)sender);
+		String finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, sender);
 
 		displayMessage(sender, finalmessage, message);
 
 		// Replace placeholders (TARGET) (CONSOLE)
-		finalmessage = chatfix.replaceMsgConsoleTargetVars(getInFormat(), message, (ProxiedPlayer)sender);
+		finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmInFormat(), message, sender);
 
 		displayConsoleMessage(finalmessage, message);
 
 		// Replace placeholders (SPY)
-		finalmessage = chatfix.replaceMsgConsoleTargetVars(getSpyFormat(), message, (ProxiedPlayer)sender);
+		finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, sender);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
 					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
-					&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
+					&& (onlineplayer.getUniqueId() != sender.getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
 				displayMessage(onlineplayer, finalmessage, message);
@@ -153,17 +140,17 @@ public class PrivateMessageManager {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		// Replace placeholders (SENDER) (CONSOLE)
-		String finalmessage = chatfix.replaceMsgConsoleSenderVars(getOutFormat(), message, target);
+		String finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, target);
 
 		displayConsoleMessage(finalmessage, message);
 
 		// Replace placeholders (TARGET)
-		finalmessage = chatfix.replaceMsgConsoleSenderVars(getInFormat(), message, target);
+		finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmInFormat(), message, target);
 
 		displayMessage(target, finalmessage, message);
 
 		// Replace placeholders (SPY)
-		finalmessage = chatfix.replaceMsgConsoleSenderVars(getSpyFormat(), message, target);
+		finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, target);
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 

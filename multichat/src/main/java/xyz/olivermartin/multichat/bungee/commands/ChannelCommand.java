@@ -5,13 +5,12 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +24,7 @@ import java.util.UUID;
 public class ChannelCommand extends Command {
 
     public ChannelCommand() {
-        super("mcchannel", "multichat.chat.channel", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("channel").toArray(new String[0]));
+        super("mcchannel", "multichat.chat.channel", ProxyConfigs.ALIASES.getAliases("mcchannel"));
     }
 
     @Override

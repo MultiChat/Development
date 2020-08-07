@@ -7,10 +7,10 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * 'Help Me' Command
@@ -21,7 +21,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 public class HelpMeCommand extends Command {
 
 	public HelpMeCommand() {
-		super("mchelpme", "multichat.chat.helpme", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("helpme").toArray(new String[0]));
+		super("mchelpme", "multichat.chat.helpme", ProxyConfigs.ALIASES.getAliases("mchelpme"));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -38,7 +38,7 @@ public class HelpMeCommand extends Command {
 
 		ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
-		if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), "helpme")) {
+		if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.HELPME)) {
 			MessageManager.sendMessage(proxiedPlayer, "mute_cannot_send_message");
 			return;
 		}
@@ -46,11 +46,11 @@ public class HelpMeCommand extends Command {
 		// TODO: Probably should do this differently
 		String message = proxiedPlayer.getName() + ": " + String.join(" ", args);
 
-		if (ChatControl.handleSpam(proxiedPlayer, message, "helpme")) {
+		if (ChatControl.handleSpam(proxiedPlayer, message, MessageType.HELPME)) {
 			return;
 		}
 
-		Optional<String> crm = ChatControl.applyChatRules(message, "helpme", proxiedPlayer.getName());
+		Optional<String> crm = ChatControl.applyChatRules(proxiedPlayer, message, MessageType.HELPME);
 		if (!crm.isPresent())
 			return;
 

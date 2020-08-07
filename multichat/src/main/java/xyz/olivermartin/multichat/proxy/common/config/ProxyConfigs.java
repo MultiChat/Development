@@ -2,6 +2,7 @@ package xyz.olivermartin.multichat.proxy.common.config;
 
 import net.md_5.bungee.api.plugin.Plugin;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -28,9 +29,19 @@ public class ProxyConfigs {
     public static final ProxyChatControl CHAT_CONTROL = new ProxyChatControl();
 
     /**
+     * Used to access the proxy's messages.yml.
+     */
+    public static final ProxyMessages MESSAGES = new ProxyMessages();
+
+    /**
+     * Used to access the proxy's joinmessages.yml.
+     */
+    public static final ProxyJoinMessages JOIN_MESSAGES = new ProxyJoinMessages();
+
+    /**
      * List of all configurations that are managed by the plugin and have pre-defined values.
      */
-    public static final List<AbstractProxyConfig> ALL = Arrays.asList(CONFIG, ALIASES, CHAT_CONTROL);
+    public static final List<AbstractProxyConfig> ALL = Arrays.asList(CONFIG, ALIASES, CHAT_CONTROL, MESSAGES, JOIN_MESSAGES);
 
     /**
      * List of all configurations that are saved in the plugin jar and don't have pre-defined values.
@@ -48,6 +59,21 @@ public class ProxyConfigs {
      * @return the {@link AbstractProxyConfig} of that file
      */
     public static AbstractProxyConfig loadRawConfig(Plugin plugin, String fileName) {
+        return loadRawConfig(plugin, fileName, plugin.getDataFolder());
+    }
+
+    /**
+     * Loads or reloads and gets the {@link AbstractProxyConfig} of a .yml file inside a plugin's resources.
+     * Calling reloadValues on the config will do nothing, you will have to make your own implementation.
+     * <p>
+     * Currently only used by french translations in MultiChat.
+     *
+     * @param plugin   the plugin of which the resources should be loaded
+     * @param fileName the name of the file that ends with .yml
+     * @param filePath the path where the file should end up
+     * @return the {@link AbstractProxyConfig} of that file
+     */
+    public static AbstractProxyConfig loadRawConfig(Plugin plugin, String fileName, File filePath) {
         if (!fileName.endsWith(".yml"))
             throw new IllegalArgumentException("File name did not end with .yml");
 
@@ -58,7 +84,7 @@ public class ProxyConfigs {
                 });
 
         RAW_CONFIGS.remove(rawConfig);
-        rawConfig.reloadConfig(plugin);
+        rawConfig.reloadConfig(plugin, filePath);
         RAW_CONFIGS.add(rawConfig);
 
         return rawConfig;

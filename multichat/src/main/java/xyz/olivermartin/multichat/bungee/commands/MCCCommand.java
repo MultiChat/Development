@@ -5,11 +5,10 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.RegexUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 import java.util.UUID;
@@ -23,7 +22,7 @@ import java.util.UUID;
 public class MCCCommand extends Command {
 
     public MCCCommand() {
-        super("mcmcc", "multichat.staff.mod", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("mcc").toArray(new String[0]));
+        super("mcmcc", "multichat.staff.mod", ProxyConfigs.ALIASES.getAliases("mcmcc"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -40,8 +39,7 @@ public class MCCCommand extends Command {
         String chatColor = args[0].toLowerCase();
         String nameColor = args[1].toLowerCase();
 
-        if (!RegexUtil.COLOR_LEGACY.matcher(chatColor).matches()
-                || !RegexUtil.COLOR_LEGACY.matcher(nameColor).matches()) {
+        if (!RegexUtil.LEGACY_COLOR.matches(chatColor) || !RegexUtil.LEGACY_COLOR.matches(nameColor)) {
             MessageManager.sendMessage(sender, "command_mcc_invalid");
             MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
             return;

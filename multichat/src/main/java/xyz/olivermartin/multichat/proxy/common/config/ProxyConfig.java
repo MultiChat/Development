@@ -13,8 +13,8 @@ import java.util.Set;
 public class ProxyConfig extends AbstractProxyConfig {
 
     private String version, displayNameFormat, pmOutFormat, pmInFormat, pmSpyFormat, defaultChannel, globalFormat,
-            localSpyFormat, groupChatFormat, groupChatColor, groupNameColor, modChatFormat, modChatColor, modNameColor,
-            adminChatFormat, adminChatColor, adminNameColor;
+            localSpyFormat, groupChatFormat, modChatFormat, adminChatFormat;
+    private char groupChatColor, groupNameColor, modChatColor, modNameColor, adminChatColor, adminNameColor;
     private boolean fetchSpigotDisplayNames, setDisplayName, pm, togglePm, forceChannelOnJoin, global, staffList,
             logPms, logStaffChat, logGroupChat, pvPreventMessage, pvPreventStaffList, pvSilenceJoin;
     private final Set<String> noPmServers = new HashSet<>(), localServers = new HashSet<>(), legacyServers = new HashSet<>();
@@ -55,28 +55,28 @@ public class ProxyConfig extends AbstractProxyConfig {
         localSpyFormat = getConfig().getString("localspyformat", "&8[&7SPY&8] %FORMAT%");
 
         groupChatFormat = getConfig().getString("groupchat.format", "%CC%(%NC%%GROUPNAME%%CC%)(%NC%%NAME%%CC%) %MESSAGE%");
-        groupChatColor = getConfig().getString("groupchat.ccdefault", "a");
-        if (!RegexUtil.LEGACY_COLOR.matches(groupChatColor))
-            groupChatColor = "a";
-        groupNameColor = getConfig().getString("groupchat.ncdefault", "f");
-        if (!RegexUtil.LEGACY_COLOR.matches(groupNameColor))
-            groupNameColor = "f";
+        groupChatColor = getConfig().getString("groupchat.ccdefault", "a").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(groupChatColor)))
+            groupChatColor = 'a';
+        groupNameColor = getConfig().getString("groupchat.ncdefault", "f").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(groupNameColor)))
+            groupNameColor = 'f';
 
         modChatFormat = getConfig().getString("modchat.format", "%CC%{%NC%%NAME%%CC%} %MESSAGE%");
-        modChatColor = getConfig().getString("modchat.ccdefault", "b");
-        if (!RegexUtil.LEGACY_COLOR.matches(modChatColor))
-            modChatColor = "b";
-        modNameColor = getConfig().getString("modchat.ncdefault", "d");
-        if (!RegexUtil.LEGACY_COLOR.matches(modNameColor))
-            modNameColor = "d";
+        modChatColor = getConfig().getString("modchat.ccdefault", "b").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(modChatColor)))
+            modChatColor = 'b';
+        modNameColor = getConfig().getString("modchat.ncdefault", "d").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(modNameColor)))
+            modNameColor = 'd';
 
         adminChatFormat = getConfig().getString("adminchat.format", "%CC%{%NC%%NAME%%CC%} %MESSAGE%");
-        adminChatColor = getConfig().getString("adminchat.ccdefault", "d");
-        if (!RegexUtil.LEGACY_COLOR.matches(adminChatColor))
-            adminChatColor = "d";
-        adminNameColor = getConfig().getString("adminchat.ncdefault", "b");
-        if (!RegexUtil.LEGACY_COLOR.matches(adminNameColor))
-            adminNameColor = "b";
+        adminChatColor = getConfig().getString("adminchat.ccdefault", "d").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(adminChatColor)))
+            adminChatColor = 'd';
+        adminNameColor = getConfig().getString("adminchat.ncdefault", "b").charAt(0);
+        if (!RegexUtil.LEGACY_COLOR.matches(String.valueOf(adminNameColor)))
+            adminNameColor = 'b';
 
         staffList = getConfig().getBoolean("staff_list", true);
 
@@ -159,11 +159,11 @@ public class ProxyConfig extends AbstractProxyConfig {
         return groupChatFormat;
     }
 
-    public String getGroupChatColor() {
+    public char getGroupChatColor() {
         return groupChatColor;
     }
 
-    public String getGroupNameColor() {
+    public char getGroupNameColor() {
         return groupNameColor;
     }
 
@@ -171,11 +171,11 @@ public class ProxyConfig extends AbstractProxyConfig {
         return modChatFormat;
     }
 
-    public String getModChatColor() {
+    public char getModChatColor() {
         return modChatColor;
     }
 
-    public String getModNameColor() {
+    public char getModNameColor() {
         return modNameColor;
     }
 
@@ -183,11 +183,11 @@ public class ProxyConfig extends AbstractProxyConfig {
         return adminChatFormat;
     }
 
-    public String getAdminChatColor() {
+    public char getAdminChatColor() {
         return adminChatColor;
     }
 
-    public String getAdminNameColor() {
+    public char getAdminNameColor() {
         return adminNameColor;
     }
 
@@ -219,7 +219,7 @@ public class ProxyConfig extends AbstractProxyConfig {
         return pvSilenceJoin;
     }
 
-    public boolean isLegacyServer(String serverName) {
-        return legacyServers.contains(serverName);
+    public boolean isModernServer(String serverName) {
+        return !legacyServers.contains(serverName);
     }
 }

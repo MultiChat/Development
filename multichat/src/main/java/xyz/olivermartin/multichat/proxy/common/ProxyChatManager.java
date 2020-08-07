@@ -6,13 +6,12 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.PlayerMeta;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 public class ProxyChatManager {
 
@@ -74,13 +73,13 @@ public class ProxyChatManager {
 		}
 
 		// Check if they are muted by MultiChat
-		if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
+		if (ChatControl.isMuted(player.getUniqueId(), MessageType.GLOBAL_CHAT)) {
 			MessageManager.sendMessage(player, "mute_cannot_send_message");
 			return false;
 		}
 
 		// Check if they are spamming
-		if (ChatControl.handleSpam(player, message, "global_chat")) {
+		if (ChatControl.handleSpam(player, message, MessageType.GLOBAL_CHAT)) {
 			DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
 			return false;
 		}
@@ -105,7 +104,7 @@ public class ProxyChatManager {
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+		crm = ChatControl.applyChatRules(player, message, MessageType.GLOBAL_CHAT);
 
 		if (crm.isPresent()) {
 			message = crm.get();
@@ -114,7 +113,7 @@ public class ProxyChatManager {
 		}
 
 		if (!player.hasPermission("multichat.chat.link")) {
-			message = ChatControl.replaceLinks(message);
+			message = ProxyConfigs.CHAT_CONTROL.replaceLinks(message);
 		}
 
 		return Optional.of(message);
@@ -148,8 +147,7 @@ public class ProxyChatManager {
 
 	public String getLocalSpyMessage(ProxiedPlayer player, String format, String message) {
 
-		String spyFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
-				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
+		String spyFormat = ProxyConfigs.CONFIG.getLocalSpyFormat();
 
 		spyFormat = spyFormat.replace("%FORMAT%", format);
 		spyFormat = spyFormat.replace("%DISPLAYNAME%", player.getDisplayName());
@@ -175,8 +173,7 @@ public class ProxyChatManager {
 
 	public String getLocalSpyMessage(CommandSender sender, String message) {
 
-		String spyFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
-				.getString(ConfigValues.Config.LOCAL_SPY_FORMAT, "&8[&7SPY&8] %FORMAT%");
+		String spyFormat = ProxyConfigs.CONFIG.getLocalSpyFormat();
 
 		spyFormat = spyFormat.replace("%FORMAT%", "");
 		spyFormat = spyFormat.replace("%DISPLAYNAME%", sender.getName());

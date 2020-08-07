@@ -3,11 +3,10 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 import xyz.olivermartin.multichat.bungee.StaffChatManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 import java.util.UUID;
 
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class MCCommand extends Command {
 
     public MCCommand() {
-        super("mcmc", "multichat.staff.mod", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("mc").toArray(new String[0]));
+        super("mcmc", "multichat.staff.mod", ProxyConfigs.ALIASES.getAliases("mcmc"));
     }
 
     public void execute(CommandSender sender, String[] args) {

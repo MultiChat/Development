@@ -7,11 +7,11 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -35,17 +35,15 @@ public class StaffChatManager {
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat;
-		if (id.equals("mod")) {
-			messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.FORMAT);
-		} else {
-			messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.FORMAT);
-		}
+		String messageFormat = id.equals("mod")
+				? ProxyConfigs.CONFIG.getModChatFormat()
+				: ProxyConfigs.CONFIG.getAdminChatFormat();
 		String original = message;
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(original, "staff_chats", username);
+		ProxiedPlayer proxiedPlayer = username.equals("console") ? null : ProxyServer.getInstance().getPlayer(username);
+		crm = ChatControl.applyChatRules(proxiedPlayer, original, MessageType.STAFF_CHATS);
 
 		if (crm.isPresent()) {
 			original = crm.get();
@@ -60,16 +58,16 @@ public class StaffChatManager {
 				if (id.equals("mod") && !ds.getModChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.CC_DEFAULT).toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.ModChat.NC_DEFAULT).toCharArray()[0]);
+					chatinfo.setChatColor(ProxyConfigs.CONFIG.getModChatColor());
+					chatinfo.setNameColor(ProxyConfigs.CONFIG.getModNameColor());
 
 					ds.getModChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 
 				} else if (id.equals("admin") && !ds.getAdminChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.CC_DEFAULT).toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.AdminChat.NC_DEFAULT).toCharArray()[0]);
+					chatinfo.setChatColor(ProxyConfigs.CONFIG.getAdminChatColor());
+					chatinfo.setNameColor(ProxyConfigs.CONFIG.getAdminNameColor());
 
 					ds.getAdminChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 

@@ -9,13 +9,12 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.GroupManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
 import xyz.olivermartin.multichat.common.RegexUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -32,7 +31,7 @@ public class GroupCommand extends Command implements TabExecutor {
     );
 
     public GroupCommand() {
-        super("mcgroup", "multichat.group", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("group").toArray(new String[0]));
+        super("mcgroup", "multichat.group", ProxyConfigs.ALIASES.getAliases("mcgroup"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -347,8 +346,7 @@ public class GroupCommand extends Command implements TabExecutor {
                 String chatColor = args[2].toLowerCase();
                 String nameColor = args[3].toLowerCase();
 
-                if (!RegexUtil.COLOR_LEGACY.matcher(chatColor).matches()
-                        || !RegexUtil.COLOR_LEGACY.matcher(nameColor).matches()) {
+                if (!RegexUtil.LEGACY_COLOR.matches(chatColor) || !RegexUtil.LEGACY_COLOR.matches(nameColor)) {
                     MessageManager.sendMessage(sender, "command_group_color_invalid");
                     MessageManager.sendMessage(sender, "command_group_color_usage");
                     return;

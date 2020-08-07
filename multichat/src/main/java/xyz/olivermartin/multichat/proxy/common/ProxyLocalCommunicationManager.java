@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 import net.md_5.bungee.api.config.ServerInfo;
-import net.md_5.bungee.config.Configuration;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Proxy -> Local communication manager
@@ -40,8 +38,7 @@ public class ProxyLocalCommunicationManager {
 
 			ObjectOutputStream out = new ObjectOutputStream(stream);
 
-			boolean globalChatServer = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean("global") == true
-					&& !ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList("no_global").contains(server.getName());
+			boolean globalChatServer = ProxyConfigs.CONFIG.isGlobal() && ProxyConfigs.CONFIG.isGlobalServer(server.getName());
 			String globalChatFormat = MultiChatProxy.getInstance().getChannelManager().getGlobalChannel().getInfo().getFormat();
 
 			out.writeUTF("global");
@@ -72,15 +69,14 @@ public class ProxyLocalCommunicationManager {
 		 * - legacy = legacy server info
 		 */
 
-		Configuration configYML = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
 		try {
 
 			ObjectOutputStream out = new ObjectOutputStream(stream);
 
-			boolean setDisplayName = configYML.getBoolean("set_display_name", true);
-			String displayNameFormat = configYML.getString("display_name_format", "%PREFIX%%NICK%%SUFFIX%");
+			boolean setDisplayName = ProxyConfigs.CONFIG.isSetDisplayName();
+			String displayNameFormat = ProxyConfigs.CONFIG.getDisplayNameFormat();
 
 			out.writeUTF("dn");
 			out.writeBoolean(setDisplayName);
@@ -118,10 +114,7 @@ public class ProxyLocalCommunicationManager {
 
 			ObjectOutputStream out = new ObjectOutputStream(stream);
 
-			boolean isLegacy =
-					ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
-					.getStringList("legacy_servers")
-					.contains(server.getName());
+			boolean isLegacy = !ProxyConfigs.CONFIG.isModernServer(server.getName());
 
 			DebugManager.log("isLegacy = " + isLegacy);
 

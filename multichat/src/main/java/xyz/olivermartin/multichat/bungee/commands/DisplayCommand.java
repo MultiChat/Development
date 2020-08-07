@@ -4,17 +4,15 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,7 +24,7 @@ import java.util.Optional;
 public class DisplayCommand extends Command {
   
     public DisplayCommand() {
-        super("mcdisplay", "multichat.staff.display", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("display").toArray(new String[0]));
+        super("mcdisplay", "multichat.staff.display", ProxyConfigs.ALIASES.getAliases("mcdisplay"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -36,21 +34,15 @@ public class DisplayCommand extends Command {
             return;
         }
 
-        displayMessage(String.join(" ", args));
-    }
-
-    private void displayMessage(String message) {
-        Optional<String> optionalMessage = ChatControl.applyChatRules(message, "display_command", "");
+        String message = String.join(" ", args);
+        Optional<String> optionalMessage = ChatControl.applyChatRules(sender, message, MessageType.DISPLAY_COMMAND);
         if (!optionalMessage.isPresent())
             return;
-
-        List<String> noGlobalServers = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
-                .getConfig().getStringList(ConfigValues.Config.NO_GLOBAL);
 
         String finalMessage = MultiChatUtil.translateColorCodes(optionalMessage.get());
         ProxyServer.getInstance().getPlayers().stream()
                 .filter(target -> target.getServer() != null
-                        && !noGlobalServers.contains(target.getServer().getInfo().getName())
+                        && ProxyConfigs.CONFIG.isModernServer(target.getServer().getInfo().getName())
                 )
                 .forEach(target ->
                         target.sendMessage(MultiChat.legacyServers.contains(target.getServer().getInfo().getName())

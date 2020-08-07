@@ -11,16 +11,15 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -32,7 +31,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class GCCommand extends Command {
 
     public GCCommand() {
-        super("mcgc", "multichat.group", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("gc").toArray(new String[0]));
+        super("mcgc", "multichat.group", ProxyConfigs.ALIASES.getAliases("mcgc"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -79,24 +78,24 @@ public class GCCommand extends Command {
 
         ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(playerName);
         if (proxiedPlayer != null) {
-            if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), "group_chats")) {
+            if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.GROUP_CHATS)) {
                 MessageManager.sendMessage(proxiedPlayer, "mute_cannot_send_message");
                 return;
             }
 
-            if (ChatControl.handleSpam(proxiedPlayer, originalMessage, "group_chats"))
+            if (ChatControl.handleSpam(proxiedPlayer, originalMessage, MessageType.GROUP_CHATS))
                 return;
         }
 
         Optional<String> optionalChatRules;
 
-        optionalChatRules = ChatControl.applyChatRules(originalMessage, "group_chats", playerName);
+        optionalChatRules = ChatControl.applyChatRules(proxiedPlayer, originalMessage, MessageType.GROUP_CHATS);
 
         if (!optionalChatRules.isPresent())
             return;
         originalMessage = optionalChatRules.get();
 
-        String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
+        String messageFormat = ProxyConfigs.CONFIG.getGroupChatFormat();
         String translatedMessage = MultiChatUtil.translateColorCodes(
                 manipulation.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName())
         );
@@ -120,7 +119,7 @@ public class GCCommand extends Command {
                 )
                 .forEach(target -> {
                     if (proxiedPlayer != null
-                            && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), "group_chats")) {
+                            && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), MessageType.GROUP_CHATS)) {
                         ChatControl.sendIgnoreNotifications(target, proxiedPlayer, "group_chats");
                         return;
                     }

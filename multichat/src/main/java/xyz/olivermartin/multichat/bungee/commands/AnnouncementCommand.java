@@ -7,9 +7,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Announcements;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Announcement Command
@@ -20,7 +19,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 public class AnnouncementCommand extends Command {
 
     public AnnouncementCommand() {
-        super("mcannouncement", "multichat.announce", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("announcement").toArray(new String[0]));
+        super("mcannouncement", "multichat.announce", ProxyConfigs.ALIASES.getAliases("mcannouncement"));
     }
 
     public void execute(CommandSender sender, String[] args) {

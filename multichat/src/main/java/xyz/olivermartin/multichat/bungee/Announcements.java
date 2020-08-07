@@ -8,6 +8,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
@@ -36,7 +37,7 @@ public class Announcements {
 				public void run() {
 					String message = announcements.get(name.toLowerCase());
 
-					message = ChatControl.applyChatRules(message, "announcements", "").get();
+					message = ChatControl.applyChatRules(null, message, MessageType.ANNOUNCEMENTS).get();
 
 					message = MultiChatUtil.translateColorCodes(message);
 
@@ -136,7 +137,7 @@ public class Announcements {
 
 			String message = announcements.get(name.toLowerCase());
 
-			message = ChatControl.applyChatRules(message, "announcements", "").get();
+			message = ChatControl.applyChatRules(null, message, MessageType.ANNOUNCEMENTS).get();
 
 			message = MultiChatUtil.translateColorCodes(message);
 

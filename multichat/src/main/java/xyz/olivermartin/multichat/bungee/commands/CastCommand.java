@@ -5,9 +5,8 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 import java.util.Arrays;
 
@@ -20,7 +19,7 @@ import java.util.Arrays;
 public class CastCommand extends Command {
 
     public CastCommand() {
-        super("mccast", "multichat.cast.admin", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("cast").toArray(new String[0]));
+        super("mccast", "multichat.cast.admin", ProxyConfigs.ALIASES.getAliases("mccast"));
     }
 
     @Override

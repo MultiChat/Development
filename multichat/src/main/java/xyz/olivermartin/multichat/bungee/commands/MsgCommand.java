@@ -2,7 +2,6 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -14,17 +13,15 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
-import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.Events;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Message Command
@@ -35,7 +32,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class MsgCommand extends Command implements TabExecutor {
 
 	public MsgCommand() {
-		super("mcmsg", "multichat.chat.msg", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("msg").toArray(new String[0]));
+		super("mcmsg", "multichat.chat.msg", ProxyConfigs.ALIASES.getAliases("mcmsg"));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
@@ -56,8 +53,7 @@ public class MsgCommand extends Command implements TabExecutor {
 			}
 
 			// Check if PMs are allowed to be toggled
-			Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
-			if (!config.getBoolean(ConfigValues.Config.TOGGLE_PM, true)) {
+			if (!ProxyConfigs.CONFIG.isTogglePm()) {
 				MessageManager.sendMessage(sender, "command_msg_no_toggle");
 				return;
 			}
@@ -100,9 +96,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
 		// Cache config values
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig();
-		boolean fetchSpigotDisplayNames = config.getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES);
-		List<String> noPmServers = config.getStringList(ConfigValues.Config.NO_PM);
+		boolean fetchSpigotDisplayNames = ProxyConfigs.CONFIG.isFetchSpigotDisplayNames();
 
 		// Target not online
 		if (!optionalTarget.isPresent()) {
@@ -116,7 +110,7 @@ public class MsgCommand extends Command implements TabExecutor {
 			ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
 
 			// Handle disabled servers for player
-			if (noPmServers.contains(serverInfo.getName())) {
+			if (ProxyConfigs.CONFIG.isNoPmServer(serverInfo.getName())) {
 				MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 				return;
 			}
@@ -134,7 +128,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		ServerInfo targetServerInfo = target.getServer().getInfo();
 
 		// Handle disabled servers for target
-		if (noPmServers.contains(targetServerInfo.getName())) {
+		if (ProxyConfigs.CONFIG.isNoPmServer(targetServerInfo.getName())) {
 			MessageManager.sendMessage(sender, "command_msg_disabled_target");
 			return;
 		}
@@ -154,29 +148,29 @@ public class MsgCommand extends Command implements TabExecutor {
 		ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
 
 		// Handle disabled servers for player
-		if (noPmServers.contains(serverInfo.getName())) {
+		if (ProxyConfigs.CONFIG.isNoPmServer(serverInfo.getName())) {
 			MessageManager.sendMessage(sender, "command_msg_disabled_sender");
 			return;
 		}
 
 		// Check if player has been muted through MultiChat
-		if (ChatControl.isMuted(playerUID, "private_messages")) {
+		if (ChatControl.isMuted(playerUID, MessageType.PRIVATE_MESSAGES)) {
 			MessageManager.sendMessage(sender, "mute_cannot_send_message");
 			return;
 		}
 
 		// Check if the target ignores the player
-		if (ChatControl.ignores(playerUID, target.getUniqueId(), "private_messages")) {
+		if (ChatControl.ignores(playerUID, target.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
 			ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
 			return;
 		}
 
 		// Check player for potential spam
-		if (ChatControl.handleSpam(proxiedPlayer, message, "private_messages"))
+		if (ChatControl.handleSpam(proxiedPlayer, message, MessageType.PRIVATE_MESSAGES))
 			return;
 
 		// Apply chat rules, if any of them cancel the message, return
-		Optional<String> optionalChatControl = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+		Optional<String> optionalChatControl = ChatControl.applyChatRules(sender, message, MessageType.PRIVATE_MESSAGES);
 		if (!optionalChatControl.isPresent())
 			return;
 

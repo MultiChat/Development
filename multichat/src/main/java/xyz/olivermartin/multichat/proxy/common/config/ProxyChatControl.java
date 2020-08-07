@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.proxy.common.config;
 
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
@@ -39,7 +40,7 @@ public class ProxyChatControl extends AbstractProxyConfig {
         applyMuteTo.clear();
         applyIgnoreTo.clear();
 
-        version = getConfig().getString("version");
+        version = getConfig().getString("version", "1.10");
 
         // Load regex rules
         getConfig().getList("regex_rules").forEach(listEntry -> {
@@ -117,26 +118,22 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
     // TODO: Some of these #apply / #replace / #handle methods could be moved into a refactored ChatControl.class
     //  I just added them to not lose the logic for now
-    public String applyRegexRules(String message, MessageType messageType) {
-        return applyRegexRules(null, message, messageType);
-    }
-
     // TODO: Add events for regex rules and actions ?
-    public String applyRegexRules(ProxiedPlayer proxiedPlayer, String message, MessageType messageType) {
+    public String applyRegexRules(CommandSender commandSender, String message, MessageType messageType) {
         if (!applyRulesTo.get(messageType)) return message;
 
         for (RegexRule regexRule : regexRules)
-            message = regexRule.apply(proxiedPlayer, message);
+            message = regexRule.apply(commandSender, message);
         return message;
     }
 
-    public boolean regexActionsCancel(ProxiedPlayer proxiedPlayer, String message, MessageType messageType) {
+    public boolean regexActionsCancel(CommandSender commandSender, String message, MessageType messageType) {
         if (!applyActionsTo.get(messageType)) return false;
 
         // TODO: Personally I believe we should return after the first action cancels the message being sent
         boolean cancel = false;
         for (RegexAction regexAction : regexActions) {
-            if (regexAction.cancels(proxiedPlayer, message))
+            if (regexAction.cancels(commandSender, message))
                 cancel = true;
         }
 
@@ -150,6 +147,17 @@ public class ProxyChatControl extends AbstractProxyConfig {
         return linkPattern.matcher(message).replaceAll(linkRemovalMessage);
     }
 
+    public boolean applyMuteTo(MessageType messageType) {
+        return applyMuteTo.get(messageType);
+    }
+
+    public boolean applyIgnoreTo(MessageType messageType) {
+        return applyIgnoreTo.get(messageType);
+    }
+
+    public boolean applyAntiSpamTo(MessageType messageType) {
+        return applyAntiSpamTo.get(messageType);
+    }
     public boolean isAntiSpam() {
         return antiSpam;
     }
@@ -176,10 +184,6 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
     public int getAntiSpamTrigger() {
         return antiSpamTrigger;
-    }
-
-    public void setAntiSpamTrigger(int antiSpamTrigger) {
-        this.antiSpamTrigger = antiSpamTrigger;
     }
 
     public String getAntiSpamCommand() {
@@ -209,8 +213,8 @@ public class ProxyChatControl extends AbstractProxyConfig {
             this.permission = permission;
         }
 
-        public String apply(ProxiedPlayer proxiedPlayer, String message) {
-            if (proxiedPlayer != null && !permission.isEmpty() && !proxiedPlayer.hasPermission(permission))
+        public String apply(CommandSender commandSender, String message) {
+            if (commandSender != null && !permission.isEmpty() && !commandSender.hasPermission(permission))
                 return message;
             return pattern.matcher(message).replaceAll(replaceWith);
         }
@@ -229,17 +233,17 @@ public class ProxyChatControl extends AbstractProxyConfig {
             this.spigot = spigot;
         }
 
-        public boolean cancels(ProxiedPlayer proxiedPlayer, String message) {
-            if (!permission.isEmpty() && !proxiedPlayer.hasPermission(permission))
+        public boolean cancels(CommandSender commandSender, String message) {
+            if (!permission.isEmpty() && !commandSender.hasPermission(permission))
                 return false;
             if (!pattern.matcher(message).matches())
                 return false;
             if (!command.isEmpty()) {
-                String tempCommand = playerPattern.matcher(command).replaceAll(proxiedPlayer.getName());
-                if (spigot)
-                    ProxyLocalCommunicationManager.sendCommandMessage(tempCommand, proxiedPlayer.getServer().getInfo());
+                String tempCommand = playerPattern.matcher(command).replaceAll(commandSender.getName());
+                if (spigot && commandSender instanceof ProxiedPlayer)
+                    ProxyLocalCommunicationManager.sendCommandMessage(tempCommand, ((ProxiedPlayer) commandSender).getServer().getInfo());
                 else
-                    ProxyServer.getInstance().getPluginManager().dispatchCommand(proxiedPlayer, tempCommand);
+                    ProxyServer.getInstance().getPluginManager().dispatchCommand(commandSender, tempCommand);
             }
             return cancel;
         }

@@ -11,7 +11,6 @@ import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
 import xyz.olivermartin.multichat.bungee.ChatManipulation;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.UUIDNameManager;
@@ -19,7 +18,7 @@ import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyServerConnectedListener implements Listener {
@@ -101,9 +100,9 @@ public class ProxyServerConnectedListener implements Listener {
 		ds.getJoinedNetwork().add(player.getUniqueId());
 
 		// If MultiChat is handling join messages...
-		if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")
-				|| ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome")
-				|| ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("private_welcome")) {
+		if (ProxyConfigs.JOIN_MESSAGES.isShowJoin()
+				|| ProxyConfigs.JOIN_MESSAGES.isWelcome()
+				|| ProxyConfigs.JOIN_MESSAGES.isPrivateWelcome()) {
 
 			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
 			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
@@ -111,10 +110,10 @@ public class ProxyServerConnectedListener implements Listener {
 			}
 
 			// Load join message formats from config
-			String joinformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("serverjoin");
-			String silentformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("silentjoin");
-			String welcomeMessage = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("welcome_message");
-			String privateWelcomeMessage = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("private_welcome_message");
+			String joinformat = ProxyConfigs.JOIN_MESSAGES.getServerJoin();
+			String silentformat = ProxyConfigs.JOIN_MESSAGES.getSilentJoin();
+			String welcomeMessage = ProxyConfigs.JOIN_MESSAGES.getWelcomeMessage();
+			String privateWelcomeMessage = ProxyConfigs.JOIN_MESSAGES.getPrivateWelcomeMessage();
 
 			// Replace the placeholders
 			ChatManipulation chatman = new ChatManipulation(); // TODO Legacy
@@ -124,8 +123,8 @@ public class ProxyServerConnectedListener implements Listener {
 			privateWelcomeMessage = chatman.replaceJoinMsgVars(privateWelcomeMessage, player.getName(), event.getServer().getInfo().getName());
 
 			// Check which messages should be broadcast
-			boolean broadcastWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("welcome", true);
-			boolean privateWelcome = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("private_welcome", false);
+			boolean broadcastWelcome = ProxyConfigs.JOIN_MESSAGES.isWelcome();
+			boolean privateWelcome = ProxyConfigs.JOIN_MESSAGES.isPrivateWelcome();
 			boolean broadcastJoin = !player.hasPermission("multichat.staff.silentjoin");
 
 			// Broadcast
@@ -144,7 +143,7 @@ public class ProxyServerConnectedListener implements Listener {
 
 					}
 
-					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
+					if (ProxyConfigs.JOIN_MESSAGES.isShowJoin()) {
 						displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), joinformat);
 					}
 
@@ -152,7 +151,7 @@ public class ProxyServerConnectedListener implements Listener {
 
 					ds.getHiddenStaff().add(player.getUniqueId());
 
-					if (ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showjoin")) {
+					if (ProxyConfigs.JOIN_MESSAGES.isShowJoin()) {
 						if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
 							displayMessage(onlineplayer, event.getPlayer(), event.getServer().getInfo().getName(), silentformat);
 						}

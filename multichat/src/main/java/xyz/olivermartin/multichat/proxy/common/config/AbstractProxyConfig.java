@@ -30,7 +30,11 @@ public abstract class AbstractProxyConfig {
     private Configuration config;
 
     public final void reloadConfig(Plugin plugin) {
-        File configFile = new File(plugin.getDataFolder(), fileName);
+        reloadConfig(plugin, plugin.getDataFolder());
+    }
+
+    public final void reloadConfig(Plugin plugin, File folder) {
+        File configFile = new File(folder, fileName);
         if (!configFile.exists()) {
             InputStream in = plugin.getResourceAsStream(fileName);
             try {

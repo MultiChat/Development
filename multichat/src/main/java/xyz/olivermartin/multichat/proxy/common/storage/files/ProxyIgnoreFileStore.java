@@ -11,10 +11,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyGenericFileStore;
 
 public class ProxyIgnoreFileStore extends ProxyGenericFileStore {
@@ -26,11 +24,8 @@ public class ProxyIgnoreFileStore extends ProxyGenericFileStore {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected boolean loadFile(File file) {
-
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
-
-		if (config.getBoolean("session_ignore")) {
-			ChatControl.setIgnoreMap(new HashMap<UUID, Set<UUID>>());
+		if (ProxyConfigs.CHAT_CONTROL.isSessionIgnore()) {
+			ChatControl.setIgnoreMap(new HashMap<>());
 			return true;
 		}
 
@@ -56,10 +51,7 @@ public class ProxyIgnoreFileStore extends ProxyGenericFileStore {
 
 	@Override
 	protected boolean saveFile(File file) {
-
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
-
-		if (config.getBoolean("session_ignore")) return true;
+		if (ProxyConfigs.CHAT_CONTROL.isSessionIgnore()) return true;
 
 		try {
 

@@ -24,7 +24,7 @@ import xyz.olivermartin.multichat.common.communication.CommChannels;
 public class ProxyPlayerMetaListener implements Listener {
 
 	@EventHandler
-	public static void onPluginMessage(PluginMessageEvent event) {
+	public void onPluginMessage(PluginMessageEvent event) {
 
 		// Ignore if sent to a different channel
 		if (!event.getTag().equals(CommChannels.PLAYER_META)) return;

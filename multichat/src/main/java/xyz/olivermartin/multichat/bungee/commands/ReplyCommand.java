@@ -1,6 +1,5 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -9,12 +8,11 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -26,7 +24,7 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class ReplyCommand extends Command {
 
     public ReplyCommand() {
-        super("mcr", "multichat.chat.msg", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("r").toArray(new String[0]));
+        super("mcr", "multichat.chat.msg", ProxyConfigs.ALIASES.getAliases("mcr"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -59,10 +57,7 @@ public class ReplyCommand extends Command {
             return;
         }
 
-        List<String> noPmServers = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig()
-                .getStringList(ConfigValues.Config.NO_PM);
-
-        if (noPmServers.contains(target.getServer().getInfo().getName())) {
+        if (ProxyConfigs.CONFIG.isNoPmServer(target.getServer().getInfo().getName())) {
             MessageManager.sendMessage(sender, "command_msg_disabled_target");
             return;
         }
@@ -73,25 +68,25 @@ public class ReplyCommand extends Command {
         }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
-        if (noPmServers.contains(proxiedPlayer.getServer().getInfo().getName())) {
+        if (ProxyConfigs.CONFIG.isNoPmServer(proxiedPlayer.getServer().getInfo().getName())) {
             MessageManager.sendMessage(sender, "command_msg_disabled_sender");
             return;
         }
 
-        if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), "private_messages")) {
+        if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
             MessageManager.sendMessage(sender, "mute_cannot_send_message");
             return;
         }
 
-        if (ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), "private_messages")) {
+        if (ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
             ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
             return;
         }
 
-        if (ChatControl.handleSpam(proxiedPlayer, message, "private_messages"))
+        if (ChatControl.handleSpam(proxiedPlayer, message, MessageType.PRIVATE_MESSAGES))
             return;
 
-        Optional<String> crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+        Optional<String> crm = ChatControl.applyChatRules(proxiedPlayer, message, MessageType.PRIVATE_MESSAGES);
         if (!crm.isPresent())
             return;
 
