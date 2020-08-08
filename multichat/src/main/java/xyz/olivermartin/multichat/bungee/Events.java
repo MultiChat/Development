@@ -219,13 +219,13 @@ public class Events implements Listener {
 						GCCommand.sendMessage(message, playerName, chatInfo);
 
 					} else {
-						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
-						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
+						ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+						ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 					}
 
 				} else {
-					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
-					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
+					ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+					ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 				}
 			}
 		}
@@ -241,7 +241,7 @@ public class Events implements Listener {
 				event.setCancelled(true);
 
 				if (ChatControl.isMuted(player.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
-					MessageManager.sendMessage(player, "mute_cannot_send_message");
+					ProxyConfigs.MESSAGES.sendMessage(player, "mute_cannot_send_message");
 					return;
 				}
 
@@ -276,15 +276,15 @@ public class Events implements Listener {
 							PrivateMessageManager.getInstance().sendMessage(message, player, target);
 
 						} else {
-							MessageManager.sendMessage(player, "command_msg_disabled_target");
+							ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_disabled_target");
 						}
 
 					} else {
-						MessageManager.sendMessage(player, "command_msg_disabled_sender");
+						ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_disabled_sender");
 					}
 
 				} else {
-					MessageManager.sendMessage(player, "command_msg_not_online");
+					ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_not_online");
 				}
 
 			}

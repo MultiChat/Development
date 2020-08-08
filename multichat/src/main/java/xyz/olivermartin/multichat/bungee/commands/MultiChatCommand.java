@@ -44,7 +44,7 @@ public class MultiChatCommand extends Command {
                 } catch (NumberFormatException ignored) {
                 }
 
-                MessageManager.sendMessage(sender, "command_multichat_help_" + Math.max(1, Math.min(page, 3)));
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_help_" + Math.max(1, Math.min(page, 3)));
                 break;
             }
             case "debug": {
@@ -53,13 +53,13 @@ public class MultiChatCommand extends Command {
                 break;
             }
             case "save": {
-                MessageManager.sendMessage(sender, "command_multichat_save_prepare");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_save_prepare");
                 MultiChatProxy.getInstance().getFileStoreManager().save();
-                MessageManager.sendMessage(sender, "command_multichat_save_completed");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_save_completed");
                 break;
             }
             case "reload": {
-                MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_reload_prepare");
 
                 // TODO: This REALLY needs to change
                 MultiChat multiChat = (MultiChat) MultiChatProxy.getInstance().getPlugin();
@@ -99,7 +99,7 @@ public class MultiChatCommand extends Command {
                         )
                 );
 
-                MessageManager.sendMessage(sender, "command_multichat_reload_completed");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_reload_completed");
                 break;
             }
         }

@@ -10,8 +10,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Listener for communication over the Player Action communication channel
@@ -54,7 +54,7 @@ public class ProxyPlayerActionListener implements Listener {
 			}
 
 		} catch (PatternSyntaxException e) {
-			MessageManager.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
+			ProxyConfigs.MESSAGES.sendMessage(ProxyServer.getInstance().getConsole(), "command_execute_regex");
 		}
 
 	}

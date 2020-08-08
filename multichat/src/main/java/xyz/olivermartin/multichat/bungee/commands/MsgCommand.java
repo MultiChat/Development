@@ -29,8 +29,8 @@ public class MsgCommand extends Command implements TabExecutor {
 
 	public void execute(CommandSender sender, String[] args) {
 		if (args.length == 0) {
-			MessageManager.sendMessage(sender, "command_msg_usage");
-			MessageManager.sendMessage(sender, "command_msg_usage_toggle");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_usage");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_usage_toggle");
 			return;
 		}
 
@@ -40,13 +40,13 @@ public class MsgCommand extends Command implements TabExecutor {
 		if (args.length == 1) {
 			// Console can not toggle PMs
 			if (!(sender instanceof ProxiedPlayer)) {
-				MessageManager.sendMessage(sender, "command_msg_only_players");
+				ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_only_players");
 				return;
 			}
 
 			// Check if PMs are allowed to be toggled
 			if (!ProxyConfigs.CONFIG.isTogglePm()) {
-				MessageManager.sendMessage(sender, "command_msg_no_toggle");
+				ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_no_toggle");
 				return;
 			}
 
@@ -57,9 +57,9 @@ public class MsgCommand extends Command implements TabExecutor {
 			if (!optionalTarget.isPresent()) {
 				if (Events.PMToggle.containsKey(playerUID)) {
 					Events.PMToggle.remove(playerUID);
-					MessageManager.sendMessage(sender, "command_msg_toggle_off");
+					ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_toggle_off");
 				} else {
-					MessageManager.sendMessage(sender, "command_msg_not_online");
+					ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_not_online");
 				}
 				return;
 			}
@@ -71,13 +71,13 @@ public class MsgCommand extends Command implements TabExecutor {
 					&& ProxyConfigs.CONFIG.isPvPreventMessage()
 					&& BungeeVanishAPI.isInvisible(target)
 					&& !sender.hasPermission("multichat.chat.msg.vanished")) {
-				MessageManager.sendMessage(sender, "command_msg_not_online");
+				ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_not_online");
 				return;
 			}
 
 			// Toggle PM and send message
 			boolean toggleResult = Events.togglePM(playerUID, target.getUniqueId());
-			MessageManager.sendSpecialMessage(sender,
+			ProxyConfigs.MESSAGES.sendMessage(sender,
 					"command_msg_toggle_" + (toggleResult ? "on" : "off"),
 					target.getName()
 					);
@@ -93,7 +93,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		// Target not online
 		if (!optionalTarget.isPresent()) {
 			if (!(sender instanceof ProxiedPlayer) || !args[0].equalsIgnoreCase("console")) {
-				MessageManager.sendMessage(sender, "command_msg_not_online");
+				ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_not_online");
 				return;
 			}
 
@@ -103,7 +103,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 			// Handle disabled servers for player
 			if (ProxyConfigs.CONFIG.isNoPmServer(serverInfo.getName())) {
-				MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+				ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_sender");
 				return;
 			}
 
@@ -121,7 +121,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 		// Handle disabled servers for target
 		if (ProxyConfigs.CONFIG.isNoPmServer(targetServerInfo.getName())) {
-			MessageManager.sendMessage(sender, "command_msg_disabled_target");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_target");
 			return;
 		}
 
@@ -141,13 +141,13 @@ public class MsgCommand extends Command implements TabExecutor {
 
 		// Handle disabled servers for player
 		if (ProxyConfigs.CONFIG.isNoPmServer(serverInfo.getName())) {
-			MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_sender");
 			return;
 		}
 
 		// Check if player has been muted through MultiChat
 		if (ChatControl.isMuted(playerUID, MessageType.PRIVATE_MESSAGES)) {
-			MessageManager.sendMessage(sender, "mute_cannot_send_message");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "mute_cannot_send_message");
 			return;
 		}
 
@@ -172,7 +172,7 @@ public class MsgCommand extends Command implements TabExecutor {
 				&& ProxyConfigs.CONFIG.isPvPreventMessage()
 				&& BungeeVanishAPI.isInvisible(target)
 				&& !sender.hasPermission("multichat.chat.msg.vanished")) {
-			MessageManager.sendMessage(sender, "command_msg_not_online");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_not_online");
 			return;
 		}
 

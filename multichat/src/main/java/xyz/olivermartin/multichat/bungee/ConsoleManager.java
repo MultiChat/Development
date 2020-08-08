@@ -16,12 +16,12 @@ public class ConsoleManager {
 	}
 
 	public static void logDisplayMessage(String message) {
-		logToConsole(MessageManager.getMessage("console_display_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_display_prefix") + message);
 	}
 
 	public static void logChat(String message) {
 
-		logToConsole(MessageManager.getMessage("console_chat_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_chat_prefix") + message);
 
 	}
 
@@ -31,7 +31,7 @@ public class ConsoleManager {
 			return;
 		}
 
-		logToConsole(MessageManager.getMessage("console_modchat_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_modchat_prefix") + message);
 
 	}
 
@@ -41,7 +41,7 @@ public class ConsoleManager {
 			return;
 		}
 
-		logToConsole(MessageManager.getMessage("console_groupchat_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_groupchat_prefix") + message);
 
 	}
 
@@ -51,20 +51,20 @@ public class ConsoleManager {
 			return;
 		}
 
-		logToConsole(MessageManager.getMessage("console_adminchat_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_adminchat_prefix") + message);
 
 	}
 
 	public static void logHelpMe(String message) {
 
-		logToConsole(MessageManager.getMessage("console_helpme_prefix") + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_helpme_prefix") + message);
 
 	}
 
 
 	public static void logBasicChat(String prefix, String message) {
 
-		logToConsole(MessageManager.getMessage("console_chat_prefix") + prefix, message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_chat_prefix") + prefix, message);
 
 	}
 
@@ -74,7 +74,7 @@ public class ConsoleManager {
 			return;
 		}
 
-		logToConsole(MessageManager.getMessage("console_socialspy_prefix") + "(" + p1 + " -> " + p2 + ")  " + message);
+		logToConsole(ProxyConfigs.MESSAGES.getMessage("console_socialspy_prefix") + "(" + p1 + " -> " + p2 + ")  " + message);
 
 	}
 
@@ -82,7 +82,7 @@ public class ConsoleManager {
 		BaseComponent[] first = TextComponent.fromLegacyText(
 				MultiChatUtil.approximateRGBColorCodes(
 						MultiChatUtil.translateColorCodes(
-								MessageManager.getMessage("console_main_prefix") + message)));
+								ProxyConfigs.MESSAGES.getMessage("console_main_prefix") + message)));
 
 		BaseComponent[] second = TextComponent.fromLegacyText(unformattedMessage);
 

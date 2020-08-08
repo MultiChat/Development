@@ -7,7 +7,6 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
@@ -28,7 +27,7 @@ public class GlobalCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_global_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_global_only_players");
             return;
         }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
@@ -36,8 +35,8 @@ public class GlobalCommand extends Command {
         if (args.length == 0) {
             ChatModeManager.getInstance().setGlobal(proxiedPlayer.getUniqueId());
 
-            MessageManager.sendMessage(sender, "command_global_enabled_1");
-            MessageManager.sendMessage(sender, "command_global_enabled_2");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_global_enabled_1");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_global_enabled_2");
             return;
         }
 
@@ -67,7 +66,7 @@ public class GlobalCommand extends Command {
         // If they had this channel hidden, then unhide it...
         if (channelManager.isHidden(proxiedPlayer.getUniqueId(), "global")) {
             channelManager.show(proxiedPlayer.getUniqueId(), "global");
-            MessageManager.sendSpecialMessage(proxiedPlayer, "command_channel_show", "GLOBAL");
+            ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_channel_show", "GLOBAL");
         }
 
         // Let server know players channel preference

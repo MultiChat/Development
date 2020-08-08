@@ -8,7 +8,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
@@ -29,8 +28,8 @@ public class ReplyCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            MessageManager.sendMessage(sender, "command_reply_usage");
-            MessageManager.sendMessage(sender, "command_reply_desc");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_desc");
             return;
         }
 
@@ -39,7 +38,7 @@ public class ReplyCommand extends Command {
         ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
 
         if (!proxyDataStore.getLastMsg().containsKey(senderUID)) {
-            MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_no_one_to_reply_to");
             return;
         }
 
@@ -53,12 +52,12 @@ public class ReplyCommand extends Command {
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(targetUID);
         if (target == null) {
-            MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_no_one_to_reply_to");
             return;
         }
 
         if (ProxyConfigs.CONFIG.isNoPmServer(target.getServer().getInfo().getName())) {
-            MessageManager.sendMessage(sender, "command_msg_disabled_target");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_target");
             return;
         }
 
@@ -69,12 +68,12 @@ public class ReplyCommand extends Command {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
         if (ProxyConfigs.CONFIG.isNoPmServer(proxiedPlayer.getServer().getInfo().getName())) {
-            MessageManager.sendMessage(sender, "command_msg_disabled_sender");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_sender");
             return;
         }
 
         if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
-            MessageManager.sendMessage(sender, "mute_cannot_send_message");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_cannot_send_message");
             return;
         }
 

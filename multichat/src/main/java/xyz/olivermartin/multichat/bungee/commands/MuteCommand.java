@@ -5,7 +5,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 public class MuteCommand extends Command {
@@ -17,30 +16,30 @@ public class MuteCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            MessageManager.sendMessage(sender, "mute_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_usage");
             return;
         }
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (target == null) {
-            MessageManager.sendMessage(sender, "mute_player_not_found");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_player_not_found");
             return;
         }
 
         if (target.hasPermission("multichat.mute.bypass")) {
-            MessageManager.sendMessage(sender, "mute_bypass");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_bypass");
             return;
         }
 
         if (!ChatControl.isMutedAnywhere(target.getUniqueId())) {
             ChatControl.mute(target.getUniqueId());
-            MessageManager.sendMessage(sender, "mute_muted_staff");
-            MessageManager.sendMessage(target, "mute_muted");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_muted_staff");
+            ProxyConfigs.MESSAGES.sendMessage(target, "mute_muted");
         } else {
             ChatControl.unmute(target.getUniqueId());
-            MessageManager.sendMessage(sender, "mute_unmuted_staff");
-            MessageManager.sendMessage(target, "mute_unmuted");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_unmuted_staff");
+            ProxyConfigs.MESSAGES.sendMessage(target, "mute_unmuted");
         }
     }
 }

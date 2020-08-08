@@ -8,7 +8,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Bulletins;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
@@ -37,10 +36,10 @@ public class BulletinCommand extends Command {
                 int counter = 0;
                 Iterator<String> it = Bulletins.getIterator();
 
-                MessageManager.sendMessage(sender, "command_bulletin_list");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_list");
                 while (it.hasNext()) {
                     counter++;
-                    MessageManager.sendSpecialMessage(sender, "command_bulletin_list_item", counter + ": +++" + it.next(), true);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_list_item", counter + ": +++" + it.next(), true);
                 }
                 return;
             }
@@ -49,7 +48,7 @@ public class BulletinCommand extends Command {
                     break;
 
                 Bulletins.addBulletin(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
-                MessageManager.sendMessage(sender, "command_bulletin_added");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_added");
                 return;
             }
             case "remove": {
@@ -60,12 +59,12 @@ public class BulletinCommand extends Command {
                 try {
                     id = Integer.parseInt(args[1]);
                 } catch (NumberFormatException ignored) {
-                    MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_invalid_usage");
                     break;
                 }
 
                 Bulletins.removeBulletin(id - 1);
-                MessageManager.sendMessage(sender, "command_bulletin_removed");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_removed");
                 return;
             }
             case "start": {
@@ -76,17 +75,17 @@ public class BulletinCommand extends Command {
                 try {
                     bulletinDelay = Integer.parseInt(args[1]);
                 } catch (NumberFormatException ignored) {
-                    MessageManager.sendMessage(sender, "command_bulletin_invalid_usage");
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_invalid_usage");
                     break;
                 }
 
                 Bulletins.startBulletins(bulletinDelay);
-                MessageManager.sendMessage(sender, "command_bulletin_started");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_started");
                 return;
             }
             case "stop": {
                 Bulletins.stopBulletins();
-                MessageManager.sendMessage(sender, "command_bulletin_stopped");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_stopped");
                 return;
             }
         }
@@ -95,7 +94,7 @@ public class BulletinCommand extends Command {
     }
 
     private void showCommandUsage(CommandSender sender) {
-        MessageManager.sendMessage(sender, "command_bulletin_usage");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_bulletin_usage");
         sender.sendMessage(new ComponentBuilder("/bulletin add <message>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/bulletin remove <index>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/bulletin start <interval in minutes>").color(ChatColor.AQUA).create());

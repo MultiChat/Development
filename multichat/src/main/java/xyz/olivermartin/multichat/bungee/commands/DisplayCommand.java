@@ -5,7 +5,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
@@ -28,8 +27,8 @@ public class DisplayCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (args.length < 1) {
-            MessageManager.sendMessage(sender, "command_display_desc");
-            MessageManager.sendMessage(sender, "command_display_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_display_desc");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_display_usage");
             return;
         }
 

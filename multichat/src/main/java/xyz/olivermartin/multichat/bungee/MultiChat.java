@@ -170,7 +170,6 @@ public class MultiChat extends Plugin {
         // Register commands
         registerCommands();
 
-        // TODO: Change to appropriate logger
         getLogger().info("Config Version: " + ProxyConfigs.CONFIG.getVersion());
 
         // Run start-up routines

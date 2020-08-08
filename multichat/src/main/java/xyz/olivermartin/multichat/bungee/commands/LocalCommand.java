@@ -8,7 +8,6 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
@@ -29,7 +28,7 @@ public class LocalCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_local_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_only_players");
             return;
         }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
@@ -38,8 +37,8 @@ public class LocalCommand extends Command {
         if (args.length == 0) {
             ChatModeManager.getInstance().setLocal(playerUID);
 
-            MessageManager.sendMessage(sender, "command_local_enabled_1");
-            MessageManager.sendMessage(sender, "command_local_enabled_2");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_1");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_2");
             return;
         }
 
@@ -63,7 +62,7 @@ public class LocalCommand extends Command {
         // If they had this channel hidden, then unhide it...
         if (channelManager.isHidden(playerUID, "local")) {
             channelManager.show(playerUID, "local");
-            MessageManager.sendSpecialMessage(proxiedPlayer, "command_channel_show", "LOCAL");
+            ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_channel_show", "LOCAL");
         }
 
         // Let server know players channel preference

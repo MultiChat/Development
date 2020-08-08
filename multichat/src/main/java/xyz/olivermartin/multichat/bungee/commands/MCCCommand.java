@@ -5,7 +5,6 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.RegexUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
@@ -27,12 +26,12 @@ public class MCCCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_mcc_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_only_players");
             return;
         }
 
         if (args.length < 2) {
-            MessageManager.sendMessage(sender, "command_mcc_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_usage");
             return;
         }
 
@@ -40,8 +39,8 @@ public class MCCCommand extends Command {
         String nameColor = args[1].toLowerCase();
 
         if (!RegexUtil.LEGACY_COLOR.matches(chatColor) || !RegexUtil.LEGACY_COLOR.matches(nameColor)) {
-            MessageManager.sendMessage(sender, "command_mcc_invalid");
-            MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_invalid");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_invalid_usage");
             return;
         }
 
@@ -53,6 +52,6 @@ public class MCCCommand extends Command {
         chatInfo.setNameColor(nameColor.charAt(0));
         proxyDataStore.getModChatPreferences().put(playerUID, chatInfo);
 
-        MessageManager.sendMessage(sender, "command_mcc_updated");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_updated");
     }
 }

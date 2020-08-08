@@ -5,7 +5,6 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 import java.util.UUID;
@@ -19,30 +18,30 @@ public class IgnoreCommand extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "ignore_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_only_players");
             return;
         }
 
         if (args.length == 0) {
-            MessageManager.sendMessage(sender, "ignore_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_usage");
             return;
         }
 
         ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 
         if (target == null) {
-            MessageManager.sendMessage(sender, "ignore_player_not_found");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_player_not_found");
             return;
         }
 
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
         if (proxiedPlayer.equals(target)) {
-            MessageManager.sendMessage(sender, "ignore_cannot_ignore_yourself");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_cannot_ignore_yourself");
             return;
         }
 
         if (target.hasPermission("multichat.ignore.bypass")) {
-            MessageManager.sendMessage(sender, "ignore_bypass");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_bypass");
             return;
         }
 
@@ -52,10 +51,10 @@ public class IgnoreCommand extends Command {
         // TODO: ChatControl.toggleIgnore
         if (!ChatControl.ignoresAnywhere(targetUID, playerUID)) {
             ChatControl.ignore(playerUID, targetUID);
-            MessageManager.sendSpecialMessage(sender, "ignore_ignored", target.getName());
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_ignored", target.getName());
         } else {
             ChatControl.unignore(playerUID, targetUID);
-            MessageManager.sendSpecialMessage(sender, "ignore_unignored", target.getName());
+            ProxyConfigs.MESSAGES.sendMessage(sender, "ignore_unignored", target.getName());
         }
     }
 }

@@ -7,7 +7,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.PlayerMeta;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.common.MessageType;
@@ -68,13 +67,13 @@ public class ProxyChatManager {
 
 		// Check if chat is frozen
 		if (MultiChatProxy.getInstance().getDataStore().isChatFrozen() && !player.hasPermission("multichat.chat.always")) {
-			MessageManager.sendMessage(player, "freezechat_frozen");
+			ProxyConfigs.MESSAGES.sendMessage(player, "freezechat_frozen");
 			return false;
 		}
 
 		// Check if they are muted by MultiChat
 		if (ChatControl.isMuted(player.getUniqueId(), MessageType.GLOBAL_CHAT)) {
-			MessageManager.sendMessage(player, "mute_cannot_send_message");
+			ProxyConfigs.MESSAGES.sendMessage(player, "mute_cannot_send_message");
 			return false;
 		}
 

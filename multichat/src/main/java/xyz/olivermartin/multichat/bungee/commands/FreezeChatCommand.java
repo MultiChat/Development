@@ -3,7 +3,6 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
@@ -25,7 +24,7 @@ public class FreezeChatCommand extends Command {
         boolean frozen = !proxyDataStore.isChatFrozen();
         proxyDataStore.setChatFrozen(frozen);
         ProxyServer.getInstance().getPlayers().forEach(proxiedPlayer ->
-                MessageManager.sendSpecialMessage(proxiedPlayer,
+                ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer,
                         "command_freezechat_" + (frozen ? "frozen" : "thawed"),
                         proxiedPlayer.getName()
                 )

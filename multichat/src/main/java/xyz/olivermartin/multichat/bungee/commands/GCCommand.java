@@ -30,7 +30,7 @@ public class GCCommand extends Command {
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, args.length == 0
+            ProxyConfigs.MESSAGES.sendMessage(sender, args.length == 0
                     ? "command_gc_only_players_toggle"
                     : "command_gc_only_players_speak"
             );
@@ -40,20 +40,20 @@ public class GCCommand extends Command {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
         if (args.length == 0) {
             boolean toggleResult = Events.toggleGC(proxiedPlayer.getUniqueId());
-            MessageManager.sendMessage(sender, "command_gc_toggle_" + (toggleResult ? "on" : "off"));
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_toggle_" + (toggleResult ? "on" : "off"));
             return;
         }
 
         ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
         String viewedChat = proxyDataStore.getViewedChats().get(proxiedPlayer.getUniqueId());
         if (viewedChat == null) {
-            MessageManager.sendMessage(sender, "command_gc_no_chat_selected");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_no_chat_selected");
             return;
         }
 
         TGroupChatInfo groupChatInfo = proxyDataStore.getGroupChats().get(viewedChat);
         if (groupChatInfo == null) {
-            MessageManager.sendMessage(sender, "command_gc_no_longer_exists");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_no_longer_exists");
             return;
         }
 
@@ -73,7 +73,7 @@ public class GCCommand extends Command {
         ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(playerName);
         if (proxiedPlayer != null) {
             if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.GROUP_CHATS)) {
-                MessageManager.sendMessage(proxiedPlayer, "mute_cannot_send_message");
+                ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "mute_cannot_send_message");
                 return;
             }
 

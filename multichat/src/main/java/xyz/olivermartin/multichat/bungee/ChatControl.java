@@ -152,12 +152,12 @@ public class ChatControl {
 
 	public static void sendIgnoreNotifications(CommandSender ignorer, CommandSender ignoree, String chatType) {
 		if (ProxyConfigs.CHAT_CONTROL.isNotifyIgnore()) {
-			MessageManager.sendSpecialMessage(ignorer, "ignore_target", ignoree.getName());
+			ProxyConfigs.MESSAGES.sendMessage(ignorer, "ignore_target", ignoree.getName());
 		}
 
 		if (!chatType.equals("private_messages")) return;
 
-		MessageManager.sendMessage(ignoree, "ignore_sender");
+		ProxyConfigs.MESSAGES.sendMessage(ignoree, "ignore_sender");
 
 	}
 
@@ -207,7 +207,7 @@ public class ChatControl {
 
 			DebugManager.log(player.getName() + " - PLAYER IS SPAMMING!");
 
-			MessageManager.sendSpecialMessage(player, "anti_spam_cooldown", String.valueOf(spamInfo.getCooldownSeconds()));
+			ProxyConfigs.MESSAGES.sendMessage(player, "anti_spam_cooldown", String.valueOf(spamInfo.getCooldownSeconds()));
 
 			DebugManager.log(player.getName() + " - sent cooldown message to player...");
 

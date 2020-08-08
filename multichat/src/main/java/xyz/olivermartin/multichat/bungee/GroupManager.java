@@ -67,7 +67,7 @@ public class GroupManager {
 
 						if (player.hasPermission("multichat.staff.spy")) {
 
-							MessageManager.sendSpecialMessage(player, "command_group_spy_off", groupname.toUpperCase());
+							ProxyConfigs.MESSAGES.sendMessage(player, "command_group_spy_off", groupname.toUpperCase());
 							groupchat.delViewer(player.getUniqueId());
 
 						} else {
@@ -90,7 +90,7 @@ public class GroupManager {
 
 					if (password.equals("")) {
 
-						MessageManager.sendSpecialMessage(player, "groups_password_protected", groupname.toUpperCase());
+						ProxyConfigs.MESSAGES.sendMessage(player, "groups_password_protected", groupname.toUpperCase());
 
 					} else {
 
@@ -100,7 +100,7 @@ public class GroupManager {
 
 								if (player.hasPermission("multichat.staff.spy")) {
 
-									MessageManager.sendSpecialMessage(player, "command_group_spy_off", groupname.toUpperCase());
+									ProxyConfigs.MESSAGES.sendMessage(player, "command_group_spy_off", groupname.toUpperCase());
 									groupchat.delViewer(player.getUniqueId());
 
 								} else {
@@ -119,7 +119,7 @@ public class GroupManager {
 
 						} else {
 
-							MessageManager.sendSpecialMessage(player, "groups_password_incorrect", groupname.toUpperCase());
+							ProxyConfigs.MESSAGES.sendMessage(player, "groups_password_incorrect", groupname.toUpperCase());
 
 						}
 
@@ -127,11 +127,11 @@ public class GroupManager {
 				}
 
 			} else {
-				MessageManager.sendSpecialMessage(player, "groups_already_joined", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(player, "groups_already_joined", groupname.toUpperCase());
 			}
 
 		} else {
-			MessageManager.sendSpecialMessage(player, "groups_banned", groupname.toUpperCase());
+			ProxyConfigs.MESSAGES.sendMessage(player, "groups_banned", groupname.toUpperCase());
 		}
 
 		groupchat = null;
@@ -160,7 +160,7 @@ public class GroupManager {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
-		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_joined"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
+		GCCommand.sendMessage(playername + ProxyConfigs.MESSAGES.getMessage("groups_info_joined"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
 
 	}
 
@@ -171,7 +171,7 @@ public class GroupManager {
 
 		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
-		GCCommand.sendMessage(playername + MessageManager.getMessage("groups_info_quit"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
+		GCCommand.sendMessage(playername + ProxyConfigs.MESSAGES.getMessage("groups_info_quit"), "&lINFO", ds.getGroupChats().get(groupname.toLowerCase()));
 
 	}
 
@@ -204,23 +204,23 @@ public class GroupManager {
 				ds.getGroupChats().remove(groupname.toLowerCase());
 				ds.getGroupChats().put(groupname.toLowerCase(), groupchatinfo);
 
-				MessageManager.sendSpecialMessage(pinstance, "groups_quit", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(pinstance, "groups_quit", groupname.toUpperCase());
 				announceQuitGroup(pinstance.getName(), groupname);
 
 			} else if (!groupchatinfo.getFormal()) {
 
-				MessageManager.sendSpecialMessage(pinstance, "groups_cannot_quit_owner_1", groupname.toUpperCase());
-				MessageManager.sendSpecialMessage(pinstance, "groups_cannot_quit_owner_2", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(pinstance, "groups_cannot_quit_owner_1", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(pinstance, "groups_cannot_quit_owner_2", groupname.toUpperCase());
 
 			} else {
 
-				MessageManager.sendSpecialMessage(pinstance, "groups_cannot_quit_admin_1", groupname.toUpperCase());
-				MessageManager.sendSpecialMessage(pinstance, "groups_cannot_quit_admin_2", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(pinstance, "groups_cannot_quit_admin_1", groupname.toUpperCase());
+				ProxyConfigs.MESSAGES.sendMessage(pinstance, "groups_cannot_quit_admin_2", groupname.toUpperCase());
 			}
 
 		} else {
 
-			MessageManager.sendSpecialMessage(pinstance, "command_group_not_a_member", groupname.toUpperCase());
+			ProxyConfigs.MESSAGES.sendMessage(pinstance, "command_group_not_a_member", groupname.toUpperCase());
 
 		}
 
@@ -232,11 +232,11 @@ public class GroupManager {
 
 		if (page == 1) {
 
-			MessageManager.sendMessage(sender, "groups_help_1");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "groups_help_1");
 
 		} else {
 
-			MessageManager.sendMessage(sender, "groups_help_2");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "groups_help_2");
 
 		}
 	}

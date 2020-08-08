@@ -6,7 +6,6 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.common.RegexUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
@@ -27,21 +26,21 @@ public class ACCCommand extends Command {
 
 	public void execute(CommandSender sender, String[] args) {
 		if (!(sender instanceof ProxiedPlayer)) {
-			MessageManager.sendMessage(sender, "command_acc_only_players");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_only_players");
 			return;
 		}
 		DebugManager.log("[ACCCommand] Command sender is a player");
 
 		if (args.length != 2) {
-			MessageManager.sendMessage(sender, "command_acc_usage");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_usage");
 			return;
 		}
 		args[0] = args[0].toLowerCase();
 		args[1] = args[1].toLowerCase();
 
 		if (!RegexUtil.LEGACY_COLOR.matches(args[0]) || !RegexUtil.LEGACY_COLOR.matches(args[1])) {
-			MessageManager.sendMessage(sender, "command_acc_invalid");
-			MessageManager.sendMessage(sender, "command_acc_invalid_usage");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_invalid");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_invalid_usage");
 			return;
 		}
 
@@ -59,6 +58,6 @@ public class ACCCommand extends Command {
 
 		DebugManager.log("[ACCCommand] Preferences updated");
 
-		MessageManager.sendMessage(sender, "command_acc_updated");
+		ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_updated");
 	}
 }
