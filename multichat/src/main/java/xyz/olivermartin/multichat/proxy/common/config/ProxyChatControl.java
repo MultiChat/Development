@@ -3,22 +3,17 @@ package xyz.olivermartin.multichat.proxy.common.config;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class ProxyChatControl extends AbstractProxyConfig {
 
     private String version, antiSpamCommand, linkRemovalMessage;
-    // List instead of Set, so owners can decide importance of rules via config order
-    private final List<RegexRule> regexRules = new ArrayList<>();
-    private final List<RegexAction> regexActions = new ArrayList<>();
+    private final Set<RegexRule> regexRules = new LinkedHashSet<>();
+    private final Set<RegexAction> regexActions = new LinkedHashSet<>();
     private final Map<MessageType, Boolean> applyRulesTo = new HashMap<>(), applyActionsTo = new HashMap<>(),
             applyAntiSpamTo = new HashMap<>(), applyMuteTo = new HashMap<>(), applyIgnoreTo = new HashMap<>();
 
@@ -44,17 +39,16 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         // Load regex rules
         getConfig().getList("regex_rules").forEach(listEntry -> {
-            if (!(listEntry instanceof Configuration))
+            if (!(listEntry instanceof Map))
                 return;
-            Configuration regexRuleConfig = (Configuration) listEntry;
-
-            String pattern = regexRuleConfig.getString("look_for", "");
-            if (pattern.isEmpty())
+            Map<?, ?> regexRuleConfig = (Map<?, ?>) listEntry;
+            String pattern = String.valueOf(regexRuleConfig.get("look_for"));
+            if (pattern == null || pattern.isEmpty())
                 return;
 
             regexRules.add(new RegexRule(pattern,
-                    regexRuleConfig.getString("replace_with", ""),
-                    regexRuleConfig.getString("permission", ""))
+                    String.valueOf(regexRuleConfig.get("replace_with")),
+                    String.valueOf(regexRuleConfig.get("permission")))
             );
         });
         for (MessageType messageType : MessageType.values())
@@ -62,19 +56,25 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         // Load regex actions
         getConfig().getList("regex_actions").forEach(listEntry -> {
-            if (!(listEntry instanceof Configuration))
+            if (!(listEntry instanceof Map))
                 return;
-            Configuration regexActionConfig = (Configuration) listEntry;
+            Map<?, ?> regexActionConfig = (Map<?, ?>) listEntry;
 
-            String pattern = regexActionConfig.getString("look_for", "");
-            if (pattern.isEmpty())
+            String pattern = String.valueOf(regexActionConfig.get("look_for"));
+            if (pattern == null || pattern.isEmpty())
                 return;
+
+            Object cancelObject = regexActionConfig.get("cancel");
+            boolean cancel = cancelObject instanceof Boolean && (boolean) cancelObject;
+
+            Object spigotObject = regexActionConfig.get("spigot");
+            boolean spigot = spigotObject instanceof Boolean && (boolean) spigotObject;
 
             regexActions.add(new RegexAction(pattern,
-                            regexActionConfig.getString("command", ""),
-                            regexActionConfig.getString("permission", ""),
-                            regexActionConfig.getBoolean("cancel", false),
-                            regexActionConfig.getBoolean("spigot", false)
+                            String.valueOf(regexActionConfig.get("command")),
+                            String.valueOf(regexActionConfig.get("permission")),
+                            cancel,
+                            spigot
                     )
             );
         });
@@ -158,6 +158,7 @@ public class ProxyChatControl extends AbstractProxyConfig {
     public boolean applyAntiSpamTo(MessageType messageType) {
         return applyAntiSpamTo.get(messageType);
     }
+
     public boolean isAntiSpam() {
         return antiSpam;
     }
@@ -209,8 +210,8 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         RegexRule(String pattern, String replaceWith, String permission) {
             this.pattern = Pattern.compile(pattern);
-            this.replaceWith = replaceWith;
-            this.permission = permission;
+            this.replaceWith = replaceWith == null ? "" : replaceWith;
+            this.permission = permission == null ? "" : permission;
         }
 
         public String apply(CommandSender commandSender, String message) {
@@ -227,8 +228,8 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         RegexAction(String pattern, String command, String permission, boolean cancel, boolean spigot) {
             this.pattern = Pattern.compile(pattern);
-            this.command = command;
-            this.permission = permission;
+            this.command = command == null ? "" : command;
+            this.permission = permission == null ? "" : permission;
             this.cancel = cancel;
             this.spigot = spigot;
         }
