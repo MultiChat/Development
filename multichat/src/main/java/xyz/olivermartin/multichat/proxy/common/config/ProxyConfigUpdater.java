@@ -95,7 +95,7 @@ public class ProxyConfigUpdater {
 
         try {
             write(oldConfig, newConfig);
-            plugin.getLogger().info("Auto update for " + configFile.getName() + "successful! Please check it yourself to verify.");
+            plugin.getLogger().info("Auto update for " + configFile.getName() + " successful! Please check it yourself to verify.");
         } catch (IOException e) {
             e.printStackTrace();
         }
