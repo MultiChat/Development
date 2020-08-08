@@ -116,9 +116,9 @@ public class ProxyChatControl extends AbstractProxyConfig {
         return version;
     }
 
-    // TODO: Some of these #apply / #replace / #handle methods could be moved into a refactored ChatControl.class
+    // TODO: [2.0] Some of these #apply / #replace / #handle methods could be moved into a refactored ChatControl.class
     //  I just added them to not lose the logic for now
-    // TODO: Add events for regex rules and actions ?
+    // TODO: [2.0] Add events for regex rules and actions ?
     public String applyRegexRules(CommandSender commandSender, String message, MessageType messageType) {
         if (!applyRulesTo.get(messageType)) return message;
 
@@ -130,7 +130,7 @@ public class ProxyChatControl extends AbstractProxyConfig {
     public boolean regexActionsCancel(CommandSender commandSender, String message, MessageType messageType) {
         if (!applyActionsTo.get(messageType)) return false;
 
-        // TODO: Personally I believe we should return after the first action cancels the message being sent
+        // TODO: [ConfigRefactor] Personally I believe we should return after the first action cancels the message being sent
         boolean cancel = false;
         for (RegexAction regexAction : regexActions) {
             if (regexAction.cancels(commandSender, message))
@@ -202,7 +202,7 @@ public class ProxyChatControl extends AbstractProxyConfig {
         return sessionIgnore;
     }
 
-    // TODO: Decide if we want to move these out of here. I don't think any other class needs access to these though.
+    // TODO: [ConfigRefactor] [2.0] Decide if we want to move these out of here. I don't think any other class needs access to these though.
     private static class RegexRule {
         private final Pattern pattern;
         private final String replaceWith, permission;

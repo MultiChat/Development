@@ -34,6 +34,7 @@ public class ProxyMessages extends AbstractProxyConfig {
     public void sendMessage(CommandSender sender, String id) {
         sendMessage(sender, id, true);
     }
+
     public void sendMessage(CommandSender sender, String id, boolean usePrefix) {
         sendMessage(sender, id, usePrefix, null);
     }

@@ -11,11 +11,10 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-// TODO: Update JavaDoc
-
 /**
- * Configuration Manager Class
- * <p>Manages all access and creation of the config.yml file</p>
+ * Class that represents the base of a config that can be handled by MultiChat
+ * <p>
+ * Manages creation and reloads
  *
  * @author Oliver Martin (Revilo410)
  */

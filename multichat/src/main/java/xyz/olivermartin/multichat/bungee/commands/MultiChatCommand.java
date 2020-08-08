@@ -61,7 +61,7 @@ public class MultiChatCommand extends Command {
             case "reload": {
                 ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_reload_prepare");
 
-                // TODO: This REALLY needs to change
+                // TODO: [2.0] This REALLY needs to change
                 MultiChat multiChat = (MultiChat) MultiChatProxy.getInstance().getPlugin();
 
                 multiChat.unregisterCommands();
