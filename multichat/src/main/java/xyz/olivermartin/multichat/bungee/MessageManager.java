@@ -1,14 +1,14 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.config.Configuration;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Message Manager
@@ -455,7 +455,7 @@ public class MessageManager {
 		// Handle legacy servers
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
-			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(player.getServer().getInfo().getName())) {
 				message = MultiChatUtil.approximateRGBColorCodes(message);
 				if (isSpecial) special = MultiChatUtil.approximateRGBColorCodes(special);
 			}

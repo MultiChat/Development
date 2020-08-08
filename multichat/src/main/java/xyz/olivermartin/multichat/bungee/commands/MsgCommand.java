@@ -1,11 +1,5 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
 import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -13,15 +7,13 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
-import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.Events;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.bungee.*;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.*;
 
 /**
  * Message Command
@@ -76,7 +68,7 @@ public class MsgCommand extends Command implements TabExecutor {
 
 			// TODO: Make this into a proper hook at some point so we can just call Somewhere.getVanishHook().applies(); or something
 			if (MultiChat.premiumVanish
-					&& MultiChat.hideVanishedStaffInMsg
+					&& ProxyConfigs.CONFIG.isPvPreventMessage()
 					&& BungeeVanishAPI.isInvisible(target)
 					&& !sender.hasPermission("multichat.chat.msg.vanished")) {
 				MessageManager.sendMessage(sender, "command_msg_not_online");
@@ -177,7 +169,7 @@ public class MsgCommand extends Command implements TabExecutor {
 		message = optionalChatControl.get();
 
 		if (MultiChat.premiumVanish
-				&& MultiChat.hideVanishedStaffInMsg
+				&& ProxyConfigs.CONFIG.isPvPreventMessage()
 				&& BungeeVanishAPI.isInvisible(target)
 				&& !sender.hasPermission("multichat.chat.msg.vanished")) {
 			MessageManager.sendMessage(sender, "command_msg_not_online");

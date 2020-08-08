@@ -6,7 +6,6 @@ import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
@@ -42,10 +41,10 @@ public class DisplayCommand extends Command {
         String finalMessage = MultiChatUtil.translateColorCodes(optionalMessage.get());
         ProxyServer.getInstance().getPlayers().stream()
                 .filter(target -> target.getServer() != null
-                        && ProxyConfigs.CONFIG.isModernServer(target.getServer().getInfo().getName())
+                        && ProxyConfigs.CONFIG.isGlobalServer(target.getServer().getInfo().getName())
                 )
                 .forEach(target ->
-                        target.sendMessage(MultiChat.legacyServers.contains(target.getServer().getInfo().getName())
+                        target.sendMessage(ProxyConfigs.CONFIG.isLegacyServer(target.getServer().getInfo().getName())
                                 ? ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(finalMessage))
                                 : ProxyJsonUtils.parseMessage(finalMessage)
                         )

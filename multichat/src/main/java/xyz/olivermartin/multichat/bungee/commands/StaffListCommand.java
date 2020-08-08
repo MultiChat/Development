@@ -1,7 +1,5 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -10,6 +8,8 @@ import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Staff List Command
@@ -36,7 +36,7 @@ public class StaffListCommand extends Command {
                     serverInfo.getPlayers().stream()
                             .filter(target -> target.hasPermission("multichat.staff")
                                     && !(MultiChat.premiumVanish
-                                    && MultiChat.hideVanishedStaffInStaffList
+                                    && ProxyConfigs.CONFIG.isPvPreventStaffList()
                                     && BungeeVanishAPI.isInvisible(target)
                                     && !sender.hasPermission("multichat.staff.list.vanished"))
                             )

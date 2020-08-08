@@ -1,9 +1,5 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -15,6 +11,8 @@ import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
+
+import java.util.Arrays;
 
 /**
  * MultiChat (Admin) Command
@@ -79,31 +77,14 @@ public class MultiChatCommand extends Command {
 
                 ChatControl.reload();
 
-
-                // Set up chat control stuff
-                ChatControl.reload();
-
-                // TODO: [ConfigRefactor] Change all of these
-                MultiChat.configversion = ProxyConfigs.CONFIG.getVersion();
-                MultiChat.logPMs = ProxyConfigs.CONFIG.isLogPms();
-                MultiChat.logStaffChat = ProxyConfigs.CONFIG.isLogStaffChat();
-                MultiChat.logGroupChat = ProxyConfigs.CONFIG.isLogGroupChat();
-                MultiChat.legacyServers = ProxyConfigs.CONFIG.getConfig().getStringList("legacy_servers");
-                MultiChat.hideVanishedStaffInMsg = ProxyConfigs.CONFIG.isPvPreventMessage();
-                MultiChat.hideVanishedStaffInStaffList = ProxyConfigs.CONFIG.isPvPreventStaffList();
-                MultiChat.hideVanishedStaffInJoin = ProxyConfigs.CONFIG.isPvSilenceJoin();
-
-                // TODO: Change to appropriate logger
-                System.out.println("VERSION LOADED: " + MultiChat.configversion);
+                multiChat.getLogger().info("VERSION LOADED: " + ProxyConfigs.CONFIG.getVersion());
 
                 // Set default channel
                 String defaultChannel = ProxyConfigs.CONFIG.getDefaultChannel();
                 boolean forceChannelOnJoin = ProxyConfigs.CONFIG.isForceChannelOnJoin();
-                // TODO: [ConfigRefactor] Change
-                List<String> noGlobalServers = new ArrayList<>(ProxyConfigs.CONFIG.getConfig().getStringList("no_global"));
 
                 // New context manager and channels
-                GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
+                GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true);
                 MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
 
                 // TODO: [ConfigRefactor] Potential change

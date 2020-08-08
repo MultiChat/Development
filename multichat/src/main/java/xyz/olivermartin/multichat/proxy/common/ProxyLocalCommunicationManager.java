@@ -1,14 +1,14 @@
 package xyz.olivermartin.multichat.proxy.common;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-
 import net.md_5.bungee.api.config.ServerInfo;
 import xyz.olivermartin.multichat.bungee.DebugManager;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 
 /**
  * Proxy -> Local communication manager
@@ -114,7 +114,7 @@ public class ProxyLocalCommunicationManager {
 
 			ObjectOutputStream out = new ObjectOutputStream(stream);
 
-			boolean isLegacy = !ProxyConfigs.CONFIG.isModernServer(server.getName());
+			boolean isLegacy = ProxyConfigs.CONFIG.isLegacyServer(server.getName());
 
 			DebugManager.log("isLegacy = " + isLegacy);
 

@@ -1,12 +1,13 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class ConsoleManager {
 
@@ -26,7 +27,7 @@ public class ConsoleManager {
 
 	public static void logModChat(String message) {
 
-		if (!MultiChat.logStaffChat) {
+		if (!ProxyConfigs.CONFIG.isLogStaffChat()) {
 			return;
 		}
 
@@ -36,7 +37,7 @@ public class ConsoleManager {
 
 	public static void logGroupChat(String message) {
 
-		if (!MultiChat.logGroupChat) {
+		if (!ProxyConfigs.CONFIG.isLogGroupChat()) {
 			return;
 		}
 
@@ -46,7 +47,7 @@ public class ConsoleManager {
 
 	public static void logAdminChat(String message) {
 
-		if (!MultiChat.logStaffChat) {
+		if (!ProxyConfigs.CONFIG.isLogStaffChat()) {
 			return;
 		}
 
@@ -69,7 +70,7 @@ public class ConsoleManager {
 
 	public static void logSocialSpy(String p1, String p2, String message) {
 
-		if (!MultiChat.logPMs) {
+		if (!ProxyConfigs.CONFIG.isLogPms()) {
 			return;
 		}
 

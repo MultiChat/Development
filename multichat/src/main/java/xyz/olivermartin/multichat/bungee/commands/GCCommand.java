@@ -1,26 +1,20 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.Optional;
-
 import com.olivermartin410.plugins.TGroupChatInfo;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatManipulation;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.Events;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.*;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Optional;
 
 /**
  * Group Chat Messaging Command
@@ -125,7 +119,7 @@ public class GCCommand extends Command {
                     }
 
                     // TODO: Move legacy check inside parsing at some point
-                    if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
+                    if (ProxyConfigs.CONFIG.isLegacyServer(target.getServer().getInfo().getName())) {
                         target.sendMessage(legacyMessage);
                         return;
                     }

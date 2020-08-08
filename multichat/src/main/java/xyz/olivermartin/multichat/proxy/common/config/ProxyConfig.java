@@ -219,7 +219,7 @@ public class ProxyConfig extends AbstractProxyConfig {
         return pvSilenceJoin;
     }
 
-    public boolean isModernServer(String serverName) {
-        return !legacyServers.contains(serverName);
+    public boolean isLegacyServer(String serverName) {
+        return legacyServers.contains(serverName);
     }
 }

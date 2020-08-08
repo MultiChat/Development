@@ -1,9 +1,6 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.Optional;
-
 import com.olivermartin410.plugins.TChatInfo;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
@@ -13,6 +10,8 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Optional;
 
 /**
  * Staff Chat Manager
@@ -82,7 +81,7 @@ public class StaffChatManager {
 				message = MultiChatUtil.translateColorCodes(message);
 				String originalTranslated = MultiChatUtil.translateColorCodes(original);
 
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+				if (ProxyConfigs.CONFIG.isLegacyServer(onlineplayer.getServer().getInfo().getName())) {
 					message = MultiChatUtil.approximateRGBColorCodes(message);
 					originalTranslated = MultiChatUtil.approximateRGBColorCodes(originalTranslated);
 				}

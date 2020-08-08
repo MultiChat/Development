@@ -1,20 +1,10 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import xyz.olivermartin.multichat.common.communication.CommChannels;
-import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
-import xyz.olivermartin.multichat.proxy.common.ProxyBackupManager;
-import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
-import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.*;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.TagManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
@@ -34,19 +24,12 @@ import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyPlay
 import xyz.olivermartin.multichat.proxy.common.listeners.communication.ProxyServerActionListener;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAdminChatFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyAnnouncementsFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyBulletinsFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyCastsFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGlobalChatFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupChatFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyGroupSpyFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyIgnoreFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyLocalSpyFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyMuteFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxySocialSpyFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyStaffChatFileStore;
-import xyz.olivermartin.multichat.proxy.common.storage.files.ProxyUUIDNameFileStore;
+import xyz.olivermartin.multichat.proxy.common.storage.files.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -94,20 +77,8 @@ public class MultiChat extends Plugin {
 
     };
 
-    public static String configversion;
-
     // Config values
-
-    public static boolean logPMs = true;
-    public static boolean logStaffChat = true;
-    public static boolean logGroupChat = true;
-
     public static boolean premiumVanish = false;
-    public static boolean hideVanishedStaffInMsg = true;
-    public static boolean hideVanishedStaffInStaffList = true;
-    public static boolean hideVanishedStaffInJoin = true;
-
-    public static List<String> legacyServers = new ArrayList<String>();
 
     public void fetchDisplayNames() {
 
@@ -167,11 +138,9 @@ public class MultiChat extends Plugin {
         ProxyConfigs.loadRawConfig(this, "chatcontrol_fr.yml", translationsDir);
         ProxyConfigs.loadRawConfig(this, "aliases_fr.yml", translationsDir);
 
-        configversion = ProxyConfigs.CONFIG.getVersion();
+        if (Arrays.asList(ALLOWED_VERSIONS).contains(ProxyConfigs.CONFIG.getVersion())) {
 
-        if (Arrays.asList(ALLOWED_VERSIONS).contains(configversion)) {
-
-            if (!configversion.equals(LATEST_VERSION)) {
+            if (!ProxyConfigs.CONFIG.getVersion().equals(LATEST_VERSION)) {
                 getLogger().warning("YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
                 getLogger().warning("SOME FEATURES OF MULTICHAT ARE ONLY PRESENT IN THE LATEST VERSION OF THE CONFIG");
             }
@@ -201,7 +170,8 @@ public class MultiChat extends Plugin {
             // Register commands
             registerCommands();
 
-            System.out.println("[MultiChat] Config Version: " + configversion);
+            // TODO: Change to appropriate logger
+            System.out.println("[MultiChat] Config Version: " + ProxyConfigs.CONFIG.getVersion());
 
             // Run start-up routines
             ProxyFileStoreManager fileStoreManager = new ProxyFileStoreManager();
@@ -247,19 +217,12 @@ public class MultiChat extends Plugin {
 
             MultiChatProxy.getInstance().registerFileStoreManager(fileStoreManager);
 
-            // TODO: [ConfigRefactor] Change how these are set / accessed
-            logPMs = ProxyConfigs.CONFIG.isLogPms();
-            logStaffChat = ProxyConfigs.CONFIG.isLogStaffChat();
-            logGroupChat = ProxyConfigs.CONFIG.isLogGroupChat();
-            legacyServers = ProxyConfigs.CONFIG.getConfig().getStringList("legacy_servers");
-            List<String> noGlobalServers = new ArrayList<>(ProxyConfigs.CONFIG.getConfig().getStringList("no_global"));
-
             // Set default channel
             String defaultChannel = ProxyConfigs.CONFIG.getDefaultChannel();
             boolean forceChannelOnJoin = ProxyConfigs.CONFIG.isForceChannelOnJoin();
 
             // New context manager and channels
-            GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true, noGlobalServers);
+            GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true);
             ContextManager contextManager = new ContextManager(globalContext);
             MultiChatProxy.getInstance().registerContextManager(contextManager);
 
@@ -305,10 +268,6 @@ public class MultiChat extends Plugin {
             if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
                 premiumVanish = true;
                 System.out.println("[MultiChat] Hooked with PremiumVanish!");
-
-                MultiChat.hideVanishedStaffInMsg = ProxyConfigs.CONFIG.isPvPreventMessage();
-                MultiChat.hideVanishedStaffInStaffList = ProxyConfigs.CONFIG.isPvPreventStaffList();
-                MultiChat.hideVanishedStaffInJoin = ProxyConfigs.CONFIG.isPvSilenceJoin();
             }
 
         } else {

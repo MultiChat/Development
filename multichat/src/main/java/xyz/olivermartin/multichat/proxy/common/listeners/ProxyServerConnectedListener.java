@@ -1,7 +1,5 @@
 package xyz.olivermartin.multichat.proxy.common.listeners;
 
-import java.util.UUID;
-
 import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -9,17 +7,15 @@ import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import xyz.olivermartin.multichat.bungee.ChatManipulation;
-import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.UUIDNameManager;
+import xyz.olivermartin.multichat.bungee.*;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.UUID;
 
 public class ProxyServerConnectedListener implements Listener {
 
@@ -28,10 +24,10 @@ public class ProxyServerConnectedListener implements Listener {
 		message = MultiChatUtil.translateColorCodes(message);
 
 		if (player.getUniqueId().equals(sender.getUniqueId())) {
-			if (MultiChat.legacyServers.contains(senderServer)) message = MultiChatUtil.approximateRGBColorCodes(message);
+			if (ProxyConfigs.CONFIG.isLegacyServer(senderServer)) message = MultiChatUtil.approximateRGBColorCodes(message);
 		} else {
 			if (player.getServer() == null) return;
-			if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColorCodes(message);
+			if (ProxyConfigs.CONFIG.isLegacyServer(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColorCodes(message);
 		}
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(message));
@@ -105,7 +101,7 @@ public class ProxyServerConnectedListener implements Listener {
 				|| ProxyConfigs.JOIN_MESSAGES.isPrivateWelcome()) {
 
 			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
-			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInJoin && BungeeVanishAPI.isInvisible(player)) {
+			if (MultiChat.premiumVanish && ProxyConfigs.CONFIG.isPvSilenceJoin() && BungeeVanishAPI.isInvisible(player)) {
 				return;
 			}
 

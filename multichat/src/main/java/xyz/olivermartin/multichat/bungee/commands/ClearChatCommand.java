@@ -77,7 +77,7 @@ public class ClearChatCommand extends Command {
 
                 clearChatForEveryone("command_clearchat_global",
                         target -> target.getServer() != null
-                                && ProxyConfigs.CONFIG.isModernServer(target.getServer().getInfo().getName())
+                                && ProxyConfigs.CONFIG.isGlobalServer(target.getServer().getInfo().getName())
                 );
                 break;
             }

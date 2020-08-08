@@ -1,9 +1,5 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.Collection;
-import java.util.Optional;
-import java.util.UUID;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
@@ -11,6 +7,10 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 public class PrivateMessageManager {
 
@@ -37,7 +37,7 @@ public class PrivateMessageManager {
 		rawMessage = MultiChatUtil.translateColorCodes(rawMessage);
 		replacement = MultiChatUtil.translateColorCodes(replacement);
 
-		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) {
+		if (ProxyConfigs.CONFIG.isLegacyServer(player.getServer().getInfo().getName())) {
 			rawMessage = MultiChatUtil.approximateRGBColorCodes(rawMessage);
 			replacement = MultiChatUtil.approximateRGBColorCodes(replacement);
 		}

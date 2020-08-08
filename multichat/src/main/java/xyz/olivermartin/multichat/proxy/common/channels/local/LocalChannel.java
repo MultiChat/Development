@@ -1,20 +1,20 @@
 package xyz.olivermartin.multichat.proxy.common.channels.local;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class LocalChannel {
 
@@ -84,7 +84,7 @@ public class LocalChannel {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, format, message);
 			}
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
@@ -118,7 +118,7 @@ public class LocalChannel {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, message);
 			}
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
