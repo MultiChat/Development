@@ -210,8 +210,8 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         RegexRule(String pattern, String replaceWith, String permission) {
             this.pattern = Pattern.compile(pattern);
-            this.replaceWith = replaceWith == null ? "" : replaceWith;
-            this.permission = permission == null ? "" : permission;
+            this.replaceWith = replaceWith.equals("null") ? "" : replaceWith;
+            this.permission = permission.equals("null") ? "" : permission;
         }
 
         public String apply(CommandSender commandSender, String message) {
@@ -228,8 +228,8 @@ public class ProxyChatControl extends AbstractProxyConfig {
 
         RegexAction(String pattern, String command, String permission, boolean cancel, boolean spigot) {
             this.pattern = Pattern.compile(pattern);
-            this.command = command == null ? "" : command;
-            this.permission = permission == null ? "" : permission;
+            this.command = command.equals("null") ? "" : command;
+            this.permission = permission.equals("null") ? "" : permission;
             this.cancel = cancel;
             this.spigot = spigot;
         }
