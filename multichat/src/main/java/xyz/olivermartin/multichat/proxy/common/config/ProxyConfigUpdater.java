@@ -224,25 +224,14 @@ public class ProxyConfigUpdater {
                         first.set(false);
                     } else
                         builder.append("  ");
-                    if (mapValue instanceof String) {
-                        // This is really dirty but we need it for the regex rules. Which we should change at some point.
-                        String value = (String) mapValue;
-                        value = value.startsWith("'")
-                                ? value.startsWith("\"")
-                                ? "'" + value.replaceAll("'", "''") + "'"
-                                : "\"" + value + "\""
-                                : "'" + value + "'";
-                        builder.append(mapKey).append(": ").append(value).append("\n");
-                    } else
-                        builder.append(mapKey).append(": ").append(mapValue).append("\n");
+                    builder.append(mapKey).append(": ").append(yaml.dump(mapValue));
                 }));
             } else {
                 builder.append("- ").append(toWrite);
             }
 
-            if (i != list.size()) {
+            if (i < list.size())
                 builder.append("\n");
-            }
         }
 
         return builder.toString();
