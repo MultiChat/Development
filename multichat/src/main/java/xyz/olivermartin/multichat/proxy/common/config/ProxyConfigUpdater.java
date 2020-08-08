@@ -100,7 +100,9 @@ public class ProxyConfigUpdater {
         // Back old config up
         try {
             InputStream in = new BufferedInputStream(new FileInputStream(configFile));
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(backupDir, configFile.getName())));
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(
+                    new File(backupDir, configFile.getName().replace(".yml", oldVersionString + ".yml")))
+            );
 
             byte[] buffer = new byte[1024];
             int lengthRead;
