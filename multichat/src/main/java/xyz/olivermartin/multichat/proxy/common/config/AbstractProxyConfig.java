@@ -3,8 +3,6 @@ package xyz.olivermartin.multichat.proxy.common.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
@@ -26,29 +24,30 @@ public abstract class AbstractProxyConfig {
         this.fileName = fileName;
     }
 
+    private Plugin plugin;
+    private File folder;
     private Configuration config;
+
+    public final void reloadConfig() {
+        if (plugin == null)
+            throw new IllegalArgumentException("You have not created this config with the plugin constructor yet.");
+        reloadConfig(plugin, folder == null ? plugin.getDataFolder() : folder);
+    }
 
     public final void reloadConfig(Plugin plugin) {
         reloadConfig(plugin, plugin.getDataFolder());
     }
 
     public final void reloadConfig(Plugin plugin, File folder) {
-        File configFile = new File(folder, fileName);
-        if (!configFile.exists()) {
-            plugin.getLogger().info("Creating " + fileName + " ...");
-            InputStream in = plugin.getResourceAsStream(fileName);
-            try {
-                Files.copy(in, configFile.toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return;
-            }
-        }
+        this.plugin = plugin;
+        this.folder = folder;
 
+        ProxyConfigUpdater configUpdater = new ProxyConfigUpdater(plugin, folder, fileName);
         plugin.getLogger().info("Loading " + fileName + " ...");
+        configUpdater.update();
+
         try {
-            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
-            // TODO: We can probably add some config update code here
+            config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configUpdater.getConfigFile());
             reloadValues();
         } catch (IOException e) {
             e.printStackTrace();

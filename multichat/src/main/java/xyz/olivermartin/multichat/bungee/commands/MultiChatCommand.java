@@ -9,6 +9,7 @@ import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.AbstractProxyConfig;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 
@@ -66,8 +67,8 @@ public class MultiChatCommand extends Command {
 
                 multiChat.unregisterCommands();
 
-                ProxyConfigs.ALL.forEach(abstractProxyConfig -> abstractProxyConfig.reloadConfig(multiChat));
-                ProxyConfigs.RAW_CONFIGS.forEach(abstractProxyConfig -> abstractProxyConfig.reloadConfig(multiChat));
+                ProxyConfigs.ALL.forEach(AbstractProxyConfig::reloadConfig);
+                ProxyConfigs.RAW_CONFIGS.forEach(AbstractProxyConfig::reloadConfig);
 
                 // Reload, and re-register commands
                 CommandManager.reload();
