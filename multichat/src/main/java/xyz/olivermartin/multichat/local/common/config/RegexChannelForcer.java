@@ -31,7 +31,7 @@ public class RegexChannelForcer {
 			testMessage = MultiChatUtil.stripColorCodes(testMessage, true);
 		} else {
 			// This makes life easier when doing the config file as only have to use & style colour codes
-			testMessage = testMessage.replace('ง', '&');
+			testMessage = testMessage.replace('ยง', '&');
 		}
 
 		return testMessage.matches(regex);

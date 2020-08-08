@@ -19,7 +19,7 @@ public enum TranslateMode {
 	X ("(?i)%1$s([x])");
 
 	private static final String ORIGIN_CHAR = "&";
-	private static final String TRANSLATED_CHAR = "ง";
+	private static final String TRANSLATED_CHAR = "ยง";
 
 	private Pattern originPattern;
 	private Pattern translatedPattern;

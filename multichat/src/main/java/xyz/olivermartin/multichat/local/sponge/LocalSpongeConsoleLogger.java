@@ -19,7 +19,7 @@ public class LocalSpongeConsoleLogger extends LocalConsoleLogger {
 
 	@Override
 	protected void sendConsoleMessage(String message) {
-		Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode('ง').deserialize(message));
+		Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode('ยง').deserialize(message));
 	}
 
 }

@@ -29,67 +29,67 @@ public class MultiChatUtilTest {
 
 		// ALL
 		assertEquals("All codes should be translated appropriately",
-				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! §r§x§a§b§c§d§e§fRGB §r§x§a§b§c§d§e§ftoo§r§x§a§b§c§d§e§f!",
+				"Â§rÂ§aHello Â§kthere! Â§6Â§lthis Â§ois Â§ma Â§nmessage! Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§fRGB Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§ftooÂ§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				MultiChatUtil.translateColorCodes(rawMessage));
 
 		// ALL #2
 		assertEquals("All codes should be translated appropriately",
-				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! §r§x§a§b§c§d§e§fRGB §r§x§a§b§c§d§e§ftoo§r§x§a§b§c§d§e§f!",
+				"Â§rÂ§aHello Â§kthere! Â§6Â§lthis Â§ois Â§ma Â§nmessage! Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§fRGB Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§ftooÂ§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.ALL));
 
 		// SIMPLE
 		assertEquals("Simple codes should be translated appropriately",
-				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
+				"Â§rÂ§aHello Â§kthere! Â§6Â§lthis Â§ois Â§ma Â§nmessage! &#ABCDEFRGB &xAbCdEftoo&xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.SIMPLE));
 
 		// SIMPLE COLOR
 		assertEquals("Simple color codes should be translated appropriately",
-				"&r§aHello &kthere! §6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
+				"&rÂ§aHello &kthere! Â§6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOR_SIMPLE));
 
 		// ALL COLOR
 		assertEquals("All color codes should be translated appropriately",
-				"§r§aHello &kthere! §6&lthis &ois &ma &nmessage! §r§x§a§b§c§d§e§fRGB §r§x§a§b§c§d§e§ftoo§r§x§a§b§c§d§e§f!",
+				"Â§rÂ§aHello &kthere! Â§6&lthis &ois &ma &nmessage! Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§fRGB Â§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§ftooÂ§rÂ§xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.COLOR_ALL));
 
 		// FORMAT UNDERLINE
 		assertEquals("Underline codes should be translated appropriately",
-				"&r&aHello &kthere! &6&lthis &ois &ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"&r&aHello &kthere! &6&lthis &ois &ma Â§nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_UNDERLINE));
 
 		// FORMAT ITALIC
 		assertEquals("Italic codes should be translated appropriately",
-				"&r&aHello &kthere! &6&lthis §ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"&r&aHello &kthere! &6&lthis Â§ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_ITALIC));
 
 		// FORMAT BOLD
 		assertEquals("Bold codes should be translated appropriately",
-				"&r&aHello &kthere! &6§lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"&r&aHello &kthere! &6Â§lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_BOLD));
 
 		// FORMAT STRIKE
 		assertEquals("Strike codes should be translated appropriately",
-				"&r&aHello &kthere! &6&lthis &ois §ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"&r&aHello &kthere! &6&lthis &ois Â§ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_STRIKE));
 
 		// FORMAT OBFUSCATED
 		assertEquals("Obfuscation codes should be translated appropriately",
-				"&r&aHello §kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"&r&aHello Â§kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_OBFUSCATED));
 
 		// FORMAT RESET
 		assertEquals("Reset codes should be translated appropriately",
-				"§r&aHello &kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"Â§r&aHello &kthere! &6&lthis &ois &ma &nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_RESET));
 
 		// FORMAT ALL
 		assertEquals("All format codes should be translated appropriately",
-				"§r&aHello §kthere! &6§lthis §ois §ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
+				"Â§r&aHello Â§kthere! &6Â§lthis Â§ois Â§ma Â§nmessage! &#ABCDEFRGB &xAbCdEftoo&x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.FORMAT_ALL));
 
 		// X
 		assertEquals("All X codes should be translated appropriately",
-				"&r&aHello &kthere! &6&lthis &ois &ma &nmessage! &r§x&a&b&c&d&e&fRGB &r§x&a&b&c&d&e&ftoo&r§x&a&b&c&d&e&f!",
+				"&r&aHello &kthere! &6&lthis &ois &ma &nmessage! &rÂ§x&a&b&c&d&e&fRGB &rÂ§x&a&b&c&d&e&ftoo&rÂ§x&a&b&c&d&e&f!",
 				MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.X));
 
 	}
@@ -119,7 +119,7 @@ public class MultiChatUtilTest {
 		String approximated = MultiChatUtil.approximateRGBColorCodes(translated);
 
 		assertEquals("Translated RGB color codes should be approximated to nearest minecraft equivalent",
-				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! §7RGB §7too§7!",
+				"Â§rÂ§aHello Â§kthere! Â§6Â§lthis Â§ois Â§ma Â§nmessage! Â§7RGB Â§7tooÂ§7!",
 				approximated);
 
 		String simpleTranslated = MultiChatUtil.translateColorCodes(rawMessage, TranslateMode.SIMPLE);
@@ -127,7 +127,7 @@ public class MultiChatUtilTest {
 		String simpleApproximated = MultiChatUtil.approximateRGBColorCodes(simpleTranslated);
 
 		assertEquals("Non translated RGB color codes should NOT be approximated to nearest minecraft equivalent",
-				"§r§aHello §kthere! §6§lthis §ois §ma §nmessage! &#ABCDEFRGB &xAbCdEftoo&x§a§b§c§d§e§f!",
+				"Â§rÂ§aHello Â§kthere! Â§6Â§lthis Â§ois Â§ma Â§nmessage! &#ABCDEFRGB &xAbCdEftoo&xÂ§aÂ§bÂ§cÂ§dÂ§eÂ§f!",
 				simpleApproximated);
 
 		String jsonMessage = "{\"text\":\"hello world\", \"color\":\"#ABCDEF\"}";
