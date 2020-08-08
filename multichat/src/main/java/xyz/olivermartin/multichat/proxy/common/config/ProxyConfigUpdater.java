@@ -4,9 +4,7 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
-import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.nodes.Tag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,12 +17,14 @@ public class ProxyConfigUpdater {
 
     private final Plugin plugin;
     private final File configFile;
+    private final File backupDir;
     private BufferedWriter writer;
     private final Yaml yaml = new Yaml();
 
     public ProxyConfigUpdater(Plugin plugin, File folder, String fileName) {
         this.plugin = plugin;
         this.configFile = new File(folder, fileName);
+        this.backupDir = new File(folder, "backups");
     }
 
     public File getConfigFile() {
@@ -91,6 +91,26 @@ public class ProxyConfigUpdater {
         if (!shouldUpdate) return;
 
         plugin.getLogger().info("New config version found for " + configFile.getName() + "! Attempting auto update...");
+
+        if (!backupDir.exists() && !backupDir.mkdirs()) {
+            plugin.getLogger().severe("The backups directory could not be created.");
+            return;
+        }
+
+        // Back old config up
+        try {
+            InputStream in = new BufferedInputStream(new FileInputStream(configFile));
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(backupDir, configFile.getName())));
+
+            byte[] buffer = new byte[1024];
+            int lengthRead;
+            while ((lengthRead = in.read(buffer)) > 0) {
+                out.write(buffer, 0, lengthRead);
+                out.flush();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         oldConfig.set("version", newVersionString);
 
         try {
@@ -107,7 +127,7 @@ public class ProxyConfigUpdater {
      * Thanks BungeeCord for not offering this.
      *
      * @param configuration the configuration to get the keys of
-     * @param previousKey the previous key (used for recursion, should be called with "")
+     * @param previousKey   the previous key (used for recursion, should be called with "")
      * @return an insertion-ordered set of key names
      */
     private Set<String> getDeepKeys(Configuration configuration, String previousKey) {
@@ -176,11 +196,9 @@ public class ProxyConfigUpdater {
     }
 
     private void write(String indent, String key, Object toWrite) throws IOException {
-        if (toWrite instanceof Configuration) {
-            writer.write(indent + key + ": " + yaml.dump(toWrite));
-        } else if (toWrite instanceof String || toWrite instanceof Character) {
+        if (toWrite instanceof String || toWrite instanceof Character) {
             String string = String.valueOf(toWrite);
-            writer.write(indent + key + ": " + yaml.dumpAs(string.replace("\n", "\\n"), Tag.STR, DumperOptions.FlowStyle.AUTO));
+            writer.write(indent + key + ": " + yaml.dump(string.replace("\n", "\\n")));
         } else if (toWrite instanceof List) {
             writer.write(getListAsString(indent, key, (List<?>) toWrite));
         } else {
@@ -287,7 +305,7 @@ public class ProxyConfigUpdater {
                 // Ignore further spaces
             else break;
         }
-        currentIndents = currentIndents/2;
+        currentIndents = currentIndents / 2;
 
         String key = configLine.trim().split(":")[0];
 
