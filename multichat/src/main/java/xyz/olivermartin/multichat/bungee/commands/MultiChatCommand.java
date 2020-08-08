@@ -12,8 +12,6 @@ import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyC
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 
-import java.util.Arrays;
-
 /**
  * MultiChat (Admin) Command
  * <p>Used to view details about the plugin and display help information</p>
@@ -87,19 +85,16 @@ public class MultiChatCommand extends Command {
                 GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true);
                 MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
 
-                // TODO: [ConfigRefactor] Potential change
                 ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
                 channelManager.setGlobalChannel(
                         new GlobalStaticProxyChannel("Global Channel",
                                 ProxyConfigs.CONFIG.getGlobalFormat(),
-                                Arrays.asList(ProxyConfigs.ALIASES.getAliases("global")),
                                 channelManager
                         )
                 );
                 channelManager.setLocalChannel(
                         new LocalChannel("Local Channel",
                                 ProxyConfigs.CONFIG.getGlobalFormat(),
-                                Arrays.asList(ProxyConfigs.ALIASES.getAliases("local")),
                                 channelManager
                         )
                 );

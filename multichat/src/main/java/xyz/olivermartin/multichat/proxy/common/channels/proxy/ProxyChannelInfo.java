@@ -1,10 +1,9 @@
 package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
-import java.util.List;
-import java.util.Optional;
-
 import net.md_5.bungee.api.CommandSender;
 import xyz.olivermartin.multichat.proxy.common.contexts.Context;
+
+import java.util.Optional;
 
 public class ProxyChannelInfo {
 
@@ -12,30 +11,28 @@ public class ProxyChannelInfo {
 	private String format; // The format of this channel
 	private boolean unhideable; // If the channel is unhideable
 	private Context context; // The context for this channel
-	private List<String> aliases; // The command aliases for this channel
 
 	private String permission; // Permission to view / speak
 	private String viewPermission; // Permission to view only
 
-	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission, String viewPermission) {
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, String permission, String viewPermission) {
 
 		this.desc = desc;
 		this.format = format;
 		this.unhideable = unhideable;
 		this.context = context;
-		this.aliases = aliases;
 
 		this.permission = permission;
 		this.viewPermission = viewPermission;
 
 	}
 
-	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases, String permission) {
-		this(desc, format, unhideable, context, aliases, permission, permission);
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, String permission) {
+		this(desc, format, unhideable, context, permission, permission);
 	}
 
-	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context, List<String> aliases) {
-		this(desc, format, unhideable, context, aliases, null);
+	public ProxyChannelInfo(String desc, String format, boolean unhideable, Context context) {
+		this(desc, format, unhideable, context, null);
 	}
 
 	/**
@@ -68,14 +65,6 @@ public class ProxyChannelInfo {
 	 */
 	public Context getContext() {
 		return this.context;
-	}
-
-	/**
-	 * Gets the command aliases of this channel
-	 * @return the command aliases
-	 */
-	public List<String> getAliases() {
-		return this.aliases;
 	}
 
 	/*

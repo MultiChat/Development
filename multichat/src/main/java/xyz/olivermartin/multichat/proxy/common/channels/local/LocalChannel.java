@@ -12,7 +12,6 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,15 +19,13 @@ public class LocalChannel {
 
 	private String desc;
 	private String format;
-	private List<String> aliases;
 
 	private ChannelManager manager;
 
-	public LocalChannel(String desc, String format, List<String> aliases, ChannelManager manager) {
+	public LocalChannel(String desc, String format, ChannelManager manager) {
 
 		this.desc = desc;
 		this.format = format;
-		this.aliases = aliases;
 
 		this.manager = manager;
 
@@ -40,10 +37,6 @@ public class LocalChannel {
 
 	public String getFormat() {
 		return this.format;
-	}
-
-	public List<String> getAliases() {
-		return this.aliases;
 	}
 
 	public ChannelManager getManager() {

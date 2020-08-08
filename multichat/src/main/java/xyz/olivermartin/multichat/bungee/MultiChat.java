@@ -27,7 +27,6 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyFileStoreManager;
 import xyz.olivermartin.multichat.proxy.common.storage.files.*;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -229,18 +228,16 @@ public class MultiChat extends Plugin {
             ChannelManager channelManager = new ChannelManager();
             channelManager.setGlobalChannel(new GlobalStaticProxyChannel("Global Channel",
                     ProxyConfigs.CONFIG.getGlobalFormat(),
-                    Arrays.asList(ProxyConfigs.ALIASES.getAliases("global")),
                     channelManager)
             );
             channelManager.setLocalChannel(new LocalChannel("Local Channel",
                     ProxyConfigs.CONFIG.getGlobalFormat(),
-                    Arrays.asList(ProxyConfigs.ALIASES.getAliases("local")),
                     channelManager)
             );
             MultiChatProxy.getInstance().registerChannelManager(channelManager);
 
             // TODO This is just a test channel
-            channelManager.registerProxyChannel(new StaticProxyChannel("test", new ProxyChannelInfo("A test channel", "&8[&7TEST&8] &f%DISPLAYNAME%&f: ", false, globalContext, new ArrayList<String>(), "multichat.chat.channel.test", "multichat.chat.channel.test.view"), channelManager));
+            channelManager.registerProxyChannel(new StaticProxyChannel("test", new ProxyChannelInfo("A test channel", "&8[&7TEST&8] &f%DISPLAYNAME%&f: ", false, globalContext, "multichat.chat.channel.test", "multichat.chat.channel.test.view"), channelManager));
 
             ProxyChatManager chatManager = new ProxyChatManager();
             MultiChatProxy.getInstance().registerChatManager(chatManager);
