@@ -70,11 +70,11 @@ public abstract class AbstractProxyConfig {
      * This method can only be called if  {@link #setPlugin(Plugin)} has been called.
      * Data folder will be the plugin folder unless first set with with {@link #setDataFolder(File)}.
      *
-     * @throws IllegalArgumentException if the plugin has not been set yet.
+     * @throws IllegalStateException if the plugin has not been set yet.
      */
-    public final void reloadConfig() throws IllegalArgumentException {
+    public final void reloadConfig() throws IllegalStateException {
         if (plugin == null)
-            throw new IllegalArgumentException("You have not set the plugin yet.");
+            throw new IllegalStateException("You have not set the plugin yet.");
 
         if (this.configFile == null)
             this.configFile = new File(getDataFolder(), fileName);
