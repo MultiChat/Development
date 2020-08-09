@@ -194,9 +194,9 @@ public class ProxyConfigUpdater {
         // All keys written, write leftover comments
         String danglingComments = comments.get(null);
 
-        if (danglingComments != null) {
+        if (danglingComments != null)
             writer.write(danglingComments);
-        }
+
         writer.close();
     }
 
@@ -231,8 +231,7 @@ public class ProxyConfigUpdater {
 
         builder.append("\n");
 
-        for (int i = 0; i < list.size(); i++) {
-            Object toWrite = list.get(i);
+        for (Object toWrite : list) {
             builder.append(indent);
 
             if (toWrite instanceof String || toWrite instanceof Character) {
@@ -252,9 +251,6 @@ public class ProxyConfigUpdater {
             } else {
                 builder.append("- ").append(toWrite);
             }
-
-            if (i < list.size())
-                builder.append("\n");
         }
 
         return builder.toString();
