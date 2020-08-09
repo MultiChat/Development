@@ -9,6 +9,11 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * Class to represent the proxy's chatcontrol.yml.
+ * <p>
+ * All methods should be relatively straight forward and represent their respective entries in the config.
+ */
 public class ProxyChatControl extends AbstractProxyConfig {
 
     private String version, antiSpamCommand, linkRemovalMessage;

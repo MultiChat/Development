@@ -1,5 +1,10 @@
 package xyz.olivermartin.multichat.proxy.common.config;
 
+/**
+ * Class to represent the proxy's joinmessages.yml.
+ * <p>
+ * All methods should be relatively straight forward and represent their respective entries in the config.
+ */
 public class ProxyJoinMessages extends AbstractProxyConfig {
 
     private String version, serverJoin, silentJoin, networkQuit, silentQuit, welcomeMessage, privateWelcomeMessage;

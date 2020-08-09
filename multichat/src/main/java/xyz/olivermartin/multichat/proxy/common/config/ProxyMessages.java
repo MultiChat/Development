@@ -8,6 +8,11 @@ import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class to represent the proxy's messages.yml.
+ * <p>
+ * All methods should be relatively straight forward and represent their respective entries in the config.
+ */
 public class ProxyMessages extends AbstractProxyConfig {
 
     private final Map<String, String> messagesMap = new HashMap<>();
@@ -51,6 +56,7 @@ public class ProxyMessages extends AbstractProxyConfig {
         sendMessage(sender, id, true, special, specialJson);
     }
 
+    // TODO: [2.0] [ConfigRefactor] Should probably take another look at this method at some point
     public void sendMessage(CommandSender sender, String id, boolean usePrefix, String special, boolean specialJson) {
 
         boolean isSpecial = special != null;

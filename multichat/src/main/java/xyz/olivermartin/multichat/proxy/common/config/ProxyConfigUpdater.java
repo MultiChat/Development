@@ -16,29 +16,32 @@ import java.util.stream.Collectors;
 public class ProxyConfigUpdater {
 
     private final Plugin plugin;
-    private final File configFile;
+    private final AbstractProxyConfig config;
     private final File backupDir;
     private BufferedWriter writer;
     private final Yaml yaml = new Yaml();
 
-    public ProxyConfigUpdater(Plugin plugin, File folder, String fileName) {
-        this.plugin = plugin;
-        this.configFile = new File(folder, fileName);
-        this.backupDir = new File(folder, "backups");
-    }
-
-    public File getConfigFile() {
-        return configFile;
+    /**
+     * Create an updater for a proxy config. Will not do anything until you call {@link #update()}
+     *
+     * @param config the config that this updater will update
+     */
+    public ProxyConfigUpdater(AbstractProxyConfig config) {
+        this.config = config;
+        this.plugin = config.getPlugin();
+        this.backupDir = new File(config.getDataFolder(), "backups");
     }
 
     /**
-     * Update a yaml file from a resource inside your plugin jar
+     * Update a yaml file from a resource inside your plugin jar, if the new version is higher than the old version.
+     * <p>
+     * Creates the yaml file if it does not exist.
      */
     public void update() {
-        if (!configFile.exists()) {
-            plugin.getLogger().info("Creating " + configFile.getName() + " ...");
+        if (!config.getConfigFile().exists()) {
+            plugin.getLogger().info("Creating " + config.getFileName() + " ...");
             try {
-                Files.copy(plugin.getResourceAsStream(configFile.getName()), configFile.toPath());
+                Files.copy(plugin.getResourceAsStream(config.getFileName()), config.getConfigFile().toPath());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -47,24 +50,24 @@ public class ProxyConfigUpdater {
 
         Configuration oldConfig;
         try {
-            oldConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
+            oldConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(config.getConfigFile());
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
         Configuration newConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(
-                new InputStreamReader(plugin.getResourceAsStream(configFile.getName()))
+                new InputStreamReader(plugin.getResourceAsStream(config.getFileName()))
         );
 
         String oldVersionString = oldConfig.getString("version");
         String newVersionString = newConfig.getString("version");
         if (oldVersionString == null) {
-            plugin.getLogger().info("Your saved version of " + configFile.getName()
+            plugin.getLogger().info("Your saved version of " + config.getFileName()
                     + " does not have a version. The auto updater will cancel.");
             return;
         }
         if (newVersionString == null) {
-            plugin.getLogger().info("The plugin-stored version of " + configFile.getName()
+            plugin.getLogger().info("The plugin-stored version of " + config.getFileName()
                     + " does not have a version. Please contact the plugin developer: "
                     + plugin.getDescription().getAuthor());
             return;
@@ -90,7 +93,7 @@ public class ProxyConfigUpdater {
 
         if (!shouldUpdate) return;
 
-        plugin.getLogger().info("New config version found for " + configFile.getName() + "! Attempting auto update...");
+        plugin.getLogger().info("New config version found for " + config.getFileName() + "! Attempting auto update...");
 
         if (!backupDir.exists() && !backupDir.mkdirs()) {
             plugin.getLogger().severe("The backups directory could not be created.");
@@ -99,9 +102,9 @@ public class ProxyConfigUpdater {
 
         // Back old config up
         try {
-            InputStream in = new BufferedInputStream(new FileInputStream(configFile));
+            InputStream in = new BufferedInputStream(new FileInputStream(config.getConfigFile()));
             OutputStream out = new BufferedOutputStream(new FileOutputStream(
-                    new File(backupDir, configFile.getName().replace(".yml", oldVersionString + ".yml")))
+                    new File(backupDir, config.getFileName().replace(".yml", oldVersionString + ".yml")))
             );
 
             byte[] buffer = new byte[1024];
@@ -117,7 +120,7 @@ public class ProxyConfigUpdater {
 
         try {
             write(oldConfig, newConfig);
-            plugin.getLogger().info("Auto update for " + configFile.getName() + " successful! Please check it yourself to verify.");
+            plugin.getLogger().info("Auto update for " + config.getFileName() + " successful! Please check it yourself to verify.");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,13 +151,13 @@ public class ProxyConfigUpdater {
 
     private void write(Configuration oldConfig, Configuration newConfig) throws IOException {
         BufferedReader resourceBufferedReader = new BufferedReader(
-                new InputStreamReader(plugin.getResourceAsStream(configFile.getName()), StandardCharsets.UTF_8)
+                new InputStreamReader(plugin.getResourceAsStream(config.getFileName()), StandardCharsets.UTF_8)
         );
         Map<String, String> comments = getComments(resourceBufferedReader.lines().collect(Collectors.toList()));
         resourceBufferedReader.close();
 
         writer = new BufferedWriter(
-                new OutputStreamWriter(new FileOutputStream(configFile), StandardCharsets.UTF_8)
+                new OutputStreamWriter(new FileOutputStream(config.getConfigFile()), StandardCharsets.UTF_8)
         );
 
         for (String key : getDeepKeys(newConfig, "")) {

@@ -70,21 +70,24 @@ public class ProxyConfigs {
      *
      * @param plugin   the plugin of which the resources should be loaded
      * @param fileName the name of the file that ends with .yml
-     * @param filePath the path where the file should end up
+     * @param dataFolder the path where the file should end up
      * @return the {@link AbstractProxyConfig} of that file
      */
-    public static AbstractProxyConfig loadRawConfig(Plugin plugin, String fileName, File filePath) {
+    public static AbstractProxyConfig loadRawConfig(Plugin plugin, String fileName, File dataFolder) {
         if (!fileName.endsWith(".yml"))
             throw new IllegalArgumentException("File name did not end with .yml");
 
         AbstractProxyConfig rawConfig = RAW_CONFIGS.stream()
                 .filter(abstractProxyConfig -> abstractProxyConfig.getFileName().equals(fileName))
                 .findFirst()
-                .orElse(new AbstractProxyConfig(fileName) {
-                });
-
-        RAW_CONFIGS.remove(rawConfig);
-        rawConfig.reloadConfig(plugin, filePath);
+                .orElse(null);
+        if (rawConfig == null) {
+            rawConfig = new AbstractProxyConfig(fileName) {};
+            rawConfig.setPlugin(plugin);
+            rawConfig.setDataFolder(dataFolder);
+        } else
+            RAW_CONFIGS.remove(rawConfig);
+        rawConfig.reloadConfig();
         RAW_CONFIGS.add(rawConfig);
 
         return rawConfig;

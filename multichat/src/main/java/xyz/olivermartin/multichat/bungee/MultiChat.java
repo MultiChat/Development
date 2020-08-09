@@ -130,7 +130,8 @@ public class MultiChat extends Plugin {
         }
 
         ProxyConfigs.ALL.forEach(proxyConfig -> {
-            proxyConfig.reloadConfig(this);
+            proxyConfig.setPlugin(this);
+            proxyConfig.reloadConfig();
             ProxyConfigs.loadRawConfig(this, proxyConfig.getFileName().replace(".yml", "_fr.yml"), translationsDir);
         });
 
