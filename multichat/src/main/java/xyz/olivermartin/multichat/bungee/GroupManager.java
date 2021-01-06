@@ -132,11 +132,11 @@ public class GroupManager {
             return;
         }
 
-        if ((!groupChatInfo.existsAdmin(player)) || (groupChatInfo.getAdmins().size() > 1)) {
+        if ((!groupChatInfo.isAdmin(player)) || (groupChatInfo.getAdmins().size() > 1)) {
             groupChatInfo.delMember(player);
             groupChatInfo.delViewer(player);
 
-            if (groupChatInfo.existsAdmin(player)) {
+            if (groupChatInfo.isAdmin(player)) {
                 groupChatInfo.delAdmin(player);
             }
 

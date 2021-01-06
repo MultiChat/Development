@@ -68,7 +68,7 @@ public class GroupCommand extends Command implements TabExecutor {
                 ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_member_list", subArgument);
                 groupChatInfo.getMembers().forEach(member ->
                         ProxyConfigs.MESSAGES.sendMessage(sender,
-                                "command_group_member_list_item" + (groupChatInfo.existsAdmin(member) ? "_admin" : ""),
+                                "command_group_member_list_item" + (groupChatInfo.isAdmin(member) ? "_admin" : ""),
                                 UUIDNameManager.getName(member)
                         )
                 );
@@ -222,7 +222,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 }
 
-                if (!groupChatInfo.existsAdmin(playerUID)) {
+                if (!groupChatInfo.isAdmin(playerUID)) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_transfer_not_owner");
                     return;
                 }
@@ -253,7 +253,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 }
 
-                if (!groupChatInfo.existsAdmin(playerUID)) {
+                if (!groupChatInfo.isAdmin(playerUID)) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_formal_not_admin");
                     return;
                 }
@@ -268,7 +268,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 }
 
-                if (groupChatInfo.existsAdmin(targetUID)) {
+                if (groupChatInfo.isAdmin(targetUID)) {
                     groupChatInfo.delAdmin(targetUID);
                     GCCommand.sendMessage(target.getName() + ProxyConfigs.MESSAGES.getMessage("groups_info_step_down"), "&lINFO", groupChatInfo);
                     return;
@@ -290,7 +290,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 }
 
-                if (!groupChatInfo.existsAdmin(playerUID)) {
+                if (!groupChatInfo.isAdmin(playerUID)) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_ban_not_admin");
                     return;
                 }
@@ -300,7 +300,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 UUID targetUID = target.getUniqueId();
 
-                if (groupChatInfo.existsAdmin(targetUID)) {
+                if (groupChatInfo.isAdmin(targetUID)) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_cannot_ban_admin");
                     return;
                 }
@@ -337,7 +337,7 @@ public class GroupCommand extends Command implements TabExecutor {
                 if (groupChatInfo == null) break;
 
                 if (!groupChatInfo.isMember(playerUID)
-                        || (groupChatInfo.getFormal() && !groupChatInfo.existsAdmin(playerUID))) {
+                        || (groupChatInfo.getFormal() && !groupChatInfo.isAdmin(playerUID))) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_formal_not_admin");
                     return;
                 }

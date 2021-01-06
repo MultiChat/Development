@@ -82,7 +82,7 @@ public class TGroupChatInfo extends TChatInfo implements Serializable {
 		this.admins.remove(playerUID);
 	}
 
-	public boolean existsAdmin(UUID playerUID) {
+	public boolean isAdmin(UUID playerUID) {
 		return this.admins.contains(playerUID);
 	}
 
