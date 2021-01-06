@@ -58,7 +58,7 @@ public abstract class LocalChatListenerLowest {
 
 		logger.debug("&8[&1CHAT-L1&8]&7 ", "CHANNEL FORMAT (built) = '" + format + "'");
 
-		format = chatManager.processExternalPlaceholders(player, format);
+		format = chatManager.processExternalPlaceholders(player, format) + "%2$s";
 
 		logger.debug("&8[&1CHAT-L1&8]&7 ", "CHANNEL FORMAT (final with external placeholders) = '" + format + "'");
 

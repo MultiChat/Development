@@ -25,7 +25,7 @@ public class LocalSpigotPlaceholderManager extends LocalPlaceholderManager {
 		format = MultiChatLocal.getInstance().getChatManager().translateColorCodes(format, true);
 
 		// Adds the message on the end, respecting any changes from other plugins.
-		return format + "%2$s"; // TODO This bit should not be added here, should be added in a different part (As sponge does not add here)
+		return format;
 
 	}
 
