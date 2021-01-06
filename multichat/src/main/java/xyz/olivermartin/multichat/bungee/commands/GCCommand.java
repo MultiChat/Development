@@ -108,7 +108,7 @@ public class GCCommand extends Command {
 
         ProxyServer.getInstance().getPlayers().stream()
                 .filter(target -> target.getServer() != null
-                        && (groupInfo.existsViewer(target.getUniqueId()) && target.hasPermission("multichat.group"))
+                        && (groupInfo.isViewer(target.getUniqueId()) && target.hasPermission("multichat.group"))
                         || proxyDataStore.getAllSpy().contains(target.getUniqueId())
                 )
                 .forEach(target -> {

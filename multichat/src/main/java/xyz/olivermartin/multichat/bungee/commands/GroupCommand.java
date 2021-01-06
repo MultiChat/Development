@@ -97,12 +97,12 @@ public class GroupCommand extends Command implements TabExecutor {
                 TGroupChatInfo groupChatInfo = getGroupChatFromName(proxyDataStore, proxiedPlayer, subArgument, false);
                 if (groupChatInfo == null) break;
 
-                if (groupChatInfo.existsMember(playerUID)) {
+                if (groupChatInfo.isMember(playerUID)) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_spy_already_a_member");
                     return;
                 }
 
-                if (groupChatInfo.existsViewer(playerUID)) {
+                if (groupChatInfo.isViewer(playerUID)) {
                     groupChatInfo.delViewer(playerUID);
                     proxyDataStore.getGroupChats().put(subArgument, groupChatInfo);
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_spy_off", subArgument);
@@ -305,7 +305,7 @@ public class GroupCommand extends Command implements TabExecutor {
                     return;
                 }
 
-                if (groupChatInfo.existsBanned(targetUID)) {
+                if (groupChatInfo.isBanned(targetUID)) {
                     groupChatInfo.delBanned(targetUID);
                     proxyDataStore.getGroupChats().put(subArgument, groupChatInfo);
                     GCCommand.sendMessage(sender.getName() + ProxyConfigs.MESSAGES.getMessage("groups_info_unban") + target.getName(), "&lINFO", groupChatInfo);
@@ -314,7 +314,7 @@ public class GroupCommand extends Command implements TabExecutor {
                 }
 
                 groupChatInfo.addBanned(targetUID);
-                if (groupChatInfo.existsMember(targetUID)) {
+                if (groupChatInfo.isMember(targetUID)) {
                     groupChatInfo.delMember(targetUID);
                     groupChatInfo.delViewer(targetUID);
                     proxyDataStore.getViewedChats().put(targetUID, null);
@@ -336,7 +336,7 @@ public class GroupCommand extends Command implements TabExecutor {
                 TGroupChatInfo groupChatInfo = getGroupChatFromName(proxyDataStore, proxiedPlayer, subArgument, true);
                 if (groupChatInfo == null) break;
 
-                if (!groupChatInfo.existsMember(playerUID)
+                if (!groupChatInfo.isMember(playerUID)
                         || (groupChatInfo.getFormal() && !groupChatInfo.existsAdmin(playerUID))) {
                     ProxyConfigs.MESSAGES.sendMessage(sender, "command_group_formal_not_admin");
                     return;
@@ -378,7 +378,7 @@ public class GroupCommand extends Command implements TabExecutor {
             return null;
         }
 
-        if (checkMember && !groupChatInfo.existsMember(proxiedPlayer.getUniqueId())) {
+        if (checkMember && !groupChatInfo.isMember(proxiedPlayer.getUniqueId())) {
             ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_group_not_a_member", groupName);
             return null;
         }
@@ -394,7 +394,7 @@ public class GroupCommand extends Command implements TabExecutor {
         }
         UUID targetUID = target.getUniqueId();
 
-        if (checkMember && !groupChatInfo.existsMember(targetUID)) {
+        if (checkMember && !groupChatInfo.isMember(targetUID)) {
             ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_group_transfer_not_member");
             return null;
         }

@@ -53,12 +53,12 @@ public class GroupManager {
         TGroupChatInfo groupChatInfo = dataStore.getGroupChats().get(groupname.toLowerCase());
 
         UUID playerUID = player.getUniqueId();
-        if (groupChatInfo.existsBanned(playerUID)) {
+        if (groupChatInfo.isBanned(playerUID)) {
             ProxyConfigs.MESSAGES.sendMessage(player, "groups_banned", groupname.toUpperCase());
             return false;
         }
 
-        if (groupChatInfo.existsMember(playerUID)) {
+        if (groupChatInfo.isMember(playerUID)) {
             ProxyConfigs.MESSAGES.sendMessage(player, "groups_already_joined", groupname.toUpperCase());
             return false;
         }
@@ -75,7 +75,7 @@ public class GroupManager {
             }
         }
 
-        if (groupChatInfo.existsViewer(player.getUniqueId())) {
+        if (groupChatInfo.isViewer(player.getUniqueId())) {
             if (player.hasPermission("multichat.staff.spy"))
                 ProxyConfigs.MESSAGES.sendMessage(player, "command_group_spy_off", groupname.toUpperCase());
 
@@ -127,7 +127,7 @@ public class GroupManager {
         ProxyDataStore dataStore = MultiChatProxy.getInstance().getDataStore();
         TGroupChatInfo groupChatInfo = dataStore.getGroupChats().get(groupname.toLowerCase());
 
-        if (!groupChatInfo.existsMember(player)) {
+        if (!groupChatInfo.isMember(player)) {
             ProxyConfigs.MESSAGES.sendMessage(pinstance, "command_group_not_a_member", groupname.toUpperCase());
             return;
         }
