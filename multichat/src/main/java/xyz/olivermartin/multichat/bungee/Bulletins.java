@@ -1,16 +1,18 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Bulletins Management
@@ -109,12 +111,12 @@ public class Bulletins {
 
 					message = bulletin.get(nextBulletin);
 
-					message = ChatControl.applyChatRules(message, "bulletins", "").get();
+					message = ChatControl.applyChatRules(null, message, MessageType.BULLETINS).get();
 
 					message = MultiChatUtil.translateColorCodes(message);
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+						if (ProxyConfigs.CONFIG.isLegacyServer(onlineplayer.getServer().getInfo().getName())) {
 							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message)));
 						} else {
 							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));

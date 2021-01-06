@@ -1,26 +1,19 @@
 package xyz.olivermartin.multichat.proxy.common.listeners;
 
-import java.util.UUID;
-
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatManipulation;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.Events;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
+import xyz.olivermartin.multichat.bungee.*;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.UUID;
 
 public class ProxyLogoutListener implements Listener {
 
@@ -30,7 +23,7 @@ public class ProxyLogoutListener implements Listener {
 
 		message = MultiChatUtil.translateColorCodes(message);
 
-		if (MultiChat.legacyServers.contains(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColorCodes(message);
+		if (ProxyConfigs.CONFIG.isLegacyServer(player.getServer().getInfo().getName())) message = MultiChatUtil.approximateRGBColorCodes(message);
 
 		player.sendMessage(ProxyJsonUtils.parseMessage(message));
 
@@ -65,10 +58,8 @@ public class ProxyLogoutListener implements Listener {
 			Events.GCToggle.remove(uuid);
 		}
 
-		Configuration config = ConfigManager.getInstance().getHandler(ConfigFile.CHAT_CONTROL).getConfig();
-
 		// If using sessional ignore, then wipe ignores stored
-		if (config.getBoolean("session_ignore")) {
+		if (ProxyConfigs.CHAT_CONTROL.isSessionIgnore()) {
 			ChatControl.unignoreAll(uuid);
 		}
 
@@ -89,32 +80,23 @@ public class ProxyLogoutListener implements Listener {
 		ds.getJoinedNetwork().remove(player.getUniqueId());
 
 		// If we are handling the quit messages, then handle them...
-		if ( ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getBoolean("showquit") == true ) {
-
+		if (ProxyConfigs.JOIN_MESSAGES.isShowQuit()) {
 			// Get the formats
-			String joinformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("networkquit");
-			String silentformat = ConfigManager.getInstance().getHandler(ConfigFile.JOIN_MESSAGES).getConfig().getString("silentquit");
+			String quitFormat = ProxyConfigs.JOIN_MESSAGES.getNetworkQuit();
+			boolean silenceQuit = player.hasPermission("multichat.staff.silentjoin");
+			if (silenceQuit)
+				quitFormat = ProxyConfigs.JOIN_MESSAGES.getSilentQuit();
 
 			// Replace the placeholders
-			ChatManipulation chatman = new ChatManipulation();
-			joinformat = chatman.replaceJoinMsgVars(joinformat, player.getName(), player.getServer().getInfo().getName());
-			silentformat = chatman.replaceJoinMsgVars(silentformat, player.getName(), player.getServer().getInfo().getName());
+			String serverName = player.getServer().getInfo().getName();
+			quitFormat = new ChatManipulation().replaceJoinMsgVars(quitFormat, player.getName(), serverName);
 
 			// Broadcast
-			for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
+			for (ProxiedPlayer target : ProxyServer.getInstance().getPlayers()) {
+				if (silenceQuit && !target.hasPermission("multichat.staff.silentjoin"))
+					continue;
 
-				if (!player.hasPermission("multichat.staff.silentjoin")) {
-
-					displayMessage(onlineplayer, joinformat);
-
-				} else {
-
-					if (onlineplayer.hasPermission("multichat.staff.silentjoin") ) {
-						displayMessage(onlineplayer, silentformat);
-					}
-
-				}
-
+				displayMessage(target, quitFormat);
 			}
 
 		}

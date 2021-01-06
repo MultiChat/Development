@@ -9,11 +9,10 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import net.md_5.bungee.event.EventPriority;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
 import xyz.olivermartin.multichat.bungee.PlayerMetaManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 public class ProxyLoginListener implements Listener {
@@ -32,8 +31,8 @@ public class ProxyLoginListener implements Listener {
 			if (!ds.getModChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("modchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("modchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ProxyConfigs.CONFIG.getModChatColor());
+				chatinfo.setNameColor(ProxyConfigs.CONFIG.getModNameColor());
 				ds.getModChatPreferences().put(uuid, chatinfo);
 
 			}
@@ -45,8 +44,8 @@ public class ProxyLoginListener implements Listener {
 			if (!ds.getAdminChatPreferences().containsKey(uuid)) {
 
 				TChatInfo chatinfo = new TChatInfo();
-				chatinfo.setChatColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
-				chatinfo.setNameColor(ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
+				chatinfo.setChatColor(ProxyConfigs.CONFIG.getAdminChatColor());
+				chatinfo.setNameColor(ProxyConfigs.CONFIG.getAdminNameColor());
 				ds.getAdminChatPreferences().put(uuid, chatinfo);
 
 			}

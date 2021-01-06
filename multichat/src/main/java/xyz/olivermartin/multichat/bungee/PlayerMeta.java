@@ -36,7 +36,7 @@ public class PlayerMeta {
 		displayName = displayName.replaceAll("%NICK%", nick);
 		displayName = displayName.replaceAll("%UUID%", uuid.toString());
 		
-		displayName = displayName.replaceAll("&(?=[a-f,0-9,k-o,r])", "ง");
+		displayName = displayName.replaceAll("&(?=[a-f,0-9,k-o,r])", "ยง");
 		
 		return displayName;
 		

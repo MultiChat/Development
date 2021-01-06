@@ -30,6 +30,7 @@ import xyz.olivermartin.multichat.bungee.commands.SocialSpyCommand;
 import xyz.olivermartin.multichat.bungee.commands.StaffListCommand;
 import xyz.olivermartin.multichat.bungee.commands.UseCastCommand;
 
+// TODO: [2.0] Definitely needs refactor
 public class CommandManager {
 
 	static {

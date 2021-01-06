@@ -1,33 +1,31 @@
 package xyz.olivermartin.multichat.proxy.common.channels.local;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.Set;
+import java.util.UUID;
 
 public class LocalChannel {
 
 	private String desc;
 	private String format;
-	private List<String> aliases;
 
 	private ChannelManager manager;
 
-	public LocalChannel(String desc, String format, List<String> aliases, ChannelManager manager) {
+	public LocalChannel(String desc, String format, ChannelManager manager) {
 
 		this.desc = desc;
 		this.format = format;
-		this.aliases = aliases;
 
 		this.manager = manager;
 
@@ -39,10 +37,6 @@ public class LocalChannel {
 
 	public String getFormat() {
 		return this.format;
-	}
-
-	public List<String> getAliases() {
-		return this.aliases;
 	}
 
 	public ChannelManager getManager() {
@@ -71,7 +65,7 @@ public class LocalChannel {
 					&& !manager.isLocalSpy(receiver)) continue;
 
 			// If receiver ignores sender
-			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), MessageType.GLOBAL_CHAT)) {
 				ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 				continue;
 			}
@@ -83,7 +77,7 @@ public class LocalChannel {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, format, message);
 			}
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));
@@ -117,7 +111,7 @@ public class LocalChannel {
 				finalMessage = MultiChatProxy.getInstance().getChatManager().getLocalSpyMessage(sender, message);
 			}
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(finalMessage)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(finalMessage));

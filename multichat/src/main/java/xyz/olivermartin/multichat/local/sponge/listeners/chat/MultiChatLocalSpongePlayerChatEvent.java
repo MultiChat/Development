@@ -33,22 +33,22 @@ public class MultiChatLocalSpongePlayerChatEvent implements MultiChatLocalPlayer
 
 	@Override
 	public String getMessage() {
-		return TextSerializers.formattingCode('ง').serialize(event.getFormatter().getBody().toText());
+		return TextSerializers.formattingCode('ยง').serialize(event.getFormatter().getBody().toText());
 	}
 
 	@Override
 	public String getFormat() {
-		return TextSerializers.formattingCode('ง').serialize(event.getFormatter().getHeader().toText());
+		return TextSerializers.formattingCode('ยง').serialize(event.getFormatter().getHeader().toText());
 	}
 
 	@Override
 	public void setMessage(String message) {
-		event.getFormatter().setBody(TextSerializers.formattingCode('ง').deserialize(message));
+		event.getFormatter().setBody(TextSerializers.formattingCode('ยง').deserialize(message));
 	}
 
 	@Override
 	public void setFormat(String format) {
-		event.getFormatter().setHeader(TextSerializers.formattingCode('ง').deserialize(format));
+		event.getFormatter().setHeader(TextSerializers.formattingCode('ยง').deserialize(format));
 	}
 
 	@Override

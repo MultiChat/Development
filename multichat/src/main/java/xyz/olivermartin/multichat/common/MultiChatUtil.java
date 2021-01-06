@@ -11,10 +11,10 @@ public class MultiChatUtil {
 
 	private static final Pattern SHORT_UNTRANSLATED_RGB = Pattern.compile("(?i)\\&(x|#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])");
 	private static final Pattern LONG_UNTRANSLATED_RGB = Pattern.compile("(?i)\\&x\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])\\&([0-9A-F])");
-	private static final Pattern TRANSLATED_RGB = Pattern.compile("(?i)(งr)?งxง([0-9A-F])ง([0-9A-F])ง([0-9A-F])ง([0-9A-F])ง([0-9A-F])ง([0-9A-F])");
+	private static final Pattern TRANSLATED_RGB = Pattern.compile("(?i)(ยงr)?ยงxยง([0-9A-F])ยง([0-9A-F])ยง([0-9A-F])ยง([0-9A-F])ยง([0-9A-F])ยง([0-9A-F])");
 	private static final Pattern ALL_FORMATTING_CHARS = Pattern.compile("(?i)([0-9A-FK-ORX])");
 	private static final Pattern JSON_RGB = Pattern.compile("(?i)(\"color\":\")#([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])(\")");
-	private static final Pattern APPROX_RGB_FORMAT = Pattern.compile("(?i)\\ง(#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])");
+	private static final Pattern APPROX_RGB_FORMAT = Pattern.compile("(?i)\\ยง(#)([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])([0-9A-F])");
 
 
 	/**
@@ -53,9 +53,9 @@ public class MultiChatUtil {
 
 	/**
 	 * <p>Takes a raw string and strips any color codes using the & symbol</p>
-	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the ง symbol</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the ยง symbol</p>
 	 * @param rawMessage The raw message to strip
-	 * @param stripTranslatedCodes If pre-translated codes (ง) should also be stripped
+	 * @param stripTranslatedCodes If pre-translated codes (ยง) should also be stripped
 	 * @return the stripped message
 	 */
 	public static String stripColorCodes(String rawMessage, boolean stripTranslatedCodes) {
@@ -64,9 +64,9 @@ public class MultiChatUtil {
 
 	/**
 	 * <p>Takes a raw string and strips formatting codes (&) according to the TranslateMode</p>
-	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the ง symbol</p>
+	 * <p>If stripTranslatedCodes is true then it will also strip any codes using the ยง symbol</p>
 	 * @param rawMessage The raw message to strip
-	 * @param stripTranslatedCodes If pre-translated codes (ง) should also be stripped
+	 * @param stripTranslatedCodes If pre-translated codes (ยง) should also be stripped
 	 * @param modes The TranslateModes to apply
 	 * @return the stripped message
 	 */
@@ -96,7 +96,7 @@ public class MultiChatUtil {
 	 * <p>Takes a raw string and checks if it contains any codes using the & symbol</p>
 	 * <p>Any RGB codes in the format &#abcdef, &xabcdef or &x&a&b&c&d&e&f will also be checked</p>
 	 * @param rawMessage The raw message to check
-	 * @param checkTranslatedCodes If pre-translated codes (ง) should also be checked
+	 * @param checkTranslatedCodes If pre-translated codes (ยง) should also be checked
 	 * @return true if it contains format codes
 	 */
 	public static boolean containsColorCodes(String rawMessage, boolean checkTranslatedCodes) {
@@ -106,7 +106,7 @@ public class MultiChatUtil {
 	/**
 	 * <p>Takes a raw string and checks if it contains any formatting codes (&) according to the TranslateMode</p>
 	 * @param rawMessage The raw message to check
-	 * @param checkTranslatedCodes If pre-translated codes (ง) should also be checked
+	 * @param checkTranslatedCodes If pre-translated codes (ยง) should also be checked
 	 * @param modes The TranslateModes to process
 	 * @return true if it contains format codes
 	 */
@@ -174,7 +174,7 @@ public class MultiChatUtil {
 	public static String approximateRGBColorCodes(String message) {
 
 		Matcher rgbMatcher = TRANSLATED_RGB.matcher(message);
-		message = rgbMatcher.replaceAll("ง#$2$3$4$5$6$7");
+		message = rgbMatcher.replaceAll("ยง#$2$3$4$5$6$7");
 
 		message = replaceRGBShortCodesWithApproximations(message, false);
 
@@ -185,7 +185,7 @@ public class MultiChatUtil {
 	private static String approximateJsonRGBColorCodes(String message) {
 
 		Matcher jsonRgbMatcher = JSON_RGB.matcher(message);
-		message = jsonRgbMatcher.replaceAll("$1ง#$2$3$4$5$6$7$8");
+		message = jsonRgbMatcher.replaceAll("$1ยง#$2$3$4$5$6$7$8");
 		return replaceRGBShortCodesWithApproximations(message, true);
 
 	}
@@ -214,7 +214,7 @@ public class MultiChatUtil {
 			if (useNameInsteadOfCode) {
 				message = message.replace(match,getMinecraftCodeName(minecraftCode));
 			} else {
-				message = message.replace(match,"ง"+minecraftCode);
+				message = message.replace(match,"ยง"+minecraftCode);
 			}
 
 		}

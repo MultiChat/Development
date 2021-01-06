@@ -20,100 +20,100 @@ version: "1.10"  #
 ############################################################
 
 # The admin chat colour command has the following aliases (other than /mcacc)
-acc:
+mcacc:
 - acc
 
 # The admin chat command has the following aliases (other than /mcac)
-ac:
+mcac:
 - ac
 
 # The announcement command has the following aliases (other than /mcannouncement)
-announcement:
+mcannouncement:
 - announcement
 - announce
 - announcements
 
 # The bulletin command has the following aliases (other than /mcbulletin)
-bulletin:
+mcbulletin:
 - bulletin
 - bulletins
 
 # The cast command has the following aliases (other than /mccast)
-cast:
+mccast:
 - cast
 
 # The channel command has the following aliases (other than /mcchannel)
-channel:
+mcchannel:
 - channel
 - ch
 
 # The clearchat command has the following aliases (other than /mcclearchat)
-clearchat:
+mcclearchat:
 - clearchat
 - chatclear
 - wipechat
 - killchat
 
 # The display command has the following aliases (other than /mcdisplay)
-display:
+mcdisplay:
 - display
 
 # The freezechat command has the following aliases (other than /mcfreezechat)
-freezechat:
+mcfreezechat:
 - freezechat
 - pausechat
 - lockchat
 - chatlock
 
 # The group chat command has the following aliases (other than /mcgc)
-gc:
+mcgc:
 - gc
 
 # The global command has the following aliases (other than /mcglobal)
-global:
+mcglobal:
 - global
 - g
 
 # The group command has the following aliases (other than /mcgroup)
-group:
+mcgroup:
 - group
 
 # The group list command has the following aliases (other than /mcgroups)
-groups:
+mcgroups:
 - groups
 - grouplist
 
 # The helpme command has the following aliases (other than /mchelpme)
-helpme:
+mchelpme:
 - helpme
 - helpop
 
 # The ignore command has the following aliases (other than /mcignore)
-ignore:
+mcignore:
 - ignore
 - blockplayer
 
 # The local command has the following aliases (other than /mclocal)
-local:
+mclocal:
 - local
 - l
 
 # The localspy command has the following aliases (other than /mclocalspy)
-localspy:
+mclocalspy:
 - localspy
 - localchatspy
 - lspy
 
 # The mod chat colour command has the following aliases (other than /mcmcc)
-mcc:
+mcmcc:
 - mcc
 
 # The mod chat command has the following aliases (other than /mcmc)
-mc:
+mcmc:
 - mc
 
 # The private message command has the following aliases (other than /mcmsg)
-msg:
+mcmsg:
 - msg
 - m
 - message
@@ -125,7 +125,7 @@ msg:
 - pm
 
 # The multichat bypass command has the following aliases (other than /mcbypass)
-bypass:
+mcbypass:
 - bypass
 - mcb
 - multichatbypass
@@ -136,7 +136,7 @@ multichat:
 - mcversion
 
 # The multichat execute command has the following aliases (other than /mcexecute)
-execute:
+mcexecute:
 - execute
 - mce
 - multichatexecute
@@ -144,30 +144,30 @@ execute:
 - gexecute
 
 # The mute command has the following aliases (other than /mcmute)
-mute:
+mcmute:
 - mute
 - silence
 - multichatmute
 
 # The reply command has the following aliases (other than /mcr)
-r:
+mcr:
 - r
 - reply
 - respond
 
 # The socialspy command has the following aliases (other than /mcsocialspy)
-socialspy:
+mcsocialspy:
 - socialspy
 - spy
 - sspy
 
 # The staff list command has the following aliases (other than /mcstaff)
-staff:
+mcstaff:
 - staff
 - stafflist
 - liststaff
 
 # The usecast command has the following aliases (other than /mcusecast)
-usecast:
+mcusecast:
 - usecast
 - ccast

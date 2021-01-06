@@ -2,8 +2,21 @@ package xyz.olivermartin.multichat.common;
 
 import java.util.regex.Pattern;
 
-public class RegexUtil {
-    public static final Pattern COLOR_LEGACY = Pattern.compile("(?i)[a-f0-9]");
-    public static final Pattern FORMAT = Pattern.compile("(?i)[k-or]");
-    public static final Pattern COLOR_LEGACY_FORMAT = Pattern.compile("(?i)[a-fk-or0-9]");
+public enum RegexUtil {
+    LEGACY_COLOR("\b(?i)[a-f0-9]\b"),
+    LEGACY_COLORS("(?i)[a-f0-9]"),
+    FORMAT("\b(?i)[k-or]\b"),
+    FORMATS("(?i)[k-or]"),
+    LEGACY_COLOR_FORMAT("\b(?i)[a-fk-or0-9]\b"),
+    LEGACY_COLORS_FORMATS("(?i)[a-fk-or0-9]");
+
+    private final Pattern pattern;
+
+    RegexUtil(String pattern) {
+        this.pattern = Pattern.compile(pattern);
+    }
+
+    public boolean matches(String toMatch) {
+        return pattern.matcher(toMatch).matches();
+    }
 }

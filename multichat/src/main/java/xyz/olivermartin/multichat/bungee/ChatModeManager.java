@@ -9,6 +9,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 public class ChatModeManager {
 
@@ -52,7 +53,7 @@ public class ChatModeManager {
 
 		if (channelManager.isHidden(uuid, "local")) {
 			channelManager.show(uuid, "local");
-			MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
+			ProxyConfigs.MESSAGES.sendMessage(player, "command_channel_show", "LOCAL");
 		}
 
 		// TODO
@@ -83,7 +84,7 @@ public class ChatModeManager {
 
 		if (channelManager.isHidden(uuid, "global")) {
 			channelManager.show(uuid, "global");
-			MessageManager.sendSpecialMessage(player, "command_channel_show", "GLOBAL");
+			ProxyConfigs.MESSAGES.sendMessage(player, "command_channel_show", "GLOBAL");
 		}
 
 		ProxyLocalCommunicationManager.sendPlayerDataMessage(player.getName(), "global", channelManager.getGlobalChannel().getInfo().getFormat(), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));

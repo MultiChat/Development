@@ -15,6 +15,7 @@ import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 import xyz.olivermartin.multichat.bungee.commands.GCCommand;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
@@ -22,8 +23,7 @@ import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelMode;
 import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
@@ -155,7 +155,7 @@ public class Events implements Listener {
 		}
 
 		///
-		if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES) == true) {
+		if (ProxyConfigs.CONFIG.isFetchSpigotDisplayNames()) {
 			if (player.getServer() != null) {
 				ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 			}
@@ -219,13 +219,13 @@ public class Events implements Listener {
 						GCCommand.sendMessage(message, playerName, chatInfo);
 
 					} else {
-						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
-						MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
+						ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+						ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 					}
 
 				} else {
-					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
-					MessageManager.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
+					ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_1");
+					ProxyConfigs.MESSAGES.sendMessage(player, "groups_toggled_but_no_longer_exists_2");
 				}
 			}
 		}
@@ -240,16 +240,16 @@ public class Events implements Listener {
 
 				event.setCancelled(true);
 
-				if (ChatControl.isMuted(player.getUniqueId(), "private_messages")) {
-					MessageManager.sendMessage(player, "mute_cannot_send_message");
+				if (ChatControl.isMuted(player.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
+					ProxyConfigs.MESSAGES.sendMessage(player, "mute_cannot_send_message");
 					return;
 				}
 
-				if (ChatControl.handleSpam(player, message, "private_messages")) {
+				if (ChatControl.handleSpam(player, message, MessageType.PRIVATE_MESSAGES)) {
 					return;
 				}
 
-				crm = ChatControl.applyChatRules(message, "private_messages", player.getName());
+				crm = ChatControl.applyChatRules(player, message, MessageType.PRIVATE_MESSAGES);
 
 				if (crm.isPresent()) {
 					message = crm.get();
@@ -264,11 +264,11 @@ public class Events implements Listener {
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(player.getName(), player.getServer().getInfo());
 					ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), target.getServer().getInfo());
 
-					if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(player.getServer().getInfo().getName())) {
+					if (!ProxyConfigs.CONFIG.isNoPmServer(player.getServer().getInfo().getName())) {
 
-						if (!ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getStringList(ConfigValues.Config.NO_PM).contains(target.getServer().getInfo().getName())) {
+						if (!ProxyConfigs.CONFIG.isNoPmServer(target.getServer().getInfo().getName())) {
 
-							if (ChatControl.ignores(player.getUniqueId(), target.getUniqueId(), "private_messages")) {
+							if (ChatControl.ignores(player.getUniqueId(), target.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
 								ChatControl.sendIgnoreNotifications(target, player, "private_messages");
 								return;
 							}
@@ -276,15 +276,15 @@ public class Events implements Listener {
 							PrivateMessageManager.getInstance().sendMessage(message, player, target);
 
 						} else {
-							MessageManager.sendMessage(player, "command_msg_disabled_target");
+							ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_disabled_target");
 						}
 
 					} else {
-						MessageManager.sendMessage(player, "command_msg_disabled_sender");
+						ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_disabled_sender");
 					}
 
 				} else {
-					MessageManager.sendMessage(player, "command_msg_not_online");
+					ProxyConfigs.MESSAGES.sendMessage(player, "command_msg_not_online");
 				}
 
 			}

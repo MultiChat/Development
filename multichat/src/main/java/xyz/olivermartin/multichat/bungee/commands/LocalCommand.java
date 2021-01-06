@@ -8,14 +8,11 @@ import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Local Chat Command
@@ -26,12 +23,12 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class LocalCommand extends Command {
 
     public LocalCommand() {
-        super("mclocal", "multichat.chat.mode", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("local").toArray(new String[0]));
+        super("mclocal", "multichat.chat.mode", ProxyConfigs.ALIASES.getAliases("mclocal"));
     }
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_local_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_only_players");
             return;
         }
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
@@ -40,16 +37,14 @@ public class LocalCommand extends Command {
         if (args.length == 0) {
             ChatModeManager.getInstance().setLocal(playerUID);
 
-            MessageManager.sendMessage(sender, "command_local_enabled_1");
-            MessageManager.sendMessage(sender, "command_local_enabled_2");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_1");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_2");
             return;
         }
 
-        if (ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES)) {
-            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(proxiedPlayer.getName(),
-                    proxiedPlayer.getServer().getInfo()
-            );
-        }
+        ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
+        if (ProxyConfigs.CONFIG.isFetchSpigotDisplayNames())
+            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(proxiedPlayer.getName(), serverInfo);
 
         ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
 
@@ -67,7 +62,7 @@ public class LocalCommand extends Command {
         // If they had this channel hidden, then unhide it...
         if (channelManager.isHidden(playerUID, "local")) {
             channelManager.show(playerUID, "local");
-            MessageManager.sendSpecialMessage(proxiedPlayer, "command_channel_show", "LOCAL");
+            ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_channel_show", "LOCAL");
         }
 
         // Let server know players channel preference
@@ -78,7 +73,6 @@ public class LocalCommand extends Command {
                 : channelManager.getProxyChannel(currentChannel).orElse(channelManager.getGlobalChannel()).getInfo()
                 .getFormat();
 
-        ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
         ProxyLocalCommunicationManager.sendPlayerDataMessage(proxiedPlayer.getName(),
                 currentChannel,
                 channelFormat,

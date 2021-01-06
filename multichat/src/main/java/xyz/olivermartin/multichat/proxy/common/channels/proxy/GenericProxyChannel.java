@@ -1,21 +1,22 @@
 package xyz.olivermartin.multichat.proxy.common.channels.proxy;
 
-import java.util.Set;
-import java.util.UUID;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
 import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.Set;
+import java.util.UUID;
 
 public abstract class GenericProxyChannel implements ProxyChannel {
 
@@ -78,12 +79,12 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 				continue;
 
 			// If receiver ignores sender
-			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+			if (ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), MessageType.GLOBAL_CHAT)) {
 				ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 				continue;
 			}
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(joined)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(joined));
@@ -119,7 +120,7 @@ public abstract class GenericProxyChannel implements ProxyChannel {
 					|| manager.isHidden(receiver.getUniqueId(), id)) // Receiver has hidden this channel
 				continue;
 
-			if (MultiChat.legacyServers.contains(receiver.getServer().getInfo().getName())) {
+			if (ProxyConfigs.CONFIG.isLegacyServer(receiver.getServer().getInfo().getName())) {
 				receiver.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateRGBColorCodes(message)));
 			} else {
 				receiver.sendMessage(TextComponent.fromLegacyText(message));

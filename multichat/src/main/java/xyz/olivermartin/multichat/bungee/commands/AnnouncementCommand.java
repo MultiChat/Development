@@ -7,9 +7,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.Announcements;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Announcement Command
@@ -20,7 +18,7 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 public class AnnouncementCommand extends Command {
 
     public AnnouncementCommand() {
-        super("mcannouncement", "multichat.announce", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("announcement").toArray(new String[0]));
+        super("mcannouncement", "multichat.announce", ProxyConfigs.ALIASES.getAliases("mcannouncement"));
     }
 
     public void execute(CommandSender sender, String[] args) {
@@ -32,9 +30,9 @@ public class AnnouncementCommand extends Command {
         String arg = args[0].toLowerCase();
         switch (arg) {
             case "list": {
-                MessageManager.sendMessage(sender, "command_announcement_list");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_list");
                 Announcements.getAnnouncementList().forEach((key, value) ->
-                        MessageManager.sendSpecialMessage(sender,
+                        ProxyConfigs.MESSAGES.sendMessage(sender,
                                 "command_announcement_list_item",
                                 key + ": +++" + value,
                                 true
@@ -49,9 +47,9 @@ public class AnnouncementCommand extends Command {
                 String announcementKey = args[1].toLowerCase();
                 String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                 if (Announcements.addAnnouncement(announcementKey, message)) {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_added", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_added", announcementKey);
                 } else {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_added_error", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_added_error", announcementKey);
                 }
                 return;
             }
@@ -61,9 +59,9 @@ public class AnnouncementCommand extends Command {
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.removeAnnouncement(announcementKey)) {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_removed", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_removed", announcementKey);
                 } else {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_does_not_exist", announcementKey);
                 }
                 return;
             }
@@ -74,9 +72,9 @@ public class AnnouncementCommand extends Command {
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.startAnnouncement(announcementKey, timer)) {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_started", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_started", announcementKey);
                 } else {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_started_error", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_started_error", announcementKey);
                 }
                 return;
             }
@@ -86,9 +84,9 @@ public class AnnouncementCommand extends Command {
 
                 String announcementKey = args[1].toLowerCase();
                 if (Announcements.stopAnnouncement(announcementKey)) {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_stopped", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_stopped", announcementKey);
                 } else {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_stopped_error", announcementKey);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_stopped_error", announcementKey);
                 }
                 return;
             }
@@ -96,7 +94,7 @@ public class AnnouncementCommand extends Command {
                 if (Announcements.existsAnnouncemnt(arg)) {
                     Announcements.playAnnouncement(arg);
                 } else {
-                    MessageManager.sendSpecialMessage(sender, "command_announcement_does_not_exist", arg);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_does_not_exist", arg);
                 }
                 return;
             }
@@ -114,7 +112,7 @@ public class AnnouncementCommand extends Command {
     }
 
     private void showCommandUsage(CommandSender sender) {
-        MessageManager.sendMessage(sender, "command_announcement_usage");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_announcement_usage");
         sender.sendMessage(new ComponentBuilder("/announcement add <name> <message>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/announcement remove <name>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/announcement start <name> <interval in minutes>").color(ChatColor.AQUA).create());

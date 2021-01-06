@@ -1,17 +1,14 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import de.myzelyam.api.vanish.BungeeVanishAPI;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.bungee.MultiChat;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Staff List Command
@@ -22,25 +19,23 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
 public class StaffListCommand extends Command {
 
     public StaffListCommand() {
-        super("mcstaff", "multichat.staff.list", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("staff").toArray(new String[0]));
+        super("mcstaff", "multichat.staff.list", ProxyConfigs.ALIASES.getAliases("mcstaff"));
     }
 
     public void execute(CommandSender sender, String[] args) {
-        MessageManager.sendMessage(sender, "command_stafflist_list");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_stafflist_list");
 
         AtomicBoolean anyStaff = new AtomicBoolean(false);
-        boolean fetchSpigotDisplayNames = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
-                .getConfig().getBoolean(ConfigValues.Config.FETCH_SPIGOT_DISPLAY_NAMES);
 
         ProxyServer.getInstance().getServers().values().stream()
                 .filter(serverInfo -> serverInfo.getPlayers().size() > 0)
                 .forEach(serverInfo -> {
-                    MessageManager.sendSpecialMessage(sender, "command_stafflist_list_server", serverInfo.getName());
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_stafflist_list_server", serverInfo.getName());
 
                     serverInfo.getPlayers().stream()
                             .filter(target -> target.hasPermission("multichat.staff")
                                     && !(MultiChat.premiumVanish
-                                    && MultiChat.hideVanishedStaffInStaffList
+                                    && ProxyConfigs.CONFIG.isPvPreventStaffList()
                                     && BungeeVanishAPI.isInvisible(target)
                                     && !sender.hasPermission("multichat.staff.list.vanished"))
                             )
@@ -48,16 +43,16 @@ public class StaffListCommand extends Command {
                                 if (!anyStaff.get())
                                     anyStaff.set(true);
 
-                                if (fetchSpigotDisplayNames)
+                                if (ProxyConfigs.CONFIG.isFetchSpigotDisplayNames())
                                     ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(target.getName(), serverInfo);
 
-                                MessageManager.sendSpecialMessage(sender, "command_stafflist_list_item", target.getDisplayName());
+                                ProxyConfigs.MESSAGES.sendMessage(sender, "command_stafflist_list_item", target.getDisplayName());
                             });
 
                     // TODO: We should decide when or how "no staff is online" is shown
                     //  If we want to keep it like this, we should replace the stream with a normal for
                     if (!anyStaff.get())
-                        MessageManager.sendMessage(sender, "command_stafflist_no_staff");
+                        ProxyConfigs.MESSAGES.sendMessage(sender, "command_stafflist_no_staff");
                     else
                         anyStaff.set(false);
                 });

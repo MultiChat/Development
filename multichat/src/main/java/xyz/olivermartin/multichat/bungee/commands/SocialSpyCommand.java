@@ -3,10 +3,8 @@ package xyz.olivermartin.multichat.bungee.commands;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 import java.util.UUID;
@@ -20,19 +18,19 @@ import java.util.UUID;
 public class SocialSpyCommand extends Command {
 
     public SocialSpyCommand() {
-        super("mcsocialspy", "multichat.staff.spy", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("socialspy").toArray(new String[0]));
+        super("mcsocialspy", "multichat.staff.spy", ProxyConfigs.ALIASES.getAliases("mcsocialspy"));
     }
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, "command_socialspy_only_players");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_socialspy_only_players");
             return;
         }
 
         // TODO: We don't really need this check
         if (args.length != 0) {
-            MessageManager.sendMessage(sender, "command_socialspy_usage");
-            MessageManager.sendMessage(sender, "command_socialspy_desc");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_socialspy_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_socialspy_desc");
             return;
         }
 
@@ -41,10 +39,10 @@ public class SocialSpyCommand extends Command {
 
         if (proxyDataStore.getSocialSpy().contains(playerUID)) {
             proxyDataStore.getSocialSpy().remove(playerUID);
-            MessageManager.sendMessage(sender, "command_socialspy_disabled");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_socialspy_disabled");
         } else {
             proxyDataStore.getSocialSpy().add(playerUID);
-            MessageManager.sendMessage(sender, "command_socialspy_enabled");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_socialspy_enabled");
         }
     }
 }

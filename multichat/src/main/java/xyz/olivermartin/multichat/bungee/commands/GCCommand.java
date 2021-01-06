@@ -1,27 +1,20 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
-import java.util.Optional;
-
 import com.olivermartin410.plugins.TGroupChatInfo;
-
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ChatManipulation;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.ConsoleManager;
-import xyz.olivermartin.multichat.bungee.Events;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.bungee.*;
+import xyz.olivermartin.multichat.common.MessageType;
 import xyz.olivermartin.multichat.common.MultiChatUtil;
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
 import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Optional;
 
 /**
  * Group Chat Messaging Command
@@ -32,12 +25,12 @@ import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 public class GCCommand extends Command {
 
     public GCCommand() {
-        super("mcgc", "multichat.group", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("gc").toArray(new String[0]));
+        super("mcgc", "multichat.group", ProxyConfigs.ALIASES.getAliases("mcgc"));
     }
 
     public void execute(CommandSender sender, String[] args) {
         if (!(sender instanceof ProxiedPlayer)) {
-            MessageManager.sendMessage(sender, args.length == 0
+            ProxyConfigs.MESSAGES.sendMessage(sender, args.length == 0
                     ? "command_gc_only_players_toggle"
                     : "command_gc_only_players_speak"
             );
@@ -47,20 +40,20 @@ public class GCCommand extends Command {
         ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
         if (args.length == 0) {
             boolean toggleResult = Events.toggleGC(proxiedPlayer.getUniqueId());
-            MessageManager.sendMessage(sender, "command_gc_toggle_" + (toggleResult ? "on" : "off"));
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_toggle_" + (toggleResult ? "on" : "off"));
             return;
         }
 
         ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
         String viewedChat = proxyDataStore.getViewedChats().get(proxiedPlayer.getUniqueId());
         if (viewedChat == null) {
-            MessageManager.sendMessage(sender, "command_gc_no_chat_selected");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_no_chat_selected");
             return;
         }
 
         TGroupChatInfo groupChatInfo = proxyDataStore.getGroupChats().get(viewedChat);
         if (groupChatInfo == null) {
-            MessageManager.sendMessage(sender, "command_gc_no_longer_exists");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_gc_no_longer_exists");
             return;
         }
 
@@ -79,24 +72,24 @@ public class GCCommand extends Command {
 
         ProxiedPlayer proxiedPlayer = ProxyServer.getInstance().getPlayer(playerName);
         if (proxiedPlayer != null) {
-            if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), "group_chats")) {
-                MessageManager.sendMessage(proxiedPlayer, "mute_cannot_send_message");
+            if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.GROUP_CHATS)) {
+                ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "mute_cannot_send_message");
                 return;
             }
 
-            if (ChatControl.handleSpam(proxiedPlayer, originalMessage, "group_chats"))
+            if (ChatControl.handleSpam(proxiedPlayer, originalMessage, MessageType.GROUP_CHATS))
                 return;
         }
 
         Optional<String> optionalChatRules;
 
-        optionalChatRules = ChatControl.applyChatRules(originalMessage, "group_chats", playerName);
+        optionalChatRules = ChatControl.applyChatRules(proxiedPlayer, originalMessage, MessageType.GROUP_CHATS);
 
         if (!optionalChatRules.isPresent())
             return;
         originalMessage = optionalChatRules.get();
 
-        String messageFormat = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG).getConfig().getString(ConfigValues.Config.GroupChat.FORMAT);
+        String messageFormat = ProxyConfigs.CONFIG.getGroupChatFormat();
         String translatedMessage = MultiChatUtil.translateColorCodes(
                 manipulation.replaceGroupChatVars(messageFormat, playerName, originalMessage, groupInfo.getName())
         );
@@ -120,13 +113,13 @@ public class GCCommand extends Command {
                 )
                 .forEach(target -> {
                     if (proxiedPlayer != null
-                            && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), "group_chats")) {
+                            && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), MessageType.GROUP_CHATS)) {
                         ChatControl.sendIgnoreNotifications(target, proxiedPlayer, "group_chats");
                         return;
                     }
 
                     // TODO: Move legacy check inside parsing at some point
-                    if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
+                    if (ProxyConfigs.CONFIG.isLegacyServer(target.getServer().getInfo().getName())) {
                         target.sendMessage(legacyMessage);
                         return;
                     }

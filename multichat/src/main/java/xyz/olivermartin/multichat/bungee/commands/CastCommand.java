@@ -5,9 +5,7 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.CastControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 import java.util.Arrays;
 
@@ -20,7 +18,7 @@ import java.util.Arrays;
 public class CastCommand extends Command {
 
     public CastCommand() {
-        super("mccast", "multichat.cast.admin", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("cast").toArray(new String[0]));
+        super("mccast", "multichat.cast.admin", ProxyConfigs.ALIASES.getAliases("mccast"));
     }
 
     @Override
@@ -33,9 +31,9 @@ public class CastCommand extends Command {
         String arg = args[0].toLowerCase();
         switch (arg) {
             case "list": {
-                MessageManager.sendMessage(sender, "command_cast_list");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_list");
                 CastControl.castList.forEach((key, value) ->
-                        MessageManager.sendSpecialMessage(sender, "command_cast_list_item", key + ": " + value)
+                        ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_list_item", key + ": " + value)
                 );
                 return;
             }
@@ -45,12 +43,12 @@ public class CastCommand extends Command {
 
                 String castName = args[1];
                 if (CastControl.existsCast(castName) || castName.equalsIgnoreCase("cast")) {
-                    MessageManager.sendSpecialMessage(sender, "command_cast_added_error", castName);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_added_error", castName);
                     return;
                 }
 
                 CastControl.addCast(castName, String.join(" ", Arrays.copyOfRange(args, 2, args.length)));
-                MessageManager.sendSpecialMessage(sender, "command_cast_added", castName);
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_added", castName);
                 return;
             }
             case "remove": {
@@ -59,12 +57,12 @@ public class CastCommand extends Command {
 
                 String castName = args[1];
                 if (!CastControl.existsCast(castName)) {
-                    MessageManager.sendSpecialMessage(sender, "command_cast_does_not_exist", castName);
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_does_not_exist", castName);
                     return;
                 }
 
                 CastControl.removeCast(castName);
-                MessageManager.sendSpecialMessage(sender, "command_cast_removed", castName);
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_removed", castName);
                 return;
             }
         }
@@ -73,7 +71,7 @@ public class CastCommand extends Command {
     }
 
     public void showCommandUsage(CommandSender sender) {
-        MessageManager.sendMessage(sender, "command_cast_usage");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_cast_usage");
         sender.sendMessage(new ComponentBuilder("/cast add <name> <format>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/cast remove <name>").color(ChatColor.AQUA).create());
         sender.sendMessage(new ComponentBuilder("/cast list").color(ChatColor.AQUA).create());

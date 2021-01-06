@@ -22,12 +22,12 @@ public class LocalSpongeChatManager extends LocalChatManager {
 			Optional<Player> opPlayer = Sponge.getServer().getPlayer(player.getUniqueId());
 			if (opPlayer.isPresent()) {
 				//MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have: " + message);
-				//MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have (visualised): " + message.replace("&", "(#d)").replace("ง", "(#e)"));
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("Going into PAPI we have (visualised): " + message.replace("&", "(#d)").replace("ยง", "(#e)"));
 
 				message = TextSerializers.FORMATTING_CODE.serialize(papi.replaceSourcePlaceholders(message+"#", opPlayer.get()));
 
 				//MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have: " + message);
-				//MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have (visualised): " + message.replace("&", "(#d)").replace("ง", "(#e)"));
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("Serialised we have (visualised): " + message.replace("&", "(#d)").replace("ยง", "(#e)"));
 
 				// PAPI replaces unknown placeholders with {key}, so change them back to %key%!!
 				message = message.substring(0,message.length()-1);
@@ -41,7 +41,7 @@ public class LocalSpongeChatManager extends LocalChatManager {
 				message = message.replace("{MODE}", "%MODE%");
 
 				//MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have: " + message);
-				//MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have (visualised): " + message.replace("&", "(#d)").replace("ง", "(#e)"));
+				//MultiChatLocal.getInstance().getConsoleLogger().debug("After PAPI we have (visualised): " + message.replace("&", "(#d)").replace("ยง", "(#e)"));
 			}
 		}
 

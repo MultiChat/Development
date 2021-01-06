@@ -5,12 +5,8 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigValues;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -25,7 +21,7 @@ public class ClearChatCommand extends Command {
     private final TextComponent EMPTY_LINES;
 
     public ClearChatCommand() {
-        super("mcclearchat", "multichat.chat.clear", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("clearchat").toArray(new String[0]));
+        super("mcclearchat", "multichat.chat.clear", ProxyConfigs.ALIASES.getAliases("mcclearchat"));
 
         // Join space and linebreak character 200 times (= 100 empty lines)
         char space = ' ';
@@ -48,7 +44,7 @@ public class ClearChatCommand extends Command {
             }
             case "all": {
                 if (!sender.hasPermission("multichat.chat.clear.all")) {
-                    MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "ALL");
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_clearchat_no_permission", "ALL");
                     return;
                 }
 
@@ -62,7 +58,7 @@ public class ClearChatCommand extends Command {
                 }
 
                 if (!sender.hasPermission("multichat.chat.clear.server")) {
-                    MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "SERVER");
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_clearchat_no_permission", "SERVER");
                     return;
                 }
 
@@ -74,20 +70,18 @@ public class ClearChatCommand extends Command {
             }
             case "global": {
                 if (!sender.hasPermission("multichat.chat.clear.global")) {
-                    MessageManager.sendSpecialMessage(sender, "command_clearchat_no_permission", "GLOBAL");
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_clearchat_no_permission", "GLOBAL");
                     return;
                 }
 
-                List<String> noGlobalServers = ConfigManager.getInstance().getHandler(ConfigFile.CONFIG)
-                        .getConfig().getStringList(ConfigValues.Config.NO_GLOBAL);
                 clearChatForEveryone("command_clearchat_global",
                         target -> target.getServer() != null
-                                && !noGlobalServers.contains(target.getServer().getInfo().getName())
+                                && ProxyConfigs.CONFIG.isGlobalServer(target.getServer().getInfo().getName())
                 );
                 break;
             }
             default: {
-                MessageManager.sendMessage(sender, "command_clearchat_usage");
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_clearchat_usage");
                 break;
             }
         }
@@ -95,7 +89,7 @@ public class ClearChatCommand extends Command {
 
     private void clearChatSelf(CommandSender sender) {
         sender.sendMessage(EMPTY_LINES);
-        MessageManager.sendMessage(sender, "command_clearchat_self");
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_clearchat_self");
     }
 
     private void clearChatForEveryone(String configPath, Predicate<ProxiedPlayer> predicate) {
@@ -104,7 +98,7 @@ public class ClearChatCommand extends Command {
         playerStream.forEach(target -> {
             target.sendMessage(EMPTY_LINES);
             if (configPath != null && !configPath.isEmpty())
-                MessageManager.sendMessage(target, configPath);
+                ProxyConfigs.MESSAGES.sendMessage(target, configPath);
         });
         playerStream.close();
     }

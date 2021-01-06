@@ -9,10 +9,8 @@ import java.util.regex.PatternSyntaxException;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
 import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
-import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Execute Command
@@ -23,12 +21,12 @@ import xyz.olivermartin.multichat.proxy.common.config.ConfigFile;
 public class MultiChatExecuteCommand extends Command {
 
     public MultiChatExecuteCommand() {
-        super("mcexecute", "multichat.execute", ConfigManager.getInstance().getHandler(ConfigFile.ALIASES).getConfig().getStringList("execute").toArray(new String[0]));
+        super("mcexecute", "multichat.execute", ProxyConfigs.ALIASES.getAliases("mcexecute"));
     }
 
     public void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            MessageManager.sendMessage(sender, "command_execute_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_execute_usage");
             return;
         }
 
@@ -60,7 +58,7 @@ public class MultiChatExecuteCommand extends Command {
             serverPattern = Pattern.compile(server);
             playerPattern = Pattern.compile(player);
         } catch (PatternSyntaxException ex) {
-            MessageManager.sendMessage(sender, "command_execute_regex");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_execute_regex");
             return;
         }
 
