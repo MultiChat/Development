@@ -112,6 +112,12 @@ public class GCCommand extends Command {
                         || proxyDataStore.getAllSpy().contains(target.getUniqueId())
                 )
                 .forEach(target -> {
+                    if (proxyDataStore.getAllSpy().contains(target.getUniqueId())
+                            && !target.hasPermission("multichat.staff.spy")) {
+                        proxyDataStore.getAllSpy().remove(target.getUniqueId());
+                        return;
+                    }
+
                     if (proxiedPlayer != null
                             && ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), MessageType.GROUP_CHATS)) {
                         ChatControl.sendIgnoreNotifications(target, proxiedPlayer, "group_chats");
