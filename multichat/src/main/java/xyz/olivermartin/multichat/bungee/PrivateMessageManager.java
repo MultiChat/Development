@@ -1,12 +1,16 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.UUID;
-
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 
 public class PrivateMessageManager {
 
@@ -28,59 +32,70 @@ public class PrivateMessageManager {
 		chatfix = new ChatManipulation();
 	}
 
+	private void displayMessage(ProxiedPlayer player, String rawMessage, String replacement) {
+
+		rawMessage = MultiChatUtil.translateColorCodes(rawMessage);
+		replacement = MultiChatUtil.translateColorCodes(replacement);
+
+		if (ProxyConfigs.CONFIG.isLegacyServer(player.getServer().getInfo().getName())) {
+			rawMessage = MultiChatUtil.approximateRGBColorCodes(rawMessage);
+			replacement = MultiChatUtil.approximateRGBColorCodes(replacement);
+		}
+
+		player.sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
+
+	}
+
+	private void displayConsoleMessage(String rawMessage, String replacement) {
+
+		rawMessage = MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(rawMessage));
+		replacement = MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(replacement));
+		ProxyServer.getInstance().getConsole().sendMessage(ProxyJsonUtils.parseMessage(rawMessage, "%MESSAGE%", replacement));
+
+	}
+
+	private void updateLastMessage(UUID sender, UUID target) {
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+		ds.getLastMsg().put(sender, target);
+		ds.getLastMsg().put(target, sender);
+
+	}
+
 	public void sendMessage(String message, ProxiedPlayer sender, ProxiedPlayer target) {
 
-		message = MultiChatUtil.reformatRGB(message);
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		// Replace placeholders (SENDER)
+		String finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, sender, target);
 
-		String finalmessage = chatfix.replaceMsgVars(messageoutformat, message, sender, target);
-		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
-			sender.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-		} else {
-			sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-		}
+		displayMessage(sender, finalmessage, message);
 
-		finalmessage = chatfix.replaceMsgVars(messageinformat, message, sender, target);
-		if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
-			target.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-		} else {
-			target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-		}
+		// Replace placeholders (TARGET)
+		finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmInFormat(), message, sender, target);
 
-		finalmessage = chatfix.replaceMsgVars(messagespyformat, message, sender, target);
+		displayMessage(target, finalmessage, message);
+
+		// Replace placeholders (SPY)
+		finalmessage = chatfix.replaceMsgVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, sender, target);
+
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
 					&& (onlineplayer.getUniqueId() != sender.getUniqueId())
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")
 							|| target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-				}
+				displayMessage(onlineplayer, finalmessage, message);
 
 			}
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(sender.getUniqueId())) {
-			MultiChat.lastmsg.remove(sender.getUniqueId());
-		}
-
-		MultiChat.lastmsg.put(sender.getUniqueId(), target.getUniqueId());
-
-		if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-			MultiChat.lastmsg.remove(target.getUniqueId());
-		}
-
-		MultiChat.lastmsg.put(target.getUniqueId(), sender.getUniqueId());
+		// Update the last message map to be used for /r
+		updateLastMessage(sender.getUniqueId(), target.getUniqueId());
 
 		ConsoleManager.logSocialSpy(sender.getName(), target.getName(), message);
 
@@ -88,101 +103,96 @@ public class PrivateMessageManager {
 
 	public void sendMessageConsoleTarget(String message, ProxiedPlayer sender) {
 
-		message = MultiChatUtil.reformatRGB(message);
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		// Replace placeholders (SENDER)
+		String finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, sender);
 
-		String finalmessage = chatfix.replaceMsgConsoleTargetVars(messageoutformat, message, (ProxiedPlayer)sender);
-		if (MultiChat.legacyServers.contains(sender.getServer().getInfo().getName())) {
-			sender.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-		} else {
-			sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-		}
+		displayMessage(sender, finalmessage, message);
 
-		finalmessage = chatfix.replaceMsgConsoleTargetVars(messageinformat, message, (ProxiedPlayer)sender);
-		ProxyServer.getInstance().getConsole().sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		// Replace placeholders (TARGET) (CONSOLE)
+		finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmInFormat(), message, sender);
 
-		finalmessage = chatfix.replaceMsgConsoleTargetVars(messagespyformat, message, (ProxiedPlayer)sender);
+		displayConsoleMessage(finalmessage, message);
+
+		// Replace placeholders (SPY)
+		finalmessage = chatfix.replaceMsgConsoleTargetVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, sender);
+
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
-					&& (onlineplayer.getUniqueId() != ((ProxiedPlayer)sender).getUniqueId())
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
+					&& (onlineplayer.getUniqueId() != sender.getUniqueId())
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")))) {
 
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-				}
+				displayMessage(onlineplayer, finalmessage, message);
 			}
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
-			MultiChat.lastmsg.remove(((ProxiedPlayer)sender).getUniqueId());
-		}
-
-		MultiChat.lastmsg.put(((ProxiedPlayer)sender).getUniqueId(), new UUID(0L, 0L));
-
-		if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-			MultiChat.lastmsg.remove(new UUID(0L, 0L));
-		}
-
-		MultiChat.lastmsg.put(new UUID(0L, 0L), ((ProxiedPlayer)sender).getUniqueId());
+		// Update the last message map to be used for /r
+		updateLastMessage(sender.getUniqueId(), new UUID(0L, 0L));
 
 	}
 
 	public void sendMessageConsoleSender(String message, ProxiedPlayer target) {
 
-		message = MultiChatUtil.reformatRGB(message);
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
 
-		CommandSender sender = ProxyServer.getInstance().getConsole();
+		// Replace placeholders (SENDER) (CONSOLE)
+		String finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmOutFormat(), message, target);
 
-		String messageoutformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmout");
-		String messageinformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmin");
-		String messagespyformat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("pmspy");
+		displayConsoleMessage(finalmessage, message);
 
-		String finalmessage = chatfix.replaceMsgConsoleSenderVars(messageoutformat, message, target);
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
+		// Replace placeholders (TARGET)
+		finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmInFormat(), message, target);
 
-		finalmessage = chatfix.replaceMsgConsoleSenderVars(messageinformat, message, target);
-		if (MultiChat.legacyServers.contains(target.getServer().getInfo().getName())) {
-			target.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-		} else {
-			target.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-		}
+		displayMessage(target, finalmessage, message);
 
-		finalmessage = chatfix.replaceMsgConsoleSenderVars(messagespyformat, message, target);
+		// Replace placeholders (SPY)
+		finalmessage = chatfix.replaceMsgConsoleSenderVars(ProxyConfigs.CONFIG.getPmSpyFormat(), message, target);
+
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
 			if ((onlineplayer.hasPermission("multichat.staff.spy"))
-					&& (MultiChat.socialspy.contains(onlineplayer.getUniqueId()))
+					&& (ds.getSocialSpy().contains(onlineplayer.getUniqueId()))
 					&& (onlineplayer.getUniqueId() != target.getUniqueId())
 					&& (!(target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
-				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));
-				}
+				displayMessage(onlineplayer, finalmessage, message);
 			}
 
 		}
 
-		if (MultiChat.lastmsg.containsKey(new UUID(0L, 0L))) {
-			MultiChat.lastmsg.remove(new UUID(0L, 0L));
+		// Update the last message map to be used for /r
+		updateLastMessage(new UUID(0L, 0L), target.getUniqueId());
+
+	}
+
+	public Optional<ProxiedPlayer> getPartialPlayerMatch(String search) {
+
+		// Spigot's own partial match algorithm
+		Collection<ProxiedPlayer> spigotMatches = ProxyServer.getInstance().matchPlayer(search);
+
+		if (spigotMatches != null && spigotMatches.size() > 0) {
+			return Optional.of(spigotMatches.iterator().next());
 		}
 
-		MultiChat.lastmsg.put(new UUID(0L, 0L), target.getUniqueId());
-
-		if (MultiChat.lastmsg.containsKey(target.getUniqueId())) {
-			MultiChat.lastmsg.remove(target.getUniqueId());
+		// Check for names to contain the search
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+			if (p.getName().toLowerCase().contains(search.toLowerCase())) {
+				return Optional.of(p);
+			}
 		}
 
-		MultiChat.lastmsg.put(target.getUniqueId(), new UUID(0L, 0L));
+		// Check for display names to contain the search
+		for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+			if (p.getDisplayName().toLowerCase().contains(search.toLowerCase())) {
+				return Optional.of(p);
+			}
+		}
+
+		return Optional.empty();
 
 	}
 

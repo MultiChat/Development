@@ -1,33 +1,25 @@
 package xyz.olivermartin.multichat.local.common;
 
+import xyz.olivermartin.multichat.common.MultiChatUtil;
+
 public abstract class LocalConsoleLogger {
 
 	private MultiChatLocalPlatform platform;
 
-	protected String prefix;
-	protected String debugPrefix;
+	protected static final String PREFIX = MultiChatUtil.translateColorCodes("&8[&2M&aC&3L&8]&7 ");
+	protected static final String DEBUG_PREFIX = PREFIX + MultiChatUtil.translateColorCodes("&8[&4DEBUG&8]&7 ");
 
 	private boolean debug;
 
 	protected LocalConsoleLogger(MultiChatLocalPlatform platform) {
 		this.platform = platform;
 		debug = false;
-		prefix = "&8[&2M&aC&3L&8]&7 ";
-		debugPrefix = "&8[&2M&aC&3L&8][&4DEBUG&8]&7 ";
-	}
-
-	public void setPrefix(String prefix) {
-		this.prefix = prefix;
-	}
-
-	public String getPrefix() {
-		return this.prefix;
 	}
 
 	public void setDebug(boolean debug) {
 		this.debug = debug;
 	}
-	
+
 	public boolean toggleDebug() {
 		this.debug = !this.debug;
 		return this.debug;
@@ -39,14 +31,20 @@ public abstract class LocalConsoleLogger {
 
 	protected abstract void displayMessageUsingLogger(String message);
 
-	protected abstract void sendColouredMessageToConsoleSender(String message);
+	protected abstract void sendConsoleMessage(String message);
 
 	public void log(String message) {
-		sendColouredMessageToConsoleSender(prefix + message);
+		sendConsoleMessage(PREFIX + message);
 	}
 
 	public void debug(String message) {
-		if (debug) sendColouredMessageToConsoleSender(debugPrefix + message);
+		debug("", message);
+	}
+
+	public void debug(String prefix, String message) {
+		if (debug) sendConsoleMessage(DEBUG_PREFIX
+				+ MultiChatUtil.approximateRGBColorCodes(MultiChatUtil.translateColorCodes(prefix))
+				+ message);
 	}
 
 }

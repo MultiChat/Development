@@ -39,9 +39,19 @@ public class LocalDataStore {
 	private String globalChatFormat = "&f%DISPLAYNAME%&f: ";
 
 	/**
+	 * Channel formats received from the proxy
+	 */
+	private Map<String, String> channelFormats = new HashMap<String, String>();
+
+	/**
 	 * Chat Queues to handle the local global hack
 	 */
 	private Map<String, Queue<String>> chatQueues = new HashMap<String, Queue<String>>();
+
+	/**
+	 * Recipient Queues
+	 */
+	private Map<UUID, Queue<Set<UUID>>> recipientQueues = new HashMap<UUID, Queue<Set<UUID>>>();
 
 	/**
 	 * What channel is each player speaking in?
@@ -62,11 +72,6 @@ public class LocalDataStore {
 	 * List of channels with their members
 	 */
 	private Map<String, LocalPseudoChannel> channelObjects = new HashMap<String, LocalPseudoChannel>();
-
-	/**
-	 * Map of who players ignore
-	 */
-	private Map<UUID, Set<UUID>> ignoreMap = new HashMap<UUID, Set<UUID>>();
 
 	/**
 	 * IS THIS A LEGACY SERVER THAT NEEDS RGB CODE APPROX.?
@@ -109,6 +114,13 @@ public class LocalDataStore {
 	}
 
 	/**
+	 * @return the recipientQueues
+	 */
+	public synchronized Map<UUID, Queue<Set<UUID>>> getRecipientQueues() {
+		return recipientQueues;
+	}
+
+	/**
 	 * @return the playerChannels
 	 */
 	public synchronized Map<UUID, String> getPlayerChannels() {
@@ -134,13 +146,6 @@ public class LocalDataStore {
 	 */
 	public synchronized Map<String, LocalPseudoChannel> getChannelObjects() {
 		return channelObjects;
-	}
-
-	/**
-	 * @return the ignoreMap
-	 */
-	public synchronized Map<UUID, Set<UUID>> getIgnoreMap() {
-		return ignoreMap;
 	}
 
 	/**
@@ -186,6 +191,13 @@ public class LocalDataStore {
 	}
 
 	/**
+	 * @param recipientQueues the recipientQueues to set
+	 */
+	public synchronized void setRecipientQueues(Map<UUID, Queue<Set<UUID>>> recipientQueues) {
+		this.recipientQueues = recipientQueues;
+	}
+
+	/**
 	 * @param playerChannels the playerChannels to set
 	 */
 	public synchronized void setPlayerChannels(Map<UUID, String> playerChannels) {
@@ -214,17 +226,24 @@ public class LocalDataStore {
 	}
 
 	/**
-	 * @param ignoreMap the ignoreMap to set
-	 */
-	public synchronized void setIgnoreMap(Map<UUID, Set<UUID>> ignoreMap) {
-		this.ignoreMap = ignoreMap;
-	}
-
-	/**
 	 * @param legach the legacy to set
 	 */
 	public synchronized void setLegacy(boolean legacy) {
 		this.legacy = legacy;
+	}
+
+	/**
+	 * @return the channelFormats
+	 */
+	public Map<String, String> getChannelFormats() {
+		return channelFormats;
+	}
+
+	/**
+	 * @param channelFormats the channelFormats to set
+	 */
+	public void setChannelFormats(Map<String, String> channelFormats) {
+		this.channelFormats = channelFormats;
 	}
 
 }

@@ -2,185 +2,107 @@ package xyz.olivermartin.multichat.bungee.commands;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.Channel;
-import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.CommandManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.UUIDNameManager;
+import xyz.olivermartin.multichat.bungee.*;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.GlobalStaticProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.AbstractProxyConfig;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.contexts.GlobalContext;
 
 /**
  * MultiChat (Admin) Command
  * <p>Used to view details about the plugin and display help information</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class MultiChatCommand extends Command {
 
-	private static String[] aliases = new String[] {};
+    public MultiChatCommand() {
+        super("multichat", "multichat.admin", ProxyConfigs.ALIASES.getAliases("multichat"));
+    }
 
-	public MultiChatCommand() {
-		super("multichat", "multichat.admin", aliases);
-	}
+    public void execute(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2Multi&aChat &bVersion " + MultiChat.LATEST_VERSION)).create());
+            sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bBy Revilo410")).create());
+            sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bOriginally created for &3Oasis-MC.US")).create());
+            sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bUse &3/multichat help &bfor all commands")).create());
+            return;
+        }
 
-	private void displayHelp(CommandSender sender, int page) {
+        String subCommand = args[0].toLowerCase();
+        String subArgument = args.length > 1 ? args[1].toLowerCase() : "";
 
-		switch (page) {
+        switch (subCommand) {
+            case "help": {
+                int page = 1;
+                try {
+                    page = Integer.parseInt(subArgument);
+                } catch (NumberFormatException ignored) {
+                }
 
-		case 1:
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_help_" + Math.max(1, Math.min(page, 3)));
+                break;
+            }
+            case "debug": {
+                DebugManager.toggle();
+                DebugManager.log("Debug mode toggled");
+                break;
+            }
+            case "save": {
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_save_prepare");
+                MultiChatProxy.getInstance().getFileStoreManager().save();
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_save_completed");
+                break;
+            }
+            case "reload": {
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_reload_prepare");
 
-			MessageManager.sendMessage(sender, "command_multichat_help_1");
-			break;
+                // TODO: [2.0] This REALLY needs to change
+                MultiChat multiChat = (MultiChat) MultiChatProxy.getInstance().getPlugin();
 
-		case 2:
+                multiChat.unregisterCommands();
 
-			MessageManager.sendMessage(sender, "command_multichat_help_2");
-			break;
+                ProxyConfigs.ALL.forEach(AbstractProxyConfig::reloadConfig);
+                ProxyConfigs.RAW_CONFIGS.forEach(AbstractProxyConfig::reloadConfig);
 
-		default:
+                // Reload, and re-register commands
+                CommandManager.reload();
+                multiChat.registerCommands();
 
-			MessageManager.sendMessage(sender, "command_multichat_help_3");
-			break;
+                ChatControl.reload();
 
-		}
+                multiChat.getLogger().info("VERSION LOADED: " + ProxyConfigs.CONFIG.getVersion());
 
-	}
+                // Set default channel
+                String defaultChannel = ProxyConfigs.CONFIG.getDefaultChannel();
+                boolean forceChannelOnJoin = ProxyConfigs.CONFIG.isForceChannelOnJoin();
 
-	public void execute(CommandSender sender, String[] args) {
+                // New context manager and channels
+                GlobalContext globalContext = new GlobalContext(defaultChannel, forceChannelOnJoin, true);
+                MultiChatProxy.getInstance().getContextManager().setGlobalContext(globalContext);
 
-		if (args.length < 1) {
+                ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
+                channelManager.setGlobalChannel(
+                        new GlobalStaticProxyChannel("Global Channel",
+                                ProxyConfigs.CONFIG.getGlobalFormat(),
+                                channelManager
+                        )
+                );
+                channelManager.setLocalChannel(
+                        new LocalChannel("Local Channel",
+                                ProxyConfigs.CONFIG.getGlobalFormat(),
+                                channelManager
+                        )
+                );
 
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&2Multi&aChat &bVersion " + MultiChat.LATEST_VERSION)).create());
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bBy Revilo410")).create());
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bOriginally created for &3Oasis-MC.US")).create());
-			sender.sendMessage(new ComponentBuilder(ChatColor.translateAlternateColorCodes('&', "&bUse &3/multichat help &bfor all commands")).create());
-
-		} else {
-
-			if (args.length == 1) {
-
-				if (args[0].toLowerCase().equals("help")) {
-
-					displayHelp(sender, 1);
-
-				} else if (args[0].toLowerCase().equals("debug")) {
-
-					DebugManager.toggle();
-					DebugManager.log("Debug mode toggled");
-
-				} else if (args[0].toLowerCase().equals("save")) {
-
-					MessageManager.sendMessage(sender, "command_multichat_save_prepare");
-
-					MultiChat.saveChatInfo();
-					MultiChat.saveGroupChatInfo();
-					MultiChat.saveGroupSpyInfo();
-					MultiChat.saveGlobalChatInfo();
-					MultiChat.saveSocialSpyInfo();
-					MultiChat.saveAnnouncements();
-					MultiChat.saveBulletins();
-					MultiChat.saveCasts();
-					MultiChat.saveMute();
-					MultiChat.saveIgnore();
-					UUIDNameManager.saveUUIDS();
-
-					MessageManager.sendMessage(sender, "command_multichat_save_completed");
-
-				} else if (args[0].toLowerCase().equals("reload")) {
-
-					MessageManager.sendMessage(sender, "command_multichat_reload_prepare");
-
-					// Unregister commands
-					MultiChat.getInstance().unregisterCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
-
-					ConfigManager.getInstance().getHandler("config.yml").startupConfig();
-					MultiChat.configversion = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("version");
-
-					ConfigManager.getInstance().getHandler("joinmessages.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("messages.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("chatcontrol.yml").startupConfig();
-
-					ConfigManager.getInstance().getHandler("messages_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("joinmessages_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("config_fr.yml").startupConfig();
-					ConfigManager.getInstance().getHandler("chatcontrol_fr.yml").startupConfig();
-
-					// Reload, and re-register commands
-					CommandManager.reload();
-					MultiChat.getInstance().registerCommands(ConfigManager.getInstance().getHandler("config.yml").getConfig(), ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig());
-
-					ChatControl.reload();
-
-					System.out.println("VERSION LOADED: " + MultiChat.configversion);
-
-					// Set up chat control stuff
-					if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_control")) {
-						ChatControl.controlLinks = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getBoolean("link_control");
-						ChatControl.linkMessage = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_removal_message");
-						if (ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().contains("link_regex")) {
-							ChatControl.linkRegex = ConfigManager.getInstance().getHandler("chatcontrol.yml").getConfig().getString("link_regex");
-						}
-					}
-
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("privacy_settings")) {
-						MultiChat.logPMs = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_pms");
-						MultiChat.logStaffChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_staffchat");
-						MultiChat.logGroupChat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("privacy_settings").getBoolean("log_groupchat");
-					}
-
-					// Legacy servers for RGB approximation
-					if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("legacy_servers")) {
-						MultiChat.legacyServers = ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("legacy_servers");
-					}
-
-					// Set default channel
-					MultiChat.defaultChannel = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("default_channel");
-					MultiChat.forceChannelOnJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("force_channel_on_join");
-
-					Channel.getGlobalChannel().setFormat(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("globalformat"));
-					Channel.getGlobalChannel().clearServers();
-
-					for (String server : ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_global")) {
-						Channel.getGlobalChannel().addServer(server);
-					}
-
-					if (ProxyServer.getInstance().getPluginManager().getPlugin("PremiumVanish") != null) {
-						MultiChat.premiumVanish = true;
-
-						if (ConfigManager.getInstance().getHandler("config.yml").getConfig().contains("premium_vanish")) {
-							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_message");
-							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
-							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_join");
-						}
-
-					} else {
-						MultiChat.premiumVanish = false;
-					}
-
-					MessageManager.sendMessage(sender, "command_multichat_reload_completed");
-				}
-			}
-
-			if (args.length == 2) {
-
-				if (args[0].toLowerCase().equals("help")) {
-
-					if (args[1].toLowerCase().equals("1")) {
-						displayHelp(sender,1);
-					} else if (args[1].toLowerCase().equals("2")) {
-						displayHelp(sender,2);
-					} else {
-						displayHelp(sender,3);
-					}
-
-				}
-			}
-		}
-	}
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_multichat_reload_completed");
+                break;
+            }
+        }
+    }
 }

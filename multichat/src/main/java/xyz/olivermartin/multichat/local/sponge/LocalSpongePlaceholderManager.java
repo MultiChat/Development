@@ -2,8 +2,8 @@ package xyz.olivermartin.multichat.local.sponge;
 
 import java.util.UUID;
 
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalPlaceholderManager;
+import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
 public class LocalSpongePlaceholderManager extends LocalPlaceholderManager {
@@ -14,10 +14,8 @@ public class LocalSpongePlaceholderManager extends LocalPlaceholderManager {
 
 	@Override
 	public String buildChatFormat(UUID uuid, String format) {
-		// Reformat any hex codes in the format
-		format = MultiChatUtil.reformatRGB(format);
-		format = processMultiChatPlaceholders(uuid, format).replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
-		format = MultiChatUtil.approximateHexCodes(format);
+		format = processMultiChatPlaceholders(uuid, format);
+		format = MultiChatLocal.getInstance().getChatManager().translateColorCodes(format, true);
 		return format;
 	}
 

@@ -1,109 +1,90 @@
 package xyz.olivermartin.multichat.bungee.commands;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
-import xyz.olivermartin.multichat.bungee.Channel;
-import xyz.olivermartin.multichat.bungee.ChatControl;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.Events;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyChatManager;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
 
 /**
  * Local Chat Command
  * <p>Players can use this command to only see the chat sent from players on their current server</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class LocalCommand extends Command {
 
-	public LocalCommand() {
-		super("local", "multichat.chat.mode", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("localcommand").toArray(new String[0]));
-	}
+    public LocalCommand() {
+        super("mclocal", "multichat.chat.mode", ProxyConfigs.ALIASES.getAliases("mclocal"));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_only_players");
+            return;
+        }
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+        UUID playerUID = proxiedPlayer.getUniqueId();
 
-		if ((sender instanceof ProxiedPlayer)) {
+        if (args.length == 0) {
+            ChatModeManager.getInstance().setLocal(playerUID);
 
-			if (args.length < 1) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_1");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_local_enabled_2");
+            return;
+        }
 
-				ChatModeManager.getInstance().setLocal(((ProxiedPlayer)sender).getUniqueId());
+        ServerInfo serverInfo = proxiedPlayer.getServer().getInfo();
+        if (ProxyConfigs.CONFIG.isFetchSpigotDisplayNames())
+            ProxyLocalCommunicationManager.sendUpdatePlayerMetaRequestMessage(proxiedPlayer.getName(), serverInfo);
 
-				MessageManager.sendMessage(sender, "command_local_enabled_1");
-				MessageManager.sendMessage(sender, "command_local_enabled_2");
+        ProxyChatManager chatManager = MultiChatProxy.getInstance().getChatManager();
 
-			} else {
+        String message = String.join(" ", args);
 
-				String message = MultiChatUtil.getMessageFromArgs(args);
-				ProxiedPlayer player = (ProxiedPlayer)sender;
+        Optional<String> optionalMessage = chatManager.handleChatMessage(proxiedPlayer, message); // Processed message
 
-				if (ConfigManager.getInstance().getHandler("config.yml").getConfig().getBoolean("fetch_spigot_display_names") == true) {
-					BungeeComm.sendMessage(player.getName(), player.getServer().getInfo());
-				}
+        if (!optionalMessage.isPresent())
+            return;
 
-				if ((!MultiChat.frozen) || (player.hasPermission("multichat.chat.always"))) {
+        message = optionalMessage.get();
 
-					if (ChatControl.isMuted(player.getUniqueId(), "global_chat")) {
-						MessageManager.sendMessage(player, "mute_cannot_send_message");
-						return;
-					}
+        ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
 
-					DebugManager.log(player.getName() + "- about to check for spam");
+        // If they had this channel hidden, then unhide it...
+        if (channelManager.isHidden(playerUID, "local")) {
+            channelManager.show(playerUID, "local");
+            ProxyConfigs.MESSAGES.sendMessage(proxiedPlayer, "command_channel_show", "LOCAL");
+        }
 
-					if (ChatControl.handleSpam(player, message, "global_chat")) {
-						DebugManager.log(player.getName() + " - chat message being cancelled due to spam");
-						return;
-					}
+        // Let server know players channel preference
 
-					Optional<String> crm;
+        String currentChannel = channelManager.getChannel(proxiedPlayer);
+        String channelFormat = currentChannel.equals("local")
+                ? channelManager.getLocalChannel().getFormat()
+                : channelManager.getProxyChannel(currentChannel).orElse(channelManager.getGlobalChannel()).getInfo()
+                .getFormat();
 
-					crm = ChatControl.applyChatRules(message, "global_chat", player.getName());
+        ProxyLocalCommunicationManager.sendPlayerDataMessage(proxiedPlayer.getName(),
+                currentChannel,
+                channelFormat,
+                serverInfo,
+                (proxiedPlayer.hasPermission("multichat.chat.color") || proxiedPlayer.hasPermission("multichat.chat.colour.simple") || proxiedPlayer.hasPermission("multichat.chat.color.simple")),
+                (proxiedPlayer.hasPermission("multichat.chat.color") || proxiedPlayer.hasPermission("multichat.chat.colour.rgb") || proxiedPlayer.hasPermission("multichat.chat.color.rgb"))
+        );
 
-					if (crm.isPresent()) {
-						message = crm.get();
-					} else {
-						return;
-					}
-
-					if (!player.hasPermission("multichat.chat.link")) {
-						message = ChatControl.replaceLinks(message);
-					}
-
-					// If they had this channel hidden, then unhide it...
-					Channel local = Channel.getLocalChannel();
-					if (!local.isMember(player.getUniqueId())) {
-						local.removeMember(player.getUniqueId());
-						MessageManager.sendSpecialMessage(player, "command_channel_show", "LOCAL");
-					}
-
-					// Let server know players channel preference
-					BungeeComm.sendPlayerChannelMessage(player.getName(), Channel.getChannel(player.getUniqueId()).getName(), Channel.getChannel(player.getUniqueId()), player.getServer().getInfo(), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.simple")||player.hasPermission("multichat.chat.color.simple")), (player.hasPermission("multichat.chat.colour")||player.hasPermission("multichat.chat.color")||player.hasPermission("multichat.chat.colour.rgb")||player.hasPermission("multichat.chat.color.rgb")));
-
-					// Message passes through to spigot here
-					// Send message directly to local chat...
-
-					BungeeComm.sendPlayerCommandMessage("!SINGLE L MESSAGE!" + message, sender.getName(), ((ProxiedPlayer)sender).getServer().getInfo());
-
-					if (Events.hiddenStaff.contains(player.getUniqueId())) {
-						Events.hiddenStaff.remove(player.getUniqueId());
-					}
-
-				} else {
-					MessageManager.sendMessage(player, "freezechat_frozen");
-				}
-
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_local_only_players");
-		}
-	}
+        // Message passes through to spigot here
+        // Send message directly to local chat...
+        ProxyLocalCommunicationManager.sendPlayerDirectChatMessage("local", sender.getName(), message, serverInfo);
+        // TODO: Move this somewhere else in the future
+        MultiChatProxy.getInstance().getDataStore().getHiddenStaff().remove(playerUID);
+    }
 }

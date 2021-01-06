@@ -4,153 +4,138 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.BungeeComm;
-import xyz.olivermartin.multichat.bungee.Channel;
 import xyz.olivermartin.multichat.bungee.ChatModeManager;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyLocalCommunicationManager;
+import xyz.olivermartin.multichat.proxy.common.channels.ChannelManager;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Chat Channel Command
  * <p>Players can use this command to switch channels, as well as show and hide specific channels</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class ChannelCommand extends Command {
 
-	public ChannelCommand() {
-		super("channel", "multichat.chat.channel", (String[]) ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("channelcommand").toArray(new String[0]));
-	}
+    public ChannelCommand() {
+        super("mcchannel", "multichat.chat.channel", ProxyConfigs.ALIASES.getAliases("mcchannel"));
+    }
 
-	private void showHelp(CommandSender sender) {
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_only_players");
+            return;
+        }
 
-		MessageManager.sendMessage(sender, "command_channel_help");
+        if (args.length < 2) {
+            showCommandUsage(sender);
+            return;
+        }
 
-	}
+        ChannelManager channelManager = MultiChatProxy.getInstance().getChannelManager();
+        String operand = args[1].toLowerCase();
 
-	@Override
-	public void execute(CommandSender sender, String[] args) {
+        // TODO: This check is horrible...
+        //  Future implementation of channelManager.exists?
+        //  Or implement a Channel interface that both Proxy and Local extend
+        if (!channelManager.existsProxyChannel(operand) && !operand.equals("local")) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_does_not_exist");
+            return;
+        }
 
-		if ((sender instanceof ProxiedPlayer)) {
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
+        UUID proxiedPlayerUID = proxiedPlayer.getUniqueId();
+        Optional<ProxyChannel> optionalProxyChannel = channelManager.getProxyChannel(operand);
 
-			if ((args.length < 1) || ((args.length == 1) && (args[0].toLowerCase().equals("help")))) {
+        String subCommand = args[0].toLowerCase();
 
-				showHelp(sender);
+        switch (subCommand) {
+            case "switch": {
+                if (!sender.hasPermission("multichat.chat.channel.switch")) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_switch_no_permission");
+                    return;
+                }
 
-			} else if (args.length == 1) {
+                if (optionalProxyChannel.isPresent()) {
+                    ProxyChannel proxyChannel = optionalProxyChannel.get();
 
-				showHelp(sender);
+                    if (!proxyChannel.getInfo().hasSpeakPermission(sender)) {
+                        ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_switch_no_permission");
+                        return;
+                    }
+                }
 
-			} else if (args.length == 2) {
+                ChatModeManager.getInstance().setGlobal(proxiedPlayerUID);
+                channelManager.select(proxiedPlayerUID, operand);
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_switch", operand.toUpperCase());
+                break;
+            }
+            case "hide": {
+                if (!sender.hasPermission("multichat.chat.channel.hide")) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_hide_no_permission");
+                    return;
+                }
 
-				String subCommand = args[0].toLowerCase();
-				String operand = args[1].toLowerCase();
+                if (channelManager.getChannel(proxiedPlayer).equalsIgnoreCase(operand)) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_cannot_hide");
+                    return;
+                }
 
-				switch (subCommand) {
+                if (channelManager.isHidden(proxiedPlayerUID, operand)) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_already_hide", operand.toUpperCase());
+                    return;
+                }
 
-				case "switch":
-					if (!sender.hasPermission("multichat.chat.channel.switch")) {
-						MessageManager.sendMessage(sender, "command_channel_switch_no_permission");
-						return;
-					}
-					if (operand.equals("local")) {
-						ChatModeManager.getInstance().setLocal(((ProxiedPlayer)sender).getUniqueId());
-						MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
-					} else if (operand.equals("global")) {
-						ChatModeManager.getInstance().setGlobal(((ProxiedPlayer)sender).getUniqueId());
-						MessageManager.sendSpecialMessage(sender, "command_channel_switch", operand.toUpperCase());
-					} else {
-						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
-					}
-					break;
+                channelManager.hide(proxiedPlayerUID, operand);
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_hide", operand.toUpperCase());
+                break;
+            }
+            case "show": {
+                if (!sender.hasPermission("multichat.chat.channel.show")) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_show_no_permission");
+                    return;
+                }
 
-				case "hide":
-					if (!sender.hasPermission("multichat.chat.channel.hide")) {
-						MessageManager.sendMessage(sender, "command_channel_hide_no_permission");
-						return;
-					}
-					if (operand.equals("local")) {
+                if (!channelManager.isHidden(proxiedPlayerUID, operand)) {
+                    ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_already_show", operand.toUpperCase());
+                    return;
+                }
 
-						if (!ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
-							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
-							return;
-						}
+                channelManager.show(proxiedPlayerUID, operand);
+                ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_show", operand.toUpperCase());
+                break;
+            }
+            default: {
+                showCommandUsage(sender);
+                return;
+            }
+        }
 
-						Channel local = Channel.getLocalChannel();
-						if (local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							local.addMember(((ProxiedPlayer)sender).getUniqueId());
-							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
-						} else {
-							MessageManager.sendSpecialMessage(sender, "command_channel_already_hide", operand.toUpperCase());
-						}
+        String channelFormat = optionalProxyChannel.isPresent()
+                ? optionalProxyChannel.get().getInfo().getFormat()
+                : channelManager.getLocalChannel().getFormat();
 
-					} else if (operand.equals("global")) {
+        // Update channel info
+        for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
+            ProxyLocalCommunicationManager.sendPlayerDataMessage(p.getName(),
+                    channelManager.getChannel(p),
+                    channelFormat,
+                    p.getServer().getInfo(),
+                    // TODO: Change this permission check mess please for the love of god (Move inside sendPlayerDataMessage)
+                    (p.hasPermission("multichat.chat.colour") || p.hasPermission("multichat.chat.color") || p.hasPermission("multichat.chat.colour.simple") || p.hasPermission("multichat.chat.color.simple")),
+                    (p.hasPermission("multichat.chat.colour") || p.hasPermission("multichat.chat.color") || p.hasPermission("multichat.chat.colour.rgb") || p.hasPermission("multichat.chat.color.rgb"))
+            );
+        }
 
-						if (ChatModeManager.getInstance().isGlobal(((ProxiedPlayer)sender).getUniqueId())) {
-							MessageManager.sendMessage(sender, "command_channel_cannot_hide");
-							return;
-						}
+    }
 
-						Channel global = Channel.getGlobalChannel();
-						if (global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							global.addMember(((ProxiedPlayer)sender).getUniqueId());
-							MessageManager.sendSpecialMessage(sender, "command_channel_hide", operand.toUpperCase());
-						} else {
-							MessageManager.sendSpecialMessage(sender, "command_channel_already_hide", operand.toUpperCase());
-						}
-
-					} else {
-						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
-					}
-					break;
-
-				case "show":
-					if (!sender.hasPermission("multichat.chat.channel.show")) {
-						MessageManager.sendMessage(sender, "command_channel_show_no_permission");
-						return;
-					}
-					if (operand.equals("local")) {
-
-						Channel local = Channel.getLocalChannel();
-						if (!local.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							local.removeMember(((ProxiedPlayer)sender).getUniqueId());
-							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
-						} else {
-							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
-						}
-
-					} else if (operand.equals("global")) {
-
-						Channel global = Channel.getGlobalChannel();
-						if (!global.isMember(((ProxiedPlayer)sender).getUniqueId())) {
-							global.removeMember(((ProxiedPlayer)sender).getUniqueId());
-							MessageManager.sendSpecialMessage(sender, "command_channel_show", operand.toUpperCase());
-						} else {
-							MessageManager.sendSpecialMessage(sender, "command_channel_already_show", operand.toUpperCase());
-						}
-
-					} else {
-						MessageManager.sendMessage(sender, "command_channel_does_not_exist");
-					}
-					break;
-
-				default:
-					showHelp(sender);
-					break;
-				}
-
-				// Update local channel info
-				for (ProxiedPlayer p : ProxyServer.getInstance().getPlayers()) {
-					BungeeComm.sendPlayerChannelMessage(p.getName(), Channel.getChannel(p.getUniqueId()).getName(), Channel.getChannel(p.getUniqueId()), p.getServer().getInfo(), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.simple")||p.hasPermission("multichat.chat.color.simple")), (p.hasPermission("multichat.chat.colour")||p.hasPermission("multichat.chat.color")||p.hasPermission("multichat.chat.colour.rgb")||p.hasPermission("multichat.chat.color.rgb")));
-				}
-
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_channel_only_players");
-		}
-
-	}
-
+    private void showCommandUsage(CommandSender sender) {
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_channel_help");
+    }
 }

@@ -1,108 +1,97 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
-import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
-import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
+import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
-import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 
 public abstract class LocalChatListenerHighest {
 
 	public void handleChat(MultiChatLocalPlayerChatEvent event) {
 
-		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
-		if (event.isCancelled()) return;
+		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now is where the fun starts... Welcome to the highest level!");
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "Processing a chat message...");
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "SENDER = '" + event.getPlayer().getName() + "'");
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "ORIGINAL MESSAGE = '" + event.getMessage() + "'");
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "ORIGINAL FORMAT = '" + event.getFormat() + "'");
+
+		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
+		if (event.isCancelled()) {
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "Message is already cancelled - FINISH");
+			return;
+		}
 
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
 
 		if (chatManager.canChatInRGBColour(event.getPlayer().getUniqueId())) {
-			event.setMessage(chatManager.translateColourCodes(event.getMessage(),true));
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (RGB) and set back in the event as: " + event.getMessage());
+			event.setMessage(chatManager.translateColorCodes(event.getMessage(),true));
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "COLOR PERMISSIONS = RGB");
 		} else if (chatManager.canChatInSimpleColour(event.getPlayer().getUniqueId())) {
-			event.setMessage(chatManager.translateColourCodes(event.getMessage(),false));
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Translated their message to include the colours (SIMPLE ONLY) and set back in the event as: " + event.getMessage());
+			event.setMessage(chatManager.translateColorCodes(event.getMessage(),false));
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "COLOR PERMISSIONS = SIMPLE");
+		} else {
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "COLOR PERMISSIONS = NONE");
 		}
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we will process MultiChat placeholders!");
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "MESSAGE (after color processing) = '" + event.getMessage() + "'");
 
 		event.setFormat(chatManager.processMultiChatConfigPlaceholders(event.getPlayer(), event.getFormat()));
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - The resulting format was... " + event.getFormat());
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "FORMAT (after MultiChat placeholders) = '" + event.getFormat() + "'");
 
 		String channel = chatManager.peekAtChatChannel(event.getPlayer());
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message before forcing is: " + channel);
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL (before forcing) = '" + channel + "'");
 
 		// Deal with regex channel forcing...
 		channel = chatManager.getRegexForcedChannel(channel, event.getFormat());
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Channel for this message after forcing is: " + channel);
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL (after forcing) = '" + channel + "'");
 
 		// Deal with ignores and channel members
 
-		Optional<LocalPseudoChannel> opChannelObject = chatManager.getChannelObject(channel);
+		Set<UUID> intendedRecipients = event.getOtherRecipients();
 
-		if (opChannelObject.isPresent()) {
+		chatManager.queueRecipients(event.getPlayer().getUniqueId(), intendedRecipients);
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Do we have a channel object to match that name? Yes!");
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we are attempting to remove ignored players from the recipient list of the message, and making sure only people who are meant to see the channel (as specified in the channel object), can see it!");
+		event.removeOtherPlayers();
 
-			event.removeIgnoredPlayersAndNonChannelMembersFromRecipients(opChannelObject.get());
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - And BAM! That was handled by the local platform implementation!");
-
-		} else {
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We didn't find a channel object to match that name... Probably not good!");
-
-		}
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "Removed all recipients except for sender");
 
 		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - We are speaking into local chat, so at this point we are returning! Bye!");
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "This is a local chat message - FINISH");
 			return;
 		}
 
 		if (chatManager.isForceMultiChatFormat()) {
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - OKAYYY! We are forcing our format! All other plugins shall now crumble!");
-
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Currently it is starting out as... " + event.getFormat());
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "MultiChat force format is enabled, so we will now force our own format");
 
 			String format;
 
 			format = chatManager.getChannelFormat(channel);
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Got the format for this channel as:" + format);
+
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT = '" + format + "'");
 
 			// Build chat format
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Rebuilding the chat format...");
 			format = MultiChatLocal.getInstance().getPlaceholderManager().buildChatFormat(event.getPlayer().getUniqueId(), format);
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Now we have: " + format);
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT (built) = '" + format + "'");
 
-			format = chatManager.processExternalPlaceholders(event.getPlayer(), format);
+			format = chatManager.processExternalPlaceholders(event.getPlayer(), format) + "%2$s";
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Processed external placeholders to get: " + format);
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "CHANNEL FORMAT (final with external placeholders) = '" + format + "'");
 
-			if (MultiChatLocal.getInstance().getPlatform() == MultiChatLocalPlatform.SPIGOT) {
-				// Handle Spigot displayname formatting etc.
-				format = format.replace("%1$s", "!!!1!!!");
-				format = format.replace("%2$s", "!!!2!!!");
-				format = format.replace("%", "%%");
-				format = format.replace("!!!1!!!", "%1$s");
-				format = format.replace("!!!2!!!", "%2$s");
-			} else {
-				format = format.replace("%", "%%");
-			}
+			event.setFormat(format);
 
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - Did some magic to get..." + format);
-
-			event.setFormat(chatManager.translateColourCodes(format, true));
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@HIGHEST - FORMAT HAS BEEN SET AS: " + event.getFormat());
+			logger.debug("&8[&9CHAT-L2&8]&7 ", "Format has been set");
 
 		}
+
+		logger.debug("&8[&9CHAT-L2&8]&7 ", "Processing completed - FINISH");
 
 	}
 }

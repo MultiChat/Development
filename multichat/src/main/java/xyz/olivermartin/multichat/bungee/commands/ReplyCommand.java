@@ -8,132 +8,87 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.ChatControl;
-import xyz.olivermartin.multichat.bungee.ConfigManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.bungee.PrivateMessageManager;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * Reply Command
  * <p>Used to quickly reply to your last private message</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class ReplyCommand extends Command {
 
-	public ReplyCommand() {
-		super("r", "multichat.chat.msg", (String[])ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("rcommand").toArray(new String[0]));
-	}
+    public ReplyCommand() {
+        super("mcr", "multichat.chat.msg", ProxyConfigs.ALIASES.getAliases("mcr"));
+    }
 
-	public void execute(CommandSender sender, String[] args) {
+    public void execute(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_usage");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_desc");
+            return;
+        }
 
-		if (args.length < 1) {
+        UUID consoleUID = new UUID(0L, 0L);
+        UUID senderUID = sender instanceof ProxiedPlayer ? ((ProxiedPlayer) sender).getUniqueId() : consoleUID;
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
 
-			MessageManager.sendMessage(sender, "command_reply_usage");
-			MessageManager.sendMessage(sender, "command_reply_desc");
+        if (!proxyDataStore.getLastMsg().containsKey(senderUID)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_no_one_to_reply_to");
+            return;
+        }
 
-		} else if ((sender instanceof ProxiedPlayer)) {
+        UUID targetUID = proxyDataStore.getLastMsg().get(senderUID);
+        String message = String.join(" ", args);
 
-			String message = MultiChatUtil.getMessageFromArgs(args);
+        if (targetUID.equals(consoleUID) && sender instanceof ProxiedPlayer) {
+            PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer) sender);
+            return;
+        }
 
-			Optional<String> crm;
+        ProxiedPlayer target = ProxyServer.getInstance().getPlayer(targetUID);
+        if (target == null) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_reply_no_one_to_reply_to");
+            return;
+        }
 
-			if (ChatControl.isMuted(((ProxiedPlayer)sender).getUniqueId(), "private_messages")) {
-				MessageManager.sendMessage(sender, "mute_cannot_send_message");
-				return;
-			}
+        if (ProxyConfigs.CONFIG.isNoPmServer(target.getServer().getInfo().getName())) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_target");
+            return;
+        }
 
-			if (ChatControl.handleSpam(((ProxiedPlayer)sender), message, "private_messages")) {
-				return;
-			}
+        if (!(sender instanceof ProxiedPlayer)) {
+            PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
+            return;
+        }
+        ProxiedPlayer proxiedPlayer = (ProxiedPlayer) sender;
 
-			crm = ChatControl.applyChatRules(message, "private_messages", sender.getName());
+        if (ProxyConfigs.CONFIG.isNoPmServer(proxiedPlayer.getServer().getInfo().getName())) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_msg_disabled_sender");
+            return;
+        }
 
-			if (crm.isPresent()) {
-				message = crm.get();
-			} else {
-				return;
-			}
+        if (ChatControl.isMuted(proxiedPlayer.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "mute_cannot_send_message");
+            return;
+        }
 
-			if (MultiChat.lastmsg.containsKey(((ProxiedPlayer)sender).getUniqueId())) {
+        if (ChatControl.ignores(proxiedPlayer.getUniqueId(), target.getUniqueId(), MessageType.PRIVATE_MESSAGES)) {
+            ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
+            return;
+        }
 
-				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId())) != null) {
+        if (ChatControl.handleSpam(proxiedPlayer, message, MessageType.PRIVATE_MESSAGES))
+            return;
 
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get(((ProxiedPlayer)sender).getUniqueId()));
+        Optional<String> crm = ChatControl.applyChatRules(proxiedPlayer, message, MessageType.PRIVATE_MESSAGES);
+        if (!crm.isPresent())
+            return;
 
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
-
-						if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
-
-							if (ChatControl.ignores(((ProxiedPlayer)sender).getUniqueId(), target.getUniqueId(), "private_messages")) {
-								ChatControl.sendIgnoreNotifications(target, sender, "private_messages");
-								return;
-							}
-
-							PrivateMessageManager.getInstance().sendMessage(message, (ProxiedPlayer)sender, target);
-
-						} else {
-							MessageManager.sendMessage(sender, "command_msg_disabled_target");
-						}
-
-					} else {
-						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
-					}
-
-				} else if ( MultiChat.lastmsg.get( ((ProxiedPlayer)sender ).getUniqueId()).equals(new UUID(0L, 0L)) ) {
-
-					// Console target stuff
-
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(((ProxiedPlayer)sender).getServer().getInfo().getName())) {
-
-						PrivateMessageManager.getInstance().sendMessageConsoleTarget(message, (ProxiedPlayer)sender);
-
-					} else {
-						MessageManager.sendMessage(sender, "command_msg_disabled_sender");
-					}
-
-					// End console target stuff
-
-				} else {
-					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
-				}
-
-			} else {
-				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
-			}
-
-		} else {
-
-			// New console reply
-
-			String message = MultiChatUtil.getMessageFromArgs(args);
-
-			if (MultiChat.lastmsg.containsKey(new UUID(0L,0L))) {
-
-				if (ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L)))) != null) {
-
-					ProxiedPlayer target = ProxyServer.getInstance().getPlayer((UUID)MultiChat.lastmsg.get((new UUID(0L,0L))));
-
-					if (!ConfigManager.getInstance().getHandler("config.yml").getConfig().getStringList("no_pm").contains(target.getServer().getInfo().getName())) {
-
-						PrivateMessageManager.getInstance().sendMessageConsoleSender(message, target);
-
-					} else {
-						MessageManager.sendMessage(sender, "command_msg_disabled_target");
-					}
-
-				} else {
-					MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
-				}
-
-			} else {
-				MessageManager.sendMessage(sender, "command_reply_no_one_to_reply_to");
-			}
-
-			// End new console stuff
-
-		}
-	}
+        PrivateMessageManager.getInstance().sendMessage(crm.get(), proxiedPlayer, target);
+    }
 }

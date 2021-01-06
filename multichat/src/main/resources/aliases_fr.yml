@@ -1,0 +1,175 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                  MultiChat Aliases                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# By Revilo410
+
+# Pour utiliser ce fichier, renommer en 'aliases.yml'
+
+##################
+#   DON'T EDIT   #
+version: "1.10"  #
+##################
+
+# 1. Command Aliases
+
+############################################################
+# +------------------------------------------------------+ #
+# |                       General                        | #
+# +------------------------------------------------------+ #
+############################################################
+
+# La commande 'acc' possède les alias suivants (autres que /mcacc)
+mcacc:
+- acc
+
+# La commande 'ac' possède les alias suivants (autres que /mcac)
+mcac:
+- ac
+
+# La commande 'announcement' possède les alias suivants (autres que /mcannouncement)
+mcannouncement:
+- announcement
+- announce
+- announcements
+
+# La commande 'bulletin' possède les alias suivants (autres que /mcbulletin)
+mcbulletin:
+- bulletin
+- bulletins
+
+# La commande 'cast' possède les alias suivants (autres que /mccast)
+mccast:
+- cast
+
+# La commande 'channel' possède les alias suivants (autres que /mcchannel)
+mcchannel:
+- channel
+- ch
+
+# La commande 'clearchat' possède les alias suivants (autres que /mcclearchat)
+mcclearchat:
+- clearchat
+- chatclear
+- wipechat
+- killchat
+
+# La commande 'display' possède les alias suivants (autres que /mcdisplay)
+mcdisplay:
+- display
+
+# La commande 'freezechat' possède les alias suivants (autres que /mcfreezechat)
+mcfreezechat:
+- freezechat
+- pausechat
+- lockchat
+- chatlock
+
+# La commande 'gc' possède les alias suivants (autres que /mcgc)
+mcgc:
+- gc
+
+# La commande 'global' possède les alias suivants (autres que /mcglobal)
+mcglobal:
+- global
+- g
+
+# La commande 'group' possède les alias suivants (autres que /mcgroup)
+mcgroup:
+- group
+
+# La commande 'groups' possède les alias suivants (autres que /mcgroups)
+mcgroups:
+- groups
+- grouplist
+
+# La commande 'helpme' possède les alias suivants (autres que /mchelpme)
+mchelpme:
+- helpme
+- helpop
+
+# La commande 'ignore' possède les alias suivants (autres que /mcignore)
+mcignore:
+- ignore
+- blockplayer
+
+# La commande 'local' possède les alias suivants (autres que /mclocal)
+mclocal:
+- local
+- l
+
+# La commande 'localspy' possède les alias suivants (autres que /mclocalspy)
+mclocalspy:
+- localspy
+- localchatspy
+- lspy
+
+# La commande 'mcc' possède les alias suivants (autres que /mcmcc)
+mcmcc:
+- mcc
+
+# La commande 'mc' possède les alias suivants (autres que /mcmc)
+mcmc:
+- mc
+
+# La commande 'msg' possède les alias suivants (autres que /mcmsg)
+mcmsg:
+- msg
+- m
+- message
+- t
+- tell
+- w
+- whisper
+- chat
+- pm
+
+# La commande 'bypass' possède les alias suivants (autres que /mcbypass)
+mcbypass:
+- bypass
+- mcb
+- multichatbypass
+
+# La commande 'multichat' possède les alias suivants (autres que /multichat)
+multichat:
+- mcinfo
+- mcversion
+
+# La commande 'execute' possède les alias suivants (autres que /mcexecute)
+mcexecute:
+- execute
+- mce
+- multichatexecute
+- gexe
+- gexecute
+
+# La commande 'mute' possède les alias suivants (autres que /mcmute)
+mcmute:
+- mute
+- silence
+- multichatmute
+
+# La commande 'r' possède les alias suivants (autres que /mcr)
+mcr:
+- r
+- reply
+- respond
+
+# La commande 'socialspy' possède les alias suivants (autres que /mcsocialspy)
+mcsocialspy:
+- socialspy
+- spy
+- sspy
+
+# La commande 'staff' possède les alias suivants (autres que /mcstaff)
+mcstaff:
+- staff
+- stafflist
+- liststaff
+
+# La commande 'usecast' possède les alias suivants (autres que /mcusecast)
+mcusecast:
+- usecast
+- ccast

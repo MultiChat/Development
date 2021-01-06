@@ -1,8 +1,8 @@
 package com.olivermartin410.plugins;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -16,22 +16,22 @@ public class TGroupChatInfo extends TChatInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<UUID> Members = new ArrayList<UUID>();
-	private List<UUID> Viewers = new ArrayList<UUID>();
-	private List<UUID> Admins = new ArrayList<UUID>();
-	private List<UUID> BannedPlayers = new ArrayList<UUID>();
+	private final Set<UUID> members = new HashSet<>();
+	private final Set<UUID> viewers = new HashSet<>();
+	private final Set<UUID> admins = new HashSet<>();
+	private final Set<UUID> bannedPlayers = new HashSet<>();
 
 	private String PartyName;
 	private boolean secret;
 	private String password;
 	private boolean formal;
 
-	public void setPassword(String newpassword) {
-		this.password = newpassword;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public void setFormal(boolean trueorfalse) {
-		this.formal = trueorfalse;
+	public void setFormal(boolean formal) {
+		this.formal = formal;
 	}
 
 	public boolean getFormal() {
@@ -42,8 +42,8 @@ public class TGroupChatInfo extends TChatInfo implements Serializable {
 		return this.password;
 	}
 
-	public void setSecret(boolean trueorfalse) {
-		this.secret = trueorfalse;
+	public void setSecret(boolean secret) {
+		this.secret = secret;
 	}
 
 	public boolean getSecret() {
@@ -58,91 +58,67 @@ public class TGroupChatInfo extends TChatInfo implements Serializable {
 		this.PartyName = Name;
 	}
 
-	public List<UUID> getMembers() {
-		return this.Members;
+	public Set<UUID> getMembers() {
+		return this.members;
 	}
 
-	public void addMember(UUID memberuuid) {
-		this.Members.add(memberuuid);
+	public void addMember(UUID playerUID) {
+		this.members.add(playerUID);
 	}
 
-	public void delMember(UUID memberuuid) {
-		this.Members.remove(memberuuid);
+	public void delMember(UUID playerUID) {
+		this.members.remove(playerUID);
 	}
 
-	public List<UUID> getAdmins() {
-		return this.Admins;
+	public Set<UUID> getAdmins() {
+		return this.admins;
 	}
 
-	public void addAdmin(UUID adminuuid) {
-		this.Admins.add(adminuuid);
+	public void addAdmin(UUID playerUID) {
+		this.admins.add(playerUID);
 	}
 
-	public void delAdmin(UUID adminuuid) {
-		this.Admins.remove(adminuuid);
+	public void delAdmin(UUID playerUID) {
+		this.admins.remove(playerUID);
 	}
 
-	public boolean existsAdmin(UUID adminuuid) {
-
-		if (this.Admins.contains(adminuuid)) {
-			return true;
-		}
-
-		return false;
-
+	public boolean isAdmin(UUID playerUID) {
+		return this.admins.contains(playerUID);
 	}
 
-	public List<UUID> getBanned() {
-		return this.BannedPlayers;
+	public Set<UUID> getBanned() {
+		return this.bannedPlayers;
 	}
 
-	public void addBanned(UUID banuuid) {
-		this.BannedPlayers.add(banuuid);
+	public void addBanned(UUID playerUID) {
+		this.bannedPlayers.add(playerUID);
 	}
 
-	public void delBanned(UUID banuuid) {
-		this.BannedPlayers.remove(banuuid);
+	public void delBanned(UUID playerUID) {
+		this.bannedPlayers.remove(playerUID);
 	}
 
-	public boolean existsBanned(UUID banuuid) {
-
-		if (this.BannedPlayers.contains(banuuid)) {
-			return true;
-		}
-
-		return false;
-
+	public boolean isBanned(UUID playerUID) {
+		return this.bannedPlayers.contains(playerUID);
 	}
 
-	public boolean existsMember(UUID memberuuid) {
-
-		if (this.Members.contains(memberuuid)) {
-			return true;
-		}
-
-		return false;
-
+	public boolean isMember(UUID playerUID) {
+		return this.members.contains(playerUID);
 	}
 
-	public List<UUID> getViewers() {
-		return this.Viewers;
+	public Set<UUID> getViewers() {
+		return this.viewers;
 	}
 
-	public void addViewer(UUID memberuuid) {
-		this.Viewers.add(memberuuid);
+	public void addViewer(UUID playerUID) {
+		this.viewers.add(playerUID);
 	}
 
-	public void delViewer(UUID memberuuid) {
-		this.Viewers.remove(memberuuid);
+	public void delViewer(UUID playerUID) {
+		this.viewers.remove(playerUID);
 	}
 
-	public boolean existsViewer(UUID memberuuid) {
-
-		if (this.Viewers.contains(memberuuid)) {
-			return true;
-		}
-
-		return false;
-
+	public boolean isViewer(UUID playerUID) {
+		return this.viewers.contains(playerUID);
 	}
 }

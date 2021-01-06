@@ -8,7 +8,7 @@
 
 ##################
 # Ne pas éditer  #
-version: "1.9.5" #
+version: "1.10"  #
 ##################
 
 # French Translation by Nogapra - Thank you!
@@ -34,6 +34,7 @@ showquit: true
 
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = le nom du joueur
+# %SERVER% = le serveur du joueur
 
 # Message de connexion sur le réseaux de serveur
 
@@ -61,6 +62,7 @@ welcome: true
 # Définissez le message de bienvenue ci-dessous
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = Le nom du joueur
+# %SERVER% = le serveur du joueur
 
 welcome_message: "&dBienvenue %NAME% pour votre première connexion sur nos serveurs!"
 
@@ -71,5 +73,6 @@ private_welcome: false
 # Définissez le message de bienvenue ci-dessous
 # Utilisez les code couleur de minecraft Standard '&X' COLOUR/FORMAT CODES
 # %NAME% = Le nom du joueur
+# %SERVER% = le serveur du joueurs
 
 private_welcome_message: "&dSalut %NAME%! S'il vous plaît lire les règles!"

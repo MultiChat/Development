@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.md_5.bungee.api.CommandSender;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.proxy.common.channels.local.LocalChannel;
+import xyz.olivermartin.multichat.proxy.common.channels.proxy.ProxyChannel;
 
 /**
  * Cast Control
@@ -16,13 +19,18 @@ public class CastControl {
 
 	public static Map<String,String> castList = new HashMap<String,String>();
 
-	public static void sendCast(String castName, String castMessage, Channel chatStream, CommandSender sender) {
-		castMessage = ChatControl.applyChatRules(castMessage, "casts", "").get();
-		chatStream.sendMessage(castList.get(castName.toLowerCase()) + " " + castMessage, sender);
+	public static void sendCast(String castName, String castMessage, ProxyChannel channel, CommandSender sender) {
+		castMessage = ChatControl.applyChatRules(sender, castMessage, MessageType.CASTS).get();
+		channel.broadcastRawMessage(sender, castList.get(castName.toLowerCase()) + " " + castMessage);
+	}
+
+	public static void sendCast(String castName, String castMessage, LocalChannel channel, String server, CommandSender sender) {
+		castMessage = ChatControl.applyChatRules(sender, castMessage, MessageType.CASTS).get();
+		channel.broadcastRawMessage(sender, server, castList.get(castName.toLowerCase()) + " " + castMessage);
 	}
 
 	public static void addCast(String castName, String castFormat) {
-		castList.put(castName.toLowerCase(), MultiChatUtil.reformatRGB(castFormat));
+		castList.put(castName.toLowerCase(), castFormat);
 	}
 
 	public static void removeCast(String castName) {

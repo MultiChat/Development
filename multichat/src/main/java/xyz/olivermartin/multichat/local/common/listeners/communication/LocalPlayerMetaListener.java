@@ -15,34 +15,13 @@ public abstract class LocalPlayerMetaListener {
 
 		try {
 
-			boolean setDisplayName = false;
-			boolean globalChat = false;
-			String displayNameFormat = "";
-
 			Optional<MultiChatLocalPlayer> opPlayer = getPlayerFromName(message.readUTF());
 
 			if (!opPlayer.isPresent()) return true;
 
 			MultiChatLocalPlayer player = opPlayer.get();
 
-			if (message.readUTF().equals("T")) {
-				setDisplayName = true;
-			}
-
-			displayNameFormat = message.readUTF();
-
-			MultiChatLocal.getInstance().getDataStore().setSetDisplayName(setDisplayName);
-			MultiChatLocal.getInstance().getDataStore().setDisplayNameFormatLastVal(displayNameFormat);
-
 			MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(player.getUniqueId());
-
-			if (message.readUTF().equals("T")) {
-				globalChat = true;
-			}
-
-			MultiChatLocal.getInstance().getDataStore().setGlobalChatServer(globalChat);
-
-			MultiChatLocal.getInstance().getDataStore().setGlobalChatFormat(message.readUTF());
 
 			return true;
 

@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.5" #
+version: "1.10"  #
 ##################
 
 # 1. General
@@ -97,31 +97,6 @@ pmin: "&6[&c%DISPLAYNAME% &6-> &cMe&6] &f%MESSAGE%"
 
 pmspy: "&8&l<< &f%NAME% &7-> &f%NAMET%&8: &7%MESSAGE% &8&l>>"
 
-##############
-# PM ALIASES #
-##############
-
-# The /msg command has the following aliases (other than /msg)
-msgcommand:
-- m
-- message
-- t
-- tell
-- w
-- whisper
-- chat
-- pm
-
-# The /r command has the following aliases (other than /r)
-rcommand:
-- reply
-- respond
-
-# The /socialspy command has the following aliases (other than /socialspy)
-socialspycommand:
-- spy
-- sspy
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                    Chat Channels                     | #
@@ -134,18 +109,6 @@ default_channel: "global"
 
 # Force players into default channel when they join the server?
 force_channel_on_join: false
-
-# The /channel command has the following aliases (other than /channel)
-channelcommand:
-- ch
-
-# The /global command has the following aliases (other than /global)
-globalcommand:
-- g
-
-# The /local command has the following aliases (other than /local)
-localcommand:
-- l
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -186,6 +149,27 @@ no_global: []
 # Will display as [FORMAT] [MESSAGE]
 
 globalformat: "&2[&aG&2] &f%DISPLAYNAME%&f: "
+
+######################
+# Local Chat Formats #
+######################
+
+# This is the format used for LOCAL SPY
+# %FORMAT% = The original format of the message, usually contains prefixes, displayname etc.
+
+# Additionally, you can use the following placeholders:
+# %NAME% = The name of the sender
+# %DISPLAYNAME% = The display name of the sender
+# %PREFIX% = The prefix of the sender
+# %SUFFIX% = The suffix of the sender
+# %NICK% = The nickname of the sender
+# %SERVER% = The server of the sender
+# %WORLD% = The world of the sender
+
+# Global Chat Format
+# Will display as [FORMAT] [MESSAGE]
+
+localspyformat: "&8[&7SPY&8] %FORMAT%"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -247,19 +231,6 @@ adminchat:
 # Set to false to disable the '/staff' staff list command
 staff_list: true
 
-# MultiChat bypass command aliases (other than /multichatbypass)
-multichatbypasscommand:
-- mcb
-- bypass
-
-# MultiChat execute command aliases (other than /multichatexecute)
-multichatexecutecommand:
-- mcexecute
-- mce
-- gexecute
-- gexe
-- gcommand
-
 # Control what aspects of chat are logged by MultiChat (useful for GDPR etc.)
 privacy_settings:
     log_pms: true
@@ -273,6 +244,9 @@ premium_vanish:
     silence_join: true # Prevent vanished players sending a join message
 
 # Legacy (PRE-1.16) Servers
+#
+# Please note: If you use any Sponge servers then they will need to be listed here!
+#
 # Listing servers here will mark them as 'LEGACY' servers
 # RGB colour codes will be approximated to their nearest value (i.e. &a, &b and so on)
 # This prevents them displaying in chat as &x...

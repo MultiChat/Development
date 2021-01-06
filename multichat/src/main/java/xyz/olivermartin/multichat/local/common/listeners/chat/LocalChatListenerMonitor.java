@@ -1,6 +1,11 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
 import xyz.olivermartin.multichat.local.common.LocalChatManager;
+import xyz.olivermartin.multichat.local.common.LocalConsoleLogger;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlatform;
 import xyz.olivermartin.multichat.local.common.config.LocalConfig;
@@ -9,35 +14,43 @@ public abstract class LocalChatListenerMonitor {
 
 	public void handleChat(MultiChatLocalPlayerChatEvent event) {
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Okay less fun here, we are just the monitor...");
+		LocalConsoleLogger logger = MultiChatLocal.getInstance().getConsoleLogger();
+
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "Processing a chat message...");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "SENDER = '" + event.getPlayer().getName() + "'");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "ORIGINAL MESSAGE = '" + event.getMessage() + "'");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "ORIGINAL FORMAT = '" + event.getFormat() + "'");
 
 		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
 		LocalChatManager chatManager = MultiChatLocal.getInstance().getChatManager();
 
+		Optional<Set<UUID>> originalRecipients = chatManager.getRecipientsFromRecipientQueue(event.getPlayer().getUniqueId());
+
+		if (!originalRecipients.isPresent()) {
+			logger.debug("&8[&3CHAT-L3&8]&7 ", "No recipients for message, must have been cancelled earlier - FINISH");
+			return;
+		}
+
 		String channel = chatManager.pollChatChannel(event.getPlayer());
+
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "CHANNEL (before forcing) = '" + channel + "'");
 
 		// Deal with regex channel forcing...
 		channel = chatManager.getRegexForcedChannel(channel, event.getFormat());
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - If the message is cancelled, then we will end here...");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "CHANNEL (after forcing) = '" + channel + "'");
 
 		// IF ITS ALREADY CANCELLED WE CAN IGNORE IT
-		if (event.isCancelled()) return;
-
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - The message isn't cancelled!");
-
-		// IF ITS LOCAL CHAT WE CAN IGNORE IT
-		if (!chatManager.isGlobalChatServer() || channel.equalsIgnoreCase("local")) {
-			MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We are speaking into local chat, so at this point we are returning! Bye!");
+		if (event.isCancelled()) {
+			logger.debug("&8[&3CHAT-L3&8]&7 ", "Message is already cancelled - FINISH");
 			return;
 		}
 
 		// IF WE ARE MANAGING GLOBAL CHAT THEN WE NEED TO MANAGE IT!
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We are in global chat... SO TIME TO FORWARD TO PROXY!");
-
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - First we are sending their meta data...");
 		MultiChatLocal.getInstance().getProxyCommunicationManager().updatePlayerMeta(event.getPlayer().getUniqueId());
+
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "Player meta data update has just been sent to proxy");
 
 		String proxyFormat = event.getFormat();
 		String proxyMessage = event.getMessage();
@@ -48,38 +61,29 @@ public abstract class LocalChatListenerMonitor {
 
 			if (!config.isOverrideAllMultiChatFormatting()) {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We were managing the format...");
-
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Currently it is " + proxyFormat);
-
 				proxyFormat = proxyFormat.replace("%1$s", MultiChatLocal.getInstance().getMetaManager().getDisplayName(event.getPlayer().getUniqueId()));
 				proxyFormat = proxyFormat.replace("%2$s", "");
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - We replaced the special bits to get: " + proxyFormat);
-
 			} else {
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Oh dear... we need to send it to the proxy... but we weren't managing the chat...");
-
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - The format currently is: " + proxyFormat);
+				logger.debug("&8[&3CHAT-L3&8]&7 ", "MultiChat's format has been overridden, so proxy formatting is done on a best-effort basis...");
 
 				proxyFormat = proxyFormat.replace("%1$s", MultiChatLocal.getInstance().getMetaManager().getDisplayName(event.getPlayer().getUniqueId()));
 				proxyFormat = proxyFormat.replace("%2$s", "");
 				proxyFormat = proxyFormat.replaceFirst("\\$s", MultiChatLocal.getInstance().getMetaManager().getDisplayName(event.getPlayer().getUniqueId()));
 				proxyFormat = proxyFormat.replaceFirst("\\$s", "");
 
-				MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - But we worked some magic to arrive at... " + proxyFormat);
-
 			}
 
 		}
 
-		MultiChatLocal.getInstance().getProxyCommunicationManager().sendChatMessage(event.getPlayer().getUniqueId(), proxyMessage, proxyFormat);
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "FORMAT (final for proxy) = '" + proxyFormat + "'");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "MESSAGE (final for proxy) = '" + proxyMessage + "'");
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "PLAYER UUID = '" + event.getPlayer().getUniqueId() + "'");
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - Aaaaand we sent it to the proxy! ALL DONE.");
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - UUID: " + event.getPlayer().getUniqueId());
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - MESSAGE (please note this will be shown in colour here even if the player doesn't have colour permissions): " + proxyMessage);
-		MultiChatLocal.getInstance().getConsoleLogger().debug("#CHAT@MONITOR - FORMAT: " + proxyFormat);
+		MultiChatLocal.getInstance().getProxyCommunicationManager().sendPlayerChatMessage(event.getPlayer().getUniqueId(), channel, proxyMessage, proxyFormat, originalRecipients.get());
+
+		logger.debug("&8[&3CHAT-L3&8]&7 ", "Info sent to proxy - FINISH");
 
 	}
 

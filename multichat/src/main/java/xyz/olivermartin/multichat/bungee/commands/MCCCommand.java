@@ -5,73 +5,53 @@ import com.olivermartin410.plugins.TChatInfo;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.common.RegexUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.UUID;
 
 /**
  * Mod-Chat Colour Command
  * <p>Allows staff members to individually set the colours that they see the mod-chat displayed in</p>
- * 
- * @author Oliver Martin (Revilo410)
  *
+ * @author Oliver Martin (Revilo410)
  */
 public class MCCCommand extends Command {
 
-	private static String[] aliases = new String[] {};
+    public MCCCommand() {
+        super("mcmcc", "multichat.staff.mod", ProxyConfigs.ALIASES.getAliases("mcmcc"));
+    }
 
-	public MCCCommand() {
-		super("mcc", "multichat.staff.mod", aliases);
-	}
+    public void execute(CommandSender sender, String[] args) {
+        if (!(sender instanceof ProxiedPlayer)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_only_players");
+            return;
+        }
 
-	public void execute(CommandSender sender, String[] args) {
+        if (args.length < 2) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_usage");
+            return;
+        }
 
-		if (args.length != 2) {
+        String chatColor = args[0].toLowerCase();
+        String nameColor = args[1].toLowerCase();
 
-			if ((sender instanceof ProxiedPlayer)) {
-				MessageManager.sendMessage(sender, "command_mcc_usage");
-			} else {
-				MessageManager.sendMessage(sender, "command_mcc_only_players");
-			}
+        if (!RegexUtil.LEGACY_COLOR.matches(chatColor) || !RegexUtil.LEGACY_COLOR.matches(nameColor)) {
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_invalid");
+            ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_invalid_usage");
+            return;
+        }
 
-		} else if ((sender instanceof ProxiedPlayer)) {
+        UUID playerUID = ((ProxiedPlayer) sender).getUniqueId();
+        ProxyDataStore proxyDataStore = MultiChatProxy.getInstance().getDataStore();
+        TChatInfo chatInfo = proxyDataStore.getModChatPreferences().getOrDefault(playerUID, new TChatInfo());
 
-			TChatInfo chatinfo = new TChatInfo();
-			ProxiedPlayer player = (ProxiedPlayer) sender;
+        chatInfo.setChatColor(chatColor.charAt(0));
+        chatInfo.setNameColor(nameColor.charAt(0));
+        proxyDataStore.getModChatPreferences().put(playerUID, chatInfo);
 
-			args[0] = args[0].toLowerCase();
-			args[1] = args[1].toLowerCase();
-
-			if ((args[0].equals("a")) || (args[0].equals("b")) || (args[0].equals("c")) || (args[0].equals("d"))
-					|| (args[0].equals("e")) || (args[0].equals("f")) || (args[0].equals("0")) || (args[0].equals("1"))
-					|| (args[0].equals("2")) || (args[0].equals("3")) || (args[0].equals("4")) || (args[0].equals("5"))
-					|| (args[0].equals("6")) || (args[0].equals("7")) || (args[0].equals("8")) || (args[0].equals("9"))) {
-
-				if ((args[1].equals("a")) || (args[1].equals("b")) || (args[1].equals("c")) || (args[1].equals("d"))
-						|| (args[1].equals("e")) || (args[1].equals("f")) || (args[1].equals("0")) || (args[1].equals("1"))
-						|| (args[1].equals("2")) || (args[1].equals("3")) || (args[1].equals("4")) || (args[1].equals("5"))
-						|| (args[1].equals("6")) || (args[1].equals("7")) || (args[1].equals("8")) || (args[1].equals("9"))) {
-
-					MultiChat.modchatpreferences.remove(player.getUniqueId());
-
-					chatinfo.setChatColor(args[0].charAt(0));
-					chatinfo.setNameColor(args[1].charAt(0));
-
-					MultiChat.modchatpreferences.put(player.getUniqueId(), chatinfo);
-
-					MessageManager.sendMessage(sender, "command_mcc_updated");
-
-				} else {
-					MessageManager.sendMessage(sender, "command_mcc_invalid");
-					MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
-				}
-
-			} else {
-				MessageManager.sendMessage(sender, "command_mcc_invalid");
-				MessageManager.sendMessage(sender, "command_mcc_invalid_usage");
-			}
-
-		} else {
-			MessageManager.sendMessage(sender, "command_mcc_only_players");
-		}
-	}
+        ProxyConfigs.MESSAGES.sendMessage(sender, "command_mcc_updated");
+    }
 }

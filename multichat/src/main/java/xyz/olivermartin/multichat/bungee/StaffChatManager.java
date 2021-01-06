@@ -1,14 +1,17 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.Optional;
-
 import com.olivermartin410.plugins.TChatInfo;
-
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
+
+import java.util.Optional;
 
 /**
  * Staff Chat Manager
@@ -19,71 +22,27 @@ import xyz.olivermartin.multichat.bungee.events.PostStaffChatEvent;
 public class StaffChatManager {
 
 	public void sendModMessage(String username, String displayname, String server, String message) {
-
-		message = MultiChatUtil.reformatRGB(message);
-
-		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.format");
-		String original = message;
-
-		Optional<String> crm;
-
-		crm = ChatControl.applyChatRules(original, "staff_chats", username);
-
-		if (crm.isPresent()) {
-			original = crm.get();
-		} else {
-			return;
-		}
-
-		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-
-			if (onlineplayer.hasPermission("multichat.staff.mod")) {
-
-				if (!MultiChat.modchatpreferences.containsKey(onlineplayer.getUniqueId())) {
-
-					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ccdefault").toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("modchat.ncdefault").toCharArray()[0]);
-
-					MultiChat.modchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
-
-				}
-
-				message = chatfix.replaceModChatVars(messageFormat, username, displayname, server, original, onlineplayer);
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
-				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
-				}
-
-			}
-		}
-
-		// Trigger PostStaffChatEvent
-		if (username.equalsIgnoreCase("console")) {
-			ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("mod", ProxyServer.getInstance().getConsole() , original));
-		} else {
-			if (ProxyServer.getInstance().getPlayer(username) != null) {
-				ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("mod", ProxyServer.getInstance().getPlayer(username) , original));
-			}
-		}
-
-		ConsoleManager.logModChat("(" + username + ") " + original);
-
+		sendStaffChatMessage("mod", username, displayname, server, message);
 	}
 
 	public void sendAdminMessage(String username, String displayname, String server, String message) {
+		sendStaffChatMessage("admin", username, displayname, server, message);
+	}
 
-		message = MultiChatUtil.reformatRGB(message);
+	private void sendStaffChatMessage(String id, String username, String displayname, String server, String message) {
 
-		String original = message;
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+
 		ChatManipulation chatfix = new ChatManipulation();
-		String messageFormat = ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.format");
+		String messageFormat = id.equals("mod")
+				? ProxyConfigs.CONFIG.getModChatFormat()
+				: ProxyConfigs.CONFIG.getAdminChatFormat();
+		String original = message;
 
 		Optional<String> crm;
 
-		crm = ChatControl.applyChatRules(original, "staff_chats", username);
+		ProxiedPlayer proxiedPlayer = username.equals("console") ? null : ProxyServer.getInstance().getPlayer(username);
+		crm = ChatControl.applyChatRules(proxiedPlayer, original, MessageType.STAFF_CHATS);
 
 		if (crm.isPresent()) {
 			original = crm.get();
@@ -93,38 +52,60 @@ public class StaffChatManager {
 
 		for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
 
-			if (onlineplayer.hasPermission("multichat.staff.admin")) {
+			if (onlineplayer.hasPermission("multichat.staff." + id)) {
 
-				if (!MultiChat.adminchatpreferences.containsKey(onlineplayer.getUniqueId())) {
+				if (id.equals("mod") && !ds.getModChatPreferences().containsKey(onlineplayer.getUniqueId())) {
 
 					TChatInfo chatinfo = new TChatInfo();
-					chatinfo.setChatColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ccdefault").toCharArray()[0]);
-					chatinfo.setNameColor(ConfigManager.getInstance().getHandler("config.yml").getConfig().getString("adminchat.ncdefault").toCharArray()[0]);
+					chatinfo.setChatColor(ProxyConfigs.CONFIG.getModChatColor());
+					chatinfo.setNameColor(ProxyConfigs.CONFIG.getModNameColor());
 
-					MultiChat.adminchatpreferences.put(onlineplayer.getUniqueId(), chatinfo);
+					ds.getModChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
+
+				} else if (id.equals("admin") && !ds.getAdminChatPreferences().containsKey(onlineplayer.getUniqueId())) {
+
+					TChatInfo chatinfo = new TChatInfo();
+					chatinfo.setChatColor(ProxyConfigs.CONFIG.getAdminChatColor());
+					chatinfo.setNameColor(ProxyConfigs.CONFIG.getAdminNameColor());
+
+					ds.getAdminChatPreferences().put(onlineplayer.getUniqueId(), chatinfo);
 
 				}
 
-				message = chatfix.replaceAdminChatVars(messageFormat, username, displayname, server, original, onlineplayer);
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', message))));
+				if (id.equals("mod")) {
+					message = chatfix.replaceModChatVars(messageFormat, username, displayname, server, original, onlineplayer);
 				} else {
-					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', message)));
+					message = chatfix.replaceAdminChatVars(messageFormat, username, displayname, server, original, onlineplayer);
 				}
+
+				message = MultiChatUtil.translateColorCodes(message);
+				String originalTranslated = MultiChatUtil.translateColorCodes(original);
+
+				if (ProxyConfigs.CONFIG.isLegacyServer(onlineplayer.getServer().getInfo().getName())) {
+					message = MultiChatUtil.approximateRGBColorCodes(message);
+					originalTranslated = MultiChatUtil.approximateRGBColorCodes(originalTranslated);
+				}
+
+				onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message, "%MESSAGE%", originalTranslated));
 
 			}
 		}
 
 		// Trigger PostStaffChatEvent
 		if (username.equalsIgnoreCase("console")) {
-			ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("admin", ProxyServer.getInstance().getConsole() , original));
+			ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent(id, ProxyServer.getInstance().getConsole() , original));
 		} else {
 			if (ProxyServer.getInstance().getPlayer(username) != null) {
-				ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent("admin", ProxyServer.getInstance().getPlayer(username) , original));
+				ProxyServer.getInstance().getPluginManager().callEvent(new PostStaffChatEvent(id, ProxyServer.getInstance().getPlayer(username) , original));
 			}
 		}
 
-		ConsoleManager.logAdminChat("(" + username + ") " + original);
+		if (id.equals("mod")) {
+			ConsoleManager.logModChat("(" + username + ") " + original);
+		} else {
+			ConsoleManager.logAdminChat("(" + username + ") " + original);
+		}
 
 	}
+
 }

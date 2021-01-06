@@ -1,5 +1,6 @@
 package xyz.olivermartin.multichat.local.common;
 
+import java.util.Set;
 import java.util.UUID;
 
 import xyz.olivermartin.multichat.proxy.common.MultiChatProxyPlatform;
@@ -30,28 +31,20 @@ public abstract class LocalProxyCommunicationManager {
 
 	public void updatePlayerMeta(UUID uuid) {
 
-		sendNicknameUpdate(uuid, MultiChatLocal.getInstance().getMetaManager().getNick(uuid));
-		sendWorldUpdate(uuid, MultiChatLocal.getInstance().getMetaManager().getWorld(uuid));
-		sendPrefixUpdate(uuid, MultiChatLocal.getInstance().getMetaManager().getPrefix(uuid));
-		sendSuffixUpdate(uuid, MultiChatLocal.getInstance().getMetaManager().getSuffix(uuid));
-		sendDisplayNameUpdate(uuid, MultiChatLocal.getInstance().getMetaManager().getDisplayName(uuid));
+		sendMetaUpdate(uuid, "nick", MultiChatLocal.getInstance().getMetaManager().getNick(uuid));
+		sendMetaUpdate(uuid, "world", MultiChatLocal.getInstance().getMetaManager().getWorld(uuid));
+		sendMetaUpdate(uuid, "prefix", MultiChatLocal.getInstance().getMetaManager().getPrefix(uuid));
+		sendMetaUpdate(uuid, "suffix", MultiChatLocal.getInstance().getMetaManager().getSuffix(uuid));
+		sendMetaUpdate(uuid, "dn", MultiChatLocal.getInstance().getMetaManager().getDisplayName(uuid));
 
 	}
 
-	protected abstract void sendNicknameUpdate(UUID uuid, String nickname);
-
-	public abstract void sendWorldUpdate(UUID uuid, String world);
-
-	protected abstract void sendPrefixUpdate(UUID uuid, String prefix);
-
-	protected abstract void sendSuffixUpdate(UUID uuid, String suffix);
-
-	protected abstract void sendDisplayNameUpdate(UUID uuid, String displayName);
+	public abstract void sendMetaUpdate(UUID uuid, String metaId, String metaValue);
 
 	public abstract void sendProxyExecuteMessage(String command);
 
 	public abstract void sendProxyExecutePlayerMessage(String command, String player);
-	
-	public abstract void sendChatMessage(UUID uuid, String message, String format);
+
+	public abstract void sendPlayerChatMessage(UUID uuid, String channel, String message, String format, Set<UUID> otherRecipients);
 
 }

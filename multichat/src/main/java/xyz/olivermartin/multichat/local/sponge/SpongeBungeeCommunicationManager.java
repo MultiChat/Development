@@ -1,7 +1,13 @@
 package xyz.olivermartin.multichat.local.sponge;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.spongepowered.api.Sponge;
@@ -95,6 +101,64 @@ public class SpongeBungeeCommunicationManager extends LocalBungeeCommunicationMa
 		this.channels.get(channel).sendTo(facilitatingPlayer, buffer -> buffer.writeUTF(uuid.toString()).writeUTF(value1).writeUTF(value2));
 
 		return true;
+	}
+
+	@Override
+	protected boolean sendUUIDAndStringAndStringAndString(String channel, UUID uuid, String value1, String value2,
+			String value3) {
+		if (!this.channels.containsKey(channel)) throw new IllegalStateException("Sponge Raw Data Channels must first be registered with MultiChat's SpongeBungeeCommunicationManager!");
+
+		if (Sponge.getServer().getOnlinePlayers().size() < 1) return false;
+
+		Player facilitatingPlayer = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+		this.channels.get(channel).sendTo(facilitatingPlayer, buffer -> buffer.writeUTF(uuid.toString()).writeUTF(value1).writeUTF(value2).writeUTF(value3));
+
+		return true;
+	}
+
+	@Override
+	protected boolean sendPlatformChatMessage(String channel, UUID uuid, String chatChannel, String message, String format, Set<UUID> otherRecipients) {
+
+		if (!this.channels.containsKey(channel)) throw new IllegalStateException("Sponge Raw Data Channels must first be registered with MultiChat's SpongeBungeeCommunicationManager!");
+
+		if (Sponge.getServer().getOnlinePlayers().size() < 1) return false;
+
+		Player facilitatingPlayer = (Player) Sponge.getServer().getOnlinePlayers().toArray()[0];
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+		ByteArrayInputStream inputStream;
+		byte[] byteArray;
+
+		try {
+
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+
+			objectOutputStream.writeUTF(uuid.toString());
+			objectOutputStream.writeUTF(chatChannel);
+			objectOutputStream.writeUTF(message);
+			objectOutputStream.writeUTF(format);
+			objectOutputStream.writeObject(otherRecipients);
+			objectOutputStream.flush();
+
+			inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+			DataInputStream dis = new DataInputStream(inputStream);
+
+			byteArray = new byte[dis.available()];
+
+			dis.readFully(byteArray);;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+		this.channels.get(channel).sendTo(facilitatingPlayer, buffer -> buffer.writeBytes(byteArray));
+
+		return true;
+
 	}
 
 }

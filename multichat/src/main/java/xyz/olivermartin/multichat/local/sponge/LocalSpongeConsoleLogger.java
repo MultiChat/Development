@@ -18,8 +18,8 @@ public class LocalSpongeConsoleLogger extends LocalConsoleLogger {
 	}
 
 	@Override
-	protected void sendColouredMessageToConsoleSender(String message) {
-		Sponge.getServer().getConsole().sendMessage(TextSerializers.FORMATTING_CODE.deserialize(message));
+	protected void sendConsoleMessage(String message) {
+		Sponge.getServer().getConsole().sendMessage(TextSerializers.formattingCode('§').deserialize(message));
 	}
 
 }

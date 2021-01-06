@@ -1,6 +1,8 @@
 package xyz.olivermartin.multichat.local.common.listeners.chat;
 
-import xyz.olivermartin.multichat.local.common.LocalPseudoChannel;
+import java.util.Set;
+import java.util.UUID;
+
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 
 public interface MultiChatLocalPlayerChatEvent {
@@ -19,6 +21,10 @@ public interface MultiChatLocalPlayerChatEvent {
 
 	public void setCancelled(boolean cancelled);
 
-	public void removeIgnoredPlayersAndNonChannelMembersFromRecipients(LocalPseudoChannel channel);
+	//public void removeIgnoredPlayersAndNonChansnelMembersFromRecipients(LocalPseudoChannel channel);
+
+	public void removeOtherPlayers();
+
+	public Set<UUID> getOtherRecipients();
 
 }

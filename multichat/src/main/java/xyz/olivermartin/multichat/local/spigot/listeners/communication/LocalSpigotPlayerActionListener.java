@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import xyz.olivermartin.multichat.common.communication.CommChannels;
 import xyz.olivermartin.multichat.local.common.listeners.LocalBungeeMessage;
 import xyz.olivermartin.multichat.local.common.listeners.communication.LocalPlayerActionListener;
 import xyz.olivermartin.multichat.local.spigot.listeners.SpigotBungeeMessage;
@@ -13,7 +14,7 @@ public class LocalSpigotPlayerActionListener extends LocalPlayerActionListener i
 	@Override
 	public void onPluginMessageReceived(String channel, Player player, byte[] message) {
 
-		if (!channel.equals("multichat:pact")) return;
+		if (!channel.equals(CommChannels.PLAYER_ACTION)) return;
 
 		LocalBungeeMessage lbm = new SpigotBungeeMessage(message);
 
@@ -32,11 +33,6 @@ public class LocalSpigotPlayerActionListener extends LocalPlayerActionListener i
 
 		}
 
-	}
-
-	@Override
-	protected void sendChatAsPlayer(String playerName, String rawMessage) {
-		Bukkit.getServer().getPlayer(playerName).chat(rawMessage);
 	}
 
 }

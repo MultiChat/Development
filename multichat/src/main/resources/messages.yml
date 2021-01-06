@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.5" #
+version: "1.10"  #
 ##################
 
 ############################################################
@@ -22,7 +22,7 @@ console_main_prefix: "&8[&2M&aC&8]&f "
 console_chat_prefix: "&fCHAT &f> "
 console_modchat_prefix: "&3STAFFCHAT &f> &3"
 console_adminchat_prefix: "&5STAFFCHAT &f> &5"
-console_groupchat_prefix": "&2GROUPCHAT &f> &2"
+console_groupchat_prefix: "&2GROUPCHAT &f> &2"
 console_display_prefix: "&fDISPLAY &f> "
 console_socialspy_prefix: "&cSOCIALSPY &f> &c"
 console_helpme_prefix: "&4HELPME &f> &4"
@@ -164,6 +164,12 @@ command_helpme_format: "&c&l<< &4HELPME &c&l>> &f&o%SPECIAL%"
 command_local_enabled_1: "&3LOCAL CHAT ENABLED"
 command_local_enabled_2: "&bYour messages will only go to this server!"
 command_local_only_players: "&cOnly players can change their chat state"
+
+command_localspy_disabled: "&cLocal Spy Disabled"
+command_localspy_enabled: "&bLocal Spy Enabled"
+command_localspy_usage: "&bUsage: /localspy"
+command_localspy_desc: "&bToggles if the user has local spy enabled or disabled"
+command_localspy_only_players: "&cOnly players can toggle localspy"
 
 command_mcc_usage: "&aUsage: /mcc <chatcolorcode> <namecolorcode>"
 command_mcc_only_players: "&cOnly players can change chat colours!"

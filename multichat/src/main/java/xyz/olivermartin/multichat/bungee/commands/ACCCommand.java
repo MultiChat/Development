@@ -6,8 +6,10 @@ import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import xyz.olivermartin.multichat.bungee.DebugManager;
-import xyz.olivermartin.multichat.bungee.MessageManager;
-import xyz.olivermartin.multichat.bungee.MultiChat;
+import xyz.olivermartin.multichat.common.RegexUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+import xyz.olivermartin.multichat.proxy.common.storage.ProxyDataStore;
 
 /**
  * Admin-Chat colour command
@@ -18,75 +20,44 @@ import xyz.olivermartin.multichat.bungee.MultiChat;
  */
 public class ACCCommand extends Command {
 
-	// Command aliases
-	private static String[] aliases = new String[] {};
-
 	public ACCCommand() {
-		super("acc", "multichat.staff.mod", aliases);
+		super("mcacc", "multichat.staff.admin", ProxyConfigs.ALIASES.getAliases("mcacc"));
 	}
 
 	public void execute(CommandSender sender, String[] args) {
-
-		// Check correct arguments
-		if (args.length != 2) {
-
-			if ((sender instanceof ProxiedPlayer)) {
-				MessageManager.sendMessage(sender, "command_acc_usage");
-			} else {
-				MessageManager.sendMessage(sender, "command_acc_only_players");
-			}
-
-		} else if ((sender instanceof ProxiedPlayer)) {
-
-			DebugManager.log("[ACCCommand] Command sender is a player");
-
-			TChatInfo chatinfo = new TChatInfo();
-			ProxiedPlayer player = (ProxiedPlayer)sender;
-
-			// Convert args to lowercase
-			args[0] = args[0].toLowerCase();
-			args[1] = args[1].toLowerCase();
-
-			if ((args[0].equals("a")) || (args[0].equals("b")) || (args[0].equals("c")) || (args[0].equals("d"))
-					|| (args[0].equals("e")) || (args[0].equals("f")) || (args[0].equals("0")) || (args[0].equals("1"))
-					|| (args[0].equals("2")) || (args[0].equals("3")) || (args[0].equals("4")) || (args[0].equals("5"))
-					|| (args[0].equals("6")) || (args[0].equals("7")) || (args[0].equals("8")) || (args[0].equals("9"))) {
-
-				if ((args[1].equals("a")) || (args[1].equals("b")) || (args[1].equals("c")) || (args[1].equals("d"))
-						|| (args[1].equals("e")) || (args[1].equals("f")) || (args[1].equals("0")) || (args[1].equals("1"))
-						|| (args[1].equals("2")) || (args[1].equals("3")) || (args[1].equals("4")) || (args[1].equals("5"))
-						|| (args[1].equals("6")) || (args[1].equals("7")) || (args[1].equals("8")) || (args[1].equals("9"))) {
-
-					DebugManager.log("[ACCCommand] Colour codes are valid");
-
-					chatinfo.setChatColor(args[0].charAt(0));
-					chatinfo.setNameColor(args[1].charAt(0));
-
-					MultiChat.adminchatpreferences.remove(player.getUniqueId());
-					MultiChat.adminchatpreferences.put(player.getUniqueId(), chatinfo);
-
-					DebugManager.log("[ACCCommand] Preferences updated");
-
-					MessageManager.sendMessage(sender, "command_acc_updated");
-
-				} else {
-
-					MessageManager.sendMessage(sender, "command_acc_invalid");
-					MessageManager.sendMessage(sender, "command_acc_invalid_usage");
-
-				}
-
-			} else {
-
-				MessageManager.sendMessage(sender, "command_acc_invalid");
-				MessageManager.sendMessage(sender, "command_acc_invalid_usage");
-
-			}
-
-		} else {
-
-			MessageManager.sendMessage(sender, "command_acc_only_players");
-
+		if (!(sender instanceof ProxiedPlayer)) {
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_only_players");
+			return;
 		}
+		DebugManager.log("[ACCCommand] Command sender is a player");
+
+		if (args.length != 2) {
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_usage");
+			return;
+		}
+		args[0] = args[0].toLowerCase();
+		args[1] = args[1].toLowerCase();
+
+		if (!RegexUtil.LEGACY_COLOR.matches(args[0]) || !RegexUtil.LEGACY_COLOR.matches(args[1])) {
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_invalid");
+			ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_invalid_usage");
+			return;
+		}
+
+		DebugManager.log("[ACCCommand] Colour codes are valid");
+
+		ProxyDataStore ds = MultiChatProxy.getInstance().getDataStore();
+		TChatInfo chatinfo = new TChatInfo();
+		ProxiedPlayer player = (ProxiedPlayer)sender;
+
+		chatinfo.setChatColor(args[0].charAt(0));
+		chatinfo.setNameColor(args[1].charAt(0));
+
+		ds.getAdminChatPreferences().remove(player.getUniqueId());
+		ds.getAdminChatPreferences().put(player.getUniqueId(), chatinfo);
+
+		DebugManager.log("[ACCCommand] Preferences updated");
+
+		ProxyConfigs.MESSAGES.sendMessage(sender, "command_acc_updated");
 	}
 }

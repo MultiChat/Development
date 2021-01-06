@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.5" #
+version: "1.10"  #
 ##################
 
 ############################################################
@@ -29,6 +29,7 @@ showquit: true
 
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
+# %SERVER% = The server of the sender
 
 # NETWORK join message
 
@@ -55,6 +56,7 @@ welcome: true
 # Define the welcome message here
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
+# %SERVER% = The server of the sender
 
 welcome_message: "&dWelcome %NAME% to the network for the first time!"
 
@@ -65,4 +67,6 @@ private_welcome: false
 # Define the private welcome message here
 # USES STANDARD MINECRAFT '&X' COLOUR/FORMAT CODES
 # %NAME% = The name of the sender
+# %SERVER% = The server of the sender
+
 private_welcome_message: "&5Hi there %NAME%, please make sure you read the /rules!"

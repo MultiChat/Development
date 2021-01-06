@@ -1,15 +1,18 @@
 package xyz.olivermartin.multichat.bungee;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
-
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
+import xyz.olivermartin.multichat.common.MessageType;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
+import xyz.olivermartin.multichat.proxy.common.MultiChatProxy;
+import xyz.olivermartin.multichat.proxy.common.ProxyJsonUtils;
+import xyz.olivermartin.multichat.proxy.common.config.ProxyConfigs;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Bulletins Management
@@ -72,7 +75,7 @@ public class Bulletins {
 
 	public static void addBulletin(String message) {
 		synchronized (bulletin) {
-			bulletin.add(MultiChatUtil.reformatRGB(message));
+			bulletin.add(message);
 		}
 	}
 
@@ -95,7 +98,7 @@ public class Bulletins {
 	}
 
 	private static void scheduleNextBulletin(final int minutes) {
-		ScheduledTask task = ProxyServer.getInstance().getScheduler().schedule(MultiChat.getInstance(), new Runnable() {
+		ScheduledTask task = ProxyServer.getInstance().getScheduler().schedule(MultiChatProxy.getInstance().getPlugin(), new Runnable() {
 
 			@Override
 			public void run() {
@@ -108,16 +111,18 @@ public class Bulletins {
 
 					message = bulletin.get(nextBulletin);
 
-					message = ChatControl.applyChatRules(message, "bulletins", "").get();
+					message = ChatControl.applyChatRules(null, message, MessageType.BULLETINS).get();
+
+					message = MultiChatUtil.translateColorCodes(message);
 
 					for (ProxiedPlayer onlineplayer : ProxyServer.getInstance().getPlayers()) {
-						if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&',message))));
+						if (ProxyConfigs.CONFIG.isLegacyServer(onlineplayer.getServer().getInfo().getName())) {
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(MultiChatUtil.approximateRGBColorCodes(message)));
 						} else {
-							onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',message)));
+							onlineplayer.sendMessage(ProxyJsonUtils.parseMessage(message));
 						}
 					}
-					
+
 					// Trigger PostBroadcastEvent
 					ProxyServer.getInstance().getPluginManager().callEvent(new PostBroadcastEvent("bulletin", message));
 

@@ -8,7 +8,6 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
-import xyz.olivermartin.multichat.bungee.MultiChatUtil;
 import xyz.olivermartin.multichat.local.common.LocalMetaManager;
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 
@@ -24,7 +23,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("prefix").isPresent()) {
-				return MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(player.getOption("prefix").get()));
+				return MultiChatLocal.getInstance().getChatManager().translateColorCodes(player.getOption("prefix").get(), true);
 			} else {
 				return "";
 			}
@@ -45,7 +44,7 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			Player player = opPlayer.get();
 
 			if (player.getOption("suffix").isPresent()) {
-				return MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(player.getOption("suffix").get()));
+				return MultiChatLocal.getInstance().getChatManager().translateColorCodes(player.getOption("suffix").get(), true);
 			} else {
 				return "";
 			}
@@ -92,10 +91,9 @@ public class LocalSpongeMetaManager extends LocalMetaManager {
 			displayNameFormat = displayNameFormat.replaceAll("%NAME%", player.getName());
 			displayNameFormat = displayNameFormat.replaceAll("%PREFIX%", getPrefix(uuid));
 			displayNameFormat = displayNameFormat.replaceAll("%SUFFIX%", getSuffix(uuid));
-			displayNameFormat = MultiChatUtil.reformatRGB(displayNameFormat);
-			displayNameFormat = displayNameFormat.replaceAll("(?i)&(?=[a-f,0-9,k-o,r,x])", "§");
 
-			displayNameFormat = MultiChatUtil.approximateHexCodes(displayNameFormat);
+			// Translate codes
+			displayNameFormat = MultiChatLocal.getInstance().getChatManager().translateColorCodes(displayNameFormat, true);
 
 			// TODO Sponge doesn't seem to like this... So we tend to work around it by sending back our original string
 			player.offer(Keys.DISPLAY_NAME,Text.of(displayNameFormat));

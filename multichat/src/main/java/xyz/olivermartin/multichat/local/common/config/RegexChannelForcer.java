@@ -1,6 +1,6 @@
 package xyz.olivermartin.multichat.local.common.config;
 
-import xyz.olivermartin.multichat.local.common.MultiChatLocal;
+import xyz.olivermartin.multichat.common.MultiChatUtil;
 
 public class RegexChannelForcer {
 
@@ -25,23 +25,14 @@ public class RegexChannelForcer {
 
 	public boolean matchesRegex(String messageFormat) {
 
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Testing format: " + messageFormat);
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Testing format (visualised): " + messageFormat.replace("&", "(#d)").replace("ง", "(#e)"));
-
 		String testMessage = messageFormat;
 
 		if (ignoreFormatCodes) {
-			testMessage = MultiChatLocal.getInstance().getNameManager().stripAllFormattingCodesAndPreformattedText(testMessage);
+			testMessage = MultiChatUtil.stripColorCodes(testMessage, true);
 		} else {
 			// This makes life easier when doing the config file as only have to use & style colour codes
-			testMessage = testMessage.replace('ง', '&');
+			testMessage = testMessage.replace('ยง', '&');
 		}
-
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Processed format codes: " + testMessage);
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Processed format codes (visualised): " + testMessage.replace("&", "(#d)").replace("ง", "(#e)"));
-
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Regex is: " + regex);
-		MultiChatLocal.getInstance().getConsoleLogger().debug("[RegexChannelForcer] Regex is (visualised): " + regex.replace("&", "(#d)").replace("ง", "(#e)"));
 
 		return testMessage.matches(regex);
 
