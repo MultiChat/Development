@@ -179,8 +179,7 @@ public class BungeeComm implements Listener {
 	}
 
 	@EventHandler
-	public static void onPluginMessage(PluginMessageEvent ev) {
-
+	public void onPluginMessage(PluginMessageEvent ev) {
 		if (! (ev.getTag().equals("multichat:comm") || ev.getTag().equals("multichat:chat") || ev.getTag().equals("multichat:prefix") || ev.getTag().equals("multichat:suffix") || ev.getTag().equals("multichat:dn") || ev.getTag().equals("multichat:world") || ev.getTag().equals("multichat:nick") || ev.getTag().equals("multichat:pxe") || ev.getTag().equals("multichat:ppxe")) ) {
 			return;
 		}
