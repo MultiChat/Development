@@ -13,8 +13,6 @@ public abstract class LocalLoginLogoutListener {
 
 	protected abstract boolean isPlayerStillOnline(MultiChatLocalPlayer player);
 
-	LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
-
 	protected void handleLoginEvent(MultiChatLocalPlayer player) {
 
 		MultiChatLocal.getInstance().getNameManager().registerPlayer(player.getUniqueId(), player.getName());

@@ -187,7 +187,7 @@ public abstract class LocalConfig {
 	}
 
 	/**
-	 * @return the serverName
+	 * @return the defaultChannel
 	 */
 	public String getDefaultChannel() {
 		return defaultChannel;
