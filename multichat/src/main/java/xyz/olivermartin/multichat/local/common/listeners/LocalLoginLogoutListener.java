@@ -9,17 +9,17 @@ import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
 public abstract class LocalLoginLogoutListener {
 
 	protected abstract boolean isPlayerStillOnline(MultiChatLocalPlayer player);
-
-	protected String defaultChannel = "global";
-
+	
 	protected void handleLoginEvent(MultiChatLocalPlayer player) {
 
 		MultiChatLocal.getInstance().getNameManager().registerPlayer(player.getUniqueId(), player.getName());
 
+		String defaultChannel = MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getDefaultChannel();
+
 		Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
 		synchronized (playerChannels) {
 			if (!playerChannels.containsKey(player.getUniqueId())) {
-				playerChannels.put(player.getUniqueId(), this.defaultChannel);
+				playerChannels.put(player.getUniqueId(), defaultChannel);
 			}
 		}
 
