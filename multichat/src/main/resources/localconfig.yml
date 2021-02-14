@@ -20,6 +20,9 @@ version: "1.9.6" #
 # Specify the name of this server here for the %SERVER% placeholder
 server_name: "UNNAMED_SERVER"
 
+# Specify the channel the user should connect to when first joining (local / global)
+default_channel: "global"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Global                        | #
