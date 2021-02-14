@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
+import xyz.olivermartin.multichat.local.common.config.LocalConfig;
 
 public abstract class LocalLoginLogoutListener {
 
@@ -17,7 +18,7 @@ public abstract class LocalLoginLogoutListener {
 		Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
 		synchronized (playerChannels) {
 			if (!playerChannels.containsKey(player.getUniqueId())) {
-				playerChannels.put(player.getUniqueId(), "global");
+				playerChannels.put(player.getUniqueId(), MultiChatLocal.getInstance().getConfigManager().getLocalConfig().getDefaultChannel());
 			}
 		}
 
