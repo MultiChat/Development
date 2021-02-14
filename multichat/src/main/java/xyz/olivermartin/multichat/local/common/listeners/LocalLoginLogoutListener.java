@@ -10,6 +10,8 @@ public abstract class LocalLoginLogoutListener {
 
 	protected abstract boolean isPlayerStillOnline(MultiChatLocalPlayer player);
 
+	protected String defaultChannel = "global";
+
 	protected void handleLoginEvent(MultiChatLocalPlayer player) {
 
 		MultiChatLocal.getInstance().getNameManager().registerPlayer(player.getUniqueId(), player.getName());
@@ -17,7 +19,7 @@ public abstract class LocalLoginLogoutListener {
 		Map<UUID, String> playerChannels = MultiChatLocal.getInstance().getDataStore().getPlayerChannels();
 		synchronized (playerChannels) {
 			if (!playerChannels.containsKey(player.getUniqueId())) {
-				playerChannels.put(player.getUniqueId(), "global");
+				playerChannels.put(player.getUniqueId(), this.defaultChannel);
 			}
 		}
 

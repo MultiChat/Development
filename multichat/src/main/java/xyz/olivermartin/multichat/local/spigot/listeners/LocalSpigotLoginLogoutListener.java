@@ -12,6 +12,11 @@ import xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlayer;
 
 public class LocalSpigotLoginLogoutListener extends LocalLoginLogoutListener implements Listener {
 
+	public LocalSpigotLoginLogoutListener() {
+		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
+		this.defaultChannel = config.getDefaultChannel();
+	}
+
 	@EventHandler
 	public void onLogin(final PlayerJoinEvent event) {
 		MultiChatLocalPlayer mclp = new MultiChatLocalSpigotPlayer(event.getPlayer());

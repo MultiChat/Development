@@ -9,11 +9,18 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 
+import xyz.olivermartin.multichat.local.common.MultiChatLocal;
 import xyz.olivermartin.multichat.local.common.MultiChatLocalPlayer;
+import xyz.olivermartin.multichat.local.common.config.LocalConfig;
 import xyz.olivermartin.multichat.local.common.listeners.LocalLoginLogoutListener;
 import xyz.olivermartin.multichat.local.sponge.MultiChatLocalSpongePlayer;
 
 public class LocalSpongeLoginLogoutListener extends LocalLoginLogoutListener {
+
+	public LocalSpongeLoginLogoutListener() {
+		LocalConfig config = MultiChatLocal.getInstance().getConfigManager().getLocalConfig();
+		this.defaultChannel = config.getDefaultChannel();
+	}
 
 	@Listener(order=Order.POST)
 	public void onJoin(ClientConnectionEvent.Join event, @Root Player player) {
