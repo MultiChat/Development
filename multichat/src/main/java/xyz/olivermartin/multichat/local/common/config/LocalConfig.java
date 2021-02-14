@@ -16,6 +16,8 @@ public abstract class LocalConfig {
 	// SERVER SETTINGS
 	private String serverName;
 
+	private String defaultChannel;
+
 	// GLOBAL CHAT SETTINGS
 	private boolean overrideGlobalFormat;
 	private String overrideGlobalFormatFormat;
@@ -118,6 +120,8 @@ public abstract class LocalConfig {
 		// Server
 		serverName = getString("server_name","SPIGOT_SERVER");
 
+		defaultChannel = getString("default_channel","global");
+
 		// Global Chat
 		overrideGlobalFormat = getBoolean("override_global_format", false);
 		overrideGlobalFormatFormat = getString("override_global_format_format", "&5[&dG&5] &f%DISPLAYNAME%&f: ");
@@ -181,7 +185,14 @@ public abstract class LocalConfig {
 	public String getServerName() {
 		return serverName;
 	}
-
+	
+	/**
+	 * @return the defaultChannel
+	 */
+	public String getDefaultChannel() {
+		return defaultChannel;
+	}
+	
 	/**
 	 * @return the overrideGlobalFormat
 	 */
