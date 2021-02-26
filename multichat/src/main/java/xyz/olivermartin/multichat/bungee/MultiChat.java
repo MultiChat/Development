@@ -101,6 +101,7 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInMsg = true;
 	public static boolean hideVanishedStaffInStaffList = true;
 	public static boolean hideVanishedStaffInJoin = true;
+	public static boolean hideVanishedStaffInLeave = true;
 
 	public static List<String> legacyServers = new ArrayList<String>();
 
@@ -383,6 +384,7 @@ public class MultiChat extends Plugin implements Listener {
 					hideVanishedStaffInMsg = configYML.getBoolean("premium_vanish.prevent_message");
 					hideVanishedStaffInStaffList = configYML.getBoolean("premium_vanish.prevent_staff_list");
 					hideVanishedStaffInJoin = configYML.getBoolean("premium_vanish.silence_join");
+					hideVanishedStaffInLeave = configYML.getBoolean("premium_vanish.silence_leave");
 				}
 
 			}
