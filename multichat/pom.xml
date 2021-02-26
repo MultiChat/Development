@@ -5,7 +5,7 @@
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.9.6</version>
+	<version>1.9.7</version>
 
 	<repositories>
 
@@ -16,7 +16,7 @@
 
 		<repository>
 			<id>sponge</id>
-			<url>http://repo.spongepowered.org/maven</url>
+			<url>https://repo.spongepowered.org/maven</url>
 		</repository>
 
 		<repository>
@@ -31,12 +31,12 @@
 
 		<repository>
 			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+			<url>https://ci.ender.zone/plugin/repository/everything</url>
 		</repository>
 
 		<repository>
 			<id>placeholderapi</id>
-			<url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+			<url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
 		</repository>
 
 		<repository>
