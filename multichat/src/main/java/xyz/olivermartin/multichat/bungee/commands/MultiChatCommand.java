@@ -157,6 +157,7 @@ public class MultiChatCommand extends Command {
 							MultiChat.hideVanishedStaffInMsg = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_message");
 							MultiChat.hideVanishedStaffInStaffList = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("prevent_staff_list");
 							MultiChat.hideVanishedStaffInJoin = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_join");
+							MultiChat.hideVanishedStaffInLeave = ConfigManager.getInstance().getHandler("config.yml").getConfig().getSection("premium_vanish").getBoolean("silence_leave");
 						}
 
 					} else {

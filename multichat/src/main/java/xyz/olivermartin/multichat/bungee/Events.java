@@ -605,6 +605,11 @@ public class Events implements Listener {
 
 		if ( ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getBoolean("showquit") == true ) {
 
+			// PremiumVanish support, return as early as possible to avoid loading unnecessary resources
+			if (MultiChat.premiumVanish && MultiChat.hideVanishedStaffInLeave && BungeeVanishAPI.isInvisible(player)) {
+				return;
+			}
+
 			String joinformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("networkquit");
 			String silentformat = ConfigManager.getInstance().getHandler("joinmessages.yml").getConfig().getString("silentquit");
 
