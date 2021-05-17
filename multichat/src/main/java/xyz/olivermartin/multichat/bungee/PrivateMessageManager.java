@@ -60,7 +60,9 @@ public class PrivateMessageManager {
 					&& (!(sender.hasPermission("multichat.staff.spy.bypass")
 							|| target.hasPermission("multichat.staff.spy.bypass")))) {
 
-				if (MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
+				if (onlineplayer.getServer() != null
+						&& onlineplayer.getServer().getInfo() != null
+						&& MultiChat.legacyServers.contains(onlineplayer.getServer().getInfo().getName())) {
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(MultiChatUtil.approximateHexCodes(ChatColor.translateAlternateColorCodes('&', finalmessage))));
 				} else {
 					onlineplayer.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', finalmessage)));

@@ -29,6 +29,7 @@ public class ChatManipulation {
 			messageFormat = messageFormat.replace("%PREFIX%", opm.get().prefix);
 			messageFormat = messageFormat.replace("%SUFFIX%", opm.get().suffix);
 			messageFormat = messageFormat.replace("%NICK%", opm.get().nick);
+			messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
 		}
 
 		messageFormat = messageFormat.replace("%DISPLAYNAMET%", target.getDisplayName());
@@ -39,13 +40,11 @@ public class ChatManipulation {
 			messageFormat = messageFormat.replace("%PREFIXT%", opmt.get().prefix);
 			messageFormat = messageFormat.replace("%SUFFIXT%", opmt.get().suffix);
 			messageFormat = messageFormat.replace("%NICKT%", opmt.get().nick);
+			messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
 		}
 
 		messageFormat = messageFormat.replace("%SERVER%", sender.getServer().getInfo().getName());
 		messageFormat = messageFormat.replace("%SERVERT%", target.getServer().getInfo().getName());
-		
-		messageFormat = messageFormat.replace("%WORLD%", opm.get().world);
-		messageFormat = messageFormat.replace("%WORLDT%", opmt.get().world);
 		
 		return messageFormat;
 

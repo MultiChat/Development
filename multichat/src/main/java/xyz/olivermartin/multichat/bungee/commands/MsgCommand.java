@@ -96,6 +96,8 @@ public class MsgCommand extends Command implements TabExecutor {
 					}
 
 				} else {
+					if (!(sender instanceof ProxiedPlayer))
+						return;
 
 					ProxiedPlayer player = (ProxiedPlayer) sender;
 
