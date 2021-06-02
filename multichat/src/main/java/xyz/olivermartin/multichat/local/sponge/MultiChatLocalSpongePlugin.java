@@ -56,7 +56,7 @@ import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpon
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerChannelListener;
 import xyz.olivermartin.multichat.local.sponge.listeners.communication.LocalSpongePlayerMetaListener;
 
-@Plugin(id = "multichat", name = "MultiChat", version = "1.9.6", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
+@Plugin(id = "multichat", name = "MultiChat", version = "1.9.7", dependencies = { @Dependency(id = "placeholderapi", optional = true) })
 public class MultiChatLocalSpongePlugin {
 
 	@Inject

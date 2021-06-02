@@ -1,8 +1,9 @@
 name: MultiChat
-version: 1.9.6
+version: 1.9.7
 author: Revilo410
 main: xyz.olivermartin.multichat.local.spigot.MultiChatLocalSpigotPlugin
 softdepend: [Vault,PlaceholderAPI]
+api-version: "1.13"
 commands:
    nick:
       description: Gives a player a nickname

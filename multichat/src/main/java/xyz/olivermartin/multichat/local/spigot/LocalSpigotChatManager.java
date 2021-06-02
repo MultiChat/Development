@@ -20,13 +20,13 @@ public class LocalSpigotChatManager extends LocalChatManager {
 
 			// LEGACY HACK
 			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-				message = message.replaceAll("&(?=[a-f,0-9,k-o,r,x])", "ง");
+				message = message.replaceAll("&(?=[a-f0-9k-orx])", "ยง");
 				message = MultiChatUtil.approximateHexCodes(message);
 			}
 
 			return ChatColor.translateAlternateColorCodes('&', message);
 		} else {
-			message = message.replaceAll("&(?=[a-f,0-9,k-o,r])", "ง");
+			message = message.replaceAll("&(?=[a-f0-9k-or])", "ยง");
 			return message;
 		}
 
@@ -34,11 +34,17 @@ public class LocalSpigotChatManager extends LocalChatManager {
 
 	@Override
 	public String processExternalPlaceholders(MultiChatLocalPlayer player, String message) {
-
 		// If we are hooked with PAPI then use their placeholders!
+		message = ChatColor.translateAlternateColorCodes('&', message);
+
+		// Unicode between U+E000 and U+F8FF is designated for private use. Unlikely to run into issues.
+		message = message.replace("%1$s", "\uEF0D").replace("%2$s", "\uEF0F");
+
 		if (LocalSpigotPAPIHook.getInstance().isHooked()) {
 			message = PlaceholderAPI.setPlaceholders(Bukkit.getPlayer(player.getUniqueId()), message);
 		}
+
+		message = message.replace("\uEF0D", "%1$s").replace("\uEF0F", "%2$s");
 
 		return message;
 	}
