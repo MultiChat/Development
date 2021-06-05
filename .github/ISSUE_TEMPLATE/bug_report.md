@@ -1,36 +1,52 @@
 ---
-name: Bug report
-about: Create a report to notify us about an issue with the plugin
+name: 🐛 Report a Bug
+about: Report a MultiChat bug
+title: ''
+labels: 'bug:unconfirmed'
+assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is. Please make separate reports for different bugs!
+<!-- MultiChat bug reporting guide
 
-**Full startup log of affected servers**
-```
-Paste the FULL startup log of Bungeecord / Spigot here depending on where the issue occurs
-```
+Don't put anything inside this block, as it won't be included in the issue.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Install a fresh copy of '....'
-2. Start up version '....' of Bungeecord
-3. Type command '....' in chat
-4. See error
+Get latest build from: https://github.com/multichat-community/multichat/releases
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+If you are reporting a bug, please follow the following steps:
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+1.  Fill out the template in full.
+      Don't just put "latest" as a version.
 
-**Platform and Versions (please complete the following information):**
- - OS: [e.g. Windows 10]
- - Java Version: [e.g. Java 8]
- - MultiChat Version: [e.g. 1.5.2]
- - Proxy Version: [e.g. Bungeecord-1523, Waterfall-156]
- - Local Server Version: [e.g. craftbukkit234, spigot-1256, paperclip-456, spongevanilla-2456]
+2.  When linking files, do not attach them to the post!
+      Copy and paste any logs into https://gist.github.com/, then paste a
+      link to them in the relevant parts of the template.
+      **DO NOT drag files into this box!**
 
-**Additional context**
-Add any other context about the problem here.
+3.  Make sure not to write between the arrows, as anything there will be
+    hidden. -->
+
+### Information
+
+- **Java Version:** <!-- e.g. Oracle Java 8, AdoptOpenJDK 8 OpenJ9 -->
+- **MultiChat Version:** <!-- e.g. 1.5.2 -->
+- **Proxy Version:** <!-- e.g. Bungeecord-1523, Waterfall-156 -->
+- **Local Server Version:** <!-- craftbukkit234, spigot-1256, paperclip-456, spongevanilla-2456 -->
+
+- **Server/proxy logs:** <!-- Upload to https://gist.github.com/ -->
+
+### Details
+
+I was **`<able / not able>`** to reproduce my issue on a fresh up-to-date server with the latest version of MultiChat and no other plugins or mods installed on both the server and the client.
+
+#### Description  
+<!-- Replace this with a brief summary of the bug. -->
+
+#### Steps to reproduce
+<!-- Replace this with exactly what you did to cause the bug. -->
+
+#### Expected behavior
+<!-- Replace this with what you expected to happen. -->
+
+#### Screenshots
+<!-- Replace this with screenshots, if necessary. -->

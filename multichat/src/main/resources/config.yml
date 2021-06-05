@@ -271,6 +271,7 @@ premium_vanish:
     prevent_message: true # Prevent players being able to /msg vanished staff
     prevent_staff_list: true # Prevent vanished staff showing up in /staff
     silence_join: true # Prevent vanished players sending a join message
+    silence_leave: true # Prevent vanished players sending a leave message    
 
 # Legacy (PRE-1.16) Servers
 # Listing servers here will mark them as 'LEGACY' servers
