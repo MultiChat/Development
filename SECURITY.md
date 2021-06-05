@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-MultiChat in general only supports the latest version of the plugin. Please note version 1.9.1 and lower are no longer supported.
+Please note version 1.9.1 and lower are no longer supported.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -11,4 +11,4 @@ MultiChat in general only supports the latest version of the plugin. Please note
 
 ## Reporting a Vulnerability
 
-In order to report a security vulnerability, please contact me privately using Discord (Revilo#3969) or in some other way. I discourage the use of GitHub Issues tracking for reporting security vulnerabilities as this could then form a 'map' for a malicious user to target servers running outdated versions of the software.
+In order to report a security vulnerability, please contact an [org member](https://github.com/orgs/multichat-community/people) in some way. Please do not use GitHub's issue tracking for reporting security vulnerabilities as this could aid bad actors in targetting users of MultiChat.
