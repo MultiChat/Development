@@ -1,17 +1,58 @@
-MultiChat is a piece of software that has evolved from a simple staff chat plugin. It is entirely my own work to this point (19/09/2018) and I have always dictated the direction of the software.
+# Contributing Guidelines
 
-In the coming updates I am planning lots of new features, and some of them are quite large. I hence wanted to open the possibility for others to contribute to the plugin.
+Contributions are welcome via GitHub pull requests. This document outlines the process to help get your contribution accepted.
 
-Firstly, I will not accept random pull requests. If you want to add a feature to the plugin please speak to me first. I don't want MultiChat to become bloated with features that should belong elsewhere.
+## Sign off Your Work
 
-Secondly, please understand the codebase of the plugin is not always well documented or even well designed in the first place. When I started MultiChat I barely knew how to program in Java, I have now completed nearly a whole Computer Science degree and know what I am doing. I am making a lot of progress in updating and refactoring the oldest parts of the plugin, but some areas are, frankly, horribly written. So please don't tell me that the plugin is badly coded, yes some areas aren't pretty to look at, but it works. And I am working hard to make the code as elegant as possible. If you want to help with this process then I would be open to pull requests which update older sections of code to reflect better industry standards.
+The Developer Certificate of Origin (DCO) is a lightweight way for contributors to certify that they wrote or otherwise have the right to submit the code they are contributing to the project. Here is the full text of the [DCO](http://developercertificate.org/). Contributors must sign-off that they adhere to these requirements by adding a `Signed-off-by` line to commit messages.
 
-And finally, I just want to say I can be picky. I'm sorry, I won't deny it. If I look at what you've written and it isn't quite what I want, I will say so. I however will not outright reject things like that, I will look at it and figure out the best way to put it into the plugin. I am a bit protective of this plugin, so please try and make sure that your pull requests obey simple java coding practices and don't introduce any terrible bugs.
+```text
+This is my commit message
 
-I think thats all I want to say here for now...
+Signed-off-by: Random J Developer <random@developer.example.org>
+```
 
-Please don't be put off from contributing by anything I've said here, I really do welcome almost anything!
+See `git help commit`:
 
-But for the best results, talk to me first before spending hours coding something I might not be too keen on.
+```text
+-s, --signoff
+    Add Signed-off-by line by the committer at the end of the commit log
+    message. The meaning of a signoff depends on the project, but it typically
+    certifies that committer has the rights to submit this work under the same
+    license and agrees to a Developer Certificate of Origin (see
+    http://developercertificate.org/ for more information).
+```
 
-Thanks for supporting the plugin, and I look forward to your contributions!
+## How to Contribute
+
+1. Fork this repository, develop, and test your changes
+1. Remember to sign off your commits as described above
+1. Submit a pull request
+
+***NOTE***: In order to make testing and merging of PRs easier, please submit changes to multiple charts in separate PRs.
+
+### Technical Requirements
+
+* Must pass [DCO check](#sign-off-your-work)
+* Any change to the plugin requires a version bump following [semver](https://semver.org/) principles. See [Immutability](#immutability) and [Versioning](#versioning) below
+
+Once changes have been merged, the release job will automatically run to package and release changed charts.
+
+### Immutability
+
+Chart releases must be immutable. Any change to a chart warrants a chart version bump even if it is only changed to the documentation.
+
+### Versioning
+
+The chart `version` should follow [semver](https://semver.org/).
+
+Charts should start at `1.0.0`. Any breaking (backwards incompatible) changes to a chart should:
+
+1. Bump the MAJOR version
+2. In the README, under a section called "Upgrading", describe the manual steps necessary to upgrade to the new (specified) MAJOR version
+
+### Community Requirements
+
+This project is released with a [Contributor Covenant](https://www.contributor-covenant.org).
+By participating in this project you agree to abide by its terms.
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
