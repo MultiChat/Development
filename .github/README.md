@@ -1,16 +1,18 @@
 ![Banner](https://i58.servimg.com/u/f58/17/28/12/77/banner10.png)
 
-# Development
-Welcome to the public code repository for MultiChat by Revilo410. (Oliver Martin)
+# MultiChat
 
-MultiChat is an advanced chat management system for Spigot/Bungeecord with over **20000** downloads.
+Welcome to the community repository for MultiChat, an advanced chat management system for Spigot/BungeeCord.
 
-[Official Listing](https://www.spigotmc.org/resources/multichat.26204/)
+This fork of MultiChat enables the community to contribute to MultiChat.
+The [MultiChat Community](https://github.com/multichat-community) organisation was established in response to stale development activity upstream.
+
+[MultiChat Community Downloads](https://github.com/multichat-community/multichat/releases)
 
 # Documentation
 
-[Click Here](https://github.com/MultiChat/Development/wiki) for the official wiki. This contains installation instructions as well as the full list of permission nodes.
+[Click here](https://github.com/MultiChat/Development/wiki) for the community wiki. The wiki contains installation instructions and a list of permission nodes.
 
 # Support
 
-Need support? Use the [GitHub Issues](https://github.com/MultiChat/Development/issues) tracking feature, or visit our [Discord](https://discord.gg/PVreERC)!
+Need support? Use [GitHub issues](https://github.com/multichat-community/multichat/issues).
