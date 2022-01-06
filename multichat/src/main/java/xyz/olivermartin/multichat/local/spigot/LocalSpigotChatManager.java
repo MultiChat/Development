@@ -20,13 +20,13 @@ public class LocalSpigotChatManager extends LocalChatManager {
 
 			// LEGACY HACK
 			if (MultiChatLocal.getInstance().getDataStore().isLegacy()) {
-				message = message.replaceAll("&(?=[a-f0-9k-orx])", "§");
+				message = message.replaceAll("&(?=[a-f0-9k-orx])", "\u00A7");
 				message = MultiChatUtil.approximateHexCodes(message);
 			}
 
 			return ChatColor.translateAlternateColorCodes('&', message);
 		} else {
-			message = message.replaceAll("&(?=[a-f0-9k-or])", "§");
+			message = message.replaceAll("&(?=[a-f0-9k-or])", "\u00A7");
 			return message;
 		}
 
