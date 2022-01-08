@@ -26,6 +26,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.proxy.common.ServerGroups;
 
 
 /**
@@ -37,11 +38,12 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.7";
+	public static final String LATEST_VERSION = "1.9.8";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.7",
 			"1.9.6",
 			"1.9.5",
 			"1.9.4",
@@ -104,6 +106,10 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInJoin = true;
 
 	public static List<String> legacyServers = new ArrayList<String>();
+
+	private static ServerGroups serverGroups;
+	private static Boolean serverGroupsEnabled = false;
+	private static HashMap<String, ArrayList<String>> serverGroupsMap = new HashMap<>();
 
 	public static MultiChat getInstance() {
 		return instance;
@@ -300,7 +306,7 @@ public class MultiChat extends Plugin implements Listener {
 			if (!configversion.equals(LATEST_VERSION))  {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
-				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] MULTICHAT HAS INTRODUCED SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
 				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
@@ -368,6 +374,25 @@ public class MultiChat extends Plugin implements Listener {
 			for (String server : configYML.getStringList("no_global")) {
 				channel.addServer(server);
 			}
+
+			// Setup Server Groups for Global Chatting
+			serverGroups = new ServerGroups();
+			serverGroupsEnabled = configYML.getBoolean("serverGroups.enabled", false);
+
+			if (configYML.getSection("serverGroups.groups") != null && configYML.getSection("serverGroups.groups").getKeys() != null) {
+				for (String groupKey : configYML.getSection("serverGroups.groups").getKeys()) {
+					ArrayList<String> serverGroupList = new ArrayList<>();
+
+					for (String server : configYML.getStringList("serverGroups.groups." + groupKey)) {
+						serverGroupList.add(server);
+					}
+
+					serverGroupsMap.put(groupKey, serverGroupList);
+				}
+			}
+
+			serverGroups.setServerGroupsEnabled(serverGroupsEnabled);
+			serverGroups.setServerGroups(serverGroupsMap);
 
 			// Initiate backup routine
 			backup();

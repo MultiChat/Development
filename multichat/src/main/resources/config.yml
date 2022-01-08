@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.7" #
+version: "1.9.8" #
 ##################
 
 # 1. General
@@ -168,6 +168,20 @@ global: true
 # etc.
 
 no_global: []
+
+# Grouping of Servers Global Chat
+# Allows for sharing of global chat between specific servers
+# Global Chat Above Still Needs to be turned on
+# Does not look at the No Global List
+serverGroups:
+    enabled: false
+    groups:
+        Group1:
+            - Server1
+            - Server2
+        Group2:
+            - Server3
+            - Server4
 
 #######################
 # Global Chat Formats #
