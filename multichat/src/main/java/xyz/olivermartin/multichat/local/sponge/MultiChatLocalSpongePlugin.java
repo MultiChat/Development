@@ -131,6 +131,9 @@ public class MultiChatLocalSpongePlugin {
 
 		}
 
+		// Set the value of the PExecute Boolean
+		pExecuteEnabled = configMan.getLocalConfig().isPExecuteEnabled();
+
 		api.registerNameManager(nameManager);
 
 		LocalFileSystemManager fileSystemManager = new LocalFileSystemManager();
@@ -211,7 +214,6 @@ public class MultiChatLocalSpongePlugin {
 
 		// Check for Proxy Execute Command Being Enabled
 		// By default this is enabled
-		pExecuteEnabled = configMan.getLocalConfig().isPExecuteEnabled();
 		if (pExecuteEnabled) {
 			CommandSpec pexecuteCommandSpec = CommandSpec.builder()
 					.description(Text.of("Sponge Proxy Execute Command"))

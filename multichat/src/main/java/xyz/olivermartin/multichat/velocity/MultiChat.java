@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Oliver Martin (Revilo410)
  */
-@Plugin(id = "multichat", name = "MultiChat", version = "1.9.8", authors = {"Revilo410", "Haha007"})
+@Plugin(id = "multichat", name = "MultiChat", version = "1.9.9", authors = {"Revilo410", "Haha007", "Gadse", "Seraek"})
 public class MultiChat {
 
     public static final String LATEST_VERSION = "1.9.9";

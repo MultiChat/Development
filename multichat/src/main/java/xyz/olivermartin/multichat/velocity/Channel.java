@@ -180,6 +180,7 @@ public class Channel {
     }
 
     public void sendMessage(String message, CommandSource sender) {
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder().character('&').hexCharacter('#').hexColors().build();
 
         for (Player receiver : MultiChat.getInstance().getServer().getAllPlayers()) {
             if (receiver != null && sender != null) {
@@ -190,9 +191,9 @@ public class Channel {
                             //TODO hiding & showing streams
 
                             if (MultiChat.legacyServers.contains(receiver.getCurrentServer().get().getServerInfo().getName())) {
-                                receiver.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(MultiChatUtil.approximateHexCodes(message)));
+                                receiver.sendMessage(serializer.deserialize(MultiChatUtil.approximateHexCodes(message)));
                             } else {
-                                receiver.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+                                receiver.sendMessage(serializer.deserialize(message));
                             }
 
                         }
@@ -215,21 +216,24 @@ public class Channel {
 
         Component toSend;
 
+        LegacyComponentSerializer serializer = LegacyComponentSerializer.builder().character('&').hexCharacter('#').hexColors().build();
+
         if (sender.hasPermission("multichat.chat.colour") || sender.hasPermission("multichat.chat.color")) {
-
             newFormat = newFormat.replace("%MESSAGE%", message);
+
             if (MultiChat.legacyServers.contains(receiver.getCurrentServer().get().getServerInfo().getName())) {
                 newFormat = MultiChatUtil.approximateHexCodes(newFormat);
             }
-            toSend = LegacyComponentSerializer.legacyAmpersand().deserialize(newFormat);
 
+            toSend = serializer.deserialize(MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(newFormat)));
         } else {
-
             newFormat = newFormat.replace("%MESSAGE%", "");
+
             if (MultiChat.legacyServers.contains(receiver.getCurrentServer().get().getServerInfo().getName())) {
                 newFormat = MultiChatUtil.approximateHexCodes(newFormat);
             }
-            toSend = LegacyComponentSerializer.legacyAmpersand().deserialize(newFormat).append(Component.text(message));
+
+            toSend = serializer.deserialize(MultiChatUtil.approximateHexCodes(MultiChatUtil.reformatRGB(newFormat))).append(Component.text(message));
         }
 
         return toSend;

@@ -113,6 +113,9 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		}
 
+		// Set the value of the PExecute Boolean
+		pExecuteEnabled = configMan.getLocalConfig().isPExecuteEnabled();
+
 		api.registerNameManager(nameManager);
 
 		LocalFileSystemManager fileSystemManager = new LocalFileSystemManager();
@@ -160,7 +163,6 @@ public class MultiChatLocalSpigotPlugin extends JavaPlugin {
 
 		// Check for Proxy Execute Command Being Enabled
 		// By default this is enabled
-		pExecuteEnabled = configMan.getLocalConfig().isPExecuteEnabled();
 		if (pExecuteEnabled) {
 			SpigotProxyExecuteCommand pxeCommand = new SpigotProxyExecuteCommand();
 			this.getCommand("pxe").setExecutor(pxeCommand);
