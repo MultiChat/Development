@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.8" #
+version: "1.9.9" #
 ##################
 
 # 1. General
@@ -254,6 +254,22 @@ adminchat:
 
 ############################################################
 # +------------------------------------------------------+ #
+# |                   Execute Command                    | #
+# +------------------------------------------------------+ #
+############################################################
+# Enable/Disable the proxy execute command
+mcexecute_enabled: true
+
+# MultiChat execute command aliases (other than /multichatexecute)
+multichatexecutecommand:
+    - mcexecute
+    - mce
+    - gexecute
+    - gexe
+    - gcommand
+
+############################################################
+# +------------------------------------------------------+ #
 # |                        Other                         | #
 # +------------------------------------------------------+ #
 ############################################################
@@ -265,14 +281,6 @@ staff_list: true
 multichatbypasscommand:
 - mcb
 - bypass
-
-# MultiChat execute command aliases (other than /multichatexecute)
-multichatexecutecommand:
-- mcexecute
-- mce
-- gexecute
-- gexe
-- gcommand
 
 # Control what aspects of chat are logged by MultiChat (useful for GDPR etc.)
 privacy_settings:

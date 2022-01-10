@@ -34,10 +34,11 @@ import java.util.concurrent.TimeUnit;
 @Plugin(id = "multichat", name = "MultiChat", version = "1.9.8", authors = {"Revilo410", "Haha007"})
 public class MultiChat {
 
-    public static final String LATEST_VERSION = "1.9.8";
+    public static final String LATEST_VERSION = "1.9.9";
 
     public static final String[] ALLOWED_VERSIONS = new String[]{
             LATEST_VERSION,
+            "1.9.8",
             "1.9.7",
             "1.9.6",
             "1.9.5",
@@ -395,7 +396,6 @@ public class MultiChat {
         registerCommand(CommandManager.getGrouplist());
         registerCommand(CommandManager.getMultichat());
         registerCommand(CommandManager.getMultichatBypass());
-        registerCommand(CommandManager.getMultiChatExecute());
         registerCommand(CommandManager.getDisplay());
         registerCommand(CommandManager.getFreezechat());
         registerCommand(CommandManager.getHelpme());
@@ -405,6 +405,12 @@ public class MultiChat {
         registerCommand(CommandManager.getCast());
         registerCommand(CommandManager.getUsecast());
         registerCommand(CommandManager.getIgnore());
+
+        // Check for Multichat Execute Command Being Enabled
+        // By default this is enabled
+        if (configYML.getNode("mcexecute_enabled").getBoolean(true)) {
+            registerCommand(CommandManager.getMultiChatExecute());
+        }
 
         // Register PM commands
         if (configYML.getNode("pm").getBoolean()) {
@@ -448,7 +454,6 @@ public class MultiChat {
         unregisterCommand(CommandManager.getGrouplist());
         unregisterCommand(CommandManager.getMultichat());
         unregisterCommand(CommandManager.getMultichatBypass());
-        unregisterCommand(CommandManager.getMultiChatExecute());
         unregisterCommand(CommandManager.getDisplay());
         unregisterCommand(CommandManager.getFreezechat());
         unregisterCommand(CommandManager.getHelpme());
@@ -458,6 +463,12 @@ public class MultiChat {
         unregisterCommand(CommandManager.getCast());
         unregisterCommand(CommandManager.getUsecast());
         unregisterCommand(CommandManager.getIgnore());
+
+        // Check for Multichat Execute Command Being Enabled
+        // By default this is enabled
+        if (configYML.getNode("mcexecute_enabled").getBoolean(true)) {
+            unregisterCommand(CommandManager.getMultiChatExecute());
+        }
 
         // Unregister PM commands
         if (configYML.getNode("pm").getBoolean()) {

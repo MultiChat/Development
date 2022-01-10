@@ -39,6 +39,9 @@ public abstract class LocalConfig {
 	private boolean nicknameSQL;
 	private boolean mySQL;
 
+	// Proxy Execute Settings
+	private Boolean pExecute;
+
 	// CHANNEL CONTROL SETTINGS
 	private List<RegexChannelForcer> regexChannelForcers;
 
@@ -139,6 +142,9 @@ public abstract class LocalConfig {
 		nicknameLengthMin = getInt("nickname_length_min", 3);
 		nicknameLengthLimitFormatting = getBoolean("nickname_length_limit_formatting", false);
 		nicknameSQL = getBoolean("nickname_sql", false);
+
+		// Proxy Execute
+		pExecute = getBoolean("pexecute_enabled", true);
 
 		// MySQL
 		mySQL = getBoolean("mysql", false);
@@ -285,6 +291,10 @@ public abstract class LocalConfig {
 	 */
 	public boolean isMySQL() {
 		return mySQL;
+	}
+
+	public boolean isPExecuteEnabled() {
+		return pExecute;
 	}
 
 	/**

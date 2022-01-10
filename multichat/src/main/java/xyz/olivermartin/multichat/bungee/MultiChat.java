@@ -38,11 +38,12 @@ import xyz.olivermartin.multichat.proxy.common.ServerGroups;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.8";
+	public static final String LATEST_VERSION = "1.9.9";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.8",
 			"1.9.7",
 			"1.9.6",
 			"1.9.5",
@@ -448,7 +449,6 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichatBypass());
-		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
@@ -458,6 +458,12 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getIgnore());
+
+		// Check for Multichat Execute Command Being Enabled
+		// By default this is enabled
+		if (configYML.getBoolean("mcexecute_enabled", true)) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMultiChatExecute());
+		}
 
 		// Register PM commands
 		if (configYML.getBoolean("pm")) {
@@ -501,7 +507,6 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichatBypass());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
@@ -511,6 +516,12 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getIgnore());
+
+		// Check for Multichat Execute Command Being Enabled
+		// By default this is enabled
+		if (configYML.getBoolean("mcexecute_enabled", true)) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
+		}
 
 		// Unregister PM commands
 		if (configYML.getBoolean("pm")) {
