@@ -26,6 +26,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
+import xyz.olivermartin.multichat.proxy.common.ServerGroups;
 
 
 /**
@@ -37,11 +38,13 @@ import net.md_5.bungee.event.EventHandler;
  */
 public class MultiChat extends Plugin implements Listener {
 
-	public static final String LATEST_VERSION = "1.9.7";
+	public static final String LATEST_VERSION = "1.9.9";
 
 	public static final String[] ALLOWED_VERSIONS = new String[] {
 
 			LATEST_VERSION,
+			"1.9.8",
+			"1.9.7",
 			"1.9.6",
 			"1.9.5",
 			"1.9.4",
@@ -104,6 +107,10 @@ public class MultiChat extends Plugin implements Listener {
 	public static boolean hideVanishedStaffInJoin = true;
 
 	public static List<String> legacyServers = new ArrayList<String>();
+
+	private static ServerGroups serverGroups;
+	private static Boolean serverGroupsEnabled = false;
+	private static HashMap<String, ArrayList<String>> serverGroupsMap = new HashMap<>();
 
 	public static MultiChat getInstance() {
 		return instance;
@@ -300,7 +307,7 @@ public class MultiChat extends Plugin implements Listener {
 			if (!configversion.equals(LATEST_VERSION))  {
 
 				getLogger().info("[!!!] [WARNING] YOUR CONFIG FILES ARE NOT THE LATEST VERSION");
-				getLogger().info("[!!!] [WARNING] MULTICHAT 1.8 INTRODUCES SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
+				getLogger().info("[!!!] [WARNING] MULTICHAT HAS INTRODUCED SEVERAL NEW FEATURES WHICH ARE NOT IN YOUR OLD FILE");
 				getLogger().info("[!!!] [WARNING] THE PLUGIN SHOULD WORK WITH THE OLDER FILE, BUT IS NOT SUPPORTED!");
 				getLogger().info("[!!!] [WARNING] PLEASE BACKUP YOUR OLD CONFIG FILES AND DELETE THEM FROM THE MULTICHAT FOLDER SO NEW ONES CAN BE GENERATED!");
 				getLogger().info("[!!!] [WARNING] THANK YOU");
@@ -369,6 +376,25 @@ public class MultiChat extends Plugin implements Listener {
 				channel.addServer(server);
 			}
 
+			// Setup Server Groups for Global Chatting
+			serverGroups = new ServerGroups();
+			serverGroupsEnabled = configYML.getBoolean("serverGroups.enabled", false);
+
+			if (configYML.getSection("serverGroups.groups") != null && configYML.getSection("serverGroups.groups").getKeys() != null) {
+				for (String groupKey : configYML.getSection("serverGroups.groups").getKeys()) {
+					ArrayList<String> serverGroupList = new ArrayList<>();
+
+					for (String server : configYML.getStringList("serverGroups.groups." + groupKey)) {
+						serverGroupList.add(server);
+					}
+
+					serverGroupsMap.put(groupKey, serverGroupList);
+				}
+			}
+
+			serverGroups.setServerGroupsEnabled(serverGroupsEnabled);
+			serverGroups.setServerGroups(serverGroupsMap);
+
 			// Initiate backup routine
 			backup();
 
@@ -423,7 +449,6 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getGrouplist());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultichatBypass());
-		getProxy().getPluginManager().registerCommand(this, CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getDisplay());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getFreezechat());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getHelpme());
@@ -433,6 +458,12 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getCast());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getUsecast());
 		getProxy().getPluginManager().registerCommand(this, CommandManager.getIgnore());
+
+		// Check for Multichat Execute Command Being Enabled
+		// By default this is enabled
+		if (configYML.getBoolean("mcexecute_enabled", true)) {
+			getProxy().getPluginManager().registerCommand(this, CommandManager.getMultiChatExecute());
+		}
 
 		// Register PM commands
 		if (configYML.getBoolean("pm")) {
@@ -476,7 +507,6 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getGrouplist());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultichatBypass());
-		getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getDisplay());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getFreezechat());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getHelpme());
@@ -486,6 +516,12 @@ public class MultiChat extends Plugin implements Listener {
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getCast());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getUsecast());
 		getProxy().getPluginManager().unregisterCommand(CommandManager.getIgnore());
+
+		// Check for Multichat Execute Command Being Enabled
+		// By default this is enabled
+		if (configYML.getBoolean("mcexecute_enabled", true)) {
+			getProxy().getPluginManager().unregisterCommand(CommandManager.getMultiChatExecute());
+		}
 
 		// Unregister PM commands
 		if (configYML.getBoolean("pm")) {

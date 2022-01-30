@@ -37,6 +37,7 @@ import xyz.olivermartin.multichat.local.common.storage.LocalFileSystemManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalNameManager;
 import xyz.olivermartin.multichat.local.common.storage.LocalNameManagerMode;
 import xyz.olivermartin.multichat.local.common.storage.LocalSQLNameManager;
+import xyz.olivermartin.multichat.local.spigot.commands.SpigotProxyExecuteCommand;
 import xyz.olivermartin.multichat.local.sponge.commands.MultiChatLocalSpongeCommand;
 import xyz.olivermartin.multichat.local.sponge.commands.SpongeNickCommand;
 import xyz.olivermartin.multichat.local.sponge.commands.SpongeProxyExecuteCommand;
@@ -62,6 +63,7 @@ public class MultiChatLocalSpongePlugin {
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path privateConfigDir;
+	private Boolean pExecuteEnabled;
 
 	@Listener
 	public void onServerStart(GameStartedServerEvent event) {
@@ -128,6 +130,9 @@ public class MultiChatLocalSpongePlugin {
 			nameManager = new LocalSpongeFileNameManager();
 
 		}
+
+		// Set the value of the PExecute Boolean
+		pExecuteEnabled = configMan.getLocalConfig().isPExecuteEnabled();
 
 		api.registerNameManager(nameManager);
 
@@ -202,19 +207,24 @@ public class MultiChatLocalSpongePlugin {
 				.executor(new SpongeUsernameCommand())
 				.build();
 
-		CommandSpec pexecuteCommandSpec = CommandSpec.builder()
-				.description(Text.of("Sponge Proxy Execute Command"))
-				.arguments(
-						GenericArguments.remainingJoinedStrings(Text.of("message")))
-				.permission("multichatlocal.pexecute")
-				.executor(new SpongeProxyExecuteCommand())
-				.build();
-
 		Sponge.getCommandManager().register(this, nicknameCommandSpec, "nick");
 		Sponge.getCommandManager().register(this, multichatlocalCommandSpec, "multichatlocal");
 		Sponge.getCommandManager().register(this, realnameCommandSpec, "realname");
 		Sponge.getCommandManager().register(this, usernameCommandSpec, "username");
-		Sponge.getCommandManager().register(this, pexecuteCommandSpec, "pexecute", "pxe");
+
+		// Check for Proxy Execute Command Being Enabled
+		// By default this is enabled
+		if (pExecuteEnabled) {
+			CommandSpec pexecuteCommandSpec = CommandSpec.builder()
+					.description(Text.of("Sponge Proxy Execute Command"))
+					.arguments(
+							GenericArguments.remainingJoinedStrings(Text.of("message")))
+					.permission("multichatlocal.pexecute")
+					.executor(new SpongeProxyExecuteCommand())
+					.build();
+
+			Sponge.getCommandManager().register(this, pexecuteCommandSpec, "pexecute", "pxe");
+		}
 
 		// Manage Dependencies
 		try {
@@ -255,10 +265,14 @@ public class MultiChatLocalSpongePlugin {
 		ChannelBinding.RawDataChannel ignoreChannel = channelRegistrar.createRawChannel(this, "multichat:ignore");
 		commManager.registerChannel("multichat:ignore", ignoreChannel);
 
-		ChannelBinding.RawDataChannel pexecuteChannel = channelRegistrar.createRawChannel(this, "multichat:pxe");
-		commManager.registerChannel("multichat:pxe", pexecuteChannel);
-		ChannelBinding.RawDataChannel ppexecuteChannel = channelRegistrar.createRawChannel(this, "multichat:ppxe");
-		commManager.registerChannel("multichat:ppxe", ppexecuteChannel);
+		// Check for Proxy Execute Command Being Enabled
+		// By default this is enabled
+		if (pExecuteEnabled) {
+			ChannelBinding.RawDataChannel pexecuteChannel = channelRegistrar.createRawChannel(this, "multichat:pxe");
+			commManager.registerChannel("multichat:pxe", pexecuteChannel);
+			ChannelBinding.RawDataChannel ppexecuteChannel = channelRegistrar.createRawChannel(this, "multichat:ppxe");
+			commManager.registerChannel("multichat:ppxe", ppexecuteChannel);
+		}
 
 		commChannel.addListener(Platform.Type.SERVER, new LocalSpongePlayerMetaListener());
 		chatChannel.addListener(Platform.Type.SERVER, new LocalSpongeCastListener());
@@ -297,10 +311,15 @@ public class MultiChatLocalSpongePlugin {
 		commManager.unregisterChannel("multichat:ch");
 		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ignore"));
 		commManager.unregisterChannel("multichat:ignore");
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:pxe"));
-		commManager.unregisterChannel("multichat:pxe");
-		Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ppxe"));
-		commManager.unregisterChannel("multichat:ppxe");
+
+		// Check for Proxy Execute Command Being Enabled
+		// By default this is enabled
+		if (pExecuteEnabled) {
+			Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:pxe"));
+			commManager.unregisterChannel("multichat:pxe");
+			Sponge.getChannelRegistrar().unbindChannel(commManager.getChannel("multichat:ppxe"));
+			commManager.unregisterChannel("multichat:ppxe");
+		}
 
 		if (MultiChatLocal.getInstance().getNameManager().getMode() == LocalNameManagerMode.SQL) {
 

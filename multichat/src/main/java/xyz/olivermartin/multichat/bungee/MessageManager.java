@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.config.Configuration;
+import org.bukkit.entity.Player;
 
 /**
  * Message Manager
@@ -410,12 +411,28 @@ public class MessageManager {
 
 	public static void sendMessage(CommandSender sender, String id) {
 		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)))));
+
+		Player player;
+		String server = "";
+		if (sender instanceof Player) {
+			player = (Player) sender;
+			server = player.getServer().getName();
+		}
+
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id).replaceAll("%SERVER%", server)))));
 	}
 
 	public static void sendSpecialMessage(CommandSender sender, String id, String special) {
 		updatePrefix();
-		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special))));
+
+		Player player;
+		String server = "";
+		if (sender instanceof Player) {
+			player = (Player) sender;
+			server = player.getServer().getName();
+		}
+
+		sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special).replaceAll("%SERVER%", server))));
 	}
 
 	public static void sendSpecialMessageWithoutPrefix(CommandSender sender, String id, String special) {

@@ -1,15 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>xyz.olivermartin.multichat</groupId>
 	<artifactId>multichat</artifactId>
-	<version>1.9.7</version>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<version>1.9.9</version>
 
 	<repositories>
 
@@ -19,8 +15,9 @@
 		</repository>
 
 		<repository>
-			<id>sponge</id>
-			<url>http://repo.spongepowered.org/maven</url>
+			<id>sponge-repo</id>
+			<name>Sponge Maven Repository</name>
+			<url>https://repo.spongepowered.org/maven</url>
 		</repository>
 
 		<repository>
@@ -48,6 +45,12 @@
 			<url>https://jitpack.io</url>
 		</repository>
 
+		<!--Velocity Rep -->
+		<repository>
+			<id>velocity</id>
+			<url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+		</repository>
+
 	</repositories>
 
 	<build>
@@ -55,25 +58,21 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.1.0</version>
-				<configuration>
-					<relocations>
-						<relocation>
-							<pattern>com.zaxxer.hikari</pattern>
-							<shadedPattern>xyz.olivermartin.shadedlib.hikari</shadedPattern>
-						</relocation>
-						<relocation>
-							<pattern>org.slf4j</pattern>
-							<shadedPattern>xyz.olivermartin.shadedlib.slf4j</shadedPattern>
-						</relocation>
-					</relocations>
-				</configuration>
+				<version>3.2.4</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<relocations>
+								<relocation>
+									<pattern>com.zaxxer.hikari</pattern>
+									<shadedPattern>shaded.com.zaxxer.hikari</shadedPattern>
+								</relocation>
+							</relocations>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -81,10 +80,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -95,7 +94,7 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>2.6.1</version>
+			<version>5.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -112,16 +111,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.spongepowered</groupId>
-			<artifactId>spongeapi</artifactId>
-			<version>7.1.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.16-R0.4-SNAPSHOT</version>
+			<version>1.18-R0.1-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
@@ -129,7 +121,7 @@
 		<dependency>
 			<groupId>net.md-5</groupId>
 			<artifactId>bungeecord-api</artifactId>
-			<version>1.16-R0.4-SNAPSHOT</version>
+			<version>1.18-R0.1-SNAPSHOT</version>
 			<type>javadoc</type>
 			<scope>provided</scope>
 		</dependency>
@@ -137,38 +129,60 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.16.1-R0.1-SNAPSHOT</version>
+			<version>1.18.1-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
-			<version>1.6</version>
+			<version>1.7</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>me.clip</groupId>
 			<artifactId>placeholderapi</artifactId>
-			<version>2.9.2</version>
+			<version>2.11.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.spongepowered</groupId>
+			<artifactId>spongeapi</artifactId>
+			<version>7.2.0</version>
+			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.github.rojo8399</groupId>
 			<artifactId>PlaceholderAPI</artifactId>
-			<version>master-SNAPSHOT</version>
+			<version>master-4.5.1-gb58a67b-1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- PremiumVanishAPI -->
+		<dependency>
+			<groupId>com.github.LeonMangler</groupId>
+			<artifactId>PremiumVanishAPI</artifactId>
+			<version>2.7.3</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!--Velocity API-->
+		<dependency>
+			<groupId>com.velocitypowered</groupId>
+			<artifactId>velocity-api</artifactId>
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.MyzelYam</groupId>
-			<artifactId>PremiumVanishAPI</artifactId>
-			<version>2.0.2</version>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.22</version>
 			<scope>provided</scope>
 		</dependency>
-
 	</dependencies>
-
 </project>

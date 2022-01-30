@@ -3,39 +3,35 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>xyz.olivermartin.multichat</groupId>
   <artifactId>multichat</artifactId>
-  <version>1.9.6</version>
+  <version>1.9.9</version>
   <build>
     <plugins>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.4</version>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
               <goal>shade</goal>
             </goals>
+            <configuration>
+              <relocations>
+                <relocation>
+                  <pattern>com.zaxxer.hikari</pattern>
+                  <shadedPattern>shaded.com.zaxxer.hikari</shadedPattern>
+                </relocation>
+              </relocations>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <relocations>
-            <relocation>
-              <pattern>com.zaxxer.hikari</pattern>
-              <shadedPattern>xyz.olivermartin.shadedlib.hikari</shadedPattern>
-            </relocation>
-            <relocation>
-              <pattern>org.slf4j</pattern>
-              <shadedPattern>xyz.olivermartin.shadedlib.slf4j</shadedPattern>
-            </relocation>
-          </relocations>
-        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.8.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
     </plugins>
@@ -46,8 +42,9 @@
       <url>https://repo.codemc.org/repository/maven-public</url>
     </repository>
     <repository>
-      <id>sponge</id>
-      <url>http://repo.spongepowered.org/maven</url>
+      <id>sponge-repo</id>
+      <name>Sponge Maven Repository</name>
+      <url>https://repo.spongepowered.org/maven</url>
     </repository>
     <repository>
       <id>bungeecord-repo</id>
@@ -69,6 +66,10 @@
       <id>jitpack.io</id>
       <url>https://jitpack.io</url>
     </repository>
+    <repository>
+      <id>velocity</id>
+      <url>https://nexus.velocitypowered.com/repository/maven-public/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -78,220 +79,65 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.spongepowered</groupId>
-      <artifactId>spongeapi</artifactId>
-      <version>7.1.0</version>
+      <groupId>net.md-5</groupId>
+      <artifactId>bungeecord-api</artifactId>
+      <version>1.18-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>error_prone_annotations</artifactId>
-          <groupId>com.google.errorprone</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>jsr305</artifactId>
-          <groupId>com.google.code.findbugs</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guice</artifactId>
-          <groupId>com.google.inject</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>caffeine</artifactId>
-          <groupId>com.github.ben-manes.caffeine</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.github.ben-manes.caffeine</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>plugin-meta</artifactId>
-          <groupId>org.spongepowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>configurate-hocon</artifactId>
-          <groupId>org.spongepowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>configurate-gson</artifactId>
-          <groupId>org.spongepowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>configurate-yaml</artifactId>
-          <groupId>org.spongepowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flow-math</artifactId>
-          <groupId>com.flowpowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flow-noise</artifactId>
-          <groupId>com.flowpowered</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>asm</artifactId>
-          <groupId>org.ow2.asm</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.md-5</groupId>
       <artifactId>bungeecord-api</artifactId>
-      <version>1.16-R0.4-SNAPSHOT</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-config</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-event</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-protocol</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>netty-transport-native-unix-common</artifactId>
-          <groupId>io.netty</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>net.md-5</groupId>
-      <artifactId>bungeecord-api</artifactId>
-      <version>1.16-R0.4-SNAPSHOT</version>
+      <version>1.18-R0.1-SNAPSHOT</version>
       <type>javadoc</type>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-config</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-event</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-protocol</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>netty-transport-native-unix-common</artifactId>
-          <groupId>io.netty</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.spigotmc</groupId>
       <artifactId>spigot-api</artifactId>
-      <version>1.16.1-R0.1-SNAPSHOT</version>
+      <version>1.18.1-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>commons-lang</artifactId>
-          <groupId>commons-lang</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>gson</artifactId>
-          <groupId>com.google.code.gson</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>bungeecord-chat</artifactId>
-          <groupId>net.md-5</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>snakeyaml</artifactId>
-          <groupId>org.yaml</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>guava</artifactId>
-          <groupId>com.google.guava</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
       <artifactId>VaultAPI</artifactId>
-      <version>1.6</version>
+      <version>1.7</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>bukkit</artifactId>
-          <groupId>org.bukkit</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
-      <version>2.9.2</version>
+      <version>2.11.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.spongepowered</groupId>
+      <artifactId>spongeapi</artifactId>
+      <version>7.2.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.github.rojo8399</groupId>
       <artifactId>PlaceholderAPI</artifactId>
-      <version>master-SNAPSHOT</version>
+      <version>master-4.5.1-gb58a67b-1</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>reflections</artifactId>
-          <groupId>org.reflections</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>configurate-hocon</artifactId>
-          <groupId>ninja.leaping.configurate</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.github.MyzelYam</groupId>
+      <groupId>com.github.LeonMangler</groupId>
       <artifactId>PremiumVanishAPI</artifactId>
-      <version>2.0.2</version>
+      <version>2.7.3</version>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>jsr305</artifactId>
-          <groupId>com.google.code.findbugs</groupId>
-        </exclusion>
-      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.velocitypowered</groupId>
+      <artifactId>velocity-api</artifactId>
+      <version>3.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.22</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
-

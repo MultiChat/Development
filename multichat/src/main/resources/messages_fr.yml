@@ -8,7 +8,7 @@
 
 ##################
 #   DON'T EDIT   #
-version: "1.9.7" #
+version: "1.9.8" #
 ##################
 
 # French Translation by Nogapra - Thank you!
@@ -18,6 +18,7 @@ version: "1.9.7" #
 # +------------------------------------------------------+ #
 # |                  Customise Messages                  | #
 # +------------------------------------------------------+ #
+# Use %SERVER% to add the player's server                  #
 ############################################################
 
 # Format des logs console

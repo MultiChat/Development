@@ -15,11 +15,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import xyz.olivermartin.multichat.bungee.events.PostBroadcastEvent;
 import xyz.olivermartin.multichat.bungee.events.PostGlobalChatEvent;
+import xyz.olivermartin.multichat.proxy.common.ServerGroups;
 
 /**
  * Channel
  * <p>A class to represent a chat channel and control the messages sent etc.</p>
- * 
+ *
  * @author Oliver Martin (Revilo410)
  *
  */
@@ -132,11 +133,13 @@ public class Channel {
 	}
 
 	public void sendMessage(ProxiedPlayer sender, String message, String format) {
-
 		DebugManager.log("CHANNEL #" + getName() + ": Got a message for the channel");
 		DebugManager.log("CHANNEL #" + getName() + ": SENDER = " + sender.getName());
 		DebugManager.log("CHANNEL #" + getName() + ": MESSAGE = " + message);
 		DebugManager.log("CHANNEL #" + getName() + ": FORMAT = " + format);
+
+		Boolean serverGroupsEnabled = ServerGroups.getServerGroupsEnabled();
+		ArrayList<String> serverGroupList = ServerGroups.getServerGroupList(sender);
 
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 
@@ -147,28 +150,40 @@ public class Channel {
 					if (sender.getServer() != null && receiver.getServer() != null) {
 
 						if ( (whitelistMembers && members.contains(receiver.getUniqueId())) || (!whitelistMembers && !members.contains(receiver.getUniqueId()))) {
-							if ( (whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
 
-								if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
-									if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
-										receiver.sendMessage(buildFormat(sender,receiver,format,message));
+							if (!serverGroupsEnabled || serverGroupsEnabled == null) {
+
+								if ((whitelistServers && servers.contains(receiver.getServer().getInfo().getName())) || (!whitelistServers && !servers.contains(receiver.getServer().getInfo().getName()))) {
+
+									if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
+
+										if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+											receiver.sendMessage(buildFormat(sender, receiver, format, message));
+										} else {
+											// If they are on the same server, this message will already have been displayed locally.
+										}
 									} else {
-										// If they are on the same server, this message will already have been displayed locally.
+										ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 									}
-								} else {
-									ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
 								}
+							} else {
+								if (serverGroupList != null && serverGroupList.contains(receiver.getServer().getInfo().getName())) {
+									if (!ChatControl.ignores(sender.getUniqueId(), receiver.getUniqueId(), "global_chat")) {
 
+										if (!receiver.getServer().getInfo().getName().equals(sender.getServer().getInfo().getName())) {
+											receiver.sendMessage(buildFormat(sender, receiver, format, message));
+										} else {
+											// If they are on the same server, this message will already have been displayed locally.
+										}
+									} else {
+										ChatControl.sendIgnoreNotifications(receiver, sender, "global_chat");
+									}
+								}
 							}
-
 						}
-
 					}
-
 				}
-
 			}
-
 		}
 
 		// Trigger PostGlobalChatEvent
@@ -179,7 +194,6 @@ public class Channel {
 	}
 
 	public void sendMessage(String message, CommandSender sender) {
-
 		for (ProxiedPlayer receiver : ProxyServer.getInstance().getPlayers()) {
 			if (receiver != null && sender != null) {
 				if (receiver.getServer() != null) {
