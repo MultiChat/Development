@@ -3,6 +3,7 @@ package xyz.olivermartin.multichat.velocity;
 import com.velocitypowered.api.command.CommandSource;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import ninja.leaping.configurate.ConfigurationNode;
+import com.velocitypowered.api.proxy.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -410,12 +411,28 @@ public class MessageManager {
 
     public static void sendMessage(CommandSource sender, String id) {
         updatePrefix();
-        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + MultiChatUtil.reformatRGB(getMessage(id))));
+
+        Player player;
+        String server = "";
+        if (sender instanceof Player) {
+            player = (Player) sender;
+            server = player.getCurrentServer().get().getServer().getServerInfo().getName();
+        }
+
+        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + MultiChatUtil.reformatRGB(getMessage(id).replaceAll("%SERVER%", server))));
     }
 
     public static void sendSpecialMessage(CommandSource sender, String id, String special) {
         updatePrefix();
-        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special)));
+
+        Player player;
+        String server = "";
+        if (sender instanceof Player) {
+            player = (Player) sender;
+            server = player.getCurrentServer().get().getServer().getServerInfo().getName();
+        }
+
+        sender.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(prefix + MultiChatUtil.reformatRGB(getMessage(id)).replaceAll("%SPECIAL%", special).replaceAll("%SERVER%", server)));
     }
 
     public static void sendSpecialMessageWithoutPrefix(CommandSource sender, String id, String special) {
